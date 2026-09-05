@@ -1,0 +1,15 @@
+# ModelSim & QuestaSim simulation databases
+work/
+msim/
+covhtmlreport/
+
+# Simulation logs & temporary files
+transcript
+vsim.wlf
+wlft*
+*.vstf
+*.db
+
+# Operating System specific files
+.DS_Store
+Thumbs.db
