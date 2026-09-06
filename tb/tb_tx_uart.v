@@ -8,7 +8,6 @@ module tb_tx_uart();
     reg [1:0] parity_type;
     wire active;
     wire data_tx;
-
     tx_uart  dut(
         .send(send),
         .baud_rate(baud_rate),
