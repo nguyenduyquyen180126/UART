@@ -12,16 +12,26 @@ all:
 help:
 	@echo Verilog ModelSim Makefile Template
 	@echo ==================================
-	@echo make sim      - Run simulation in GUI mode (opens ModelSim)
-	@echo make sim_cli  - Run simulation in command-line/batch mode
-	@echo make clean    - Remove generated simulation files and folders
-	@echo make help     - Show this help message
+	@echo make tx_uart          - Run UART TX simulation in GUI mode
+	@echo make tx_uart_cli      - Run UART TX simulation in CLI/Batch mode
+	@echo make tx_baud_gen      - Run Baud Gen simulation in GUI mode
+	@echo make tx_baud_gen_cli  - Run Baud Gen simulation in CLI/Batch mode
+	@echo make clean            - Remove generated simulation files and folders
+	@echo make help             - Show this help message
 
-# Run simulation in GUI mode
+# Run UART TX simulation in GUI mode
+tx_uart:
+	vsim -do sim/tx_uart.tcl
+
+# Run UART TX simulation in CLI/Batch mode
+tx_uart_cli:
+	vsim -c -do "do sim/tx_uart.tcl; quit -f"
+
+# Run Baud Gen simulation in GUI mode
 tx_baud_gen:
 	vsim -do sim/tx_baud_gen.tcl
 
-# Run simulation in CLI/Batch mode (useful for CI/CD or fast tests)
+# Run Baud Gen simulation in CLI/Batch mode (useful for CI/CD or fast tests)
 tx_baud_gen_cli:
 	vsim -c -do "do sim/tx_baud_gen.tcl; quit -f"
 

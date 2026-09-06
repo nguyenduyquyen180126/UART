@@ -4,8 +4,9 @@ module tx_baud_gen #(
 )(
     input [1:0] baud_rate,
     input clk,
+    input baud_en,
     input rst_n,            // 00: 2400, 01: 4800, 10: 9600, 11: 19200
-    output reg baud_en      // Xung enable tích cực cao trong 1 chu kỳ clock
+    output reg baud_tick      // Xung enable tích cực cao trong 1 chu kỳ clock
 );  
     localparam CNT_2400 = CLK_FREQ / 2400;
     localparam CNT_4800 = CLK_FREQ / 4800;
@@ -27,16 +28,22 @@ module tx_baud_gen #(
     always @(posedge clk or negedge rst_n) begin
         if(~rst_n) begin
             cnt <= 15'b0;
-            baud_en <= 1'b0;
+            baud_tick <= 1'b0;
         end
         else begin
-            if (cnt >= max_cnt - 1) begin
-                baud_en <= 1'b1;
-                cnt <= 15'b0;
+            if(baud_en) begin
+                if (cnt >= max_cnt - 1) begin
+                    baud_tick <= 1'b1;
+                    cnt <= 15'b0;
+                end
+                else begin
+                    baud_tick <= 1'b0;
+                    cnt <= cnt + 1'b1;
+                end
             end
             else begin
-                baud_en <= 1'b0;
-                cnt <= cnt + 1'b1;
+                cnt <= 15'b0;
+                baud_tick <= 1'b0;
             end
         end
     end

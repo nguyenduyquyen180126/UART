@@ -4,7 +4,6 @@ module piso(
     input shift_en,
     input parity_bit,
     input [7:0] data_in,
-    input [1:0] parity_type,
     output data_tx
 );
     localparam no_parity = 2'b00;

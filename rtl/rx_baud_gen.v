@@ -1,4 +1,4 @@
-module tx_baud_gen #(
+module rx_baud_gen #(
     parameter CLK_FREQ = 50_000_000
 
 )(
