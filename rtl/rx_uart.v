@@ -1,62 +1,93 @@
 module rx_uart(
     input clk,
     input rst_n,
-    input [1:0] baud_rate,
-    input data_tx,
+    input rx,
+    input baud_tick,
+    input [1:0] data_b_num,
+    input stop_b_num,
     input [1:0] parity_type,
-    output [7:0] raw_data,
-    output [2:0] error_flag,
-    output done_flag
+    input parity_en,
+    output [31:0] rx_data,
+    output rx_done,
+    output error
 );
-    wire active_flag, clear_en, shift_en, received_flag;
-    wire [10:0] data_parall;
-    wire baud_en;
-    wire parity_bit, start_bit, stop_bit;
-
-    rx_baud_gen rx_baud_gen_inst(
-        .clk(clk),
-        .rst_n(rst_n),
-        .baud_rate(baud_rate),
-        .baud_en(baud_en)
-    );
-
+   wire parity_bit;
+   wire shift_en;
+   wire tick_en;
+   wire tick_clr;
+   wire bit_clr;
+   wire bit_last;
+   wire [11:0] data_out;
+   wire [3:0] num_data_b;
+   wire [1:0] num_stop_b;
+   wire [3:0] bit_cnt;
+   wire [3:0] tick_cnt;
+   wire parity_exp;
     rx_controller rx_controller_inst(
         .clk(clk),
         .rst_n(rst_n),
-        .baud_en(baud_en),
-        .data_tx(data_tx),
-        .active_flag(active_flag),
-        .clear_en(clear_en),
+        .baud_tick(baud_tick),
+        .rx(rx),
+        .bit_last(bit_last),
+        .tick_cnt(tick_cnt),
         .shift_en(shift_en),
-        .received_flag(received_flag)
+        .tick_clr(tick_clr),
+        .tick_en(tick_en),
+        .num_stop_b(num_stop_b),
+        .bit_clr(bit_clr),
+        .rx_done(rx_done)
+    );
+    data_b_num data_b_num_inst(
+        .data_b_num(data_b_num),
+        .data_b_num_out(num_data_b)
+    );
+    stop_b_num stop_b_num_inst(
+        .stop_b_num(stop_b_num),
+        .stop_b_num_out(num_stop_b)
+    );
+    bit_cnt bit_cnt_inst(
+        .clk(clk),
+        .rst_n(rst_n),
+        .tick_en(tick_en),
+        .bit_clr(bit_clr),
+        .data_b_num_out(num_data_b),
+        .stop_b_num_out(num_stop_b),
+        .bit_last(bit_last),
+        .bit_cnt(bit_cnt),
+        .parity_en(parity_en)
+    );
+    tick_cnt tick_cnt_inst(
+        .clk(clk),
+        .rst_n(rst_n),
+        .baud_tick(baud_tick),
+        .tick_clr(tick_clr),
+        .tick_cnt(tick_cnt)
     );
     sipo sipo_inst(
         .clk(clk),
         .rst_n(rst_n),
         .shift_en(shift_en),
-        .clear_en(clear_en),
-        .data_tx(data_tx),
-        .data_out(data_parall)
+        .rx(rx),
+        .data_out(data_out)
     );
     deframe deframe_inst(
-        .received_flag(received_flag),
+        .clk(clk),
         .rst_n(rst_n),
-        .data_parall(data_parall),
-        .raw_data(raw_data),
+        .bit_last(bit_last),
+        .parity_en(parity_en),
+        .data_in(data_out),
+        .num_data_b(num_data_b),
+        .num_stop_b(num_stop_b),
+        .rx_data(rx_data),
         .parity_bit(parity_bit),
-        .start_bit(start_bit),
-        .stop_bit(stop_bit),
-        .done_flag(done_flag)
+        .parity_exp(parity_exp)
     );
     error_check error_check_inst(
-        .rst_n(rst_n),
-        .raw_data(raw_data),
-        .parity_bit(parity_bit),
-        .start_bit(start_bit),
-        .stop_bit(stop_bit),
+        .parity_en(parity_en),
         .parity_type(parity_type),
-        .received_flag(received_flag),
-        .error_flag(error_flag)
+        .parity_bit(parity_bit),
+        .parity_exp(parity_exp),
+        .error(error)
     );
 
 endmodule
