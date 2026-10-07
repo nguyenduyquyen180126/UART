@@ -23,11 +23,23 @@ module rx_uart(
    wire [3:0] bit_cnt;
    wire [3:0] tick_cnt;
    wire parity_exp;
+    // 2-FF Synchronizer cho tin hieu rx (chong Metastability)
+    reg rx_sync1, rx_sync2;
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            rx_sync1 <= 1'b1;
+            rx_sync2 <= 1'b1;
+        end else begin
+            rx_sync1 <= rx;
+            rx_sync2 <= rx_sync1;
+        end
+    end
+
     rx_controller rx_controller_inst(
         .clk(clk),
         .rst_n(rst_n),
         .baud_tick(baud_tick),
-        .rx(rx),
+        .rx(rx_sync2),
         .bit_last(bit_last),
         .tick_cnt(tick_cnt),
         .shift_en(shift_en),
@@ -67,7 +79,7 @@ module rx_uart(
         .clk(clk),
         .rst_n(rst_n),
         .shift_en(shift_en),
-        .rx(rx),
+        .rx(rx_sync2),
         .data_out(data_out)
     );
     deframe deframe_inst(

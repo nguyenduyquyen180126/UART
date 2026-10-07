@@ -38,11 +38,12 @@ module rx_controller(
                 else next_state = IDLE;
             end
             CENTER: begin
-                if(tick_cnt == 4'd7) begin
-                    if(~rx) next_state = FRAME;
-                    else next_state = IDLE;
-                end
-                else next_state = CENTER;
+                if (tick_cnt == 4'd7 && ~rx)
+                    next_state = FRAME;
+                else if (tick_cnt == 4'd7 && rx)
+                    next_state = IDLE;
+                else
+                    next_state = CENTER;
             end
             FRAME: begin
                 if(bit_last) next_state = HOLD;
@@ -55,84 +56,47 @@ module rx_controller(
         endcase
     end
     end
-    always @(posedge clk or negedge rst_n) begin
-        if(~rst_n) begin
-            tick_en <= 1'b0;
-            tick_clr <= 1'b1;
-            rx_done <= 1'b0;
-            bit_clr <= 1'b1;
-            shift_en <= 1'b0;
-        end
-        else begin
-            tick_en <= 1'b0;
-            shift_en <= 1'b0;
-            if(baud_tick) begin
+    always @(*) begin
+        tick_en = 1'b0;
+        shift_en = 1'b0;
+        tick_clr = 1'b0;
+        rx_done = 1'b0;
+        bit_clr = 1'b0;
+        if(baud_tick) begin
             case(state)
                 IDLE: begin
-                    tick_en <= 1'b0;
-                    tick_clr <= 1'b1;
-                    rx_done <= 1'b0;
-                    bit_clr <= 1'b1;
-                    shift_en <= 1'b0;
+                    tick_clr = 1'b1;
+                    bit_clr  = 1'b1;
                 end
                 CENTER: begin
-                    bit_clr <= 1'b0;
-                    tick_en <= 1'b0;
-                    tick_clr <= 1'b0;
-                    shift_en <= 1'b0;
-                    rx_done <= 1'b0;
-                    if(tick_cnt == 4'd6) begin
-                        tick_en <= 1'b1;
-                        tick_clr <= 1'b1;
-                        shift_en <= 1'b1;
+                    if (tick_cnt == 4'd7 && ~rx) begin
+                        shift_en = 1'b1;
+                        tick_en  = 1'b1;
+                        tick_clr = 1'b1;
                     end
-                    else begin
-                        tick_en <= 1'b0;
-                        tick_clr <= 1'b0;
-                        shift_en <= 1'b0;
+                    else if (tick_cnt == 4'd7 && rx) begin
+                        tick_clr = 1'b1;
+                        bit_clr  = 1'b1;
                     end
                 end
                 FRAME: begin
-                    tick_en <= 1'b0;
-                    tick_clr <= 1'b0;
-                    shift_en <= 1'b0;
-                    rx_done <= 1'b0;
                     if(bit_last) begin
-                        bit_clr <= 1'b1;
-                        tick_en <= 1'b0;
-                        tick_clr <= 1'b1;
-                        shift_en <= 1'b0;
-                        rx_done <= 1'b0;
+                        bit_clr  = 1'b1;
+                        tick_clr = 1'b1;
                     end
-                    else begin
-                        if(tick_cnt == 4'd15) begin
-                            tick_en <= 1'b1;
-                            shift_en <= 1'b1;
-                        end
-                        else begin
-                            tick_en <= 1'b0;
-                            tick_clr <= 1'b0;
-                            shift_en <= 1'b0;
-                        end
+                    else if(tick_cnt == 4'd15) begin
+                        tick_en  = 1'b1;
+                        shift_en = 1'b1;
                     end
                 end
                 HOLD: begin
-                    bit_clr <= 1'b1;
-                    tick_en <= 1'b0;
-                    shift_en <= 1'b0;
-                    tick_clr <= 1'b0;
-                    rx_done <= 1'b1;
+                    bit_clr = 1'b1;
                     if(tick_cnt == tick_cnt_max) begin
-                        rx_done <= 1'b1;
-                        tick_clr <= 1'b1;
-                    end
-                    else begin
-                        rx_done <= 1'b0;
-                        tick_clr <= 1'b0;
+                        rx_done  = 1'b1;
+                        tick_clr = 1'b1;
                     end
                 end
             endcase
-        end
         end
     end
 

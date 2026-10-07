@@ -5,11 +5,11 @@ module uart_regs (
     input  wire [11:0] paddr,
     input  wire [31:0] pwdata,
     input  wire        pwrite,
-    input  wire        write_en,
-    input  wire        read_en,
+    input  wire        write_en,// check
+    input  wire        read_en,// check
     output reg  [31:0] prdata,
 
-    output wire [31:0] tx_data,
+    output wire [31:0] tx_data,// chck
     output wire [1:0]  data_bit_num,
     output wire        stop_bit_num,
     output wire        parity_en,

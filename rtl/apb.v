@@ -65,7 +65,7 @@ module apb_slave (
             reg_paddr  <= 12'h000;
             reg_pwdata <= 32'h00000000;
             reg_pwrite <= 1'b0;
-        end 
+        end
         else if (state == IDLE && psel && !penable) begin
             reg_paddr  <= paddr;
             reg_pwdata <= pwdata;
