@@ -2,85 +2,35 @@ module apb_slave (
     input  wire        pclk,
     input  wire        preset_n,
     
+    // APB Bus Interface
     input  wire        psel,
     input  wire        penable,
     input  wire        pwrite,
     input  wire [11:0] paddr,
     input  wire [31:0] pwdata,
-    output reg         pready,
-    output reg         pslverr,
-    output reg  [31:0] prdata,
+    output wire        pready,
+    output wire        pslverr,
+    output wire [31:0] prdata,
 
-    output reg         reg_en,
+    // UART Register Interface
+    output wire        reg_pread,   // Kich hoat DOC thanh ghi
+    output wire        reg_pwrite,  // Kich hoat GHI thanh ghi
     output wire [11:0] reg_paddr,
     output wire [31:0] reg_pwdata,
-    output wire        reg_pwrite,
     input  wire [31:0] reg_prdata,
-    input  wire        write_en,
-    input  wire        read_en
+    input  wire        reg_ack_err  // Bao loi vi pham bao ve tu uart_regs
 );
+    assign pready = psel & penable;
 
-    localparam IDLE   = 2'b00;
-    localparam SETUP  = 2'b01;
-    localparam ACCESS = 2'b10;
+    wire addr_valid = (paddr <= 12'h010) && (paddr[1:0] == 2'b00);
 
-    reg [1:0] state, next_state;
-
-    always @(posedge pclk or negedge preset_n) begin
-        if (!preset_n) begin
-            state <= IDLE;
-        end else begin
-            state <= next_state;
-        end
-    end
-
-    always @(*) begin
-        next_state = state;
-        case (state)
-            IDLE: begin
-                if (psel && !penable) 
-                    next_state = SETUP;
-            end
-            
-            SETUP: begin
-                if (psel && penable) 
-                    next_state = ACCESS;
-                else if (!psel) 
-                    next_state = IDLE;
-            end
-            
-            ACCESS: begin
-                if (pready) begin
-                    if (!psel)
-                        next_state = IDLE;
-                    else if (psel && !penable)
-                        next_state = SETUP;
-                end
-            end
-            
-            default: next_state = IDLE;
-        endcase
-    end
-
+    assign reg_pread  = psel & penable & addr_valid & (~pwrite);
+    assign reg_pwrite = psel & penable & addr_valid & pwrite;
     assign reg_paddr  = paddr;
     assign reg_pwdata = pwdata;
-    assign reg_pwrite = pwrite;
 
-    always @(*) begin
-        reg_en  = 1'b0;
-        pready  = 1'b1;
-        pslverr = 1'b0;
-        prdata  = 32'h00000000;
+    assign pslverr = psel & penable & ((!addr_valid) | reg_ack_err);
 
-        case (state)
-            ACCESS: begin
-                reg_en  = 1'b1;
-                pslverr = reg_pwrite ? !write_en : !read_en;
-                prdata  = (read_en) ? reg_prdata : 32'h00000000;
-            end
-
-            default: ;
-        endcase
-    end
+    assign prdata = (reg_pread && !reg_ack_err) ? reg_prdata : 32'h0000_0000;
 
 endmodule

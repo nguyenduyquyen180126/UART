@@ -77,8 +77,7 @@ module avalon2apb #(
     // -------------------------------------------------------------------------
     localparam [1:0] ST_IDLE       = 2'b00; // Idle state, waits for Avalon read/write
     localparam [1:0] ST_SETUP      = 2'b01; // APB Setup phase (psel=1, penable=0)
-    localparam [1:0] ST_ACCESS_PRE = 2'b10; // First cycle of penable=1 (allows apb_slave FSM to enter ACCESS)
-    localparam [1:0] ST_ACCESS     = 2'b11; // APB Access phase (apb_slave is in ACCESS, data transferred)
+    localparam [1:0] ST_ACCESS     = 2'b10; // APB Access phase (apb_slave is in ACCESS, data transferred)
 
     reg [1:0] state, next_state;
 
@@ -109,10 +108,6 @@ module avalon2apb #(
             end
 
             ST_SETUP: begin
-                next_state = ST_ACCESS_PRE;
-            end
-
-            ST_ACCESS_PRE: begin
                 next_state = ST_ACCESS;
             end
 
@@ -158,11 +153,6 @@ module avalon2apb #(
                     penable <= 1'b1; // Assert penable for access phase
                 end
 
-                ST_ACCESS_PRE: begin
-                    psel    <= 1'b1;
-                    penable <= 1'b1; // Keep asserted as apb_slave transitions into ACCESS
-                end
-
                 ST_ACCESS: begin
                     if (pready) begin
                         psel         <= 1'b0;
@@ -197,11 +187,10 @@ module avalon2apb #(
     reg waitrequest_comb;
     always @(*) begin
         case (state)
-            ST_IDLE:       waitrequest_comb = req_valid;
-            ST_SETUP:      waitrequest_comb = 1'b1;
-            ST_ACCESS_PRE: waitrequest_comb = 1'b1;
-            ST_ACCESS:     waitrequest_comb = !pready;
-            default:       waitrequest_comb = 1'b1;
+            ST_IDLE:   waitrequest_comb = req_valid;
+            ST_SETUP:  waitrequest_comb = 1'b1;
+            ST_ACCESS: waitrequest_comb = !pready;
+            default:   waitrequest_comb = 1'b1;
         endcase
     end
 
