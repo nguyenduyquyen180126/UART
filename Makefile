@@ -85,6 +85,49 @@ tx_baud_gen_cli:
 	$(VSIM) -c -do "do sim/tx_baud_gen.tcl; quit -f"
 
 # ------------------------------------------------------------------------------
+# 3.1. CHẠY MÔ PHỎNG APB_UART (HỖ TRỢ CẢ IVERILOG & MODELSIM/QUESTASIM)
+# ------------------------------------------------------------------------------
+APB_UART_SRCS := rtl/apb_uart.v \
+                 rtl/apb_slave.v \
+                 rtl/reg_uart.v \
+                 rtl/baud_gen.v \
+                 rtl/tx_uart.v \
+                 rtl/tx_controller.v \
+                 rtl/tx_tick_cnt.v \
+                 rtl/tx_bit_cnt.v \
+                 rtl/tx_stop_cnt.v \
+                 rtl/tx_parity.v \
+                 rtl/tx_piso.v \
+                 rtl/rx_uart.v \
+                 rtl/rx_controller.v \
+                 rtl/data_b_num.v \
+                 rtl/stop_b_num.v \
+                 rtl/bit_cnt.v \
+                 rtl/tick_cnt.v \
+                 rtl/sipo.v \
+                 rtl/deframe.v \
+                 rtl/error_check.v
+
+# Chạy mô phỏng apb_uart bằng iverilog (mặc định nhanh, không cần license)
+apb_uart:
+	@echo "==> Đang biên dịch và chạy mô phỏng tb_apb_uart bằng Icarus Verilog..."
+	iverilog -g2012 -o sim_apb_uart.vvp $(APB_UART_SRCS) tb/tb_apb_uart.v
+	vvp sim_apb_uart.vvp
+
+# Mở dạng sóng GTKWave cho apb_uart
+wave_apb_uart: apb_uart
+	gtkwave wave_apb_uart.vcd &
+
+# Chạy bằng QuestaSim/ModelSim (khi có license)
+apb_uart_vsim: work
+	$(VLOG) -sv $(APB_UART_SRCS) tb/tb_apb_uart.v
+	$(VSIM) -do "vsim -voptargs=+acc work.tb_apb_uart; add wave -r /*; run -all"
+
+apb_uart_vsim_cli: work
+	$(VLOG) -sv $(APB_UART_SRCS) tb/tb_apb_uart.v
+	$(VSIM) -c -do "run -all; quit -f" work.tb_apb_uart
+
+# ------------------------------------------------------------------------------
 # 4. GÕ TẮT THEO TÊN MODULE (VÍ DỤ: make rx_uart)
 # ------------------------------------------------------------------------------
 %:

@@ -26,7 +26,6 @@ module apb_uart #(
 
     wire        tx_done, rx_done, error, baud_tick;
     wire [31:0] rx_data;
-    wire [1:0]  rx_parity_type = {parity_type, ~parity_type};
 
     apb_slave u_apb_slave (
         .pclk       (clk),
@@ -99,7 +98,7 @@ module apb_uart #(
         .baud_tick   (baud_tick),
         .data_b_num  (data_bit_num),
         .stop_b_num  (stop_bit_num),
-        .parity_type (rx_parity_type),
+        .parity_type (parity_type),
         .parity_en   (parity_en),
         .rx_data     (rx_data),
         .rx_done     (rx_done),

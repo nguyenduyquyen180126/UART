@@ -5,7 +5,7 @@ module rx_uart(
     input baud_tick,
     input [1:0] data_b_num,
     input stop_b_num,
-    input [1:0] parity_type,
+    input parity_type,
     input parity_en,
     output [31:0] rx_data,
     output rx_done,

@@ -43,7 +43,7 @@ module uart_regs (
     wire addr_stt  = (paddr == ADDR_STT);
 
     wire tx_wr_en    = addr_tx && stt_reg[0];
-    wire uart_idle   = stt_reg[0] && rx_done;
+    wire uart_idle   = stt_reg[0] && !stt_reg[1];
     wire cfg_wr_en   = addr_cfg && uart_idle;
     wire rx_read_ack = read_en && addr_rx;
     wire tx_write_ack = write_en && addr_ctrl && pwdata[0];
@@ -89,10 +89,10 @@ module uart_regs (
             else if (rx_done)
                 stt_reg[1] <= 1'b1;
 
-            if (error)
-                stt_reg[2] <= 1'b1;
-            else if (rx_read_ack)
+            if (rx_read_ack)
                 stt_reg[2] <= 1'b0;
+            else if (rx_done && error)
+                stt_reg[2] <= 1'b1;
         end
     end
 

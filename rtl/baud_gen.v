@@ -5,12 +5,12 @@ module baud_gen #(
     input             rst_n,
     input      [1:0]  baud_sel,
     output reg        baud_tick
-);  
+);
     localparam CNT_2400  = CLK_FREQ / (2400 * 16);
     localparam CNT_4800  = CLK_FREQ / (4800 * 16);
     localparam CNT_9600  = CLK_FREQ / (9600 * 16);
     localparam CNT_19200 = CLK_FREQ / (19200 * 16);
-    
+
     reg [14:0] max_cnt;
     always @(*) begin
         case (baud_sel)
