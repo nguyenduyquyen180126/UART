@@ -1,0 +1,264 @@
+Kế hoạch cải tiến thiết kế cho apb_slave và uart_regs nhằm loại bỏ hoàn toàn FSM tuần tự (FSM-less / Combinational Decode), đưa chuẩn APB về đúng Zero-
+Wait-State (2 clock cycles/transfer) mà vẫn bảo toàn 100% tính năng và cơ chế bảo vệ cũ của UART.
+──────
+### I. Đánh giá tính năng hiện tại cần bảo toàn
+
+Thiết kế cũ có các tính năng đặc thù cần giữ nguyên vẹn:
+
+1. Bản đồ thanh ghi (Register Map - 32-bit aligned):
+    • 0x00 (ADDR_TX): Ghi dữ liệu truyền (8-bit payload).
+    • 0x04 (ADDR_RX): Đọc dữ liệu nhận từ UART.
+    • 0x08 (ADDR_CFG): Cấu hình Baudrate, Parity, Stop bit, Data bit.
+    • 0x0C (ADDR_CTRL): Ghi bit[0] = 1 kích hoạt start_tx (tự động xóa sau 1 clock).
+    • 0x10 (ADDR_STT): Trạng thái [0]=tx_ready/done, [1]=rx_done, [2]=rx_error.
+2. Cơ chế bảo vệ (Hardware Protection & Error Check):
+    • Bảo vệ CFG: Chỉ cho phép ghi vào ADDR_CFG khi UART hoàn toàn rảnh rỗi (stt_reg[0] == 1 && rx_done == 1).
+    • Bảo vệ TX: Chỉ cho phép ghi ADDR_TX khi TX đang rảnh (stt_reg[0] == 1).
+    • Báo lỗi pslverr: Trả về pslverr = 1 nếu CPU cố tình ghi vi phạm bảo vệ hoặc truy cập địa chỉ ngoài dải hợp lệ.
+3. Cơ chế phần cứng tự động (Side-effects):
+    • Đọc ADDR_RX tự động xóa cờ rx_done (stt_reg[1]) và xóa cờ error (stt_reg[2]).
+    • Ghi start_tx tự động kéo cờ tx_ready (stt_reg[0] = 0).
+
+──────
+### II. Phân tích & Tối ưu hóa kiến trúc mới (Loại bỏ FSM)
+
+Trong mẫu code tham khảo của bạn có sử dụng 32'bz cho PRDATA.
+
+│ ⚠ Lưu ý chuẩn thiết kế SoC: Trong vi mạch hiện đại (FPGA/ASIC), bus nội bộ APB không dùng Tri-state (32'bz) mà dùng multiplexer tổ hợp. Khi không đọc
+│ hoặc không chọn slave, ta lái về 32'h0 để tiết kiệm điện và tránh floating net.
+
+#### 1. Định nghĩa pha APB bằng logic tổ hợp:
+
+Không cần biến trạng thái FSM state, nhận diện pha bus trực tiếp:
+
+• Pha SETUP: psel && !penable (Master chuẩn bị địa chỉ & dữ liệu).
+• Pha ACCESS: psel && penable (Thời điểm truyền dữ liệu và phản hồi).
+• PREADY: Vì các thanh ghi UART là flip-flop nội bộ (phản hồi ngay trong chu kỳ), ta kích hoạt:
+
+PREADY = PSEL & PENABLE
+
+(Zero wait-state: Transfer chỉ mất đúng 1 clock SETUP + 1 clock ACCESS = 2 chu kỳ).
+
+#### 2. Lựa chọn cấu trúc mô-đun hóa:
+
+Nên giữ cấu trúc 2 module riêng biệt (apb_slave làm bus decoder + uart_regs chứa logic thanh ghi và UART peripheral) để đảm bảo tính module hóa và dễ
+tái sử dụng:
+
+• apb_slave: Chuyên trách giao thức APB, kiểm tra địa chỉ hợp lệ, quản lý PREADY, PSLVERR, chuyển đổi tín hiệu reg_en, reg_pwrite, reg_paddr, reg_pwdata.
+• uart_regs: Chuyên trách logic nghiệp vụ của UART, quản lý trạng thái truyền/nhận và cờ báo.
+──────
+### III. Chi tiết thiết kế mới
+
+#### 1. Module apb_slave (FSM-less, Chuẩn APB3/APB4)
+
+module apb_slave (
+    input  wire        pclk,
+    input  wire        preset_n,
+    
+    // APB Bus Interface
+    input  wire        psel,
+    input  wire        penable,
+    input  wire        pwrite,
+    input  wire [11:0] paddr,
+    input  wire [31:0] pwdata,
+    output wire        pready,
+    output wire        pslverr,
+    output wire [31:0] prdata,
+
+    // Internal Register Bus Interface
+    output wire        reg_en,
+    output wire [11:0] reg_paddr,
+    output wire [31:0] reg_pwdata,
+    output wire        reg_pwrite,
+    input  wire [31:0] reg_prdata,
+    input  wire        reg_ack_err  // Báo lỗi vi phạm truy cập từ uart_regs
+);
+
+    // 1. Nhận diện chu kỳ ACCESS hợp lệ
+    wire apb_access = psel & penable;
+
+    // 2. Zero-wait-state PREADY
+    assign pready = apb_access;
+
+    // 3. Address Range Valid Check (Vùng địa chỉ hợp lệ: 0x000 đến 0x010)
+    wire addr_valid = (paddr <= 12'h010) && (paddr[1:0] == 2'b00); // Yêu cầu 4-byte aligned
+
+    // 4. Kích hoạt giao tiếp với thanh ghi UART
+    assign reg_en     = apb_access & addr_valid;
+    assign reg_paddr  = paddr;
+    assign reg_pwdata = pwdata;
+    assign reg_pwrite = pwrite;
+
+    // 5. PSLVERR: Báo lỗi khi địa chỉ sai HOẶC vi phạm cơ chế ghi đè của uart_regs
+    assign pslverr = apb_access & ((!addr_valid) | reg_ack_err);
+
+    // 6. PRDATA: Lái dữ liệu khi đọc, trả về 0 khi không đọc
+    assign prdata = (apb_access && !pwrite && addr_valid) ? reg_prdata : 32'h0000_0000;
+
+endmodule
+──────
+#### 2. Module uart_regs (Cải tiến cơ chế bảo vệ & bắt lỗi)
+
+Trong thiết kế mới, uart_regs sẽ trả về tín hiệu reg_ack_err ngay trong chu kỳ ACCESS nếu phát hiện lệnh ghi/đọc không hợp lệ:
+
+module uart_regs (
+    input  wire        clk,
+    input  wire        rst_n,
+
+    // Giao tiếp từ apb_slave
+    input  wire        reg_en,
+    input  wire [11:0] paddr,
+    input  wire [31:0] pwdata,
+    input  wire        pwrite,
+    output reg  [31:0] prdata,
+    output wire        reg_ack_err, // Báo lỗi nếu vi phạm điều kiện
+
+    // Giao tiếp với UART TX / RX Hardware
+    output wire [7:0]  tx_data,
+    output wire [1:0]  data_bit_num,
+    output wire        stop_bit_num,
+    output wire        parity_en,
+    output wire        parity_type,
+    output wire        start_tx,
+    output wire [1:0]  baud_sel,
+
+    input  wire        tx_done,
+    input  wire        rx_done,
+    input  wire        error,
+    input  wire [31:0] rx_data
+);
+
+    localparam [11:0] ADDR_TX   = 12'h000;
+    localparam [11:0] ADDR_RX   = 12'h004;
+    localparam [11:0] ADDR_CFG  = 12'h008;
+    localparam [11:0] ADDR_CTRL = 12'h00C;
+    localparam [11:0] ADDR_STT  = 12'h010;
+
+    reg [31:0] tx_data_reg;
+    reg [31:0] rx_data_reg;
+    reg [31:0] cfg_reg;
+    reg [31:0] ctrl_reg;
+    reg [31:0] stt_reg;
+
+    // Decode địa chỉ
+    wire addr_tx   = (paddr == ADDR_TX);
+    wire addr_rx   = (paddr == ADDR_RX);
+    wire addr_cfg  = (paddr == ADDR_CFG);
+    wire addr_ctrl = (paddr == ADDR_CTRL);
+    wire addr_stt  = (paddr == ADDR_STT);
+
+    // Điều kiện an toàn
+    wire tx_ready  = stt_reg[0];
+    wire uart_idle = stt_reg[0] && rx_done;
+
+    // Xác thực lệnh ghi hợp lệ
+    wire write_legal = (addr_tx   && tx_ready)  ||  // TX rảnh mới được ghi
+                        (addr_cfg  && uart_idle) ||  // UART idle mới được đổi config
+                        (addr_ctrl);                 // Luôn cho phép ghi control
+
+    // Xác thực lệnh đọc hợp lệ (RX, TX, CFG, CTRL, STT đều đọc được)
+    wire read_legal  = addr_tx || addr_rx || addr_cfg || addr_ctrl || addr_stt;
+
+    // Báo lỗi vi phạm bảo vệ:
+    // - Khi ghi vào địa chỉ Read-only (RX, STT) hoặc ghi khi UART đang bận
+    // - Khi đọc địa chỉ không hỗ trợ
+    assign reg_ack_err = reg_en && (pwrite ? (!write_legal) : (!read_legal));
+
+    wire write_en = reg_en && pwrite  && write_legal;
+    wire read_en  = reg_en && !pwrite && read_legal;
+
+    // Side-effects
+    wire rx_read_ack  = read_en  && addr_rx;
+    wire tx_write_ack = write_en && addr_ctrl && pwdata[0];
+
+    // 1. Quản lý các thanh ghi cấu hình & điều khiển
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            tx_data_reg <= 32'h0;
+            cfg_reg     <= 32'h0;
+            ctrl_reg    <= 32'h0;
+        end else begin
+            ctrl_reg[0] <= 1'b0; // Tự động xóa xung start_tx sau 1 chu kỳ
+
+            if (write_en) begin
+                case (paddr)
+                    ADDR_TX:   tx_data_reg <= pwdata;
+                    ADDR_CFG:  cfg_reg     <= pwdata;
+                    ADDR_CTRL: ctrl_reg    <= pwdata;
+                    default: ;
+                endcase
+            end
+        end
+    end
+
+    // 2. Quản lý trạng thái STT và RX Data
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            rx_data_reg <= 32'h0;
+            stt_reg     <= 32'h0000_0001; // tx_done mặc định = 1
+        end else begin
+            rx_data_reg <= rx_data;
+
+            // Cờ TX Done (Bit 0)
+            if (tx_write_ack)
+                stt_reg[0] <= 1'b0;
+            else if (tx_done)
+                stt_reg[0] <= 1'b1;
+
+            // Cờ RX Done (Bit 1)
+            if (rx_read_ack)
+                stt_reg[1] <= 1'b0;
+            else if (rx_done)
+                stt_reg[1] <= 1'b1;
+
+            // Cờ Error (Bit 2)
+            if (error)
+                stt_reg[2] <= 1'b1;
+            else if (rx_read_ack)
+                stt_reg[2] <= 1'b0;
+        end
+    end
+
+    // 3. Đọc dữ liệu ra
+    always @(*) begin
+        if (read_en) begin
+            case (paddr)
+                ADDR_TX:   prdata = tx_data_reg;
+                ADDR_RX:   prdata = rx_data_reg;
+                ADDR_CFG:  prdata = cfg_reg;
+                ADDR_CTRL: prdata = ctrl_reg;
+                ADDR_STT:  prdata = stt_reg;
+                default:   prdata = 32'h0;
+            endcase
+        end else begin
+            prdata = 32'h0;
+        end
+    end
+
+    // Gán tín hiệu ra ngoại vi UART
+    assign tx_data      = tx_data_reg[7:0];
+    assign data_bit_num = cfg_reg[1:0];
+    assign stop_bit_num = cfg_reg[2];
+    assign parity_en    = cfg_reg[3];
+    assign parity_type  = cfg_reg[4];
+    assign baud_sel     = cfg_reg[6:5];
+    assign start_tx     = ctrl_reg[0];
+
+endmodule
+──────
+### IV. Lợi ích vượt trội của thiết kế mới
+
+Tiêu chí                            | Thiết kế cũ (Dùng FSM trễ)            | Thiết kế mới (FSM-less)
+-------------------------------------|---------------------------------------|--------------------------------------------------------------------------
+Thời gian truyền 1 từ               | 3 – 4 chu kỳ clock (bị trễ FSM)       | Đúng 2 chu kỳ clock (1 SETUP + 1 ACCESS)
+Tính tương thích APB                | Cần bridge trung gian (ST_ACCESS_PRE) | Chuẩn 100% AMBA APB3/APB4, cắm trực tiếp vào bất kỳ CPU/Interconnect nào
+Độ phức tạp phần cứng               | Tốn thanh ghi FSM state, next_state   | Giảm diện tích logic, hoàn toàn là tổ hợp giải mã
+Bảo vệ phần cứng                    | Có                                    | Bảo toàn đầy đủ, pslverr phản hồi tức thì
+Độ trễ đọc dữ liệu                  | Trễ sau ACCESS                        | Có dữ liệu ngay khi PENABLE = 1 & PREADY = 1
+──────
+### V. Các bước triển khai tiếp theo
+
+1. Cập nhật RTL: Thay thế mã nguồn trong apb_slave.v và reg_uart.v.
+2. Cập nhật Top Module apb_uart.v: Nối chân reg_ack_err giữa 2 module.
+3. Cập nhật Testbench tb_uart_regs.v: Tinh chỉnh task apb_write và apb_read về chuẩn 2 chu kỳ (không cần delay thêm xung clock).
+4. Đơn giản hóa avalon2apb.v: Bỏ trạng thái trung gian ST_ACCESS_PRE, giúp CPU Nios V truy cập UART nhanh hơn 33%.

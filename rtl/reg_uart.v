@@ -2,13 +2,12 @@ module uart_regs (
     input  wire        clk,
     input  wire        rst_n,
 
-    input  wire        reg_en,
+    input  wire        reg_pread, 
+    input  wire        reg_pwrite,  
     input  wire [11:0] paddr,
     input  wire [31:0] pwdata,
-    input  wire        pwrite,
-    output wire        write_en,
-    output wire        read_en,
     output reg  [31:0] prdata,
+    output wire        reg_ack_err,
 
     output wire [7:0]  tx_data,
     output wire [1:0]  data_bit_num,
@@ -20,15 +19,16 @@ module uart_regs (
 
     input  wire        tx_done,
     input  wire        rx_done,
+    input  wire        rx_busy,
     input  wire        error,
     input  wire [31:0] rx_data
 );
 
-    localparam [11:0] ADDR_TX   = 12'h00;
-    localparam [11:0] ADDR_RX   = 12'h04;
-    localparam [11:0] ADDR_CFG  = 12'h08;
-    localparam [11:0] ADDR_CTRL = 12'h0C;
-    localparam [11:0] ADDR_STT  = 12'h10;
+    localparam [11:0] ADDR_TX   = 12'h000;
+    localparam [11:0] ADDR_RX   = 12'h004;
+    localparam [11:0] ADDR_CFG  = 12'h008;
+    localparam [11:0] ADDR_CTRL = 12'h00C;
+    localparam [11:0] ADDR_STT  = 12'h010;
 
     reg [31:0] tx_data_reg;
     reg [31:0] rx_data_reg;
@@ -42,25 +42,34 @@ module uart_regs (
     wire addr_ctrl = (paddr == ADDR_CTRL);
     wire addr_stt  = (paddr == ADDR_STT);
 
-    wire tx_wr_en    = addr_tx && stt_reg[0];
-    wire uart_idle   = stt_reg[0] && rx_done;
-    wire cfg_wr_en   = addr_cfg && uart_idle;
-    wire rx_read_ack = read_en && addr_rx;
-    wire tx_write_ack = write_en && addr_ctrl && pwdata[0];
+    wire tx_ready  = stt_reg[0];
+    wire uart_idle = tx_ready && (!rx_busy);
 
-    assign write_en = reg_en && pwrite && (tx_wr_en || cfg_wr_en || addr_ctrl);
-    assign read_en  = reg_en && !pwrite && (addr_tx || addr_rx || addr_cfg || addr_ctrl || addr_stt);
+    wire write_legal = (addr_tx   && tx_ready)  ||
+                       (addr_cfg  && uart_idle) ||
+                       (addr_ctrl);
 
-    // Write logic & TX control
+    wire read_legal  = addr_tx || addr_rx || addr_cfg || addr_ctrl || addr_stt;
+
+    assign reg_ack_err = (reg_pwrite && !write_legal) || 
+                         (reg_pread  && !read_legal);
+
+    wire valid_write = reg_pwrite && write_legal;
+    wire valid_read  = reg_pread  && read_legal;
+
+    wire rx_read_ack  = valid_read  && addr_rx;
+    wire tx_write_ack = valid_write && addr_ctrl && pwdata[0];
+
+    // 1. Quan ly ghi thanh ghi
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
             tx_data_reg <= 32'h0;
             cfg_reg     <= 32'h0;
             ctrl_reg    <= 32'h0;
         end else begin
-            ctrl_reg[0] <= 1'b0;
+            ctrl_reg[0] <= 1'b0; // Tu dong xoa xung start_tx sau 1 chu ky
 
-            if (write_en) begin
+            if (valid_write) begin
                 case (paddr)
                     ADDR_TX:   tx_data_reg <= pwdata;
                     ADDR_CFG:  cfg_reg     <= pwdata;
@@ -71,11 +80,11 @@ module uart_regs (
         end
     end
 
-    // RX capture & Status register 
+    // 2. Quan ly RX Data & Trang thai STT
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
             rx_data_reg <= 32'h0;
-            stt_reg     <= 32'h0000_0001; // Bit 0 (tx_done) reset = 1
+            stt_reg     <= 32'h0000_0001; // tx_done ban dau = 1
         end else begin
             rx_data_reg <= rx_data;
 
@@ -96,9 +105,9 @@ module uart_regs (
         end
     end
 
-    // Read multiplexer
+    // 3. Doc du lieu ra prdata
     always @(*) begin
-        if (read_en) begin
+        if (valid_read) begin
             case (paddr)
                 ADDR_TX:   prdata = tx_data_reg;
                 ADDR_RX:   prdata = rx_data_reg;

@@ -13,12 +13,11 @@ module tb_uart_regs;
     wire        pslverr;
     wire [31:0] prdata;
 
-    wire        reg_en;
+    wire        reg_pread;
+    wire        reg_pwrite;
+    wire        reg_ack_err;
     wire [11:0] reg_paddr;
     wire [31:0] reg_pwdata;
-    wire        reg_pwrite;
-    wire        write_en;
-    wire        read_en;
     wire [31:0] reg_prdata;
 
     wire [7:0]  tx_data;
@@ -31,41 +30,40 @@ module tb_uart_regs;
 
     reg         tx_done;
     reg         rx_done;
+    reg         rx_busy;
     reg         error;
     reg  [31:0] rx_data;
 
     // APB Slave
     apb_slave u_apb_slave (
-        .pclk       (clk),
-        .preset_n   (rst_n),
-        .psel       (psel),
-        .penable    (penable),
-        .pwrite     (pwrite),
-        .paddr      (paddr),
-        .pwdata     (pwdata),
-        .pready     (pready),
-        .pslverr    (pslverr),
-        .prdata     (prdata),
-        .reg_en     (reg_en),
-        .reg_paddr  (reg_paddr),
-        .reg_pwdata (reg_pwdata),
-        .reg_pwrite (reg_pwrite),
-        .write_en   (write_en),
-        .read_en    (read_en),
-        .reg_prdata (reg_prdata)
+        .pclk        (clk),
+        .preset_n    (rst_n),
+        .psel        (psel),
+        .penable     (penable),
+        .pwrite      (pwrite),
+        .paddr       (paddr),
+        .pwdata      (pwdata),
+        .pready      (pready),
+        .pslverr     (pslverr),
+        .prdata      (prdata),
+        .reg_pread   (reg_pread),
+        .reg_pwrite  (reg_pwrite),
+        .reg_paddr   (reg_paddr),
+        .reg_pwdata  (reg_pwdata),
+        .reg_prdata  (reg_prdata),
+        .reg_ack_err (reg_ack_err)
     );
 
     // UART Registers
     uart_regs u_uart_regs (
         .clk          (clk),
         .rst_n        (rst_n),
-        .reg_en       (reg_en),
+        .reg_pread    (reg_pread),
+        .reg_pwrite   (reg_pwrite),
         .paddr        (reg_paddr),
         .pwdata       (reg_pwdata),
-        .pwrite       (reg_pwrite),
-        .write_en     (write_en),
-        .read_en      (read_en),
         .prdata       (reg_prdata),
+        .reg_ack_err  (reg_ack_err),
         .tx_data      (tx_data),
         .data_bit_num (data_bit_num),
         .stop_bit_num (stop_bit_num),
@@ -75,6 +73,7 @@ module tb_uart_regs;
         .baud_sel     (baud_sel),
         .tx_done      (tx_done),
         .rx_done      (rx_done),
+        .rx_busy      (rx_busy),
         .error        (error),
         .rx_data      (rx_data)
     );
@@ -92,12 +91,10 @@ module tb_uart_regs;
 
             @(posedge clk);
             penable <= 1'b1;
-
-            @(posedge clk); // State becomes ACCESS
             #1;
             err = pslverr;
 
-            @(posedge clk); // Write takes place on this clock edge
+            @(posedge clk);
             psel    <= 1'b0;
             penable <= 1'b0;
             pwrite  <= 1'b0;
@@ -114,8 +111,6 @@ module tb_uart_regs;
 
             @(posedge clk);
             penable <= 1'b1;
-
-            @(posedge clk); // State becomes ACCESS
             #1;
             data = prdata;
             err  = pslverr;
@@ -138,7 +133,8 @@ module tb_uart_regs;
         paddr   = 0;
         pwdata  = 0;
         tx_done = 0; // Output tu tx_uart mac dinh la 0, chi phat xung 1 chu ky khi xong
-        rx_done = 1; // IDLE
+        rx_done = 0; // Xung Mealy khi nhan xong byte
+        rx_busy = 0; // IDLE
         error   = 0;
         rx_data = 0;
 
@@ -148,7 +144,7 @@ module tb_uart_regs;
 
         $display("=== STARTING UART_REGS PROTECTION TEST ===");
 
-        // 1. Khi ca TX va RX deu IDLE sau reset (tx_done_latch=1, rx_done=1) -> Ghi CFG thanh cong
+        // 1. Khi ca TX va RX deu IDLE sau reset (tx_done_latch=1, rx_busy=0) -> Ghi CFG thanh cong
         apb_write(12'h008, 32'h0000_003A, err);
         apb_read(12'h008, rdata, err);
         $display("[Test 1: IDLE] Ghi CFG = 0x3A | Doc lai: 0x%02X | Loi: %b", rdata[7:0], err);
@@ -189,7 +185,7 @@ module tb_uart_regs;
         tx_done = 1; // Xung Mealy tx_done 1 chu ky
         @(posedge clk);
         tx_done = 0;
-        rx_done = 0; // RX dang chay
+        rx_busy = 1; // RX dang ban
         @(posedge clk);
 
         apb_write(12'h008, 32'h0000_0055, err);
@@ -207,7 +203,7 @@ module tb_uart_regs;
 
         // 4. Khi ca hai quay ve IDLE
         @(posedge clk);
-        rx_done = 1;
+        rx_busy = 0; // RX quay ve IDLE
         @(posedge clk);
         apb_write(12'h008, 32'h0000_0012, err);
         apb_read(12'h008, rdata, err);

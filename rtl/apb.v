@@ -2,6 +2,7 @@ module apb_slave (
     input  wire        pclk,
     input  wire        preset_n,
     
+    // APB Bus Interface
     input  wire        psel,
     input  wire        penable,
     input  wire        pwrite,
@@ -11,74 +12,34 @@ module apb_slave (
     output wire        pslverr,
     output wire [31:0] prdata,
 
-    output reg  [11:0] reg_paddr,
-    output reg  [31:0] reg_pwdata,
-    output reg         reg_pwrite,
-    output wire        write_en,
-    output wire        read_en,
-    input  wire [31:0] reg_prdata
+    // UART Register Interface
+    output wire        reg_pread,   // Kich hoat DOC thanh ghi
+    output wire        reg_pwrite,  // Kich hoat GHI thanh ghi
+    output wire [11:0] reg_paddr,
+    output wire [31:0] reg_pwdata,
+    input  wire [31:0] reg_prdata,
+    input  wire        reg_ack_err  // Bao loi vi pham bao ve tu uart_regs
 );
 
-    localparam IDLE   = 2'b00;
-    localparam SETUP  = 2'b01;
-    localparam ACCESS = 2'b10;
+    // 1. Nhan dien chu ky ACCESS hop le (Zero-Wait-State, khong dung FSM)
+    wire apb_access = psel & penable;
 
-    reg [1:0] state, next_state;
-    always @(posedge pclk or negedge preset_n) begin
-        if (!preset_n) begin
-            state <= IDLE;
-        end else begin
-            state <= next_state;
-        end
-    end
+    // 2. Zero-wait-state PREADY
+    assign pready = apb_access;
 
-    always @(*) begin
-        next_state = state;
-        case (state)
-            IDLE: begin
-                if (psel && !penable) 
-                    next_state = SETUP;
-            end
-            
-            SETUP: begin
-                if (psel && penable) 
-                    next_state = ACCESS;
-                else if (!psel) 
-                    next_state = IDLE;
-            end
-            
-            ACCESS: begin
-                if (pready) begin
-                    if (!psel)
-                        next_state = IDLE;
-                    else if (psel && !penable)
-                        next_state = SETUP;
-                end
-            end
-            
-            default: next_state = IDLE;
-        endcase
-    end
+    // 3. Kiem tra dia chi hop le (vung dia chi 0x000 den 0x010, can le 4-byte)
+    wire addr_valid = (paddr <= 12'h010) && (paddr[1:0] == 2'b00);
 
-    always @(posedge pclk or negedge preset_n) begin
-        if (!preset_n) begin
-            reg_paddr  <= 12'h000;
-            reg_pwdata <= 32'h00000000;
-            reg_pwrite <= 1'b0;
-        end
-        else if (state == IDLE && psel && !penable) begin
-            reg_paddr  <= paddr;
-            reg_pwdata <= pwdata;
-            reg_pwrite <= pwrite;
-        end
-    end
+    // 4. Tach bach tin hieu dieu khien Read / Write
+    assign reg_pread  = apb_access & addr_valid & (~pwrite);
+    assign reg_pwrite = apb_access & addr_valid & pwrite;
+    assign reg_paddr  = paddr;
+    assign reg_pwdata = pwdata;
 
-    assign pready  = 1'b1; 
-    assign pslverr = 1'b0; 
+    // 5. PSLVERR: Bao loi khi dia chi khong hop le HOAC vi pham dieu kien bao ve
+    assign pslverr = apb_access & ((!addr_valid) | reg_ack_err);
 
-    assign write_en = (state == ACCESS) &&  reg_pwrite && pready;
-    assign read_en  = (state == ACCESS) && !reg_pwrite && pready;
-
-    assign prdata = (read_en) ? reg_prdata : 32'h00000000;
+    // 6. PRDATA: Lai du lieu khi doc hop le va khong loi; con lai tra ve 0
+    assign prdata = (reg_pread && !reg_ack_err) ? reg_prdata : 32'h0000_0000;
 
 endmodule

@@ -29,12 +29,11 @@ module tb_avalon2apb;
     wire [31:0] prdata;
 
     // apb_slave <-> uart_regs wires
-    wire        reg_en;
+    wire        reg_pread;
+    wire        reg_pwrite;
+    wire        reg_ack_err;
     wire [11:0] reg_paddr;
     wire [31:0] reg_pwdata;
-    wire        reg_pwrite;
-    wire        write_en;
-    wire        read_en;
     wire [31:0] reg_prdata;
 
     // UART peripheral side
@@ -48,6 +47,7 @@ module tb_avalon2apb;
 
     reg         tx_done;
     reg         rx_done;
+    reg         rx_busy;
     reg         error;
     reg  [31:0] rx_data;
 
@@ -87,23 +87,22 @@ module tb_avalon2apb;
     // 2. Instantiate apb_slave
     // -------------------------------------------------------------------------
     apb_slave u_apb_slave (
-        .pclk       (pclk),
-        .preset_n   (preset_n),
-        .psel       (psel),
-        .penable    (penable),
-        .pwrite     (pwrite),
-        .paddr      (paddr),
-        .pwdata     (pwdata),
-        .pready     (pready),
-        .pslverr    (pslverr),
-        .prdata     (prdata),
-        .reg_en     (reg_en),
-        .reg_paddr  (reg_paddr),
-        .reg_pwdata (reg_pwdata),
-        .reg_pwrite (reg_pwrite),
-        .write_en   (write_en),
-        .read_en    (read_en),
-        .reg_prdata (reg_prdata)
+        .pclk        (pclk),
+        .preset_n    (preset_n),
+        .psel        (psel),
+        .penable     (penable),
+        .pwrite      (pwrite),
+        .paddr       (paddr),
+        .pwdata      (pwdata),
+        .pready      (pready),
+        .pslverr     (pslverr),
+        .prdata      (prdata),
+        .reg_pread   (reg_pread),
+        .reg_pwrite  (reg_pwrite),
+        .reg_paddr   (reg_paddr),
+        .reg_pwdata  (reg_pwdata),
+        .reg_prdata  (reg_prdata),
+        .reg_ack_err (reg_ack_err)
     );
 
     // -------------------------------------------------------------------------
@@ -112,13 +111,12 @@ module tb_avalon2apb;
     uart_regs u_uart_regs (
         .clk          (clk),
         .rst_n        (rst_n),
-        .reg_en       (reg_en),
+        .reg_pread    (reg_pread),
+        .reg_pwrite   (reg_pwrite),
         .paddr        (reg_paddr),
         .pwdata       (reg_pwdata),
-        .pwrite       (reg_pwrite),
-        .write_en     (write_en),
-        .read_en      (read_en),
         .prdata       (reg_prdata),
+        .reg_ack_err  (reg_ack_err),
         .tx_data      (tx_data),
         .data_bit_num (data_bit_num),
         .stop_bit_num (stop_bit_num),
@@ -128,6 +126,7 @@ module tb_avalon2apb;
         .baud_sel     (baud_sel),
         .tx_done      (tx_done),
         .rx_done      (rx_done),
+        .rx_busy      (rx_busy),
         .error        (error),
         .rx_data      (rx_data)
     );
@@ -197,7 +196,8 @@ module tb_avalon2apb;
         avl_writedata  = 0;
         avl_byteenable = 4'b1111;
         tx_done        = 0; // Output tu tx_uart mac dinh la 0, chi phat xung 1 chu ky khi xong
-        rx_done        = 1; // IDLE
+        rx_done        = 0;
+        rx_busy        = 0; // IDLE
         error          = 0;
         rx_data        = 32'h0;
 

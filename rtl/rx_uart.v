@@ -9,6 +9,7 @@ module rx_uart(
     input parity_en,
     output [31:0] rx_data,
     output rx_done,
+    output rx_busy,
     output error
 );
    wire parity_bit;
@@ -47,7 +48,8 @@ module rx_uart(
         .tick_en(tick_en),
         .num_stop_b(num_stop_b),
         .bit_clr(bit_clr),
-        .rx_done(rx_done)
+        .rx_done(rx_done),
+        .rx_busy(rx_busy)
     );
     data_b_num data_b_num_inst(
         .data_b_num(data_b_num),
