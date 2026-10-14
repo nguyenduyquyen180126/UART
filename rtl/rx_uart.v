@@ -1,8 +1,10 @@
-module rx_uart(
+module rx_uart #(
+    parameter CLK_FREQ = 50_000_000
+)(
     input clk,
     input rst_n,
     input rx,
-    input baud_tick,
+    input [1:0] baud_sel,
     input [1:0] data_b_num,
     input stop_b_num,
     input parity_type,
@@ -12,6 +14,8 @@ module rx_uart(
     output rx_busy,
     output error
 );
+   wire baud_tick;
+   wire clr_baud;
    wire parity_bit;
    wire shift_en;
    wire tick_en;
@@ -36,6 +40,16 @@ module rx_uart(
         end
     end
 
+    rx_baud_gen #(
+        .CLK_FREQ(CLK_FREQ)
+    ) u_rx_baud_gen (
+        .baud_sel(baud_sel),
+        .clk(clk),
+        .rst_n(rst_n),
+        .clr_baud(clr_baud),
+        .baud_tick(baud_tick)
+    );
+
     rx_controller rx_controller_inst(
         .clk(clk),
         .rst_n(rst_n),
@@ -49,7 +63,8 @@ module rx_uart(
         .num_stop_b(num_stop_b),
         .bit_clr(bit_clr),
         .rx_done(rx_done),
-        .rx_busy(rx_busy)
+        .rx_busy(rx_busy),
+        .clr_baud(clr_baud)
     );
     data_b_num data_b_num_inst(
         .data_b_num(data_b_num),

@@ -37,20 +37,13 @@ module tb_rx_uart();
     // =========================================================================
     // 2. KHỞI TẠO MODULE (DUT & BAUD GEN INSTANTIATION)
     // =========================================================================
-    rx_baud_gen #(
+    rx_uart #(
         .CLK_FREQ(50_000_000)
-    ) rx_baud_gen_inst (
-        .clk(clk),
-        .rst_n(rst_n),
-        .baud_rate(baud_rate),
-        .baud_en(baud_tick)
-    );
-
-    rx_uart rx_uart_dut (
+    ) rx_uart_dut (
         .clk(clk),
         .rst_n(rst_n),
         .rx(rx),
-        .baud_tick(baud_tick),
+        .baud_sel(baud_rate),
         .data_b_num(data_b_num),
         .stop_b_num(stop_b_num),
         .parity_type(parity_type),

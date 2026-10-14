@@ -1,7 +1,7 @@
 module tx_stop_cnt(
     input clk, rst_n,
     input clr_stop,
-    input tick_last,
+    input baud_tick,
     output reg cnt
 );
     always @(posedge clk or negedge rst_n) begin
@@ -13,7 +13,7 @@ module tx_stop_cnt(
                 cnt <= 1'b0;
             end
             else begin
-                if(tick_last) begin
+                if(baud_tick) begin
                     cnt <= cnt + 1'b1;
                 end
                 else begin

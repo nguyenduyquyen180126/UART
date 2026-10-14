@@ -119,10 +119,10 @@ avalon2apb_cli: work
 APB_UART_SRCS := rtl/apb_uart.v \
                  rtl/apb_slave.v \
                  rtl/reg_uart.v \
-                 rtl/baud_gen.v \
+                 rtl/rx_baud_gen.v \
                  rtl/tx_uart.v \
                  rtl/tx_controller.v \
-                 rtl/tx_tick_cnt.v \
+                 rtl/tx_baud_gen.v \
                  rtl/tx_bit_cnt.v \
                  rtl/tx_stop_cnt.v \
                  rtl/tx_parity.v \

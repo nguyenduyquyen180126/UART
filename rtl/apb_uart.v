@@ -24,7 +24,7 @@ module apb_uart #(
     wire [1:0]  data_bit_num, baud_sel;
     wire        stop_bit_num, parity_en, parity_type, start_tx;
 
-    wire        tx_done, rx_done, rx_busy, error, baud_tick;
+    wire        tx_done, rx_done, rx_busy, error;
     wire [31:0] rx_data;
 
     apb_slave u_apb_slave (
@@ -69,14 +69,7 @@ module apb_uart #(
         .rx_data      (rx_data)
     );
 
-    baud_gen #(.CLK_FREQ(CLK_FREQ)) u_baud_gen (
-        .clk       (clk),
-        .rst_n     (rst_n),
-        .baud_sel  (baud_sel),
-        .baud_tick (baud_tick)
-    );
-
-    tx_uart u_tx_uart (
+    tx_uart #(.CLK_FREQ(CLK_FREQ)) u_tx_uart (
         .clk          (clk),
         .rst_n        (rst_n),
         .start_tx     (start_tx),
@@ -85,16 +78,16 @@ module apb_uart #(
         .stop_bit_num (stop_bit_num),
         .parity_en    (parity_en),
         .parity_type  (parity_type),
-        .baud_tick    (baud_tick),
+        .baud_sel     (baud_sel),
         .tx           (tx),
         .tx_done      (tx_done)
     );
 
-    rx_uart u_rx_uart (
+    rx_uart #(.CLK_FREQ(CLK_FREQ)) u_rx_uart (
         .clk         (clk),
         .rst_n       (rst_n),
         .rx          (rx),
-        .baud_tick   (baud_tick),
+        .baud_sel    (baud_sel),
         .data_b_num  (data_bit_num),
         .stop_b_num  (stop_bit_num),
         .parity_type (parity_type),
