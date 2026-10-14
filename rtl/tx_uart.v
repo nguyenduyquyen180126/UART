@@ -10,7 +10,9 @@ module tx_uart #(
     input parity_type,
     input [1:0] baud_sel,
     output reg tx,
-    output tx_done
+    output tx_done,
+    output load_reg,
+    output tx_busy
 );
     wire stop_last;
     wire bit_last;
@@ -24,7 +26,6 @@ module tx_uart #(
     reg [2:0] bit_cnt_last;
     wire stop_cnt;
     wire [1:0] tx_sel;
-    wire load_reg;
     wire shift_reg;
     reg [7:0] tx_data_masked;
 
@@ -43,7 +44,8 @@ module tx_uart #(
         .shift_reg(shift_reg),
         .clr_bit(clr_bit),
         .clr_stop(clr_stop),
-        .clr_baud(clr_baud)
+        .clr_baud(clr_baud),
+        .tx_busy(tx_busy)
     );
 
     tx_baud_gen #(

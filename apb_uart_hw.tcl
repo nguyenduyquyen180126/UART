@@ -23,7 +23,7 @@ set_fileset_property QUARTUS_SYNTH ENABLE_RELATIVE_INCLUDE_PATHS false
 set_fileset_property QUARTUS_SYNTH ENABLE_FILE_OVERWRITE_MODE false
 add_fileset_file apb_uart.v VERILOG PATH apb_uart.v TOP_LEVEL_FILE
 add_fileset_file apb_slave.v VERILOG PATH apb_slave.v
-add_fileset_file reg_uart.v VERILOG PATH reg_uart.v
+add_fileset_file uart_regs.v VERILOG PATH uart_regs.v
 add_fileset_file baud_gen.v VERILOG PATH baud_gen.v
 add_fileset_file tx_uart.v VERILOG PATH tx_uart.v
 add_fileset_file tx_controller.v VERILOG PATH tx_controller.v

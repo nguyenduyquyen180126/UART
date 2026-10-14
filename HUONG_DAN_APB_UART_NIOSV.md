@@ -127,7 +127,7 @@ CPU không thể điều khiển trực tiếp từng dây tín hiệu logic t�
 
 ## 3. Các Bước Tiếp Theo Bạn Cần Làm (Chi Tiết Từng Bước)
 
-Bạn đã có sẵn các khối con (`apb.v`, `reg_uart.v`, `tx_uart.v`, `rx_uart.v`, `rx_baud_gen.v`). Dưới đây là lộ trình chính xác để hoàn thiện toàn bộ hệ thống:
+Bạn đã có sẵn các khối con (`apb.v`, `uart_regs.v`, `tx_uart.v`, `rx_uart.v`, `rx_baud_gen.v`). Dưới đây là lộ trình chính xác để hoàn thiện toàn bộ hệ thống:
 
 ```
 [Bước 1: Ghép khối Top apb_uart.v]
@@ -381,7 +381,7 @@ Mở file [`software/main.c`](file:///home/vietanh/altera_lite/24.1std/software/
 #define APB_UART_BASE 0x00020000
 #endif
 
-// Offset các thanh ghi theo đúng định nghĩa trong reg_uart.v
+// Offset các thanh ghi theo đúng định nghĩa trong uart_regs.v
 #define UART_TX_DATA_REG  (APB_UART_BASE + 0x00)
 #define UART_RX_DATA_REG  (APB_UART_BASE + 0x04)
 #define UART_CFG_REG      (APB_UART_BASE + 0x08)

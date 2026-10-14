@@ -32,6 +32,7 @@ module tb_apb_uart;
     integer     fail_count;
     integer     timeout;
     integer     bit_time_ns;
+    integer     i;
 
     reg  [31:0] read_val;
     reg         err_resp;
@@ -120,8 +121,6 @@ module tb_apb_uart;
             @(posedge clk);
             #1;
             err = pslverr;
-
-            @(posedge clk);
             psel    <= 1'b0;
             penable <= 1'b0;
             pwrite  <= 1'b0;
@@ -143,7 +142,6 @@ module tb_apb_uart;
             @(posedge clk);
             penable <= 1'b1;
 
-            @(posedge clk);
             #1;
             data = prdata;
             err  = pslverr;
@@ -260,14 +258,13 @@ module tb_apb_uart;
         end
 
         // ---------------------------------------------------------------------
-        // TESTCASE 2: TRUYỀN DỮ LIỆU UART (TX) & KIỂM TRA BẢO VỆ
+        // TESTCASE 2: TRUYỀN DỮ LIỆU UART (TX) & KIỂM TRA BẢO VỆ FIFO FULL
         // ---------------------------------------------------------------------
         test_id = 2;
         print_header("TRUYEN DU LIEU UART (TX) & KIEM TRA CO STATUS");
 
-        // Ghi dữ liệu 0xA5 vào ADDR_TX và kích start_tx = 1 qua ADDR_CTRL
+        // Ghi dữ liệu 0xA5 vào ADDR_TX (TX tu dong kich hoat qua !tx_fifo_empty)
         apb_write(12'h000, 32'h0000_00A5, err_resp);
-        apb_write(12'h00C, 32'h0000_0001, err_resp);
 
         // Kiểm tra cờ tx_done đã tụt xuống 0 (báo TX bận)
         apb_read(12'h010, read_val, err_resp);
@@ -279,19 +276,24 @@ module tb_apb_uart;
             fail_count = fail_count + 1;
         end
 
-        // Cố tình ghi đè vào ADDR_TX khi TX đang bận -> Mong đợi pslverr = 1
+        // Bơm thêm 15 byte vào TX FIFO để làm đầy FIFO (Tổng 16 byte)
+        for (i = 0; i < 15; i = i + 1) begin
+            apb_write(12'h000, 32'h0000_0010 + i, err_resp);
+        end
+
+        // Cố tình ghi thêm byte thứ 17 vào ADDR_TX khi TX FIFO đã FULL -> Mong đợi pslverr = 1
         apb_write(12'h000, 32'h0000_00FF, err_resp);
         if (err_resp == 1'b1) begin
-            $display("  --> [PASS] apb_slave da chan va bao pslverr=1 khi ghi de luc TX ban!");
+            $display("  --> [PASS] apb_slave da chan va bao pslverr=1 khi ghi vao TX FIFO bi FULL!");
             pass_count = pass_count + 1;
         end else begin
-            $display("  --> [FAIL] Khong bao loi pslverr khi ghi vao TX luc dang ban!");
+            $display("  --> [FAIL] Khong bao loi pslverr khi ghi vao TX FIFO bi FULL!");
             fail_count = fail_count + 1;
         end
 
-        // Polling chờ TX phát xong (tx_done quay lại 1)
+        // Polling chờ TX phát xong toàn bộ FIFO (tx_done quay lại 1)
         timeout = 0;
-        while (((read_val & 32'h1) == 0) && (timeout < 50)) begin
+        while (((read_val & 32'h1) == 0) && (timeout < 500)) begin
             #(bit_time_ns);
             apb_read(12'h010, read_val, err_resp);
             timeout = timeout + 1;
@@ -402,7 +404,6 @@ module tb_apb_uart;
             // Tiến trình 2: Điều khiển phát và kiểm tra nhận qua bus APB
             begin
                 apb_write(12'h000, 32'h0000_00D2, err_resp);
-                apb_write(12'h00C, 32'h0000_0001, err_resp);
 
                 // Chờ nhận xong ở RX
                 timeout = 0;
@@ -470,14 +471,16 @@ module tb_apb_uart;
             fail_count = fail_count + 1;
         end
 
-        // 4. Kịch bản Overrun: Gửi byte 1 ('1' = 0x31)
-        $display("  [INFO] Bat dau kich ban Overrun: Gui byte 1 (0x31)...");
-        send_uart_rx_byte(8'h31, 2'b11, 1'b1, 1'b0, 1'b0);
+        // 4. Kịch bản Overrun: Gửi 16 byte vào RX mà CPU không đọc để làm đầy FIFO
+        $display("  [INFO] Bat dau kich ban Overrun: Bom 16 byte vao RX FIFO...");
+        for (i = 0; i < 16; i = i + 1) begin
+            send_uart_rx_byte(8'h30 + i, 2'b11, 1'b1, 1'b0, 1'b0);
+        end
         #100;
 
-        // CPU bận không đọc, PC bắn tiếp byte 2 ('2' = 0x32)
-        $display("  [INFO] CPU ban khong doc, PC tiep tuc ban byte 2 (0x32)...");
-        send_uart_rx_byte(8'h32, 2'b11, 1'b1, 1'b0, 1'b0);
+        // CPU bận không đọc, PC bắn tiếp byte thứ 17 (0xFF) -> Gây Overrun
+        $display("  [INFO] RX FIFO da day (16 byte), PC tiep tuc ban byte thu 17...");
+        send_uart_rx_byte(8'hFF, 2'b11, 1'b1, 1'b0, 1'b0);
         #100;
 
         // Kiểm tra bit 3 (overrun_error) trong ADDR_STT và IRQ = 1
@@ -490,8 +493,10 @@ module tb_apb_uart;
             fail_count = fail_count + 1;
         end
 
-        // 5. Đọc RX để thu byte mới và tự động xóa cờ Overrun
-        apb_read(12'h004, read_val, err_resp);
+        // 5. Đọc cạn RX FIFO để thu thập dữ liệu và tự động xóa cờ Overrun
+        for (i = 0; i < 16; i = i + 1) begin
+            apb_read(12'h004, read_val, err_resp);
+        end
         apb_read(12'h010, read_val, err_resp);
         #100;
         if (((read_val & 32'h08) == 0) && (irq == 0)) begin

@@ -258,7 +258,7 @@ Bảo vệ phần cứng                    | Có                               
 ──────
 ### V. Các bước triển khai tiếp theo
 
-1. Cập nhật RTL: Thay thế mã nguồn trong apb_slave.v và reg_uart.v.
+1. Cập nhật RTL: Thay thế mã nguồn trong apb_slave.v và uart_regs.v.
 2. Cập nhật Top Module apb_uart.v: Nối chân reg_ack_err giữa 2 module.
 3. Cập nhật Testbench tb_uart_regs.v: Tinh chỉnh task apb_write và apb_read về chuẩn 2 chu kỳ (không cần delay thêm xung clock).
 4. Đơn giản hóa avalon2apb.v: Bỏ trạng thái trung gian ST_ACCESS_PRE, giúp CPU Nios V truy cập UART nhanh hơn 33%.

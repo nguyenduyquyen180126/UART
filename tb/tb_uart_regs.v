@@ -32,7 +32,7 @@ module tb_uart_regs;
     reg         rx_done;
     reg         rx_busy;
     reg         error;
-    reg  [31:0] rx_data;
+    reg  [8:0]  rx_data;
     wire        irq;
 
     // APB Slave

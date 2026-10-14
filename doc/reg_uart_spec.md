@@ -1,6 +1,6 @@
-# Tài liệu Đặc tả Hoạt động Module `uart_regs` (`rtl/reg_uart.v`)
+# Tài liệu Đặc tả Hoạt động Module `uart_regs` (`rtl/uart_regs.v`)
 
-Tài liệu này mô tả chi tiết các trường hợp hoạt động, điều kiện kích hoạt và hành vi mong đợi của các thanh ghi trong module [`uart_regs`](../rtl/reg_uart.v).
+Tài liệu này mô tả chi tiết các trường hợp hoạt động, điều kiện kích hoạt và hành vi mong đợi của các thanh ghi trong module [`uart_regs`](../rtl/uart_regs.v).
 
 ---
 

@@ -11,7 +11,8 @@ module tx_controller(
     output reg shift_reg,
     output reg clr_bit,
     output reg clr_stop,
-    output reg clr_baud
+    output reg clr_baud,
+    output reg tx_busy
 );
     localparam IDLE     = 3'b000;
     localparam START    = 3'b001;
@@ -79,6 +80,7 @@ module tx_controller(
         clr_baud    = 1'b0;
         load_reg    = 1'b0;
         shift_reg   = 1'b0;
+        tx_busy     = 1'b0;
 
         case(state)
             IDLE: begin
@@ -87,6 +89,7 @@ module tx_controller(
                 clr_bit = 1'b1;
                 clr_stop = 1'b1;
                 clr_baud = 1'b1;
+                tx_busy = 1'b0;
                 if(start_tx) begin
                     load_reg = 1'b1;
                 end
@@ -96,12 +99,14 @@ module tx_controller(
                 tx_sel = 2'b00;
                 clr_bit = 1'b1;
                 clr_stop = 1'b1;
+                tx_busy = 1'b1;
             end
             DATA: begin
                 tx_done = 1'b0;
                 tx_sel = 2'b10;
                 clr_bit = 1'b0;
                 clr_stop = 1'b1;
+                tx_busy = 1'b1;
                 if(~bit_last && baud_tick) begin
                     shift_reg = 1'b1;
                 end
@@ -117,6 +122,7 @@ module tx_controller(
                 tx_sel = 2'b11;
                 clr_bit = 1'b1;
                 clr_stop = 1'b1;
+                tx_busy = 1'b1;
                 if(baud_tick) begin 
                     
                 end
@@ -126,6 +132,7 @@ module tx_controller(
                 tx_sel = 2'b01;
                 clr_bit = 1'b1;
                 clr_stop = 1'b0;
+                tx_busy = 1'b1;
                 if(~stop_last && baud_tick) begin
                     
                 end

@@ -743,4 +743,4 @@ T_6.15 ;
     "<interactive>";
     "tb/tb_uart_regs.v";
     "rtl/apb_slave.v";
-    "rtl/reg_uart.v";
+    "rtl/uart_regs.v";

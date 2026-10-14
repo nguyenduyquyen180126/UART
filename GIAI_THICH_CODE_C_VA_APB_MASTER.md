@@ -96,9 +96,9 @@ Khi trong mã nguồn C bạn thực thi lệnh đọc hoặc ghi:
      - `pwrite = 1`: Báo hiệu đây là chu kỳ Ghi.
      - `paddr = 12'h00C`: Offset địa chỉ 12-bit (bỏ phần base `0x00020000`).
      - `pwdata = 32'h0000_0001`: Dữ liệu cần ghi.
-3. **Tại Khối `apb_slave.v` và `reg_uart.v`:**
+3. **Tại Khối `apb_slave.v` và `uart_regs.v`:**
    - Khối `apb_slave.v` phát hiện `psel & penable = 1`, lập tức trả về `pready = 1` báo cho CPU biết phần cứng đã tiếp nhận.
-   - Khối `reg_uart.v` so khớp `paddr == 12'h00C`, nạp bit `pwdata[0] = 1` vào thanh ghi `ctrl_reg[0]`, tạo xung kích hoạt phát UART (`start_tx = 1`).
+   - Khối `uart_regs.v` so khớp `paddr == 12'h00C`, nạp bit `pwdata[0] = 1` vào thanh ghi `ctrl_reg[0]`, tạo xung kích hoạt phát UART (`start_tx = 1`).
 
 #### B. Chu kỳ Đọc (Read Transaction) - Ví dụ: `IORD_32DIRECT(UART_STT_REG, 0)`
 1. **Tại CPU RISC-V:**
@@ -194,7 +194,7 @@ int uart_putc(char c) {
    - Biến `timeout = 500000` đóng vai trò là "chốt bảo vệ" (Watchdog mềm). Nếu sau 500.000 chu kỳ mà phần cứng không phản hồi, hàm lập tức thoát ra với mã lỗi `-1`, **ngăn chặn tuyệt đối tình trạng CPU bị đóng băng (hang/freeze)**.
 3. **Nạp dữ liệu và kích xung phát:**
    - Ghi ký tự `c` vào `UART_TX_DATA_REG`.
-   - Ghi `0x01` vào `UART_CTRL_REG` để set `start_tx = 1`. Do trong phần cứng (`reg_uart.v`) đã thiết kế tự động xóa `ctrl_reg[0] <= 1'b0` ở chu kỳ clock kế tiếp, xung phát được đảm bảo độ rộng chính xác 1 chu kỳ clock.
+   - Ghi `0x01` vào `UART_CTRL_REG` để set `start_tx = 1`. Do trong phần cứng (`uart_regs.v`) đã thiết kế tự động xóa `ctrl_reg[0] <= 1'b0` ở chu kỳ clock kế tiếp, xung phát được đảm bảo độ rộng chính xác 1 chu kỳ clock.
 
 ---
 
@@ -215,7 +215,7 @@ char uart_getc(void) {
    - Khi module `rx_uart.v` nhận đủ 1 frame 10-bit từ PC (Start + 8 Data + Stop), nó kéo `rx_done` lên `1` và lưu dữ liệu vào thanh ghi `rx_data_reg`.
 2. **Đọc dữ liệu và Auto-Clear cờ:**
    - Khi CPU gọi `IORD_32DIRECT(UART_RX_DATA_REG, 0)`, trên bus APB sinh ra tín hiệu `reg_pread & (paddr == ADDR_RX)`.
-   - Tín hiệu này kích hoạt `rx_read_ack` bên trong `reg_uart.v`, **tự động xóa cờ `rx_done` về 0**, sẵn sàng cho byte kế tiếp mà lập trình viên không cần phải viết thêm thao tác xóa thủ công.
+   - Tín hiệu này kích hoạt `rx_read_ack` bên trong `uart_regs.v`, **tự động xóa cờ `rx_done` về 0**, sẵn sàng cho byte kế tiếp mà lập trình viên không cần phải viết thêm thao tác xóa thủ công.
 
 ---
 

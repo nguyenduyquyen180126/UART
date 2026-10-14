@@ -35,7 +35,7 @@ Hệ thống `apb_uart` đóng vai trò là một thiết bị ngoại vi SoC (P
 ---
 
 ### 1.2. Bản Đồ Bộ Nhớ (Register Memory Map)
-Theo đúng code nguồn trong [`rtl/reg_uart.v`](file:///home/vietanh/Downloads/code/UART/UART/rtl/reg_uart.v), CPU giao tiếp với UART qua 5 thanh ghi 32-bit (chỉ dùng các byte/bit thấp):
+Theo đúng code nguồn trong [`rtl/uart_regs.v`](file:///home/vietanh/Downloads/code/UART/UART/rtl/uart_regs.v), CPU giao tiếp với UART qua 5 thanh ghi 32-bit (chỉ dùng các byte/bit thấp):
 
 | Tên Thanh Ghi | Địa Chỉ (Offset) | Quyền Truy Cập | Chức Năng Chi Tiết |
 | :--- | :---: | :---: | :--- |
@@ -64,7 +64,7 @@ Trong quá trình phát triển SoC và viết Testbench, việc phát hiện l�
 ---
 
 #### 🔴 LỖI 2: Điều kiện `uart_idle` chặn ghi thanh ghi cấu hình `ADDR_CFG`
-* **Vị trí**: [`rtl/reg_uart.v`](file:///home/vietanh/Downloads/code/UART/UART/rtl/reg_uart.v#L46).
+* **Vị trí**: [`rtl/uart_regs.v`](file:///home/vietanh/Downloads/code/UART/UART/rtl/uart_regs.v#L46).
 * **Đoạn code bị lỗi**:
   ```verilog
   wire tx_wr_en    = addr_tx && stt_reg[0];
@@ -74,7 +74,7 @@ Trong quá trình phát triển SoC và viết Testbench, việc phát hiện l�
 * **Hiện tượng**: CPU ghi vào `ADDR_CFG` (0x08) luôn bị báo lỗi `pslverr = 1`, thanh ghi giữ nguyên giá trị `0x0000_0000` (5 data bits, 2400 baud, không parity).
 * **Nguyên nhân gốc rễ**:
   - `rx_done` từ `rx_uart` là một xung tích cực mức cao chỉ kéo dài 1 chu kỳ khi nhận xong byte. Ở trạng thái rảnh (IDLE), `rx_done = 0`!
-  - Tác giả `reg_uart.v` giả định nhầm trong testbench con (`tb_uart_regs.v`) rằng `rx_done = 1` là rảnh. Khi tích hợp vào hệ thống thực tế, `uart_idle = stt_reg[0] && rx_done` = `1 && 0 = 0` $\rightarrow$ `cfg_wr_en = 0` vĩnh viễn!
+  - Tác giả `uart_regs.v` giả định nhầm trong testbench con (`tb_uart_regs.v`) rằng `rx_done = 1` là rảnh. Khi tích hợp vào hệ thống thực tế, `uart_idle = stt_reg[0] && rx_done` = `1 && 0 = 0` $\rightarrow$ `cfg_wr_en = 0` vĩnh viễn!
 * **Cách khắc phục**:
   Sửa điều kiện rảnh thành TX không bận và RX không có dữ liệu chưa đọc:
   ```verilog
@@ -84,7 +84,7 @@ Trong quá trình phát triển SoC và viết Testbench, việc phát hiện l�
 ---
 
 #### 🔴 LỖI 3: Cờ `ERROR` không tự xóa sau khi đọc `ADDR_RX` (Latch Priority Bug)
-* **Vị trí**: [`rtl/reg_uart.v`](file:///home/vietanh/Downloads/code/UART/UART/rtl/reg_uart.v#L92).
+* **Vị trí**: [`rtl/uart_regs.v`](file:///home/vietanh/Downloads/code/UART/UART/rtl/uart_regs.v#L92).
 * **Đoạn code bị lỗi**:
   ```verilog
   if (error)
@@ -814,7 +814,7 @@ Nếu muốn gõ lệnh tay trực tiếp:
 iverilog -g2012 -o sim_apb_uart.vvp \
     rtl/apb_uart.v \
     rtl/apb_slave.v \
-    rtl/reg_uart.v \
+    rtl/uart_regs.v \
     rtl/baud_gen.v \
     rtl/tx_uart.v \
     rtl/tx_controller.v \

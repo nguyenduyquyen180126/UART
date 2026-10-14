@@ -17,7 +17,7 @@ module tb_rx_uart();
     reg         parity_en;     // 0: Không dùng parity, 1: Có parity
     reg         rx;            // Đường truyền nối tiếp UART RX
 
-    wire [31:0] rx_data;       // Dữ liệu nhận được từ DUT
+    wire [8:0]  rx_data;       // Dữ liệu nhận được từ DUT (Bit 8: error, Bit 7:0: data)
     wire        rx_done;       // Xung báo đã nhận xong 1 frame
     wire        error;         // Cờ báo lỗi Parity từ DUT
 
@@ -29,10 +29,10 @@ module tb_rx_uart();
 
     // Bộ chốt (Latch) để bắt xung rx_done và lưu kết quả nhận được
     // Giúp TB không bao giờ bị trượt xung rx_done dù xung chỉ tồn tại 1 chu kỳ clock!
-    reg        clear_done;
-    reg        rx_done_latched;
-    reg [31:0] captured_rx_data;
-    reg        captured_error;
+    reg       clear_done;
+    reg       rx_done_latched;
+    reg [8:0] captured_rx_data;
+    reg       captured_error;
 
     // =========================================================================
     // 2. KHỞI TẠO MODULE (DUT & BAUD GEN INSTANTIATION)
@@ -67,7 +67,7 @@ module tb_rx_uart();
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
             rx_done_latched  <= 1'b0;
-            captured_rx_data <= 32'd0;
+            captured_rx_data <= 9'd0;
             captured_error   <= 1'b0;
         end else if (clear_done) begin
             rx_done_latched  <= 1'b0;
@@ -201,10 +201,10 @@ module tb_rx_uart();
                 $display("             (Goi y: Kiem tra rx_controller FSM hoac tick_cnt/bit_cnt trong RTL)");
                 fail_count = fail_count + 1;
             end else begin
-                if (captured_rx_data !== expected_data) begin
+                if (captured_rx_data[7:0] !== expected_data[7:0]) begin
                     $display("  --> [FAIL] DỮ LIỆU SAI (DATA MISMATCH)!");
                     $display("             Ky vong (Expected): 0x%02X", expected_data[7:0]);
-                    $display("             Nhan duoc (Got)   : 0x%02X (rx_data 32-bit: 0x%08X)",
+                    $display("             Nhan duoc (Got)   : 0x%02X (rx_data 9-bit: 0x%03X)",
                              captured_rx_data[7:0], captured_rx_data);
                     fail_count = fail_count + 1;
                 end else if (captured_error !== inject_parity_error) begin

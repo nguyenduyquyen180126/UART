@@ -1135,4 +1135,4 @@ T_10.14 ;
     "tb/tb_avalon2apb.v";
     "rtl/apb_slave.v";
     "avalon2apb.v";
-    "rtl/reg_uart.v";
+    "rtl/uart_regss.v";

@@ -11,7 +11,8 @@ VVP      ?= vvp
 .PHONY: all help compile check sim sim_cli clean \
         tx_uart tx_uart_cli tx_baud_gen tx_baud_gen_cli \
         uart_regs uart_regs_cli avalon2apb avalon2apb_cli \
-        iv_uart_regs iv_avalon2apb test \
+        iv_uart_regs iv_avalon2apb test test_all test_apb test_fw test_fd test_rx \
+        rx_uart tb_rx_uart wave_rx_uart \
         apb_uart tb_apb_uart wave_apb_uart apb_uart_vsim apb_uart_vsim_cli \
         firmware firmware_scenario tb_firmware_scenario wave_firmware firmware_vsim firmware_vsim_cli \
         full_duplex tb_full_duplex wave_full_duplex full_duplex_vsim full_duplex_vsim_cli
@@ -100,20 +101,20 @@ tx_baud_gen_cli:
 
 # APB Slave & UART Registers (Zero-Wait-State & Protection Check)
 uart_regs: work
-	$(VLOG) rtl/apb_slave.v rtl/reg_uart.v tb/tb_uart_regs.v
+	$(VLOG) rtl/apb_slave.v rtl/uart_regs.v tb/tb_uart_regs.v
 	$(VSIM) -do "vsim -voptargs=+acc work.tb_uart_regs; add wave -r /*; run -all"
 
 uart_regs_cli: work
-	$(VLOG) rtl/apb_slave.v rtl/reg_uart.v tb/tb_uart_regs.v
+	$(VLOG) rtl/apb_slave.v rtl/uart_regs.v tb/tb_uart_regs.v
 	$(VSIM) -c -do "run -all; quit -f" work.tb_uart_regs
 
 # Avalon-MM to APB Bridge
 avalon2apb: work
-	$(VLOG) avalon2apb.v rtl/apb_slave.v rtl/reg_uart.v tb/tb_avalon2apb.v
+	$(VLOG) avalon2apb.v rtl/apb_slave.v rtl/uart_regs.v tb/tb_avalon2apb.v
 	$(VSIM) -do "vsim -voptargs=+acc work.tb_avalon2apb; add wave -r /*; run -all"
 
 avalon2apb_cli: work
-	$(VLOG) avalon2apb.v rtl/apb_slave.v rtl/reg_uart.v tb/tb_avalon2apb.v
+	$(VLOG) avalon2apb.v rtl/apb_slave.v rtl/uart_regs.v tb/tb_avalon2apb.v
 	$(VSIM) -c -do "run -all; quit -f" work.tb_avalon2apb
 
 # ------------------------------------------------------------------------------
@@ -121,7 +122,7 @@ avalon2apb_cli: work
 # ------------------------------------------------------------------------------
 APB_UART_SRCS := rtl/apb_uart.v \
                  rtl/apb_slave.v \
-                 rtl/reg_uart.v \
+                 rtl/uart_regs.v \
                  rtl/rx_baud_gen.v \
                  rtl/tx_uart.v \
                  rtl/tx_controller.v \
@@ -138,7 +139,8 @@ APB_UART_SRCS := rtl/apb_uart.v \
                  rtl/tick_cnt.v \
                  rtl/sipo.v \
                  rtl/deframe.v \
-                 rtl/error_check.v
+                 rtl/error_check.v \
+                 rtl/sync_fifo.v
 
 # 1) tb_apb_uart: Testbench tong hop tinh nang APB UART
 apb_uart tb_apb_uart:
@@ -191,26 +193,52 @@ full_duplex_vsim_cli: work
 	$(VLOG) -sv $(APB_UART_SRCS) tb/tb_full_duplex.v
 	$(VSIM) -c -do "run -all; quit -f" work.tb_full_duplex
 
+# 4) tb_rx_uart: Kịch bản kiểm thử chi tiết bộ thu RX UART
+RX_UART_SRCS  := rtl/rx_uart.v \
+                 rtl/rx_controller.v \
+                 rtl/rx_baud_gen.v \
+                 rtl/data_b_num.v \
+                 rtl/stop_b_num.v \
+                 rtl/bit_cnt.v \
+                 rtl/tick_cnt.v \
+                 rtl/sipo.v \
+                 rtl/deframe.v \
+                 rtl/error_check.v
+
+rx_uart tb_rx_uart test_rx:
+	@echo "==> Đang biên dịch và chạy mô phỏng tb_rx_uart bằng Icarus Verilog..."
+	iverilog -g2012 -o sim_rx_uart.vvp $(RX_UART_SRCS) tb/tb_rx_uart.v
+	vvp sim_rx_uart.vvp
+
+wave_rx_uart: rx_uart
+	gtkwave wave.vcd &
+
 # ------------------------------------------------------------------------------
-# 4. GÕ TẮT THEO TÊN MODULE (VÍ DỤ: make rx_uart)
-# 4. MÔ PHỎNG NHANH BẰNG ICARUS VERILOG (IVERILOG / VVP)
+# 4. CÁC LỆNH GÕ TẮT TIỆN LỢI (CONVENIENT ALIASES)
 # ------------------------------------------------------------------------------
-test_regs.vvp: rtl/apb_slave.v rtl/reg_uart.v tb/tb_uart_regs.v
-	$(IVERILOG) -o $@ $^
+test_apb: apb_uart
+test_fw:  firmware
+test_fd:  full_duplex
 
-iv_uart_regs: test_regs.vvp
-	@echo "==> Mo phong tb_uart_regs bang Icarus Verilog..."
-	$(VVP) $<
-
-sim_avl.vvp: avalon2apb.v rtl/apb_slave.v rtl/reg_uart.v tb/tb_avalon2apb.v
-	$(IVERILOG) -o $@ $^
-
-iv_avalon2apb: sim_avl.vvp
-	@echo "==> Mo phong tb_avalon2apb bang Icarus Verilog..."
-	$(VVP) $<
-
-# Chạy toàn bộ test suite bằng iverilog
-test: iv_uart_regs iv_avalon2apb
+# Chạy toàn bộ test suite hoàn chỉnh của IP Core APB UART
+test test_all:
+	@echo "=========================================================================="
+	@echo ">>> 1/4: Chay kiem chung Song Cong (Full-Duplex):"
+	@echo "=========================================================================="
+	$(MAKE) test_fd
+	@echo "\n=========================================================================="
+	@echo ">>> 2/4: Chay kiem chung Firmware Scenario C (Nios V CPU):"
+	@echo "=========================================================================="
+	$(MAKE) test_fw
+	@echo "\n=========================================================================="
+	@echo ">>> 3/4: Chay kiem chung Unit Test Bo Thu RX UART:"
+	@echo "=========================================================================="
+	$(MAKE) test_rx
+	@echo "\n=========================================================================="
+	@echo ">>> 4/4: Chay kiem chung Toan Dien APB UART (FIFO, IRQ, Overrun):"
+	@echo "=========================================================================="
+	$(MAKE) test_apb
+	@echo "\n>>> HOAN TAT TAT CA CAC TEST SUITE TREN MAKEFILE! <<<"
 
 # ------------------------------------------------------------------------------
 # 5. GÕ TẮT THEO TÊN MODULE (VÍ DỤ: make rx_uart)
@@ -247,12 +275,16 @@ help:
 	@echo "                       HUONG DAN BIEN DICH & MO PHONG                    "
 	@echo "=========================================================================="
 	@echo "1. CHAY TESTBENCH TONG THE BANG ICARUS VERILOG (IVERILOG - KHUYEN DUNG):"
-	@echo "   make apb_uart              : Chay tb_apb_uart (test tong hop cac chuc nang)"
-	@echo "   make wave_apb_uart         : Mo GTKWave xem dang song tb_apb_uart"
-	@echo "   make firmware              : Chay tb_firmware_scenario (kich ban C firmware Nios V)"
-	@echo "   make wave_firmware         : Mo GTKWave xem dang song firmware"
-	@echo "   make full_duplex           : Chay tb_full_duplex (kiem chung truyen nhan 2 day)"
-	@echo "   make wave_full_duplex      : Mo GTKWave xem dang song full_duplex"
+	@echo "   make test (hoac make test_all) : Chay TOAN BO test suite (4 kich ban)"
+	@echo "   make full_duplex (make test_fd): Chay tb_full_duplex (truyen/nhan 2 day)"
+	@echo "   make firmware    (make test_fw): Chay tb_firmware_scenario (Nios V CPU)"
+	@echo "   make rx_uart     (make test_rx): Chay tb_rx_uart (unit test bo thu RX)"
+	@echo "   make apb_uart    (make test_apb): Chay tb_apb_uart (tong hop FIFO & IRQ)"
+	@echo ""
+	@echo "   make wave_apb_uart             : Mo GTKWave xem dang song tb_apb_uart"
+	@echo "   make wave_firmware             : Mo GTKWave xem dang song firmware"
+	@echo "   make wave_full_duplex          : Mo GTKWave xem dang song full_duplex"
+	@echo "   make wave_rx_uart              : Mo GTKWave xem dang song tb_rx_uart"
 	@echo ""
 	@echo "2. BIEN DICH / KIEM TRA LOI CU PHAP (MODELSIM):"
 	@echo "   make check                 : Bien dich tat ca file trong thu muc rtl/"

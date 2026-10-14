@@ -1,5 +1,5 @@
 $date
-	Wed Oct 14 00:04:13 2026
+	Wed Oct 14 22:59:41 2026
 $end
 $version
 	Icarus Verilog
@@ -9,11 +9,11 @@ $timescale
 $end
 $scope module tb_rx_uart $end
 $var wire 1 ! rx_done $end
-$var wire 32 " rx_data [31:0] $end
+$var wire 9 " rx_data [8:0] $end
 $var wire 1 # error $end
 $var reg 2 $ baud_rate [1:0] $end
 $var reg 1 % captured_error $end
-$var reg 32 & captured_rx_data [31:0] $end
+$var reg 9 & captured_rx_data [8:0] $end
 $var reg 1 ' clear_done $end
 $var reg 1 ( clk $end
 $var reg 2 ) data_b_num [1:0] $end
@@ -41,7 +41,7 @@ $var wire 4 8 tick_cnt [3:0] $end
 $var wire 1 9 tick_clr $end
 $var wire 1 : shift_en $end
 $var wire 1 ! rx_done $end
-$var wire 32 ; rx_data [31:0] $end
+$var wire 8 ; rx_data [7:0] $end
 $var wire 1 < rx_busy $end
 $var wire 1 = parity_exp $end
 $var wire 1 > parity_bit $end
@@ -82,7 +82,7 @@ $var wire 2 P num_stop_b [1:0] $end
 $var wire 12 Q data_in [11:0] $end
 $var reg 1 > parity_bit $end
 $var reg 1 = parity_exp $end
-$var reg 32 R rx_data [31:0] $end
+$var reg 8 R rx_data [7:0] $end
 $upscope $end
 $scope module error_check_inst $end
 $var wire 1 > parity_bit $end
@@ -229,7 +229,7 @@ b111111111111 A
 bx @
 bx ?
 0>
-x=
+0=
 0<
 b0 ;
 0:
@@ -280,7 +280,7 @@ $end
 #100000
 1E
 19
-x#
+1#
 b111 [
 16
 b1 ?
@@ -269080,10 +269080,9 @@ b1 e
 0(
 #1092350000
 0#
+b10100101 "
 b10 e
 1>
-0=
-b10100101 "
 b10100101 ;
 b10100101 R
 1(
@@ -593238,8 +593237,8 @@ b1 e
 #2446500000
 0(
 #2446510000
-b10 e
 b1011010 "
+b10 e
 b1011010 ;
 b1011010 R
 1(
@@ -917379,9 +917378,9 @@ b1 e
 0(
 #3800670000
 1#
+b111100 "
 b10 e
 0>
-b111100 "
 b111100 ;
 b111100 R
 1(
@@ -1905397,8 +1905396,8 @@ b1 e
 #7967500000
 0(
 #7967510000
-b10 e
 b1111110 "
+b10 e
 b1111110 ;
 b1111110 R
 1(
@@ -2224295,9 +2224294,9 @@ b1 e
 0(
 #9321670000
 0#
+b1010101 "
 b10 e
 1>
-b1010101 "
 b1010101 ;
 b1010101 R
 1(

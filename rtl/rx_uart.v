@@ -9,7 +9,7 @@ module rx_uart #(
     input stop_b_num,
     input parity_type,
     input parity_en,
-    output [31:0] rx_data,
+    output [7:0] rx_data,
     output rx_done,
     output rx_busy,
     output error
@@ -28,6 +28,7 @@ module rx_uart #(
    wire [3:0] bit_cnt;
    wire [3:0] tick_cnt;
    wire parity_exp;
+   
     // 2-FF Synchronizer cho tin hieu rx (chong Metastability)
     reg rx_sync1, rx_sync2;
     always @(posedge clk or negedge rst_n) begin

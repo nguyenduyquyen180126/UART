@@ -25,7 +25,7 @@
 #define PIO_KEY_BASE 0x00010030 // Nút nhấn KEY[1]
 #endif
 
-// Offset các thanh ghi APB UART (Khớp với rtl/reg_uart.v)
+// Offset các thanh ghi APB UART (Khớp với rtl/uart_regs.v)
 #define UART_TX_DATA_REG  (APB_UART_0_BASE + 0x00) // Thanh ghi ghi dữ liệu phát
 #define UART_RX_DATA_REG  (APB_UART_0_BASE + 0x04) // Thanh ghi đọc dữ liệu nhận
 #define UART_CFG_REG      (APB_UART_0_BASE + 0x08) // Cấu hình baudrate và khung truyền

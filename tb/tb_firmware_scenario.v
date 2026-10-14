@@ -92,10 +92,10 @@ module tb_firmware_scenario;
         @(posedge clk);
         penable <= 1'b1;
 
-        @(posedge clk);
         #1;
         data = prdata;
 
+        @(posedge clk);
         psel    <= 1'b0;
         penable <= 1'b0;
     end
@@ -179,11 +179,10 @@ module tb_firmware_scenario;
 
         // ---------------------------------------------------------------------
         // TEST 3: CPU chạy lệnh "send" -> Gửi ký tự 'K' (0x4B) qua UART TX
-        // Code C: Ghi 'K' vào 0x00, ghi 0x01 vào 0x0C (start_tx)
+        // Code C: Ghi 'K' vào 0x00 (TX FIFO tu dong kick truyen)
         // ---------------------------------------------------------------------
         $display("\n>>> [BƯỚC 3]: CPU gui ky tu 'K' (0x4B) qua bus APB");
         cpu_apb_write(12'h000, 32'h0000_004B); // Ghi ký tự vào TX buffer
-        cpu_apb_write(12'h00C, 32'h0000_0001); // start_tx = 1
 
         // Kiểm tra cờ tx_done bị kéo xuống 0 (đang bận truyền)
         cpu_apb_read(12'h010, read_val);

@@ -175,8 +175,7 @@ module tb_full_duplex;
             // TIẾN TRÌNH 1 (DE2-115 Master): Ghi TX và kích hoạt phát
             begin
                 apb_write(12'h000, 32'h0000_0058); // Ghi 'X' vào TX_DATA
-                apb_write(12'h00C, 32'h0000_0001); // start_tx = 1
-                $display("    [DE2 Core] Da phat lenh start_tx cho byte 0x58 ('X')");
+                $display("    [DE2 Core] Da nạp byte 0x58 ('X') vao TX FIFO");
             end
 
             // TIẾN TRÌNH 2 (PC Host): Bắn byte 0x59 ('Y') vào chân rx_line
@@ -239,7 +238,6 @@ module tb_full_duplex;
                         #1000;
                     end
                     apb_write(12'h000, {24'h0, de2_tx_data[k]});
-                    apb_write(12'h00C, 32'h0000_0001);
                 end
             end
 
