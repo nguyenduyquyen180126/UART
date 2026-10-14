@@ -11,7 +11,10 @@ VVP      ?= vvp
 .PHONY: all help compile check sim sim_cli clean \
         tx_uart tx_uart_cli tx_baud_gen tx_baud_gen_cli \
         uart_regs uart_regs_cli avalon2apb avalon2apb_cli \
-        iv_uart_regs iv_avalon2apb test
+        iv_uart_regs iv_avalon2apb test \
+        apb_uart tb_apb_uart wave_apb_uart apb_uart_vsim apb_uart_vsim_cli \
+        firmware firmware_scenario tb_firmware_scenario wave_firmware firmware_vsim firmware_vsim_cli \
+        full_duplex tb_full_duplex wave_full_duplex full_duplex_vsim full_duplex_vsim_cli
 
 # Mặc định khi chỉ gõ 'make' sẽ hiển thị menu hướng dẫn
 all: help
@@ -137,17 +140,15 @@ APB_UART_SRCS := rtl/apb_uart.v \
                  rtl/deframe.v \
                  rtl/error_check.v
 
-# Chạy mô phỏng apb_uart bằng iverilog (mặc định nhanh, không cần license)
-apb_uart:
+# 1) tb_apb_uart: Testbench tong hop tinh nang APB UART
+apb_uart tb_apb_uart:
 	@echo "==> Đang biên dịch và chạy mô phỏng tb_apb_uart bằng Icarus Verilog..."
 	iverilog -g2012 -o sim_apb_uart.vvp $(APB_UART_SRCS) tb/tb_apb_uart.v
 	vvp sim_apb_uart.vvp
 
-# Mở dạng sóng GTKWave cho apb_uart
 wave_apb_uart: apb_uart
 	gtkwave wave_apb_uart.vcd &
 
-# Chạy bằng QuestaSim/ModelSim (khi có license)
 apb_uart_vsim: work
 	$(VLOG) -sv $(APB_UART_SRCS) tb/tb_apb_uart.v
 	$(VSIM) -do "vsim -voptargs=+acc work.tb_apb_uart; add wave -r /*; run -all"
@@ -155,6 +156,40 @@ apb_uart_vsim: work
 apb_uart_vsim_cli: work
 	$(VLOG) -sv $(APB_UART_SRCS) tb/tb_apb_uart.v
 	$(VSIM) -c -do "run -all; quit -f" work.tb_apb_uart
+
+# 2) tb_firmware_scenario: Kịch bản mô phỏng tương thích Firmware C & CPU Nios V
+firmware firmware_scenario tb_firmware_scenario:
+	@echo "==> Đang biên dịch và chạy mô phỏng tb_firmware_scenario bằng Icarus Verilog..."
+	iverilog -g2012 -o sim_firmware.vvp $(APB_UART_SRCS) tb/tb_firmware_scenario.v
+	vvp sim_firmware.vvp
+
+wave_firmware: firmware_scenario
+	gtkwave wave_firmware_scenario.vcd &
+
+firmware_vsim: work
+	$(VLOG) -sv $(APB_UART_SRCS) tb/tb_firmware_scenario.v
+	$(VSIM) -do "vsim -voptargs=+acc work.tb_firmware_scenario; add wave -r /*; run -all"
+
+firmware_vsim_cli: work
+	$(VLOG) -sv $(APB_UART_SRCS) tb/tb_firmware_scenario.v
+	$(VSIM) -c -do "run -all; quit -f" work.tb_firmware_scenario
+
+# 3) tb_full_duplex: Kịch bản kiểm chứng truyền và nhận đồng thời Full-Duplex (2 dây)
+full_duplex tb_full_duplex:
+	@echo "==> Đang biên dịch và chạy mô phỏng tb_full_duplex bằng Icarus Verilog..."
+	iverilog -g2012 -o sim_full_duplex.vvp $(APB_UART_SRCS) tb/tb_full_duplex.v
+	vvp sim_full_duplex.vvp
+
+wave_full_duplex: full_duplex
+	gtkwave wave_full_duplex.vcd &
+
+full_duplex_vsim: work
+	$(VLOG) -sv $(APB_UART_SRCS) tb/tb_full_duplex.v
+	$(VSIM) -do "vsim -voptargs=+acc work.tb_full_duplex; add wave -r /*; run -all"
+
+full_duplex_vsim_cli: work
+	$(VLOG) -sv $(APB_UART_SRCS) tb/tb_full_duplex.v
+	$(VSIM) -c -do "run -all; quit -f" work.tb_full_duplex
 
 # ------------------------------------------------------------------------------
 # 4. GÕ TẮT THEO TÊN MODULE (VÍ DỤ: make rx_uart)
@@ -211,26 +246,26 @@ help:
 	@echo "=========================================================================="
 	@echo "                       HUONG DAN BIEN DICH & MO PHONG                    "
 	@echo "=========================================================================="
-	@echo "1. BIEN DICH / KIEM TRA LOI CU PHAP (MODELSIM):"
+	@echo "1. CHAY TESTBENCH TONG THE BANG ICARUS VERILOG (IVERILOG - KHUYEN DUNG):"
+	@echo "   make apb_uart              : Chay tb_apb_uart (test tong hop cac chuc nang)"
+	@echo "   make wave_apb_uart         : Mo GTKWave xem dang song tb_apb_uart"
+	@echo "   make firmware              : Chay tb_firmware_scenario (kich ban C firmware Nios V)"
+	@echo "   make wave_firmware         : Mo GTKWave xem dang song firmware"
+	@echo "   make full_duplex           : Chay tb_full_duplex (kiem chung truyen nhan 2 day)"
+	@echo "   make wave_full_duplex      : Mo GTKWave xem dang song full_duplex"
+	@echo ""
+	@echo "2. BIEN DICH / KIEM TRA LOI CU PHAP (MODELSIM):"
 	@echo "   make check                 : Bien dich tat ca file trong thu muc rtl/"
 	@echo "   make check FILE=rx_uart    : Bien dich kiem tra file rtl/rx_uart.v"
 	@echo "   make check FILE=tb_rx_uart : Bien dich kiem tra testbench tb/tb_rx_uart.v"
 	@echo ""
-	@echo "2. CHAY MO PHONG MODELSIM (GUI SONG / DONG LENH CLI):"
+	@echo "3. CHAY MO PHONG MODELSIM (GUI SONG / DONG LENH CLI):"
+	@echo "   make apb_uart_vsim         : Mo GUI ModelSim mo phong tb_apb_uart"
+	@echo "   make firmware_vsim         : Mo GUI ModelSim mo phong tb_firmware_scenario"
+	@echo "   make full_duplex_vsim      : Mo GUI ModelSim mo phong tb_full_duplex"
 	@echo "   make uart_regs             : Mo GUI ModelSim mo phong APB Slave & UART Regs"
-	@echo "   make uart_regs_cli         : Chay CLI terminal mo phong APB Slave & UART Regs"
 	@echo "   make avalon2apb            : Mo GUI ModelSim mo phong Bridge Avalon to APB"
-	@echo "   make avalon2apb_cli        : Chay CLI terminal mo phong Bridge Avalon to APB"
-	@echo "   make tx_uart               : Chay GUI mo phong TX UART"
-	@echo "   make tx_uart_cli           : Chay CLI mo phong TX UART"
-	@echo "   make tx_baud_gen           : Chay GUI mo phong TX Baud Generator"
-	@echo "   make tx_baud_gen_cli       : Chay CLI mo phong TX Baud Generator"
-	@echo ""
-	@echo "3. CHAY MO PHONG NHANH BANG ICARUS VERILOG (IVERILOG):"
-	@echo "   make test                  : Chay toan bo test suites (uart_regs + avalon2apb)"
-	@echo "   make iv_uart_regs          : Chay rieng testbench tb_uart_regs bang iverilog"
-	@echo "   make iv_avalon2apb         : Chay rieng testbench tb_avalon2apb bang iverilog"
 	@echo ""
 	@echo "4. DON DEP:"
-	@echo "   make clean                 : Xoa thu vien work/, *.vvp, transcript, vsim.wlf"
+	@echo "   make clean                 : Xoa thu vien work/, *.vvp, *.vcd, transcript"
 	@echo "=========================================================================="
