@@ -50,6 +50,7 @@ module tb_avalon2apb;
     reg         rx_busy;
     reg         error;
     reg  [31:0] rx_data;
+    wire        uart_irq;
 
     // -------------------------------------------------------------------------
     // 1. Instantiate avalon2apb Bridge
@@ -117,6 +118,7 @@ module tb_avalon2apb;
         .pwdata       (reg_pwdata),
         .prdata       (reg_prdata),
         .reg_ack_err  (reg_ack_err),
+        .irq          (uart_irq),
         .tx_data      (tx_data),
         .data_bit_num (data_bit_num),
         .stop_bit_num (stop_bit_num),

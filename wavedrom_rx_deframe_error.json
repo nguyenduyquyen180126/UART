@@ -1,0 +1,93 @@
+{
+  "signal": [
+    {
+      "name": "clk",
+      "wave": "p..............."
+    },
+    {
+      "name": "state (FSM)",
+      "wave": "3...4.......3...",
+      "data": [
+        "FRAME",
+        "HOLD",
+        "IDLE"
+      ]
+    },
+    {
+      "name": "bit_last",
+      "wave": "0.1.0..........."
+    },
+    {},
+    {
+      "name": "data_in [11:0]",
+      "wave": "x.3.............",
+      "data": [
+        "{P=0, D[10:3]=A5}"
+      ]
+    },
+    {},
+    {
+      "name": "num_data_b [3:0]",
+      "wave": "3...............",
+      "data": [
+        "4'd8"
+      ]
+    },
+    {
+      "name": "parity_en",
+      "wave": "1..............."
+    },
+    {
+      "name": "rx_data [31:0]",
+      "wave": "x...3...........",
+      "data": [
+        "32'h0000_00A5"
+      ]
+    },
+    {
+      "name": "parity_bit",
+      "wave": "x...3...........",
+      "data": [
+        "0"
+      ]
+    },
+    {
+      "name": "parity_exp",
+      "wave": "x...3...........",
+      "data": [
+        "0"
+      ]
+    },
+    {},
+    {
+      "name": "parity_type",
+      "wave": "3...............",
+      "data": [
+        "0 (EVEN)"
+      ]
+    },
+    {
+      "name": "error (Hop le)",
+      "wave": "0..............."
+    },
+    {
+      "name": "error (Bao loi)",
+      "wave": "0...1..........."
+    },
+    {},
+    {
+      "name": "rx_busy",
+      "wave": "1...........0..."
+    },
+    {
+      "name": "rx_done",
+      "wave": "0.........1.0..."
+    }
+  ],
+  "head": {
+    "text": "UART RX: deframe.v & error_check.v (8-E-1, Data = 0xA5)"
+  },
+  "config": {
+    "hscale": 2
+  }
+}

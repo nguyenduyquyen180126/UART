@@ -24,6 +24,7 @@ module tb_apb_uart;
     // Tín hiệu UART nối tiếp
     wire        tx;
     reg         rx;
+    wire        irq;
 
     // Biến quản lý testbench & thống kê
     integer     test_id;
@@ -52,7 +53,8 @@ module tb_apb_uart;
         .pslverr (pslverr),
         .prdata  (prdata),
         .tx      (tx),
-        .rx      (rx)
+        .rx      (rx),
+        .irq     (irq)
     );
 
     // =========================================================================
@@ -427,6 +429,78 @@ module tb_apb_uart;
             end
         join_any
         disable fork;
+
+        // ---------------------------------------------------------------------
+        // TESTCASE 6: KIỂM CHỨNG CƠ CHẾ NGẮT (INTERRUPT) & LỖI TRÀN OVERRUN
+        // ---------------------------------------------------------------------
+        test_id = 6;
+        print_header("CO CHE NGAT (INTERRUPT) & PHAT HIEN TRAN DU LIEU OVERRUN");
+
+        // 1. Ghi IER = 0x05 (Bật RX Interrupt & Overrun Interrupt)
+        apb_write(12'h014, 32'h0000_0005, err_resp);
+        apb_read(12'h014, read_val, err_resp);
+        if (read_val == 32'h0000_0005) begin
+            $display("  --> [PASS] Ghi va doc lai ADDR_IER = 0x05 thanh cong!");
+            pass_count = pass_count + 1;
+        end else begin
+            $display("  --> [FAIL] Ghi/doc ADDR_IER that bai: 0x%08X", read_val);
+            fail_count = fail_count + 1;
+        end
+
+        // 2. Gửi byte 0xA5 vào RX, kiểm tra ngắt IRQ nhảy lên 1
+        $display("  [INFO] Gui byte 0xA5 vao RX va theo doi chan IRQ...");
+        send_uart_rx_byte(8'hA5, 2'b11, 1'b1, 1'b0, 1'b0);
+        #100;
+        if (irq == 1) begin
+            $display("  --> [PASS] Nhan xong byte 0xA5, chan IRQ da lap tuc nhay len muc 1!");
+            pass_count = pass_count + 1;
+        end else begin
+            $display("  --> [FAIL] IRQ khong nhay len muc 1 sau khi nhan xong byte!");
+            fail_count = fail_count + 1;
+        end
+
+        // 3. Đọc dữ liệu RX -> Kiểm tra IRQ tự động hạ về 0
+        apb_read(12'h004, read_val, err_resp);
+        #100;
+        if ((read_val[7:0] == 8'hA5) && (irq == 0)) begin
+            $display("  --> [PASS] Doc dung byte 0xA5 va chan IRQ da tu dong ha ve 0!");
+            pass_count = pass_count + 1;
+        end else begin
+            $display("  --> [FAIL] Doc sai byte hoac IRQ chua ha ve 0: Val=0x%02X, IRQ=%b", read_val[7:0], irq);
+            fail_count = fail_count + 1;
+        end
+
+        // 4. Kịch bản Overrun: Gửi byte 1 ('1' = 0x31)
+        $display("  [INFO] Bat dau kich ban Overrun: Gui byte 1 (0x31)...");
+        send_uart_rx_byte(8'h31, 2'b11, 1'b1, 1'b0, 1'b0);
+        #100;
+
+        // CPU bận không đọc, PC bắn tiếp byte 2 ('2' = 0x32)
+        $display("  [INFO] CPU ban khong doc, PC tiep tuc ban byte 2 (0x32)...");
+        send_uart_rx_byte(8'h32, 2'b11, 1'b1, 1'b0, 1'b0);
+        #100;
+
+        // Kiểm tra bit 3 (overrun_error) trong ADDR_STT và IRQ = 1
+        apb_read(12'h010, read_val, err_resp);
+        if (((read_val & 32'h08) != 0) && (irq == 1)) begin
+            $display("  --> [PASS] Phat hien Overrun: Bit 3 cua ADDR_STT = 1 va IRQ = 1!");
+            pass_count = pass_count + 1;
+        end else begin
+            $display("  --> [FAIL] Khong phat hien Overrun khi byte bi ghi de: STT=0x%02X, IRQ=%b", read_val[7:0], irq);
+            fail_count = fail_count + 1;
+        end
+
+        // 5. Đọc RX để thu byte mới và tự động xóa cờ Overrun
+        apb_read(12'h004, read_val, err_resp);
+        apb_read(12'h010, read_val, err_resp);
+        #100;
+        if (((read_val & 32'h08) == 0) && (irq == 0)) begin
+            $display("  --> [PASS] Co Overrun da duoc xoa ve 0 va IRQ ha ve 0 sau khi doc RX!");
+            pass_count = pass_count + 1;
+        end else begin
+            $display("  --> [FAIL] Co Overrun hoac IRQ chua duoc xoa sau khi doc RX: STT=0x%02X, IRQ=%b", read_val[7:0], irq);
+            fail_count = fail_count + 1;
+        end
 
         // Kết thúc mô phỏng
         #500;

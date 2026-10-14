@@ -33,6 +33,7 @@ module tb_uart_regs;
     reg         rx_busy;
     reg         error;
     reg  [31:0] rx_data;
+    wire        irq;
 
     // APB Slave
     apb_slave u_apb_slave (
@@ -64,6 +65,7 @@ module tb_uart_regs;
         .pwdata       (reg_pwdata),
         .prdata       (reg_prdata),
         .reg_ack_err  (reg_ack_err),
+        .irq          (irq),
         .tx_data      (tx_data),
         .data_bit_num (data_bit_num),
         .stop_bit_num (stop_bit_num),
@@ -212,6 +214,83 @@ module tb_uart_regs;
             $display("--> [PASS] Ghi CFG thanh cong khi quay lai IDLE!");
         else
             $fatal(1, "--> [FAIL] Ghi that bai!");
+
+        // 5. Kiem tra thanh ghi IER (0x14) va co che phat sinh ngat IRQ
+        $display("\n=== STARTING INTERRUPT & OVERRUN TESTS ===");
+        // Kiem tra gia tri mac dinh cua IER sau reset phai bang 0, IRQ phai bang 0
+        apb_read(12'h014, rdata, err);
+        if (rdata == 32'h0 && err == 0 && irq == 0)
+            $display("[Test 5.1: IER Reset] IER = 0x%08X, IRQ = %b --> [PASS]", rdata, irq);
+        else
+            $fatal(1, "--> [FAIL] Gia tri reset cua IER hoac IRQ khong dung!");
+
+        // Ghi IER = 0x05 (Bit 0: RX_IE, Bit 2: OE_IE)
+        apb_write(12'h014, 32'h0000_0005, err);
+        apb_read(12'h014, rdata, err);
+        if (rdata == 32'h0000_0005 && err == 0)
+            $display("[Test 5.2: IER Write/Read] Ghi va doc lai IER = 0x%02X thanh cong --> [PASS]", rdata[7:0]);
+        else
+            $fatal(1, "--> [FAIL] Ghi/Doc IER that bai!");
+
+        // Gia lap phan cung RX nhan xong 1 byte ('A' = 0x41)
+        rx_data = 32'h0000_0041;
+        @(posedge clk);
+        rx_done = 1;
+        @(posedge clk);
+        rx_done = 0;
+        #1;
+        if (irq == 1)
+            $display("[Test 5.3: RX IRQ Trigger] rx_done=1 da kich hoat IRQ = 1 thanh cong --> [PASS]");
+        else
+            $fatal(1, "--> [FAIL] IRQ khong len 1 khi co byte nhan moi!");
+
+        // CPU doc thanh ghi RX (0x04) -> Kiem tra du lieu va co che tu dong ha IRQ ve 0
+        apb_read(12'h004, rdata, err);
+        #1;
+        if (rdata[7:0] == 8'h41 && irq == 0)
+            $display("[Test 5.4: RX IRQ Auto-Clear] Doc RX = 0x%02X, IRQ tu dong ha ve %b --> [PASS]", rdata[7:0], irq);
+        else
+            $fatal(1, "--> [FAIL] IRQ khong tu dong ha ve 0 sau khi doc RX!");
+
+        // 6. Kiem tra co Overrun Error (Trang thai STT bit 3)
+        // Gia lap byte 1 ('B' = 0x42) toi
+        rx_data = 32'h0000_0042;
+        @(posedge clk);
+        rx_done = 1;
+        @(posedge clk);
+        rx_done = 0;
+        @(posedge clk);
+
+        // CPU CO TINH KHONG DOC BYTE 1, byte 2 ('C' = 0x43) ap toi tiep
+        rx_data = 32'h0000_0043;
+        @(posedge clk);
+        rx_done = 1;
+        @(posedge clk);
+        rx_done = 0;
+        #1;
+
+        // Doc thanh ghi STT (0x10) de kiem tra bit 3 (overrun_err)
+        apb_read(12'h010, rdata, err);
+        if ((rdata & 32'h08) != 0 && irq == 1)
+            $display("[Test 6.1: Overrun Detection] Byte 2 toi khi byte 1 chua doc: STT = 0x%02X (Bit 3 Overrun = 1), IRQ = %b --> [PASS]", rdata[7:0], irq);
+        else
+            $fatal(1, "--> [FAIL] Phan cung khong phat hien loi Overrun khi byte bi ghi de!");
+
+        // CPU doc RX de clear loi Overrun va lay byte moi nhat
+        apb_read(12'h004, rdata, err);
+        apb_read(12'h010, rdata, err);
+        #1;
+        if ((rdata & 32'h08) == 0 && irq == 0)
+            $display("[Test 6.2: Overrun Auto-Clear] Sau khi doc RX, bit Overrun = 0 va IRQ = %b --> [PASS]", irq);
+        else
+            $fatal(1, "--> [FAIL] Co Overrun hoac IRQ khong duoc xoa sau khi doc RX!");
+
+        // 7. Kiem tra truy cap dia chi bat hop le ngoai dai (0x018) -> phai tra ve pslverr = 1
+        apb_read(12'h018, rdata, err);
+        if (err == 1)
+            $display("[Test 7: Out-of-Range Access] Doc dia chi 0x018 tra ve PSLVERR = 1 hop le --> [PASS]");
+        else
+            $fatal(1, "--> [FAIL] Khong bao loi pslverr khi truy cap dia chi ngoai dai 0x018!");
 
         $display("=== TAT CA CAC TEST PASS HOAN TOAN! ===");
         $finish;

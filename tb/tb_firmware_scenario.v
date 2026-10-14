@@ -24,6 +24,7 @@ module tb_firmware_scenario;
     // Đường dây nối tiếp UART
     wire       tx; // DE2 phát sang PC
     reg        rx; // PC phát sang DE2
+    wire       irq;
 
     // Biến phụ trợ kiểm tra
     reg [31:0] read_val;
@@ -49,7 +50,8 @@ module tb_firmware_scenario;
         .pslverr (pslverr),
         .prdata  (prdata),
         .tx      (tx),
-        .rx      (rx)
+        .rx      (rx),
+        .irq     (irq)
     );
 
     // Tạo clock 50 MHz

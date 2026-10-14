@@ -21,6 +21,7 @@ module tb_full_duplex;
     // 2 đường dây vật lý nối tiếp độc lập
     wire       tx_line; // FPGA DE2-115 truyền sang PC (PIN_AC15)
     reg        rx_line; // PC truyền sang FPGA DE2-115 (PIN_AB22)
+    wire       irq;
 
     // DUT
     apb_uart #(
@@ -37,7 +38,8 @@ module tb_full_duplex;
         .pslverr (pslverr),
         .prdata  (prdata),
         .tx      (tx_line),
-        .rx      (rx_line)
+        .rx      (rx_line),
+        .irq     (irq)
     );
 
     // Clock generator 50 MHz

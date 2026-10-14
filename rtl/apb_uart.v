@@ -13,7 +13,8 @@ module apb_uart #(
     output wire [31:0] prdata,
 
     output wire        tx,
-    input  wire        rx
+    input  wire        rx,
+    output wire        irq
 );
 
     wire        reg_pread, reg_pwrite, reg_ack_err;
@@ -55,6 +56,7 @@ module apb_uart #(
         .pwdata       (reg_pwdata),
         .prdata       (reg_prdata),
         .reg_ack_err  (reg_ack_err),
+        .irq          (irq),
         .tx_data      (tx_data),
         .data_bit_num (data_bit_num),
         .stop_bit_num (stop_bit_num),

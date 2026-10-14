@@ -12,8 +12,6 @@ set_module_property OPAQUE_ADDRESS_MAP true
 set_module_property DISPLAY_NAME "apb_uart"
 set_module_property INSTANTIATE_IN_SYSTEM_MODULE true
 set_module_property EDITABLE false
-set_module_property REPORT_TO_TALK_BACK false
-set_module_property ALLOW_GREYBOX_ADDITION false
 set_module_property REPORT_HIERARCHY false
 
 # 
@@ -97,3 +95,13 @@ set_interface_property conduit_uart ENABLED true
 
 add_interface_port conduit_uart tx uart_tx Output 1
 add_interface_port conduit_uart rx uart_rx Input 1
+
+# 
+# connection point interrupt_sender
+# 
+add_interface interrupt_sender interrupt end
+set_interface_property interrupt_sender associatedClock clock
+set_interface_property interrupt_sender associatedReset reset
+set_interface_property interrupt_sender ENABLED true
+
+add_interface_port interrupt_sender irq irq Output 1

@@ -22,7 +22,7 @@ module apb_slave (
 );
     assign pready = psel & penable;
 
-    wire addr_valid = (paddr <= 12'h010) && (paddr[1:0] == 2'b00);
+    wire addr_valid = (paddr <= 12'h014) && (paddr[1:0] == 2'b00);
 
     assign reg_pread  = psel & penable & addr_valid & (~pwrite);
     assign reg_pwrite = psel & penable & addr_valid & pwrite;

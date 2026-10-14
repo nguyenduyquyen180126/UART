@@ -8,6 +8,7 @@ module uart_regs (
     input  wire [31:0] pwdata,
     output reg  [31:0] prdata,
     output wire        reg_ack_err,
+    output wire        irq,
 
     output wire [7:0]  tx_data,
     output wire [1:0]  data_bit_num,
@@ -29,27 +30,31 @@ module uart_regs (
     localparam [11:0] ADDR_CFG  = 12'h008;
     localparam [11:0] ADDR_CTRL = 12'h00C;
     localparam [11:0] ADDR_STT  = 12'h010;
+    localparam [11:0] ADDR_IER  = 12'h014;
 
     reg [31:0] tx_data_reg;
     reg [31:0] rx_data_reg;
     reg [31:0] cfg_reg;
     reg [31:0] ctrl_reg;
     reg [31:0] stt_reg;
+    reg [31:0] ier_reg;
 
     wire addr_tx   = (paddr == ADDR_TX);
     wire addr_rx   = (paddr == ADDR_RX);
     wire addr_cfg  = (paddr == ADDR_CFG);
     wire addr_ctrl = (paddr == ADDR_CTRL);
     wire addr_stt  = (paddr == ADDR_STT);
+    wire addr_ier  = (paddr == ADDR_IER);
 
     wire tx_ready  = stt_reg[0];
     wire uart_idle = tx_ready && (!rx_busy);
 
     wire write_legal = (addr_tx   && tx_ready)  ||
                        (addr_cfg  && uart_idle) ||
-                       (addr_ctrl);
+                       (addr_ctrl)              ||
+                       (addr_ier);
 
-    wire read_legal  = addr_tx || addr_rx || addr_cfg || addr_ctrl || addr_stt;
+    wire read_legal  = addr_tx || addr_rx || addr_cfg || addr_ctrl || addr_stt || addr_ier;
 
     assign reg_ack_err = (reg_pwrite && !write_legal) || 
                          (reg_pread  && !read_legal);
@@ -66,6 +71,7 @@ module uart_regs (
             tx_data_reg <= 32'h0;
             cfg_reg     <= 32'h0;
             ctrl_reg    <= 32'h0;
+            ier_reg     <= 32'h0;
         end else begin
             ctrl_reg[0] <= 1'b0; // Tu dong xoa xung start_tx sau 1 chu ky
 
@@ -74,6 +80,7 @@ module uart_regs (
                     ADDR_TX:   tx_data_reg <= pwdata;
                     ADDR_CFG:  cfg_reg     <= pwdata;
                     ADDR_CTRL: ctrl_reg    <= pwdata;
+                    ADDR_IER:  ier_reg     <= pwdata;
                     default: ;
                 endcase
             end
@@ -88,20 +95,29 @@ module uart_regs (
         end else begin
             rx_data_reg <= rx_data;
 
+            // Bit 0: tx_done / tx_ready
             if (tx_write_ack)
                 stt_reg[0] <= 1'b0;
             else if (tx_done)
                 stt_reg[0] <= 1'b1;
 
-            if (rx_read_ack)
+            // Bit 1: rx_done / rx_ready
+            if (rx_read_ack && !rx_done)
                 stt_reg[1] <= 1'b0;
             else if (rx_done)
                 stt_reg[1] <= 1'b1;
 
-            if (rx_read_ack)
+            // Bit 2: parity/frame error
+            if (rx_read_ack && !rx_done)
                 stt_reg[2] <= 1'b0;
             else if (rx_done && error)
                 stt_reg[2] <= 1'b1;
+
+            // Bit 3: overrun error (byte moi den khi byte cu chua duoc doc)
+            if (rx_read_ack && !rx_done)
+                stt_reg[3] <= 1'b0;
+            else if (rx_done && stt_reg[1] && !rx_read_ack)
+                stt_reg[3] <= 1'b1;
         end
     end
 
@@ -114,12 +130,23 @@ module uart_regs (
                 ADDR_CFG:  prdata = cfg_reg;
                 ADDR_CTRL: prdata = ctrl_reg;
                 ADDR_STT:  prdata = stt_reg;
+                ADDR_IER:  prdata = ier_reg;
                 default:   prdata = 32'h0;
             endcase
         end else begin
             prdata = 32'h0;
         end
     end
+
+    // 4. Sinh tin hieu ngat (Interrupt Generation)
+    // ier_reg[0]: RX interrupt enable (rx_ie)
+    // ier_reg[1]: TX interrupt enable (tx_ie)
+    // ier_reg[2]: Overrun error interrupt enable (oe_ie)
+    wire rx_irq = stt_reg[1] & ier_reg[0];
+    wire tx_irq = stt_reg[0] & ier_reg[1];
+    wire oe_irq = stt_reg[3] & ier_reg[2];
+
+    assign irq = rx_irq | tx_irq | oe_irq;
 
     // Hardware mapping
     assign tx_data      = tx_data_reg[7:0];
