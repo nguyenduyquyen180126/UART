@@ -234,7 +234,7 @@ module tb_apb_uart;
         print_header("KHOI TAO & CAU HINH THANH GHI CFG");
 
         // Đọc kiểm tra trạng thái ADDR_STT sau reset (Mong đợi: tx_done=1, rx_done=0, err=0)
-        apb_read(12'h010, read_val, err_resp);
+        apb_read(12'h00C, read_val, err_resp);
         if (read_val == 32'h0000_0001 && err_resp == 1'b0) begin
             $display("  --> [PASS] Trang thai reset ADDR_STT = 0x%08X, ERR = %b", read_val, err_resp);
             pass_count = pass_count + 1;
@@ -267,7 +267,7 @@ module tb_apb_uart;
         apb_write(12'h000, 32'h0000_00A5, err_resp);
 
         // Kiểm tra cờ tx_done đã tụt xuống 0 (báo TX bận)
-        apb_read(12'h010, read_val, err_resp);
+        apb_read(12'h00C, read_val, err_resp);
         if ((read_val & 32'h1) == 0) begin
             $display("  --> [PASS] Co tx_done da keo xuong 0 (TX dang ban truyen)!");
             pass_count = pass_count + 1;
@@ -295,7 +295,7 @@ module tb_apb_uart;
         timeout = 0;
         while (((read_val & 32'h1) == 0) && (timeout < 500)) begin
             #(bit_time_ns);
-            apb_read(12'h010, read_val, err_resp);
+            apb_read(12'h00C, read_val, err_resp);
             timeout = timeout + 1;
         end
 
@@ -318,10 +318,10 @@ module tb_apb_uart;
 
         // Polling chờ rx_done = 1
         timeout = 0;
-        apb_read(12'h010, read_val, err_resp);
+        apb_read(12'h00C, read_val, err_resp);
         while (((read_val & 32'h2) == 0) && (timeout < 50)) begin
             #(bit_time_ns / 2);
-            apb_read(12'h010, read_val, err_resp);
+            apb_read(12'h00C, read_val, err_resp);
             timeout = timeout + 1;
         end
 
@@ -344,7 +344,7 @@ module tb_apb_uart;
         end
 
         // Kiểm tra Auto-Clear: Đọc lại ADDR_STT xem rx_done đã bị xóa về 0 chưa
-        apb_read(12'h010, read_val, err_resp);
+        apb_read(12'h00C, read_val, err_resp);
         if ((read_val & 32'h2) == 0) begin
             $display("  --> [PASS] Co rx_done da duoc tu dong xoa ve 0 sau khi doc ADDR_RX!");
             pass_count = pass_count + 1;
@@ -364,10 +364,10 @@ module tb_apb_uart;
 
         // Polling chờ nhận xong
         timeout = 0;
-        apb_read(12'h010, read_val, err_resp);
+        apb_read(12'h00C, read_val, err_resp);
         while (((read_val & 32'h2) == 0) && (timeout < 50)) begin
             #(bit_time_ns / 2);
-            apb_read(12'h010, read_val, err_resp);
+            apb_read(12'h00C, read_val, err_resp);
             timeout = timeout + 1;
         end
 
@@ -382,7 +382,7 @@ module tb_apb_uart;
 
         // Đọc ADDR_RX để kích hoạt cơ chế tự xóa lỗi
         apb_read(12'h004, read_val, err_resp);
-        apb_read(12'h010, read_val, err_resp);
+        apb_read(12'h00C, read_val, err_resp);
         if ((read_val & 32'h4) == 0) begin
             $display("  --> [PASS] Co ERROR da duoc tu dong xoa ve 0 sau khi doc ADDR_RX!");
             pass_count = pass_count + 1;
@@ -410,7 +410,7 @@ module tb_apb_uart;
                 read_val = 0;
                 while (((read_val & 32'h2) == 0) && (timeout < 100)) begin
                     #(bit_time_ns / 2);
-                    apb_read(12'h010, read_val, err_resp);
+                    apb_read(12'h00C, read_val, err_resp);
                     timeout = timeout + 1;
                 end
 
@@ -438,8 +438,8 @@ module tb_apb_uart;
         print_header("CO CHE NGAT (INTERRUPT) & PHAT HIEN TRAN DU LIEU OVERRUN");
 
         // 1. Ghi IER = 0x05 (Bật RX Interrupt & Overrun Interrupt)
-        apb_write(12'h014, 32'h0000_0005, err_resp);
-        apb_read(12'h014, read_val, err_resp);
+        apb_write(12'h010, 32'h0000_0005, err_resp);
+        apb_read(12'h010, read_val, err_resp);
         if (read_val == 32'h0000_0005) begin
             $display("  --> [PASS] Ghi va doc lai ADDR_IER = 0x05 thanh cong!");
             pass_count = pass_count + 1;
@@ -484,7 +484,7 @@ module tb_apb_uart;
         #100;
 
         // Kiểm tra bit 3 (overrun_error) trong ADDR_STT và IRQ = 1
-        apb_read(12'h010, read_val, err_resp);
+        apb_read(12'h00C, read_val, err_resp);
         if (((read_val & 32'h08) != 0) && (irq == 1)) begin
             $display("  --> [PASS] Phat hien Overrun: Bit 3 cua ADDR_STT = 1 va IRQ = 1!");
             pass_count = pass_count + 1;
@@ -497,7 +497,7 @@ module tb_apb_uart;
         for (i = 0; i < 16; i = i + 1) begin
             apb_read(12'h004, read_val, err_resp);
         end
-        apb_read(12'h010, read_val, err_resp);
+        apb_read(12'h00C, read_val, err_resp);
         #100;
         if (((read_val & 32'h08) == 0) && (irq == 0)) begin
             $display("  --> [PASS] Co Overrun da duoc xoa ve 0 va IRQ ha ve 0 sau khi doc RX!");

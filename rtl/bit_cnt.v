@@ -3,7 +3,6 @@ module bit_cnt(
     input rst_n,
     input tick_en,
     input [3:0] data_b_num_out,
-    input [1:0] stop_b_num_out,
     input parity_en,
     input bit_clr,
     output reg [3:0] bit_cnt,

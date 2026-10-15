@@ -5,7 +5,6 @@ module tx_controller(
     input stop_last,
     input baud_tick,
     input bit_last,
-    output reg tx_done,
     output reg [1:0]tx_sel,
     output reg load_reg,
     output reg shift_reg,
@@ -73,8 +72,7 @@ module tx_controller(
     end
 
     always @(*) begin
-        tx_done     = 1'b0;
-        tx_sel      = 1'b0;
+        tx_sel      = 2'b01;
         clr_bit     = 1'b0;
         clr_stop    = 1'b0;
         clr_baud    = 1'b0;
@@ -84,7 +82,6 @@ module tx_controller(
 
         case(state)
             IDLE: begin
-                tx_done = 1'b0;
                 tx_sel = 2'b01;
                 clr_bit = 1'b1;
                 clr_stop = 1'b1;
@@ -95,14 +92,12 @@ module tx_controller(
                 end
             end
             START: begin
-                tx_done = 1'b0;
                 tx_sel = 2'b00;
                 clr_bit = 1'b1;
                 clr_stop = 1'b1;
                 tx_busy = 1'b1;
             end
             DATA: begin
-                tx_done = 1'b0;
                 tx_sel = 2'b10;
                 clr_bit = 1'b0;
                 clr_stop = 1'b1;
@@ -110,35 +105,18 @@ module tx_controller(
                 if(~bit_last && baud_tick) begin
                     shift_reg = 1'b1;
                 end
-                else if(bit_last && baud_tick && parity_en) begin
-                    
-                end
-                else if(bit_last && baud_tick && ~parity_en) begin
-                    
-                end
             end
             PARITY: begin
-                tx_done = 1'b0;
                 tx_sel = 2'b11;
                 clr_bit = 1'b1;
                 clr_stop = 1'b1;
                 tx_busy = 1'b1;
-                if(baud_tick) begin 
-                    
-                end
             end
             STOP: begin
-                tx_done = 1'b0;
                 tx_sel = 2'b01;
                 clr_bit = 1'b1;
                 clr_stop = 1'b0;
                 tx_busy = 1'b1;
-                if(~stop_last && baud_tick) begin
-                    
-                end
-                else if(stop_last && baud_tick) begin
-                    tx_done = 1'b1; // Mealy output: 1 clock pulse on transition to IDLE
-                end
             end
         endcase
     end

@@ -5,7 +5,6 @@ module deframe(
         input               parity_en,
         input [11:0]        data_in,
         input [3:0]         num_data_b,
-        input [1:0]         num_stop_b,
         output reg [7:0]    rx_data,
         output reg          parity_exp,
         output reg          parity_bit

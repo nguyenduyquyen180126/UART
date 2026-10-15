@@ -10,7 +10,6 @@ module tx_uart #(
     input parity_type,
     input [1:0] baud_sel,
     output reg tx,
-    output tx_done,
     output load_reg,
     output tx_busy
 );
@@ -38,7 +37,6 @@ module tx_uart #(
         .stop_last(stop_last),
         .baud_tick(baud_tick),
         .bit_last(bit_last),
-        .tx_done(tx_done),
         .tx_sel(tx_sel),
         .load_reg(load_reg),
         .shift_reg(shift_reg),
@@ -92,11 +90,11 @@ module tx_uart #(
 
     always @(*) begin
         case(data_bit_num)
-            2'b00: tx_data_masked = {3'b0, tx_data[4:0]};
-            2'b01: tx_data_masked = {2'b0, tx_data[5:0]};
-            2'b10: tx_data_masked = {1'b0, tx_data[6:0]};
-            2'b11: tx_data_masked = tx_data[7:0];
-            default: ;
+            2'b00:   tx_data_masked = {3'b0, tx_data[4:0]};
+            2'b01:   tx_data_masked = {2'b0, tx_data[5:0]};
+            2'b10:   tx_data_masked = {1'b0, tx_data[6:0]};
+            2'b11:   tx_data_masked = tx_data[7:0];
+            default: tx_data_masked = tx_data[7:0];
         endcase
     end
 
@@ -118,11 +116,11 @@ module tx_uart #(
 
     always @(*) begin
         case(tx_sel)
-            2'b00: tx = 1'b0;
-            2'b01: tx = 1'b1;
-            2'b10: tx = data_mux_in;
-            2'b11: tx = parity_bit;
-            default: ;
+            2'b00:   tx = 1'b0;
+            2'b01:   tx = 1'b1;
+            2'b10:   tx = data_mux_in;
+            2'b11:   tx = parity_bit;
+            default: tx = 1'b1;
         endcase
     end
 endmodule

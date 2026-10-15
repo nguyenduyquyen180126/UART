@@ -46,10 +46,14 @@ module tb_full_duplex;
     always #(CLK_PERIOD / 2) clk = ~clk;
 
     // =========================================================================
-    // APB DRIVER TASKS
+    // APB DRIVER TASKS (Co co che Bus Arbiter / Mutex ngan xung dot da luong)
     // =========================================================================
+    reg bus_busy = 0;
+
     task apb_write(input [11:0] addr, input [31:0] data);
     begin
+        while (bus_busy) @(posedge clk);
+        bus_busy = 1;
         @(posedge clk);
         paddr   <= addr;
         pwdata  <= data;
@@ -64,11 +68,14 @@ module tb_full_duplex;
         psel    <= 1'b0;
         penable <= 1'b0;
         pwrite  <= 1'b0;
+        bus_busy = 0;
     end
     endtask
 
     task apb_read(input [11:0] addr, output [31:0] data);
     begin
+        while (bus_busy) @(posedge clk);
+        bus_busy = 1;
         @(posedge clk);
         paddr   <= addr;
         pwrite  <= 1'b0;
@@ -78,12 +85,13 @@ module tb_full_duplex;
         @(posedge clk);
         penable <= 1'b1;
 
-        @(posedge clk);
         #1;
         data = prdata;
 
+        @(posedge clk);
         psel    <= 1'b0;
         penable <= 1'b0;
+        bus_busy = 0;
     end
     endtask
 
@@ -234,7 +242,7 @@ module tb_full_duplex;
                     // Đợi tx_done = 1
                     stt_val = 0;
                     while ((stt_val & 32'h1) == 0) begin
-                        apb_read(12'h010, stt_val);
+                        apb_read(12'h00C, stt_val);
                         #1000;
                     end
                     apb_write(12'h000, {24'h0, de2_tx_data[k]});
@@ -270,7 +278,7 @@ module tb_full_duplex;
                 for (n = 0; n < 3; n = n + 1) begin
                     stt_val = 0;
                     while ((stt_val & 32'h2) == 0) begin
-                        apb_read(12'h010, stt_val);
+                        apb_read(12'h00C, stt_val);
                         #1000;
                     end
                     apb_read(12'h004, rx_val);

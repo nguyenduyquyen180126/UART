@@ -23,11 +23,9 @@ module apb_uart #(
 
     wire [1:0]  data_bit_num, baud_sel;
     wire        stop_bit_num, parity_en, parity_type;
-    wire        tx_done, tx_busy, rx_done, rx_busy, error;
+    wire        tx_busy, rx_done, rx_busy, error;
 
     apb_slave u_apb_slave (
-        .pclk        (clk),
-        .preset_n    (rst_n),
         .psel        (psel),
         .penable     (penable),
         .pwrite      (pwrite),
@@ -136,7 +134,6 @@ module apb_uart #(
         .parity_type  (parity_type),
         .baud_sel     (baud_sel),
         .tx           (tx),
-        .tx_done      (tx_done),
         .load_reg     (tx_load_reg),
         .tx_busy      (tx_busy)
     );

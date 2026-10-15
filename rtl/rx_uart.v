@@ -81,7 +81,6 @@ module rx_uart #(
         .tick_en(tick_en),
         .bit_clr(bit_clr),
         .data_b_num_out(num_data_b),
-        .stop_b_num_out(num_stop_b),
         .bit_last(bit_last),
         .bit_cnt(bit_cnt),
         .parity_en(parity_en)
@@ -107,7 +106,6 @@ module rx_uart #(
         .parity_en(parity_en),
         .data_in(data_out),
         .num_data_b(num_data_b),
-        .num_stop_b(num_stop_b),
         .rx_data(rx_data),
         .parity_bit(parity_bit),
         .parity_exp(parity_exp)

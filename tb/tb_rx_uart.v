@@ -17,7 +17,7 @@ module tb_rx_uart();
     reg         parity_en;     // 0: Không dùng parity, 1: Có parity
     reg         rx;            // Đường truyền nối tiếp UART RX
 
-    wire [8:0]  rx_data;       // Dữ liệu nhận được từ DUT (Bit 8: error, Bit 7:0: data)
+    wire [7:0]  rx_data;       // Dữ liệu nhận được từ DUT (Bit 7:0: data)
     wire        rx_done;       // Xung báo đã nhận xong 1 frame
     wire        error;         // Cờ báo lỗi Parity từ DUT
 
@@ -31,7 +31,7 @@ module tb_rx_uart();
     // Giúp TB không bao giờ bị trượt xung rx_done dù xung chỉ tồn tại 1 chu kỳ clock!
     reg       clear_done;
     reg       rx_done_latched;
-    reg [8:0] captured_rx_data;
+    reg [7:0] captured_rx_data;
     reg       captured_error;
 
     // =========================================================================
@@ -46,10 +46,11 @@ module tb_rx_uart();
         .baud_sel(baud_rate),
         .data_b_num(data_b_num),
         .stop_b_num(stop_b_num),
-        .parity_type(parity_type),
+        .parity_type(parity_type[0]),
         .parity_en(parity_en),
         .rx_data(rx_data),
         .rx_done(rx_done),
+        .rx_busy(),
         .error(error)
     );
 

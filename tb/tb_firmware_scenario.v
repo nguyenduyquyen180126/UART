@@ -150,13 +150,13 @@ module tb_firmware_scenario;
         // ---------------------------------------------------------------------
         // TEST 1: Kiểm tra trạng thái Reset của APB UART
         // ---------------------------------------------------------------------
-        $display("\n>>> [BƯỚC 1]: Kiem tra trang thai ban dau cua thanh ghi STT (0x10)");
-        cpu_apb_read(12'h010, read_val);
+        $display("\n>>> [BƯỚC 1]: Kiem tra trang thai ban dau cua thanh ghi STT (0x0C)");
+        cpu_apb_read(12'h00C, read_val);
         if ((read_val & 32'h1) == 1'b1) begin
-            $display("  --> [PASS] Co tx_done = 1 (Bo phat dang ranh, san sang)");
+            $display("  --> [PASS] Co tx_ready = 1 (Bo phat dang ranh, san sang)");
             pass_count = pass_count + 1;
         end else begin
-            $display("  --> [FAIL] Co tx_done != 1 (Gia tri doc duoc: 0x%08X)", read_val);
+            $display("  --> [FAIL] Co tx_ready != 1 (Gia tri doc duoc: 0x%08X)", read_val);
             fail_count = fail_count + 1;
         end
 
@@ -185,7 +185,7 @@ module tb_firmware_scenario;
         cpu_apb_write(12'h000, 32'h0000_004B); // Ghi ký tự vào TX buffer
 
         // Kiểm tra cờ tx_done bị kéo xuống 0 (đang bận truyền)
-        cpu_apb_read(12'h010, read_val);
+        cpu_apb_read(12'h00C, read_val);
         if ((read_val & 32'h1) == 1'b0) begin
             $display("  --> [PASS] Co tx_done da keo ve 0 (UART dang ban phat frame 10-bit)");
             pass_count = pass_count + 1;
@@ -196,7 +196,7 @@ module tb_firmware_scenario;
 
         // Chờ UART phát xong (10 bit x 104us ~ 1.04ms)
         #(BIT_TIME_9600 * 11);
-        cpu_apb_read(12'h010, read_val);
+        cpu_apb_read(12'h00C, read_val);
         if ((read_val & 32'h1) == 1'b1) begin
             $display("  --> [PASS] Phat xong frame! Co tx_done da tu dong quay ve 1");
             pass_count = pass_count + 1;
@@ -215,7 +215,7 @@ module tb_firmware_scenario;
 
         // Ký tự 1: 'O' (0x4F)
         pc_send_byte(8'h4F);
-        cpu_apb_read(12'h010, read_val);
+        cpu_apb_read(12'h00C, read_val);
         if ((read_val & 32'h2) != 1'b0) begin
             $display("  --> [PASS] Nhan byte 1 ('O'): Co rx_done = 1");
             pass_count = pass_count + 1;
@@ -229,7 +229,7 @@ module tb_firmware_scenario;
 
         // Ký tự 2: 'K' (0x4B)
         pc_send_byte(8'h4B);
-        cpu_apb_read(12'h010, read_val);
+        cpu_apb_read(12'h00C, read_val);
         if ((read_val & 32'h2) != 1'b0) begin
             $display("  --> [PASS] Nhan byte 2 ('K'): Co rx_done = 1");
             pass_count = pass_count + 1;
@@ -243,7 +243,7 @@ module tb_firmware_scenario;
 
         // Ký tự 3: '\r' (0x0D - Phím Enter từ PC)
         pc_send_byte(8'h0D);
-        cpu_apb_read(12'h010, read_val);
+        cpu_apb_read(12'h00C, read_val);
         if ((read_val & 32'h2) != 1'b0) begin
             $display("  --> [PASS] Nhan byte 3 (Enter '\\r'): Co rx_done = 1");
             pass_count = pass_count + 1;
@@ -263,7 +263,7 @@ module tb_firmware_scenario;
         end
 
         // Kiểm tra cơ chế tự động xóa cờ (Auto-clear rx_done)
-        cpu_apb_read(12'h010, read_val);
+        cpu_apb_read(12'h00C, read_val);
         if ((read_val & 32'h2) == 1'b0) begin
             $display("  --> [PASS] Phan cung tu dong xoa co rx_done ve 0 sau khi CPU doc!");
             pass_count = pass_count + 1;

@@ -29,12 +29,12 @@
 #define UART_TX_DATA_REG  (APB_UART_0_BASE + 0x00) // Thanh ghi ghi dữ liệu phát
 #define UART_RX_DATA_REG  (APB_UART_0_BASE + 0x04) // Thanh ghi đọc dữ liệu nhận
 #define UART_CFG_REG      (APB_UART_0_BASE + 0x08) // Cấu hình baudrate và khung truyền
-#define UART_CTRL_REG     (APB_UART_0_BASE + 0x0C) // Thanh ghi điều khiển (start_tx)
-#define UART_STT_REG      (APB_UART_0_BASE + 0x10) // Thanh ghi trạng thái (tx_done, rx_done, error, overrun)
-#define UART_IER_REG      (APB_UART_0_BASE + 0x14) // Thanh ghi cho phép ngắt (rx_ie, tx_ie, oe_ie)
+#define UART_STT_REG      (APB_UART_0_BASE + 0x0C) // Thanh ghi trạng thái (tx_ready, rx_ready, error, overrun)
+#define UART_IER_REG      (APB_UART_0_BASE + 0x10) // Thanh ghi cho phép ngắt (rx_ie, tx_ie, oe_ie)
 
 // Mặt nạ bit thanh ghi STT
-#define UART_STT_TX_DONE  (1 << 0) // Bit 0: Bộ phát rảnh (1) / bận (0)
+#define UART_STT_TX_READY (1 << 0) // Bit 0: Bộ phát sẵn sàng & TX FIFO rỗng (1)
+#define UART_STT_TX_DONE  (1 << 0) // Alias tương thích ngược với code cũ
 #define UART_STT_RX_DONE  (1 << 1) // Bit 1: Có byte mới trong bộ nhận (1)
 #define UART_STT_ERROR    (1 << 2) // Bit 2: Lỗi Parity hoặc Frame
 #define UART_STT_OVERRUN  (1 << 3) // Bit 3: Lỗi tràn dữ liệu Overrun
@@ -140,10 +140,8 @@ int uart_putc(char c) {
     while (((IORD_32DIRECT(UART_STT_REG, 0) & UART_STT_TX_DONE) == 0) && --timeout);
     if (timeout == 0) return -1; // Quá thời gian chờ
 
-    // Ghi byte ký tự vào bộ đệm TX
+    // Ghi byte ky tu vao TX FIFO (Phan cung tu dong truyen khi FIFO khong rong)
     IOWR_32DIRECT(UART_TX_DATA_REG, 0, (uint32_t)c);
-    // Kích xung start_tx = 1 (Hardware tự động xóa về 0 sau 1 chu kỳ clock)
-    IOWR_32DIRECT(UART_CTRL_REG, 0, 0x01);
     return 0;
 }
 

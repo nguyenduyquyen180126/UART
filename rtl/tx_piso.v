@@ -8,7 +8,7 @@ module piso(
     reg [7:0] data;
     always @(posedge clk or negedge rst_n) begin
         if(~rst_n) begin
-            data <= 7'b0;
+            data <= 8'd0;
         end
         else begin
             if(load_reg) begin
