@@ -24,16 +24,17 @@ set_fileset_property QUARTUS_SYNTH ENABLE_FILE_OVERWRITE_MODE false
 add_fileset_file apb_uart.v VERILOG PATH apb_uart.v TOP_LEVEL_FILE
 add_fileset_file apb_slave.v VERILOG PATH apb_slave.v
 add_fileset_file uart_regs.v VERILOG PATH uart_regs.v
-add_fileset_file baud_gen.v VERILOG PATH baud_gen.v
+add_fileset_file sync_fifo.v VERILOG PATH sync_fifo.v
 add_fileset_file tx_uart.v VERILOG PATH tx_uart.v
 add_fileset_file tx_controller.v VERILOG PATH tx_controller.v
-add_fileset_file tx_tick_cnt.v VERILOG PATH tx_tick_cnt.v
+add_fileset_file tx_baud_gen.v VERILOG PATH tx_baud_gen.v
 add_fileset_file tx_bit_cnt.v VERILOG PATH tx_bit_cnt.v
 add_fileset_file tx_stop_cnt.v VERILOG PATH tx_stop_cnt.v
 add_fileset_file tx_parity.v VERILOG PATH tx_parity.v
 add_fileset_file tx_piso.v VERILOG PATH tx_piso.v
 add_fileset_file rx_uart.v VERILOG PATH rx_uart.v
 add_fileset_file rx_controller.v VERILOG PATH rx_controller.v
+add_fileset_file rx_baud_gen.v VERILOG PATH rx_baud_gen.v
 add_fileset_file data_b_num.v VERILOG PATH data_b_num.v
 add_fileset_file stop_b_num.v VERILOG PATH stop_b_num.v
 add_fileset_file bit_cnt.v VERILOG PATH bit_cnt.v
