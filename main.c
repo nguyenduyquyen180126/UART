@@ -24,7 +24,7 @@
 #define PIO_KEY_BASE 0x00010030 // Nút nhấn KEY[1]
 #endif
 
-// Offset các thanh ghi APB UART (khớp với rtl/uart_regs.v)
+// Offset các thanh ghi APB UART (khớp chuẩn với rtl/uart_regs.v)
 #define UART_TX_DATA_REG  (APB_UART_0_BASE + 0x00) // Thanh ghi ghi dữ liệu phát
 #define UART_RX_DATA_REG  (APB_UART_0_BASE + 0x04) // Thanh ghi đọc dữ liệu nhận
 #define UART_CFG_REG      (APB_UART_0_BASE + 0x08) // Cấu hình baudrate và khung truyền
@@ -329,7 +329,7 @@ void print_help(void) {
     jtag_puts("  send <message>      : Gui tin nhan chuoi qua bus APB sang Terminal PC\r\n");
     jtag_puts("  chat                : Bat/tat che do go truc tiep (Direct Chat Mode)\r\n");
     jtag_puts("  status              : Xem thong ke byte truyen/nhan & trang thai bus\r\n");
-    jtag_puts("  peek <offset_hex>   : Doc thanh ghi APB UART (Vi du: peek 0x10)\r\n");
+    jtag_puts("  peek <offset_hex>   : Doc thanh ghi APB UART (Vi du: peek 0x0C)\r\n");
     jtag_puts("  poke <offset> <val> : Ghi thanh ghi APB UART (Vi du: poke 0x00 0x41)\r\n");
     jtag_puts("  hex <val_hex>       : Dat so hien thi tren LED 7 thanh HEX1-HEX0\r\n");
     jtag_puts("  echo <on/off>       : Bat/tat che do tu dong echo tin nhan tu PC\r\n");
@@ -374,7 +374,7 @@ void execute_command(char *cmd) {
         jtag_puts(" - JTAG UART Rx (nhan tu CLI) : "); jtag_put_uint(g_stats.jtag_rx_bytes); jtag_puts(" bytes\r\n");
         jtag_puts(" - JTAG UART Tx (xuat ra CLI) : "); jtag_put_uint(g_stats.jtag_tx_bytes); jtag_puts(" bytes\r\n");
         jtag_puts(" - Echo loopback status       : "); jtag_puts(g_stats.echo_enabled ? "ON\r\n" : "OFF\r\n");
-        jtag_puts(" - Thanh ghi STT (0x20010)    : "); jtag_put_hex32(IORD_32DIRECT(UART_STT_REG, 0)); jtag_puts("\r\n");
+        jtag_puts(" - Thanh ghi STT (0x2000C)    : "); jtag_put_hex32(IORD_32DIRECT(UART_STT_REG, 0)); jtag_puts("\r\n");
         jtag_puts(" - Thanh ghi CFG (0x20008)    : "); jtag_put_hex32(IORD_32DIRECT(UART_CFG_REG, 0)); jtag_puts("\r\n");
         jtag_puts("=========================================\r\n");
     }
@@ -397,9 +397,9 @@ void execute_command(char *cmd) {
         uint32_t val = parse_hex(p);
         uint32_t reg_off = offset & 0xFFC;
 
-        // Chốt an toàn: Chặn ghi vào offset 0x0C (đã gỡ khỏi RTL, gây lỗi bus SLVERR nếu ghi)
+        // Chốt an toàn: Chặn ghi vào offset 0x0C (UART_STT_REG là read-only, ghi sẽ gây lỗi bus SLVERR)
         if (reg_off == 0x0C) {
-            jtag_puts("\r\n[Error] Offset 0x0C (UART_CTRL_REG) is removed from hardware and causes bus exception!\r\n");
+            jtag_puts("\r\n[Error] Offset 0x0C (UART_STT_REG) is read-only and causes bus exception if written!\r\n");
         } else {
             uint32_t addr = APB_UART_0_BASE + reg_off;
             IOWR_32DIRECT(addr, 0, val);
