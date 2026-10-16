@@ -7,6 +7,7 @@ VLOG     ?= vlog
 VLIB     ?= vlib
 IVERILOG ?= iverilog
 VVP      ?= vvp
+VVP_ARGS ?=
 
 .PHONY: all help compile check sim sim_cli clean \
         tx_uart tx_uart_cli tx_baud_gen tx_baud_gen_cli \
@@ -142,21 +143,23 @@ APB_UART_SRCS := rtl/apb_uart.v \
                  rtl/error_check.v \
                  rtl/sync_fifo.v
 
+UART_VIRTUAL_SRCS := tb/models/uart_rx_virtual.v tb/models/uart_tx_virtual.v
+
 # 1) tb_apb_uart: Testbench tong hop tinh nang APB UART
 apb_uart tb_apb_uart:
 	@echo "==> Đang biên dịch và chạy mô phỏng tb_apb_uart bằng Icarus Verilog..."
-	iverilog -g2012 -o sim_apb_uart.vvp $(APB_UART_SRCS) tb/tb_apb_uart.v
-	vvp sim_apb_uart.vvp
+	iverilog -g2012 -o sim_apb_uart.vvp $(APB_UART_SRCS) $(UART_VIRTUAL_SRCS) tb/tb_apb_uart.v
+	$(VVP) sim_apb_uart.vvp $(VVP_ARGS)
 
 wave_apb_uart: apb_uart
 	gtkwave wave_apb_uart.vcd &
 
 apb_uart_vsim: work
-	$(VLOG) -sv $(APB_UART_SRCS) tb/tb_apb_uart.v
+	$(VLOG) -sv $(APB_UART_SRCS) $(UART_VIRTUAL_SRCS) tb/tb_apb_uart.v
 	$(VSIM) -do "vsim -voptargs=+acc work.tb_apb_uart; add wave -r /*; run -all"
 
 apb_uart_vsim_cli: work
-	$(VLOG) -sv $(APB_UART_SRCS) tb/tb_apb_uart.v
+	$(VLOG) -sv $(APB_UART_SRCS) $(UART_VIRTUAL_SRCS) tb/tb_apb_uart.v
 	$(VSIM) -c -do "run -all; quit -f" work.tb_apb_uart
 
 # 2) tb_firmware_scenario: Kịch bản mô phỏng tương thích Firmware C & CPU Nios V

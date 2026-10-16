@@ -12,6 +12,7 @@ module rx_controller(
     output reg rx_done,
     output wire rx_busy,
     output wire clr_baud,
+    output wire frame_error,
     output reg bit_clr
 );
     reg [1:0] state, next_state;
@@ -28,13 +29,28 @@ module rx_controller(
         else state <= next_state;
     end
 
-    reg [3:0] tick_cnt_max;
-    always @(*) begin
-        case(num_stop_b)
-            2'd1: tick_cnt_max = 4'd7;
-            2'd2: tick_cnt_max = 4'd15;
-            default: tick_cnt_max = 4'd7;
-        endcase
+    // FRAME ends one oversampling tick after the last data/parity sample.
+    // Sample each stop after 16 more ticks, close to its center.
+    reg first_stop_sampled;
+    reg frame_error_latched;
+    wire stop_sample = (state == HOLD) && baud_tick && (tick_cnt == 4'd15);
+    wire final_stop = (num_stop_b != 2'd2) || first_stop_sampled;
+
+    // Include the current sample combinationally: RX FIFO captures error
+    // on the same clock edge as rx_done, before latch NBA updates.
+    assign frame_error = frame_error_latched || (stop_sample && !rx);
+
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            first_stop_sampled <= 1'b0;
+            frame_error_latched <= 1'b0;
+        end else if (state == IDLE) begin
+            first_stop_sampled <= 1'b0;
+            frame_error_latched <= 1'b0;
+        end else if (stop_sample) begin
+            first_stop_sampled <= 1'b1;
+            frame_error_latched <= frame_error_latched || !rx;
+        end
     end
 
     always @(*) begin
@@ -61,10 +77,7 @@ module rx_controller(
                 end
             end
             HOLD: begin
-                if(baud_tick) begin
-                    if(tick_cnt == tick_cnt_max) next_state = IDLE;
-                    else next_state = HOLD;
-                end
+                if (stop_sample && final_stop) next_state = IDLE;
             end
         endcase
     end
@@ -108,11 +121,9 @@ module rx_controller(
             end
             HOLD: begin
                 bit_clr = 1'b1;
-                if(baud_tick) begin
-                    if(tick_cnt == tick_cnt_max) begin
-                        rx_done  = 1'b1;
-                        tick_clr = 1'b1;
-                    end
+                if (stop_sample) begin
+                    tick_clr = 1'b1;
+                    if (final_stop) rx_done = 1'b1;
                 end
             end
         endcase

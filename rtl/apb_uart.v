@@ -62,9 +62,9 @@ module apb_uart #(
         .rst_n           (rst_n),
         .reg_pread       (reg_pread),
         .reg_pwrite      (reg_pwrite),
-        .paddr           (reg_paddr),
-        .pwdata          (reg_pwdata),
-        .prdata          (reg_prdata),
+        .reg_paddr           (reg_paddr),
+        .reg_pwdata          (reg_pwdata),
+        .reg_prdata          (reg_prdata),
         .reg_ack_err     (reg_ack_err),
         .irq             (irq),
 

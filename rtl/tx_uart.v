@@ -18,6 +18,7 @@ module tx_uart #(
     wire baud_tick;
     wire data_mux_in;
     wire parity_bit;
+    reg parity_latched;
     wire clr_bit;
     wire clr_stop;
     wire clr_baud;
@@ -105,6 +106,15 @@ module tx_uart #(
         .parity_bit(parity_bit)
     );
 
+    // Capture parity with the PISO byte before the same edge pops TX FIFO.
+    // The FIFO head may change while this frame is still being transmitted.
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n)
+            parity_latched <= 1'b0;
+        else if (load_reg)
+            parity_latched <= parity_bit;
+    end
+
     piso u_piso(
         .clk(clk),
         .rst_n(rst_n),
@@ -119,7 +129,7 @@ module tx_uart #(
             2'b00:   tx = 1'b0;
             2'b01:   tx = 1'b1;
             2'b10:   tx = data_mux_in;
-            2'b11:   tx = parity_bit;
+            2'b11:   tx = parity_latched;
             default: tx = 1'b1;
         endcase
     end

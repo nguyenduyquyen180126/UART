@@ -4,9 +4,9 @@ module uart_regs (
 
     input  wire        reg_pread,
     input  wire        reg_pwrite,
-    input  wire [11:0] paddr,
-    input  wire [31:0] pwdata,
-    output reg  [31:0] prdata,
+    input  wire [11:0] reg_paddr,
+    input  wire [31:0] reg_pwdata,
+    output reg  [31:0] reg_prdata,
     output wire        reg_ack_err,
     output wire        irq,
 
@@ -38,11 +38,11 @@ module uart_regs (
     reg [6:0] cfg_reg; // [1:0] data_bits, [2] stop_bit, [3] parity_en, [4] parity_type, [6:5] baud_sel
     reg [2:0] ier_reg; // [0] rx_irq_en, [1] tx_irq_en, [2] overrun_irq_en
 
-    wire addr_tx   = (paddr == ADDR_TX);
-    wire addr_rx   = (paddr == ADDR_RX);
-    wire addr_cfg  = (paddr == ADDR_CFG);
-    wire addr_stt  = (paddr == ADDR_STT);
-    wire addr_ier  = (paddr == ADDR_IER);
+    wire addr_tx   = (reg_paddr == ADDR_TX);
+    wire addr_rx   = (reg_paddr == ADDR_RX);
+    wire addr_cfg  = (reg_paddr == ADDR_CFG);
+    wire addr_stt  = (reg_paddr == ADDR_STT);
+    wire addr_ier  = (reg_paddr == ADDR_IER);
 
     // Trang thai ranh cua he thong
     wire tx_ready  = (!tx_busy) && tx_fifo_empty;  // TX hoan toan ranh khi core khong ban va FIFO rong
@@ -56,14 +56,14 @@ module uart_regs (
     wire read_legal  = addr_tx || addr_rx || addr_cfg || addr_stt || addr_ier;
 
     wire valid_write = reg_pwrite && write_legal;
-    wire valid_read  = reg_pread  && read_legal;
+    wire valid_read  = reg_pread  && read_legal;    
 
     // Bao loi vi pham bao ve bus (pslverr = 1)
     assign reg_ack_err = (reg_pwrite && !write_legal) || 
                          (reg_pread  && !read_legal);
 
     assign tx_fifo_wr_en   = valid_write && addr_tx;
-    assign tx_fifo_wr_data = pwdata[7:0];
+    assign tx_fifo_wr_data = reg_pwdata[7:0];
     assign rx_fifo_rd_en   = valid_read  && addr_rx && (!rx_fifo_empty);
 
     always @(posedge clk or negedge rst_n) begin
@@ -71,9 +71,9 @@ module uart_regs (
             cfg_reg <= 7'h0;
             ier_reg <= 3'h0;
         end else if (valid_write) begin
-            case (paddr)
-                ADDR_CFG: cfg_reg <= pwdata[6:0];
-                ADDR_IER: ier_reg <= pwdata[2:0];
+            case (reg_paddr)
+                ADDR_CFG: cfg_reg <= reg_pwdata[6:0];
+                ADDR_IER: ier_reg <= reg_pwdata[2:0];
                 default: ;
             endcase
         end
@@ -104,16 +104,16 @@ module uart_regs (
 
     always @(*) begin
         if (valid_read) begin
-            case (paddr)
-                ADDR_TX:   prdata = 32'h0;
-                ADDR_RX:   prdata = rx_fifo_empty ? 32'h0 : {23'd0, rx_fifo_rd_data}; // [7:0] data, [8] error
-                ADDR_CFG:  prdata = {25'd0, cfg_reg};
-                ADDR_STT:  prdata = stt_reg;
-                ADDR_IER:  prdata = {29'd0, ier_reg};
-                default:   prdata = 32'h0;
-            endcase
+            case (reg_paddr)
+                ADDR_TX:   reg_prdata = 32'h0;
+                ADDR_RX:   reg_prdata = rx_fifo_empty ? 32'h0 : {23'd0, rx_fifo_rd_data}; // [7:0] data, [8] error
+                ADDR_CFG:  reg_prdata = {25'd0, cfg_reg};
+                ADDR_STT:  reg_prdata = stt_reg;
+                ADDR_IER:  reg_prdata = {29'd0, ier_reg};
+                default:   reg_prdata = 32'h0;
+            endcase 
         end else begin
-            prdata = 32'h0;
+            reg_prdata = 32'h0;
         end
     end
 

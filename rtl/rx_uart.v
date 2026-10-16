@@ -28,6 +28,11 @@ module rx_uart #(
    wire [3:0] bit_cnt;
    wire [3:0] tick_cnt;
    wire parity_exp;
+   wire parity_error;
+   wire frame_error;
+
+   // Reuse the existing per-byte error bit in the 9-bit RX FIFO.
+   assign error = parity_error | frame_error;
    
     // 2-FF Synchronizer cho tin hieu rx (chong Metastability)
     reg rx_sync1, rx_sync2;
@@ -65,7 +70,8 @@ module rx_uart #(
         .bit_clr(bit_clr),
         .rx_done(rx_done),
         .rx_busy(rx_busy),
-        .clr_baud(clr_baud)
+        .clr_baud(clr_baud),
+        .frame_error(frame_error)
     );
     data_b_num data_b_num_inst(
         .data_b_num(data_b_num),
@@ -115,7 +121,7 @@ module rx_uart #(
         .parity_type(parity_type),
         .parity_bit(parity_bit),
         .parity_exp(parity_exp),
-        .error(error)
+        .error(parity_error)
     );
 
 endmodule
