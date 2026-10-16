@@ -106,8 +106,6 @@ module tx_uart #(
         .parity_bit(parity_bit)
     );
 
-    // Capture parity with the PISO byte before the same edge pops TX FIFO.
-    // The FIFO head may change while this frame is still being transmitted.
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n)
             parity_latched <= 1'b0;

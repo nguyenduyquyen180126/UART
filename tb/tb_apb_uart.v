@@ -40,27 +40,6 @@ module tb_apb_uart;
     wire [7:0]  virtual_rx_data;
     wire        virtual_rx_done, virtual_rx_busy;
     wire        virtual_rx_start_error, virtual_rx_parity_error, virtual_rx_stop_error;
-    wire [31:0] virtual_baud = reference_baud(ref_cfg[6:5]);
-
-    // Hai nhanh doc lap, dung so do stimulus -> DUT -> compare -> monitor.
-    // DUT TX -> RX ao -> compare voi pwdata da duoc APB chap nhan.
-    // TX ao -> DUT RX -> compare prdata voi byte stimulus.
-    assign rx = raw_rx_enable ? raw_rx_level : (loopback_enable ? tx : virtual_tx_serial);
-    uart_rx_virtual u_virtual_rx (
-        .clk(clk), .rst_n(rst_n), .serial_in(tx),
-        .cfg(ref_cfg[4:0]), .baud_rate(virtual_baud),
-        .rx_data(virtual_rx_data), .rx_done(virtual_rx_done), .busy(virtual_rx_busy),
-        .start_error(virtual_rx_start_error),
-        .parity_error(virtual_rx_parity_error), .stop_error(virtual_rx_stop_error)
-    );
-    uart_tx_virtual u_virtual_tx (
-        .clk(clk), .rst_n(rst_n), .start(virtual_tx_start),
-        .tx_data(virtual_tx_data), .cfg(virtual_tx_cfg), .baud_rate(virtual_baud),
-        .inject_parity_error(virtual_tx_inject), .serial_out(virtual_tx_serial),
-        .busy(virtual_tx_busy), .tx_done(virtual_tx_done)
-    );
-    wire        irq;
-
     // Biến quản lý testbench & thống kê
     integer     test_id;
     integer     pass_count;
@@ -101,6 +80,27 @@ module tb_apb_uart;
             reference_mask = value & (8'hFF >> (3 - width_cfg));
         end
     endfunction
+
+    wire [31:0] virtual_baud = reference_baud(ref_cfg[6:5]);
+
+    // Hai nhanh doc lap, dung so do stimulus -> DUT -> compare -> monitor.
+    // DUT TX -> RX ao -> compare voi pwdata da duoc APB chap nhan.
+    // TX ao -> DUT RX -> compare prdata voi byte stimulus.
+    assign rx = raw_rx_enable ? raw_rx_level : (loopback_enable ? tx : virtual_tx_serial);
+    uart_rx_virtual u_virtual_rx (
+        .clk(clk), .rst_n(rst_n), .serial_in(tx),
+        .cfg(ref_cfg[4:0]), .baud_rate(virtual_baud),
+        .rx_data(virtual_rx_data), .rx_done(virtual_rx_done), .busy(virtual_rx_busy),
+        .start_error(virtual_rx_start_error),
+        .parity_error(virtual_rx_parity_error), .stop_error(virtual_rx_stop_error)
+    );
+    uart_tx_virtual u_virtual_tx (
+        .clk(clk), .rst_n(rst_n), .start(virtual_tx_start),
+        .tx_data(virtual_tx_data), .cfg(virtual_tx_cfg), .baud_rate(virtual_baud),
+        .inject_parity_error(virtual_tx_inject), .serial_out(virtual_tx_serial),
+        .busy(virtual_tx_busy), .tx_done(virtual_tx_done)
+    );
+    wire        irq;
 
     // FIFO RX mo hinh: byte den khi day bi bo, dung dung luong 16 byte.
     task reference_expect_rx(input [7:0] value, input error_bit);
