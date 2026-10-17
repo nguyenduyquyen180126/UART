@@ -5,7 +5,7 @@ module rx_baud_gen #(
     input clk,
     input rst_n,
     input clr_baud,
-    output reg baud_tick
+    output baud_tick
 );  
     localparam CNT_2400  = CLK_FREQ / (2400 * 16);
     localparam CNT_4800  = CLK_FREQ / (4800 * 16);
@@ -24,26 +24,17 @@ module rx_baud_gen #(
     end
 
     reg [14:0] cnt;
+
+    // Ngõ ra tổ hợp: nhảy lên 1 ngay khi cnt đạt max_cnt - 1
+    assign baud_tick = (cnt >= max_cnt - 1'b1);
+
     always @(posedge clk or negedge rst_n) begin
-        if(~rst_n) begin
-            cnt       <= 15'b0;
-            baud_tick <= 1'b0;
-        end
-        else begin
-            if(clr_baud) begin
-                cnt       <= 15'b0;
-                baud_tick <= 1'b0;
-            end
-            else begin
-                if (cnt >= max_cnt - 1) begin
-                    baud_tick <= 1'b1;
-                    cnt       <= 15'b0;
-                end
-                else begin
-                    baud_tick <= 1'b0;
-                    cnt       <= cnt + 1'b1;
-                end
-            end
+        if (~rst_n) begin
+            cnt <= 15'b0;
+        end else if (clr_baud || baud_tick) begin
+            cnt <= 15'b0;
+        end else begin
+            cnt <= cnt + 1'b1;
         end
     end
 endmodule
