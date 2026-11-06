@@ -125,3 +125,5 @@ module rx_uart #(
     );
 
 endmodule
+
+//cd /home/vietanh/Downloads/code/UART/UART

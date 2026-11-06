@@ -1,3 +1,5 @@
+> Tích hợp SoC Nios V/m, kiểm chứng đường IRQ sau fitting và demo HEX3–HEX2: [hướng dẫn mới](doc/HUONG_DAN_NIOSV_IRQ_DEMO.md). Đã cài license, build hai `.sof` và nạp/kiểm tra trên kit; xem [báo cáo chạy kit](doc/BAO_CAO_NAP_LICENSE_VA_CHAY_KIT_2026-10-17.md).
+
 # Verilog + ModelSim + Makefile Project Template
 
 A simple, ready-to-use template for writing Verilog code, running simulations in ModelSim (Intel FPGA Edition or standard) using TCL scripts, and managing the workflow with a Makefile.

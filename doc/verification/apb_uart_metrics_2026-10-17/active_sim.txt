@@ -1,0 +1,3 @@
+VCD info: dumpfile active_raw.vcd opened for output.
+PASS active: TX=32 RX=32, polls=1659, time_ns=16661520000
+scripts/uart_metrics/tb_uart_power.v:59: $finish called at 16661520000 (1ps)

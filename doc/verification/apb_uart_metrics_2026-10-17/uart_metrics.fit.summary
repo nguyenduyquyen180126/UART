@@ -1,0 +1,16 @@
+Fitter Status : Successful - Sat Oct 17 13:51:12 2026
+Quartus Prime Version : 24.1std.0 Build 1077 03/04/2025 SC Lite Edition
+Revision Name : uart_metrics
+Top-level Entity Name : apb_uart
+Family : Cyclone IV E
+Device : EP4CE115F29C7
+Timing Models : Final
+Total logic elements : 349 / 114,480 ( < 1 % )
+    Total combinational functions : 334 / 114,480 ( < 1 % )
+    Dedicated logic registers : 168 / 114,480 ( < 1 % )
+Total registers : 168
+Total pins : 1 / 529 ( < 1 % )
+Total virtual pins : 85
+Total memory bits : 272 / 3,981,312 ( < 1 % )
+Embedded Multiplier 9-bit elements : 0 / 532 ( 0 % )
+Total PLLs : 0 / 4 ( 0 % )

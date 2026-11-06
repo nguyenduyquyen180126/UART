@@ -1,0 +1,23 @@
+Inspection date: 2026-10-16
+Run: bash doc/cpu_apb/run_probe.sh
+Full run covers the four named configurations below, not a complete CPU/SoC simulation.
+
+custom-byte
+PASS MERLIN=0 ADDR_MODE=0 LAST_RX=0; 11795 APB transfers; UART loopback A; errors; response stability
+/home/vietanh/Downloads/code/UART/UART/doc/cpu_apb/tb_bus_probe.sv:213: $finish called at 943680000 (1ps)
+
+custom-word
+PASS MERLIN=0 ADDR_MODE=1 LAST_RX=0; 11794 APB transfers; UART loopback A; errors; response stability
+/home/vietanh/Downloads/code/UART/UART/doc/cpu_apb/tb_bus_probe.sv:213: $finish called at 943600000 (1ps)
+
+merlin-local
+PASS MERLIN=1 ADDR_MODE=0 LAST_RX=0; 5904 APB transfers; UART loopback A; errors; response stability
+/home/vietanh/Downloads/code/UART/UART/doc/cpu_apb/tb_bus_probe.sv:213: $finish called at 944720000 (1ps)
+
+merlin-quartus
+PASS MERLIN=1 ADDR_MODE=0 LAST_RX=1; 5904 APB transfers; UART loopback A; errors; response stability
+/home/vietanh/Downloads/code/UART/UART/doc/cpu_apb/tb_bus_probe.sv:213: $finish called at 944720000 (1ps)
+
+Existing tb_apb_uart: 16 tests, 16 PASS, 0 FAIL.
+Existing tb_avalon2apb cannot elaborate against current RTL (8 outdated-port errors).
+Merlin compile logs include the Icarus notice about always_* constant selects; sensitivity includes all bits.

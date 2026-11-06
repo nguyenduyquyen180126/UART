@@ -46,3 +46,27 @@ __pycache__/
 Thumbs.db
 *.swp
 *.bak
+
+# Reproducible Quartus / BSP outputs (sources live in fpga/ and software/)
+fpga/db/
+fpga/incremental_db/
+fpga/output_files/
+fpga/system/
+fpga/*.sopcinfo
+fpga/*.qws
+fpga/*.qdf
+fpga/*.summary
+fpga/*.rpt
+fpga/*.smsg
+fpga/*.jdi
+fpga/*.pin
+fpga/*.sof
+fpga/*.hex
+fpga/*.done
+fpga/*.qsys_edit/
+software/bsp/
+software/build-*/
+build/
+
+fpga/serv_req_info.txt
+fpga/sld*

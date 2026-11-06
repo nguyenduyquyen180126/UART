@@ -21,27 +21,27 @@ add_fileset QUARTUS_SYNTH QUARTUS_SYNTH "" ""
 set_fileset_property QUARTUS_SYNTH TOP_LEVEL apb_uart
 set_fileset_property QUARTUS_SYNTH ENABLE_RELATIVE_INCLUDE_PATHS false
 set_fileset_property QUARTUS_SYNTH ENABLE_FILE_OVERWRITE_MODE false
-add_fileset_file apb_uart.v VERILOG PATH apb_uart.v TOP_LEVEL_FILE
-add_fileset_file apb_slave.v VERILOG PATH apb_slave.v
-add_fileset_file uart_regs.v VERILOG PATH uart_regs.v
-add_fileset_file sync_fifo.v VERILOG PATH sync_fifo.v
-add_fileset_file tx_uart.v VERILOG PATH tx_uart.v
-add_fileset_file tx_controller.v VERILOG PATH tx_controller.v
-add_fileset_file tx_baud_gen.v VERILOG PATH tx_baud_gen.v
-add_fileset_file tx_bit_cnt.v VERILOG PATH tx_bit_cnt.v
-add_fileset_file tx_stop_cnt.v VERILOG PATH tx_stop_cnt.v
-add_fileset_file tx_parity.v VERILOG PATH tx_parity.v
-add_fileset_file tx_piso.v VERILOG PATH tx_piso.v
-add_fileset_file rx_uart.v VERILOG PATH rx_uart.v
-add_fileset_file rx_controller.v VERILOG PATH rx_controller.v
-add_fileset_file rx_baud_gen.v VERILOG PATH rx_baud_gen.v
-add_fileset_file data_b_num.v VERILOG PATH data_b_num.v
-add_fileset_file stop_b_num.v VERILOG PATH stop_b_num.v
-add_fileset_file bit_cnt.v VERILOG PATH bit_cnt.v
-add_fileset_file tick_cnt.v VERILOG PATH tick_cnt.v
-add_fileset_file sipo.v VERILOG PATH sipo.v
-add_fileset_file deframe.v VERILOG PATH deframe.v
-add_fileset_file error_check.v VERILOG PATH error_check.v
+add_fileset_file apb_uart.v VERILOG PATH rtl/apb_uart.v TOP_LEVEL_FILE
+add_fileset_file apb_slave.v VERILOG PATH rtl/apb_slave.v
+add_fileset_file uart_regs.v VERILOG PATH rtl/uart_regs.v
+add_fileset_file sync_fifo.v VERILOG PATH rtl/sync_fifo.v
+add_fileset_file tx_uart.v VERILOG PATH rtl/tx_uart.v
+add_fileset_file tx_controller.v VERILOG PATH rtl/tx_controller.v
+add_fileset_file tx_baud_gen.v VERILOG PATH rtl/tx_baud_gen.v
+add_fileset_file tx_bit_cnt.v VERILOG PATH rtl/tx_bit_cnt.v
+add_fileset_file tx_stop_cnt.v VERILOG PATH rtl/tx_stop_cnt.v
+add_fileset_file tx_parity.v VERILOG PATH rtl/tx_parity.v
+add_fileset_file tx_piso.v VERILOG PATH rtl/tx_piso.v
+add_fileset_file rx_uart.v VERILOG PATH rtl/rx_uart.v
+add_fileset_file rx_controller.v VERILOG PATH rtl/rx_controller.v
+add_fileset_file rx_baud_gen.v VERILOG PATH rtl/rx_baud_gen.v
+add_fileset_file data_b_num.v VERILOG PATH rtl/data_b_num.v
+add_fileset_file stop_b_num.v VERILOG PATH rtl/stop_b_num.v
+add_fileset_file bit_cnt.v VERILOG PATH rtl/bit_cnt.v
+add_fileset_file tick_cnt.v VERILOG PATH rtl/tick_cnt.v
+add_fileset_file sipo.v VERILOG PATH rtl/sipo.v
+add_fileset_file deframe.v VERILOG PATH rtl/deframe.v
+add_fileset_file error_check.v VERILOG PATH rtl/error_check.v
 
 # 
 # parameters
@@ -104,5 +104,6 @@ add_interface interrupt_sender interrupt end
 set_interface_property interrupt_sender associatedClock clock
 set_interface_property interrupt_sender associatedReset reset
 set_interface_property interrupt_sender ENABLED true
+set_interface_property interrupt_sender associatedAddressablePoint apb_slave
 
 add_interface_port interrupt_sender irq irq Output 1

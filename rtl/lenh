@@ -1,0 +1,23 @@
+cd /home/vietanh/Downloads/code/UART/UART
+
+./flash_fpga.sh
+
+./run_terminal_pc.sh \
+  /dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_0001-if00-port0
+
+cd /home/vietanh/Downloads/code/UART/UART
+
+# Nạp demo.sof rồi tự mở JTAG terminal
+./run_irq_demo.sh
+
+cd /home/vietanh/Downloads/code/UART/UART
+
+./run_terminal_pc.sh \
+  /dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_0001-if00-port0
+
+  ./run_terminal_pc.sh /dev/ttyUSB0 9600 8N1
+  ./run_terminal_jtag.sh
+  cd /home/vietanh/Downloads/code/UART/UART
+./run_shell_demo.sh
+
+./run_scope_demo.sh

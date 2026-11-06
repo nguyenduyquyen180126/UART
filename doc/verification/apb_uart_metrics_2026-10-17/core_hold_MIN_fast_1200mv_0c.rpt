@@ -1,0 +1,926 @@
+----------------
+; Command Info ;
+----------------
+Report Timing: Found 10 hold paths (0 violated).  Worst case slack is 0.139 
+
+Tcl Command:
+    report_timing -hold -file core_hold_MIN_fast_1200mv_0c.rpt -from [get_registers *] -to [get_registers *] -npaths 10 -detail full_path
+
+Options:
+    -from [get_registers *] 
+    -to [get_registers *] 
+    -hold 
+    -npaths 10 
+    -detail full_path 
+    -file {core_hold_MIN_fast_1200mv_0c.rpt} 
+
+Delay Model:
+    Fast 1200mV 0C Model
+
++--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Summary of Paths                                                                                                                                                                                                                           ;
++-------+---------------------------------------------------+----------------------------------------------------------------------------------------------------------+--------------+-------------+--------------+------------+------------+
+; Slack ; From Node                                         ; To Node                                                                                                  ; Launch Clock ; Latch Clock ; Relationship ; Clock Skew ; Data Delay ;
++-------+---------------------------------------------------+----------------------------------------------------------------------------------------------------------+--------------+-------------+--------------+------------+------------+
+; 0.139 ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[2] ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0  ; clk          ; clk         ; 0.000        ; 0.230      ; 0.473      ;
+; 0.139 ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[7] ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0  ; clk          ; clk         ; 0.000        ; 0.230      ; 0.473      ;
+; 0.142 ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[5] ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0  ; clk          ; clk         ; 0.000        ; 0.232      ; 0.478      ;
+; 0.145 ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[4] ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0  ; clk          ; clk         ; 0.000        ; 0.231      ; 0.480      ;
+; 0.146 ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[3] ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0  ; clk          ; clk         ; 0.000        ; 0.231      ; 0.481      ;
+; 0.148 ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[1] ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0  ; clk          ; clk         ; 0.000        ; 0.231      ; 0.483      ;
+; 0.151 ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[0] ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0  ; clk          ; clk         ; 0.000        ; 0.232      ; 0.487      ;
+; 0.153 ; sync_fifo:u_rx_fifo|wptr[0]                       ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_address_reg0 ; clk          ; clk         ; 0.000        ; 0.225      ; 0.482      ;
+; 0.154 ; sync_fifo:u_rx_fifo|wptr[1]                       ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_address_reg0 ; clk          ; clk         ; 0.000        ; 0.225      ; 0.483      ;
+; 0.170 ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[6] ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0  ; clk          ; clk         ; 0.000        ; 0.231      ; 0.505      ;
++-------+---------------------------------------------------+----------------------------------------------------------------------------------------------------------+--------------+-------------+--------------+------------+------------+
+
+Path #1: Hold slack is 0.139 
+===============================================================================
++------------------------------------------------------------------------------------------------------------------------------+
+; Path Summary                                                                                                                 ;
++--------------------+---------------------------------------------------------------------------------------------------------+
+; Property           ; Value                                                                                                   ;
++--------------------+---------------------------------------------------------------------------------------------------------+
+; From Node          ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[2]                                                       ;
+; To Node            ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0 ;
+; Launch Clock       ; clk                                                                                                     ;
+; Latch Clock        ; clk                                                                                                     ;
+; Data Arrival Time  ; 1.965                                                                                                   ;
+; Data Required Time ; 1.826                                                                                                   ;
+; Slack              ; 0.139                                                                                                   ;
++--------------------+---------------------------------------------------------------------------------------------------------+
+
++-----------------------------------------------------------------------------------+
+; Statistics                                                                        ;
++------------------------+-------+-------+-------------+------------+-------+-------+
+; Property               ; Value ; Count ; Total Delay ; % of Total ; Min   ; Max   ;
++------------------------+-------+-------+-------------+------------+-------+-------+
+; Hold Relationship      ; 0.000 ;       ;             ;            ;       ;       ;
+; Clock Skew             ; 0.230 ;       ;             ;            ;       ;       ;
+; Data Delay             ; 0.473 ;       ;             ;            ;       ;       ;
+; Number of Logic Levels ;       ; 0     ;             ;            ;       ;       ;
+; Physical Delays        ;       ;       ;             ;            ;       ;       ;
+;  Arrival Path          ;       ;       ;             ;            ;       ;       ;
+;   Clock                ;       ;       ;             ;            ;       ;       ;
+;    IC                  ;       ; 3     ; 0.946       ; 63         ; 0.000 ; 0.851 ;
+;    Cell                ;       ; 3     ; 0.546       ; 37         ; 0.000 ; 0.273 ;
+;   Data                 ;       ;       ;             ;            ;       ;       ;
+;    IC                  ;       ; 1     ; 0.332       ; 70         ; 0.332 ; 0.332 ;
+;    Cell                ;       ; 2     ; 0.036       ; 8          ; 0.000 ; 0.036 ;
+;    uTco                ;       ; 1     ; 0.105       ; 22         ; 0.105 ; 0.105 ;
+;  Required Path         ;       ;       ;             ;            ;       ;       ;
+;   Clock                ;       ;       ;             ;            ;       ;       ;
+;    IC                  ;       ; 3     ; 0.989       ; 57         ; 0.000 ; 0.890 ;
+;    Cell                ;       ; 3     ; 0.753       ; 43         ; 0.000 ; 0.480 ;
++------------------------+-------+-------+-------------+------------+-------+-------+
+Note: Negative delays are omitted from totals when calculating percentages
+
++----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Data Arrival Path                                                                                                                                                    ;
++---------+---------+----+------+--------+-------------------+---------------------------------------------------------------------------------------------------------+
+; Total   ; Incr    ; RF ; Type ; Fanout ; Location          ; Element                                                                                                 ;
++---------+---------+----+------+--------+-------------------+---------------------------------------------------------------------------------------------------------+
+; 0.000   ; 0.000   ;    ;      ;        ;                   ; launch edge time                                                                                        ;
+; 1.492   ; 1.492   ;    ;      ;        ;                   ; clock path                                                                                              ;
+;   0.000 ;   0.000 ;    ;      ;        ;                   ; source latency                                                                                          ;
+;   0.000 ;   0.000 ;    ;      ; 1      ; PIN_Y2            ; clk                                                                                                     ;
+;   0.000 ;   0.000 ; RR ; IC   ; 1      ; IOIBUF_X0_Y36_N15 ; clk~input|i                                                                                             ;
+;   0.273 ;   0.273 ; RR ; CELL ; 1      ; IOIBUF_X0_Y36_N15 ; clk~input|o                                                                                             ;
+;   0.368 ;   0.095 ; RR ; IC   ; 1      ; CLKCTRL_G4        ; clk~inputclkctrl|inclk[0]                                                                               ;
+;   0.368 ;   0.000 ; RR ; CELL ; 170    ; CLKCTRL_G4        ; clk~inputclkctrl|outclk                                                                                 ;
+;   1.219 ;   0.851 ; RR ; IC   ; 1      ; FF_X49_Y42_N27    ; u_rx_uart|deframe_inst|rx_data[2]|clk                                                                   ;
+;   1.492 ;   0.273 ; RR ; CELL ; 1      ; FF_X49_Y42_N27    ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[2]                                                       ;
+; 1.965   ; 0.473   ;    ;      ;        ;                   ; data path                                                                                               ;
+;   1.597 ;   0.105 ;    ; uTco ; 1      ; FF_X49_Y42_N27    ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[2]                                                       ;
+;   1.597 ;   0.000 ; RR ; CELL ; 3      ; FF_X49_Y42_N27    ; u_rx_uart|deframe_inst|rx_data[2]|q                                                                     ;
+;   1.929 ;   0.332 ; RR ; IC   ; 1      ; M9K_X51_Y42_N0    ; u_rx_fifo|fifo_rtl_0|auto_generated|ram_block1a0|portadatain[2]                                         ;
+;   1.965 ;   0.036 ; RR ; CELL ; 0      ; M9K_X51_Y42_N0    ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0 ;
++---------+---------+----+------+--------+-------------------+---------------------------------------------------------------------------------------------------------+
+
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Data Required Path                                                                                                                                                    ;
++---------+----------+----+------+--------+-------------------+---------------------------------------------------------------------------------------------------------+
+; Total   ; Incr     ; RF ; Type ; Fanout ; Location          ; Element                                                                                                 ;
++---------+----------+----+------+--------+-------------------+---------------------------------------------------------------------------------------------------------+
+; 0.000   ; 0.000    ;    ;      ;        ;                   ; latch edge time                                                                                         ;
+; 1.722   ; 1.722    ;    ;      ;        ;                   ; clock path                                                                                              ;
+;   0.000 ;   0.000  ;    ;      ;        ;                   ; source latency                                                                                          ;
+;   0.000 ;   0.000  ;    ;      ; 1      ; PIN_Y2            ; clk                                                                                                     ;
+;   0.000 ;   0.000  ; RR ; IC   ; 1      ; IOIBUF_X0_Y36_N15 ; clk~input|i                                                                                             ;
+;   0.273 ;   0.273  ; RR ; CELL ; 1      ; IOIBUF_X0_Y36_N15 ; clk~input|o                                                                                             ;
+;   0.372 ;   0.099  ; RR ; IC   ; 1      ; CLKCTRL_G4        ; clk~inputclkctrl|inclk[0]                                                                               ;
+;   0.372 ;   0.000  ; RR ; CELL ; 170    ; CLKCTRL_G4        ; clk~inputclkctrl|outclk                                                                                 ;
+;   1.262 ;   0.890  ; RR ; IC   ; 4      ; M9K_X51_Y42_N0    ; u_rx_fifo|fifo_rtl_0|auto_generated|ram_block1a0|clk0                                                   ;
+;   1.742 ;   0.480  ; RR ; CELL ; 0      ; M9K_X51_Y42_N0    ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0 ;
+;   1.722 ;   -0.020 ;    ;      ;        ;                   ; clock pessimism removed                                                                                 ;
+; 1.722   ; 0.000    ;    ;      ;        ;                   ; clock uncertainty                                                                                       ;
+; 1.826   ; 0.104    ;    ; uTh  ; 0      ; M9K_X51_Y42_N0    ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0 ;
++---------+----------+----+------+--------+-------------------+---------------------------------------------------------------------------------------------------------+
+
+----------------------------
+; Extra Fitter Information ;
+----------------------------
+HTML report is unavailable in plain text report export.
+
+
+Path #2: Hold slack is 0.139 
+===============================================================================
++------------------------------------------------------------------------------------------------------------------------------+
+; Path Summary                                                                                                                 ;
++--------------------+---------------------------------------------------------------------------------------------------------+
+; Property           ; Value                                                                                                   ;
++--------------------+---------------------------------------------------------------------------------------------------------+
+; From Node          ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[7]                                                       ;
+; To Node            ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0 ;
+; Launch Clock       ; clk                                                                                                     ;
+; Latch Clock        ; clk                                                                                                     ;
+; Data Arrival Time  ; 1.965                                                                                                   ;
+; Data Required Time ; 1.826                                                                                                   ;
+; Slack              ; 0.139                                                                                                   ;
++--------------------+---------------------------------------------------------------------------------------------------------+
+
++-----------------------------------------------------------------------------------+
+; Statistics                                                                        ;
++------------------------+-------+-------+-------------+------------+-------+-------+
+; Property               ; Value ; Count ; Total Delay ; % of Total ; Min   ; Max   ;
++------------------------+-------+-------+-------------+------------+-------+-------+
+; Hold Relationship      ; 0.000 ;       ;             ;            ;       ;       ;
+; Clock Skew             ; 0.230 ;       ;             ;            ;       ;       ;
+; Data Delay             ; 0.473 ;       ;             ;            ;       ;       ;
+; Number of Logic Levels ;       ; 0     ;             ;            ;       ;       ;
+; Physical Delays        ;       ;       ;             ;            ;       ;       ;
+;  Arrival Path          ;       ;       ;             ;            ;       ;       ;
+;   Clock                ;       ;       ;             ;            ;       ;       ;
+;    IC                  ;       ; 3     ; 0.946       ; 63         ; 0.000 ; 0.851 ;
+;    Cell                ;       ; 3     ; 0.546       ; 37         ; 0.000 ; 0.273 ;
+;   Data                 ;       ;       ;             ;            ;       ;       ;
+;    IC                  ;       ; 1     ; 0.332       ; 70         ; 0.332 ; 0.332 ;
+;    Cell                ;       ; 2     ; 0.036       ; 8          ; 0.000 ; 0.036 ;
+;    uTco                ;       ; 1     ; 0.105       ; 22         ; 0.105 ; 0.105 ;
+;  Required Path         ;       ;       ;             ;            ;       ;       ;
+;   Clock                ;       ;       ;             ;            ;       ;       ;
+;    IC                  ;       ; 3     ; 0.989       ; 57         ; 0.000 ; 0.890 ;
+;    Cell                ;       ; 3     ; 0.753       ; 43         ; 0.000 ; 0.480 ;
++------------------------+-------+-------+-------------+------------+-------+-------+
+Note: Negative delays are omitted from totals when calculating percentages
+
++----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Data Arrival Path                                                                                                                                                    ;
++---------+---------+----+------+--------+-------------------+---------------------------------------------------------------------------------------------------------+
+; Total   ; Incr    ; RF ; Type ; Fanout ; Location          ; Element                                                                                                 ;
++---------+---------+----+------+--------+-------------------+---------------------------------------------------------------------------------------------------------+
+; 0.000   ; 0.000   ;    ;      ;        ;                   ; launch edge time                                                                                        ;
+; 1.492   ; 1.492   ;    ;      ;        ;                   ; clock path                                                                                              ;
+;   0.000 ;   0.000 ;    ;      ;        ;                   ; source latency                                                                                          ;
+;   0.000 ;   0.000 ;    ;      ; 1      ; PIN_Y2            ; clk                                                                                                     ;
+;   0.000 ;   0.000 ; RR ; IC   ; 1      ; IOIBUF_X0_Y36_N15 ; clk~input|i                                                                                             ;
+;   0.273 ;   0.273 ; RR ; CELL ; 1      ; IOIBUF_X0_Y36_N15 ; clk~input|o                                                                                             ;
+;   0.368 ;   0.095 ; RR ; IC   ; 1      ; CLKCTRL_G4        ; clk~inputclkctrl|inclk[0]                                                                               ;
+;   0.368 ;   0.000 ; RR ; CELL ; 170    ; CLKCTRL_G4        ; clk~inputclkctrl|outclk                                                                                 ;
+;   1.219 ;   0.851 ; RR ; IC   ; 1      ; FF_X49_Y42_N1     ; u_rx_uart|deframe_inst|rx_data[7]|clk                                                                   ;
+;   1.492 ;   0.273 ; RR ; CELL ; 1      ; FF_X49_Y42_N1     ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[7]                                                       ;
+; 1.965   ; 0.473   ;    ;      ;        ;                   ; data path                                                                                               ;
+;   1.597 ;   0.105 ;    ; uTco ; 1      ; FF_X49_Y42_N1     ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[7]                                                       ;
+;   1.597 ;   0.000 ; RR ; CELL ; 3      ; FF_X49_Y42_N1     ; u_rx_uart|deframe_inst|rx_data[7]|q                                                                     ;
+;   1.929 ;   0.332 ; RR ; IC   ; 1      ; M9K_X51_Y42_N0    ; u_rx_fifo|fifo_rtl_0|auto_generated|ram_block1a0|portadatain[7]                                         ;
+;   1.965 ;   0.036 ; RR ; CELL ; 0      ; M9K_X51_Y42_N0    ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0 ;
++---------+---------+----+------+--------+-------------------+---------------------------------------------------------------------------------------------------------+
+
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Data Required Path                                                                                                                                                    ;
++---------+----------+----+------+--------+-------------------+---------------------------------------------------------------------------------------------------------+
+; Total   ; Incr     ; RF ; Type ; Fanout ; Location          ; Element                                                                                                 ;
++---------+----------+----+------+--------+-------------------+---------------------------------------------------------------------------------------------------------+
+; 0.000   ; 0.000    ;    ;      ;        ;                   ; latch edge time                                                                                         ;
+; 1.722   ; 1.722    ;    ;      ;        ;                   ; clock path                                                                                              ;
+;   0.000 ;   0.000  ;    ;      ;        ;                   ; source latency                                                                                          ;
+;   0.000 ;   0.000  ;    ;      ; 1      ; PIN_Y2            ; clk                                                                                                     ;
+;   0.000 ;   0.000  ; RR ; IC   ; 1      ; IOIBUF_X0_Y36_N15 ; clk~input|i                                                                                             ;
+;   0.273 ;   0.273  ; RR ; CELL ; 1      ; IOIBUF_X0_Y36_N15 ; clk~input|o                                                                                             ;
+;   0.372 ;   0.099  ; RR ; IC   ; 1      ; CLKCTRL_G4        ; clk~inputclkctrl|inclk[0]                                                                               ;
+;   0.372 ;   0.000  ; RR ; CELL ; 170    ; CLKCTRL_G4        ; clk~inputclkctrl|outclk                                                                                 ;
+;   1.262 ;   0.890  ; RR ; IC   ; 4      ; M9K_X51_Y42_N0    ; u_rx_fifo|fifo_rtl_0|auto_generated|ram_block1a0|clk0                                                   ;
+;   1.742 ;   0.480  ; RR ; CELL ; 0      ; M9K_X51_Y42_N0    ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0 ;
+;   1.722 ;   -0.020 ;    ;      ;        ;                   ; clock pessimism removed                                                                                 ;
+; 1.722   ; 0.000    ;    ;      ;        ;                   ; clock uncertainty                                                                                       ;
+; 1.826   ; 0.104    ;    ; uTh  ; 0      ; M9K_X51_Y42_N0    ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0 ;
++---------+----------+----+------+--------+-------------------+---------------------------------------------------------------------------------------------------------+
+
+----------------------------
+; Extra Fitter Information ;
+----------------------------
+HTML report is unavailable in plain text report export.
+
+
+Path #3: Hold slack is 0.142 
+===============================================================================
++------------------------------------------------------------------------------------------------------------------------------+
+; Path Summary                                                                                                                 ;
++--------------------+---------------------------------------------------------------------------------------------------------+
+; Property           ; Value                                                                                                   ;
++--------------------+---------------------------------------------------------------------------------------------------------+
+; From Node          ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[5]                                                       ;
+; To Node            ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0 ;
+; Launch Clock       ; clk                                                                                                     ;
+; Latch Clock        ; clk                                                                                                     ;
+; Data Arrival Time  ; 1.968                                                                                                   ;
+; Data Required Time ; 1.826                                                                                                   ;
+; Slack              ; 0.142                                                                                                   ;
++--------------------+---------------------------------------------------------------------------------------------------------+
+
++-----------------------------------------------------------------------------------+
+; Statistics                                                                        ;
++------------------------+-------+-------+-------------+------------+-------+-------+
+; Property               ; Value ; Count ; Total Delay ; % of Total ; Min   ; Max   ;
++------------------------+-------+-------+-------------+------------+-------+-------+
+; Hold Relationship      ; 0.000 ;       ;             ;            ;       ;       ;
+; Clock Skew             ; 0.232 ;       ;             ;            ;       ;       ;
+; Data Delay             ; 0.478 ;       ;             ;            ;       ;       ;
+; Number of Logic Levels ;       ; 0     ;             ;            ;       ;       ;
+; Physical Delays        ;       ;       ;             ;            ;       ;       ;
+;  Arrival Path          ;       ;       ;             ;            ;       ;       ;
+;   Clock                ;       ;       ;             ;            ;       ;       ;
+;    IC                  ;       ; 3     ; 0.944       ; 63         ; 0.000 ; 0.849 ;
+;    Cell                ;       ; 3     ; 0.546       ; 37         ; 0.000 ; 0.273 ;
+;   Data                 ;       ;       ;             ;            ;       ;       ;
+;    IC                  ;       ; 1     ; 0.337       ; 71         ; 0.337 ; 0.337 ;
+;    Cell                ;       ; 2     ; 0.036       ; 8          ; 0.000 ; 0.036 ;
+;    uTco                ;       ; 1     ; 0.105       ; 22         ; 0.105 ; 0.105 ;
+;  Required Path         ;       ;       ;             ;            ;       ;       ;
+;   Clock                ;       ;       ;             ;            ;       ;       ;
+;    IC                  ;       ; 3     ; 0.989       ; 57         ; 0.000 ; 0.890 ;
+;    Cell                ;       ; 3     ; 0.753       ; 43         ; 0.000 ; 0.480 ;
++------------------------+-------+-------+-------------+------------+-------+-------+
+Note: Negative delays are omitted from totals when calculating percentages
+
++----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Data Arrival Path                                                                                                                                                    ;
++---------+---------+----+------+--------+-------------------+---------------------------------------------------------------------------------------------------------+
+; Total   ; Incr    ; RF ; Type ; Fanout ; Location          ; Element                                                                                                 ;
++---------+---------+----+------+--------+-------------------+---------------------------------------------------------------------------------------------------------+
+; 0.000   ; 0.000   ;    ;      ;        ;                   ; launch edge time                                                                                        ;
+; 1.490   ; 1.490   ;    ;      ;        ;                   ; clock path                                                                                              ;
+;   0.000 ;   0.000 ;    ;      ;        ;                   ; source latency                                                                                          ;
+;   0.000 ;   0.000 ;    ;      ; 1      ; PIN_Y2            ; clk                                                                                                     ;
+;   0.000 ;   0.000 ; RR ; IC   ; 1      ; IOIBUF_X0_Y36_N15 ; clk~input|i                                                                                             ;
+;   0.273 ;   0.273 ; RR ; CELL ; 1      ; IOIBUF_X0_Y36_N15 ; clk~input|o                                                                                             ;
+;   0.368 ;   0.095 ; RR ; IC   ; 1      ; CLKCTRL_G4        ; clk~inputclkctrl|inclk[0]                                                                               ;
+;   0.368 ;   0.000 ; RR ; CELL ; 170    ; CLKCTRL_G4        ; clk~inputclkctrl|outclk                                                                                 ;
+;   1.217 ;   0.849 ; RR ; IC   ; 1      ; FF_X47_Y42_N3     ; u_rx_uart|deframe_inst|rx_data[5]|clk                                                                   ;
+;   1.490 ;   0.273 ; RR ; CELL ; 1      ; FF_X47_Y42_N3     ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[5]                                                       ;
+; 1.968   ; 0.478   ;    ;      ;        ;                   ; data path                                                                                               ;
+;   1.595 ;   0.105 ;    ; uTco ; 1      ; FF_X47_Y42_N3     ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[5]                                                       ;
+;   1.595 ;   0.000 ; RR ; CELL ; 3      ; FF_X47_Y42_N3     ; u_rx_uart|deframe_inst|rx_data[5]|q                                                                     ;
+;   1.932 ;   0.337 ; RR ; IC   ; 1      ; M9K_X51_Y42_N0    ; u_rx_fifo|fifo_rtl_0|auto_generated|ram_block1a0|portadatain[5]                                         ;
+;   1.968 ;   0.036 ; RR ; CELL ; 0      ; M9K_X51_Y42_N0    ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0 ;
++---------+---------+----+------+--------+-------------------+---------------------------------------------------------------------------------------------------------+
+
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Data Required Path                                                                                                                                                    ;
++---------+----------+----+------+--------+-------------------+---------------------------------------------------------------------------------------------------------+
+; Total   ; Incr     ; RF ; Type ; Fanout ; Location          ; Element                                                                                                 ;
++---------+----------+----+------+--------+-------------------+---------------------------------------------------------------------------------------------------------+
+; 0.000   ; 0.000    ;    ;      ;        ;                   ; latch edge time                                                                                         ;
+; 1.722   ; 1.722    ;    ;      ;        ;                   ; clock path                                                                                              ;
+;   0.000 ;   0.000  ;    ;      ;        ;                   ; source latency                                                                                          ;
+;   0.000 ;   0.000  ;    ;      ; 1      ; PIN_Y2            ; clk                                                                                                     ;
+;   0.000 ;   0.000  ; RR ; IC   ; 1      ; IOIBUF_X0_Y36_N15 ; clk~input|i                                                                                             ;
+;   0.273 ;   0.273  ; RR ; CELL ; 1      ; IOIBUF_X0_Y36_N15 ; clk~input|o                                                                                             ;
+;   0.372 ;   0.099  ; RR ; IC   ; 1      ; CLKCTRL_G4        ; clk~inputclkctrl|inclk[0]                                                                               ;
+;   0.372 ;   0.000  ; RR ; CELL ; 170    ; CLKCTRL_G4        ; clk~inputclkctrl|outclk                                                                                 ;
+;   1.262 ;   0.890  ; RR ; IC   ; 4      ; M9K_X51_Y42_N0    ; u_rx_fifo|fifo_rtl_0|auto_generated|ram_block1a0|clk0                                                   ;
+;   1.742 ;   0.480  ; RR ; CELL ; 0      ; M9K_X51_Y42_N0    ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0 ;
+;   1.722 ;   -0.020 ;    ;      ;        ;                   ; clock pessimism removed                                                                                 ;
+; 1.722   ; 0.000    ;    ;      ;        ;                   ; clock uncertainty                                                                                       ;
+; 1.826   ; 0.104    ;    ; uTh  ; 0      ; M9K_X51_Y42_N0    ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0 ;
++---------+----------+----+------+--------+-------------------+---------------------------------------------------------------------------------------------------------+
+
+----------------------------
+; Extra Fitter Information ;
+----------------------------
+HTML report is unavailable in plain text report export.
+
+
+Path #4: Hold slack is 0.145 
+===============================================================================
++------------------------------------------------------------------------------------------------------------------------------+
+; Path Summary                                                                                                                 ;
++--------------------+---------------------------------------------------------------------------------------------------------+
+; Property           ; Value                                                                                                   ;
++--------------------+---------------------------------------------------------------------------------------------------------+
+; From Node          ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[4]                                                       ;
+; To Node            ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0 ;
+; Launch Clock       ; clk                                                                                                     ;
+; Latch Clock        ; clk                                                                                                     ;
+; Data Arrival Time  ; 1.971                                                                                                   ;
+; Data Required Time ; 1.826                                                                                                   ;
+; Slack              ; 0.145                                                                                                   ;
++--------------------+---------------------------------------------------------------------------------------------------------+
+
++-----------------------------------------------------------------------------------+
+; Statistics                                                                        ;
++------------------------+-------+-------+-------------+------------+-------+-------+
+; Property               ; Value ; Count ; Total Delay ; % of Total ; Min   ; Max   ;
++------------------------+-------+-------+-------------+------------+-------+-------+
+; Hold Relationship      ; 0.000 ;       ;             ;            ;       ;       ;
+; Clock Skew             ; 0.231 ;       ;             ;            ;       ;       ;
+; Data Delay             ; 0.480 ;       ;             ;            ;       ;       ;
+; Number of Logic Levels ;       ; 0     ;             ;            ;       ;       ;
+; Physical Delays        ;       ;       ;             ;            ;       ;       ;
+;  Arrival Path          ;       ;       ;             ;            ;       ;       ;
+;   Clock                ;       ;       ;             ;            ;       ;       ;
+;    IC                  ;       ; 3     ; 0.945       ; 63         ; 0.000 ; 0.850 ;
+;    Cell                ;       ; 3     ; 0.546       ; 37         ; 0.000 ; 0.273 ;
+;   Data                 ;       ;       ;             ;            ;       ;       ;
+;    IC                  ;       ; 1     ; 0.339       ; 71         ; 0.339 ; 0.339 ;
+;    Cell                ;       ; 2     ; 0.036       ; 8          ; 0.000 ; 0.036 ;
+;    uTco                ;       ; 1     ; 0.105       ; 22         ; 0.105 ; 0.105 ;
+;  Required Path         ;       ;       ;             ;            ;       ;       ;
+;   Clock                ;       ;       ;             ;            ;       ;       ;
+;    IC                  ;       ; 3     ; 0.989       ; 57         ; 0.000 ; 0.890 ;
+;    Cell                ;       ; 3     ; 0.753       ; 43         ; 0.000 ; 0.480 ;
++------------------------+-------+-------+-------------+------------+-------+-------+
+Note: Negative delays are omitted from totals when calculating percentages
+
++----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Data Arrival Path                                                                                                                                                    ;
++---------+---------+----+------+--------+-------------------+---------------------------------------------------------------------------------------------------------+
+; Total   ; Incr    ; RF ; Type ; Fanout ; Location          ; Element                                                                                                 ;
++---------+---------+----+------+--------+-------------------+---------------------------------------------------------------------------------------------------------+
+; 0.000   ; 0.000   ;    ;      ;        ;                   ; launch edge time                                                                                        ;
+; 1.491   ; 1.491   ;    ;      ;        ;                   ; clock path                                                                                              ;
+;   0.000 ;   0.000 ;    ;      ;        ;                   ; source latency                                                                                          ;
+;   0.000 ;   0.000 ;    ;      ; 1      ; PIN_Y2            ; clk                                                                                                     ;
+;   0.000 ;   0.000 ; RR ; IC   ; 1      ; IOIBUF_X0_Y36_N15 ; clk~input|i                                                                                             ;
+;   0.273 ;   0.273 ; RR ; CELL ; 1      ; IOIBUF_X0_Y36_N15 ; clk~input|o                                                                                             ;
+;   0.368 ;   0.095 ; RR ; IC   ; 1      ; CLKCTRL_G4        ; clk~inputclkctrl|inclk[0]                                                                               ;
+;   0.368 ;   0.000 ; RR ; CELL ; 170    ; CLKCTRL_G4        ; clk~inputclkctrl|outclk                                                                                 ;
+;   1.218 ;   0.850 ; RR ; IC   ; 1      ; FF_X48_Y42_N11    ; u_rx_uart|deframe_inst|rx_data[4]|clk                                                                   ;
+;   1.491 ;   0.273 ; RR ; CELL ; 1      ; FF_X48_Y42_N11    ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[4]                                                       ;
+; 1.971   ; 0.480   ;    ;      ;        ;                   ; data path                                                                                               ;
+;   1.596 ;   0.105 ;    ; uTco ; 1      ; FF_X48_Y42_N11    ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[4]                                                       ;
+;   1.596 ;   0.000 ; RR ; CELL ; 3      ; FF_X48_Y42_N11    ; u_rx_uart|deframe_inst|rx_data[4]|q                                                                     ;
+;   1.935 ;   0.339 ; RR ; IC   ; 1      ; M9K_X51_Y42_N0    ; u_rx_fifo|fifo_rtl_0|auto_generated|ram_block1a0|portadatain[4]                                         ;
+;   1.971 ;   0.036 ; RR ; CELL ; 0      ; M9K_X51_Y42_N0    ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0 ;
++---------+---------+----+------+--------+-------------------+---------------------------------------------------------------------------------------------------------+
+
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Data Required Path                                                                                                                                                    ;
++---------+----------+----+------+--------+-------------------+---------------------------------------------------------------------------------------------------------+
+; Total   ; Incr     ; RF ; Type ; Fanout ; Location          ; Element                                                                                                 ;
++---------+----------+----+------+--------+-------------------+---------------------------------------------------------------------------------------------------------+
+; 0.000   ; 0.000    ;    ;      ;        ;                   ; latch edge time                                                                                         ;
+; 1.722   ; 1.722    ;    ;      ;        ;                   ; clock path                                                                                              ;
+;   0.000 ;   0.000  ;    ;      ;        ;                   ; source latency                                                                                          ;
+;   0.000 ;   0.000  ;    ;      ; 1      ; PIN_Y2            ; clk                                                                                                     ;
+;   0.000 ;   0.000  ; RR ; IC   ; 1      ; IOIBUF_X0_Y36_N15 ; clk~input|i                                                                                             ;
+;   0.273 ;   0.273  ; RR ; CELL ; 1      ; IOIBUF_X0_Y36_N15 ; clk~input|o                                                                                             ;
+;   0.372 ;   0.099  ; RR ; IC   ; 1      ; CLKCTRL_G4        ; clk~inputclkctrl|inclk[0]                                                                               ;
+;   0.372 ;   0.000  ; RR ; CELL ; 170    ; CLKCTRL_G4        ; clk~inputclkctrl|outclk                                                                                 ;
+;   1.262 ;   0.890  ; RR ; IC   ; 4      ; M9K_X51_Y42_N0    ; u_rx_fifo|fifo_rtl_0|auto_generated|ram_block1a0|clk0                                                   ;
+;   1.742 ;   0.480  ; RR ; CELL ; 0      ; M9K_X51_Y42_N0    ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0 ;
+;   1.722 ;   -0.020 ;    ;      ;        ;                   ; clock pessimism removed                                                                                 ;
+; 1.722   ; 0.000    ;    ;      ;        ;                   ; clock uncertainty                                                                                       ;
+; 1.826   ; 0.104    ;    ; uTh  ; 0      ; M9K_X51_Y42_N0    ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0 ;
++---------+----------+----+------+--------+-------------------+---------------------------------------------------------------------------------------------------------+
+
+----------------------------
+; Extra Fitter Information ;
+----------------------------
+HTML report is unavailable in plain text report export.
+
+
+Path #5: Hold slack is 0.146 
+===============================================================================
++------------------------------------------------------------------------------------------------------------------------------+
+; Path Summary                                                                                                                 ;
++--------------------+---------------------------------------------------------------------------------------------------------+
+; Property           ; Value                                                                                                   ;
++--------------------+---------------------------------------------------------------------------------------------------------+
+; From Node          ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[3]                                                       ;
+; To Node            ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0 ;
+; Launch Clock       ; clk                                                                                                     ;
+; Latch Clock        ; clk                                                                                                     ;
+; Data Arrival Time  ; 1.972                                                                                                   ;
+; Data Required Time ; 1.826                                                                                                   ;
+; Slack              ; 0.146                                                                                                   ;
++--------------------+---------------------------------------------------------------------------------------------------------+
+
++-----------------------------------------------------------------------------------+
+; Statistics                                                                        ;
++------------------------+-------+-------+-------------+------------+-------+-------+
+; Property               ; Value ; Count ; Total Delay ; % of Total ; Min   ; Max   ;
++------------------------+-------+-------+-------------+------------+-------+-------+
+; Hold Relationship      ; 0.000 ;       ;             ;            ;       ;       ;
+; Clock Skew             ; 0.231 ;       ;             ;            ;       ;       ;
+; Data Delay             ; 0.481 ;       ;             ;            ;       ;       ;
+; Number of Logic Levels ;       ; 0     ;             ;            ;       ;       ;
+; Physical Delays        ;       ;       ;             ;            ;       ;       ;
+;  Arrival Path          ;       ;       ;             ;            ;       ;       ;
+;   Clock                ;       ;       ;             ;            ;       ;       ;
+;    IC                  ;       ; 3     ; 0.945       ; 63         ; 0.000 ; 0.850 ;
+;    Cell                ;       ; 3     ; 0.546       ; 37         ; 0.000 ; 0.273 ;
+;   Data                 ;       ;       ;             ;            ;       ;       ;
+;    IC                  ;       ; 1     ; 0.340       ; 71         ; 0.340 ; 0.340 ;
+;    Cell                ;       ; 2     ; 0.036       ; 7          ; 0.000 ; 0.036 ;
+;    uTco                ;       ; 1     ; 0.105       ; 22         ; 0.105 ; 0.105 ;
+;  Required Path         ;       ;       ;             ;            ;       ;       ;
+;   Clock                ;       ;       ;             ;            ;       ;       ;
+;    IC                  ;       ; 3     ; 0.989       ; 57         ; 0.000 ; 0.890 ;
+;    Cell                ;       ; 3     ; 0.753       ; 43         ; 0.000 ; 0.480 ;
++------------------------+-------+-------+-------------+------------+-------+-------+
+Note: Negative delays are omitted from totals when calculating percentages
+
++----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Data Arrival Path                                                                                                                                                    ;
++---------+---------+----+------+--------+-------------------+---------------------------------------------------------------------------------------------------------+
+; Total   ; Incr    ; RF ; Type ; Fanout ; Location          ; Element                                                                                                 ;
++---------+---------+----+------+--------+-------------------+---------------------------------------------------------------------------------------------------------+
+; 0.000   ; 0.000   ;    ;      ;        ;                   ; launch edge time                                                                                        ;
+; 1.491   ; 1.491   ;    ;      ;        ;                   ; clock path                                                                                              ;
+;   0.000 ;   0.000 ;    ;      ;        ;                   ; source latency                                                                                          ;
+;   0.000 ;   0.000 ;    ;      ; 1      ; PIN_Y2            ; clk                                                                                                     ;
+;   0.000 ;   0.000 ; RR ; IC   ; 1      ; IOIBUF_X0_Y36_N15 ; clk~input|i                                                                                             ;
+;   0.273 ;   0.273 ; RR ; CELL ; 1      ; IOIBUF_X0_Y36_N15 ; clk~input|o                                                                                             ;
+;   0.368 ;   0.095 ; RR ; IC   ; 1      ; CLKCTRL_G4        ; clk~inputclkctrl|inclk[0]                                                                               ;
+;   0.368 ;   0.000 ; RR ; CELL ; 170    ; CLKCTRL_G4        ; clk~inputclkctrl|outclk                                                                                 ;
+;   1.218 ;   0.850 ; RR ; IC   ; 1      ; FF_X48_Y42_N31    ; u_rx_uart|deframe_inst|rx_data[3]|clk                                                                   ;
+;   1.491 ;   0.273 ; RR ; CELL ; 1      ; FF_X48_Y42_N31    ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[3]                                                       ;
+; 1.972   ; 0.481   ;    ;      ;        ;                   ; data path                                                                                               ;
+;   1.596 ;   0.105 ;    ; uTco ; 1      ; FF_X48_Y42_N31    ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[3]                                                       ;
+;   1.596 ;   0.000 ; RR ; CELL ; 3      ; FF_X48_Y42_N31    ; u_rx_uart|deframe_inst|rx_data[3]|q                                                                     ;
+;   1.936 ;   0.340 ; RR ; IC   ; 1      ; M9K_X51_Y42_N0    ; u_rx_fifo|fifo_rtl_0|auto_generated|ram_block1a0|portadatain[3]                                         ;
+;   1.972 ;   0.036 ; RR ; CELL ; 0      ; M9K_X51_Y42_N0    ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0 ;
++---------+---------+----+------+--------+-------------------+---------------------------------------------------------------------------------------------------------+
+
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Data Required Path                                                                                                                                                    ;
++---------+----------+----+------+--------+-------------------+---------------------------------------------------------------------------------------------------------+
+; Total   ; Incr     ; RF ; Type ; Fanout ; Location          ; Element                                                                                                 ;
++---------+----------+----+------+--------+-------------------+---------------------------------------------------------------------------------------------------------+
+; 0.000   ; 0.000    ;    ;      ;        ;                   ; latch edge time                                                                                         ;
+; 1.722   ; 1.722    ;    ;      ;        ;                   ; clock path                                                                                              ;
+;   0.000 ;   0.000  ;    ;      ;        ;                   ; source latency                                                                                          ;
+;   0.000 ;   0.000  ;    ;      ; 1      ; PIN_Y2            ; clk                                                                                                     ;
+;   0.000 ;   0.000  ; RR ; IC   ; 1      ; IOIBUF_X0_Y36_N15 ; clk~input|i                                                                                             ;
+;   0.273 ;   0.273  ; RR ; CELL ; 1      ; IOIBUF_X0_Y36_N15 ; clk~input|o                                                                                             ;
+;   0.372 ;   0.099  ; RR ; IC   ; 1      ; CLKCTRL_G4        ; clk~inputclkctrl|inclk[0]                                                                               ;
+;   0.372 ;   0.000  ; RR ; CELL ; 170    ; CLKCTRL_G4        ; clk~inputclkctrl|outclk                                                                                 ;
+;   1.262 ;   0.890  ; RR ; IC   ; 4      ; M9K_X51_Y42_N0    ; u_rx_fifo|fifo_rtl_0|auto_generated|ram_block1a0|clk0                                                   ;
+;   1.742 ;   0.480  ; RR ; CELL ; 0      ; M9K_X51_Y42_N0    ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0 ;
+;   1.722 ;   -0.020 ;    ;      ;        ;                   ; clock pessimism removed                                                                                 ;
+; 1.722   ; 0.000    ;    ;      ;        ;                   ; clock uncertainty                                                                                       ;
+; 1.826   ; 0.104    ;    ; uTh  ; 0      ; M9K_X51_Y42_N0    ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0 ;
++---------+----------+----+------+--------+-------------------+---------------------------------------------------------------------------------------------------------+
+
+----------------------------
+; Extra Fitter Information ;
+----------------------------
+HTML report is unavailable in plain text report export.
+
+
+Path #6: Hold slack is 0.148 
+===============================================================================
++------------------------------------------------------------------------------------------------------------------------------+
+; Path Summary                                                                                                                 ;
++--------------------+---------------------------------------------------------------------------------------------------------+
+; Property           ; Value                                                                                                   ;
++--------------------+---------------------------------------------------------------------------------------------------------+
+; From Node          ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[1]                                                       ;
+; To Node            ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0 ;
+; Launch Clock       ; clk                                                                                                     ;
+; Latch Clock        ; clk                                                                                                     ;
+; Data Arrival Time  ; 1.974                                                                                                   ;
+; Data Required Time ; 1.826                                                                                                   ;
+; Slack              ; 0.148                                                                                                   ;
++--------------------+---------------------------------------------------------------------------------------------------------+
+
++-----------------------------------------------------------------------------------+
+; Statistics                                                                        ;
++------------------------+-------+-------+-------------+------------+-------+-------+
+; Property               ; Value ; Count ; Total Delay ; % of Total ; Min   ; Max   ;
++------------------------+-------+-------+-------------+------------+-------+-------+
+; Hold Relationship      ; 0.000 ;       ;             ;            ;       ;       ;
+; Clock Skew             ; 0.231 ;       ;             ;            ;       ;       ;
+; Data Delay             ; 0.483 ;       ;             ;            ;       ;       ;
+; Number of Logic Levels ;       ; 0     ;             ;            ;       ;       ;
+; Physical Delays        ;       ;       ;             ;            ;       ;       ;
+;  Arrival Path          ;       ;       ;             ;            ;       ;       ;
+;   Clock                ;       ;       ;             ;            ;       ;       ;
+;    IC                  ;       ; 3     ; 0.945       ; 63         ; 0.000 ; 0.850 ;
+;    Cell                ;       ; 3     ; 0.546       ; 37         ; 0.000 ; 0.273 ;
+;   Data                 ;       ;       ;             ;            ;       ;       ;
+;    IC                  ;       ; 1     ; 0.342       ; 71         ; 0.342 ; 0.342 ;
+;    Cell                ;       ; 2     ; 0.036       ; 7          ; 0.000 ; 0.036 ;
+;    uTco                ;       ; 1     ; 0.105       ; 22         ; 0.105 ; 0.105 ;
+;  Required Path         ;       ;       ;             ;            ;       ;       ;
+;   Clock                ;       ;       ;             ;            ;       ;       ;
+;    IC                  ;       ; 3     ; 0.989       ; 57         ; 0.000 ; 0.890 ;
+;    Cell                ;       ; 3     ; 0.753       ; 43         ; 0.000 ; 0.480 ;
++------------------------+-------+-------+-------------+------------+-------+-------+
+Note: Negative delays are omitted from totals when calculating percentages
+
++----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Data Arrival Path                                                                                                                                                    ;
++---------+---------+----+------+--------+-------------------+---------------------------------------------------------------------------------------------------------+
+; Total   ; Incr    ; RF ; Type ; Fanout ; Location          ; Element                                                                                                 ;
++---------+---------+----+------+--------+-------------------+---------------------------------------------------------------------------------------------------------+
+; 0.000   ; 0.000   ;    ;      ;        ;                   ; launch edge time                                                                                        ;
+; 1.491   ; 1.491   ;    ;      ;        ;                   ; clock path                                                                                              ;
+;   0.000 ;   0.000 ;    ;      ;        ;                   ; source latency                                                                                          ;
+;   0.000 ;   0.000 ;    ;      ; 1      ; PIN_Y2            ; clk                                                                                                     ;
+;   0.000 ;   0.000 ; RR ; IC   ; 1      ; IOIBUF_X0_Y36_N15 ; clk~input|i                                                                                             ;
+;   0.273 ;   0.273 ; RR ; CELL ; 1      ; IOIBUF_X0_Y36_N15 ; clk~input|o                                                                                             ;
+;   0.368 ;   0.095 ; RR ; IC   ; 1      ; CLKCTRL_G4        ; clk~inputclkctrl|inclk[0]                                                                               ;
+;   0.368 ;   0.000 ; RR ; CELL ; 170    ; CLKCTRL_G4        ; clk~inputclkctrl|outclk                                                                                 ;
+;   1.218 ;   0.850 ; RR ; IC   ; 1      ; FF_X48_Y42_N17    ; u_rx_uart|deframe_inst|rx_data[1]|clk                                                                   ;
+;   1.491 ;   0.273 ; RR ; CELL ; 1      ; FF_X48_Y42_N17    ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[1]                                                       ;
+; 1.974   ; 0.483   ;    ;      ;        ;                   ; data path                                                                                               ;
+;   1.596 ;   0.105 ;    ; uTco ; 1      ; FF_X48_Y42_N17    ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[1]                                                       ;
+;   1.596 ;   0.000 ; RR ; CELL ; 3      ; FF_X48_Y42_N17    ; u_rx_uart|deframe_inst|rx_data[1]|q                                                                     ;
+;   1.938 ;   0.342 ; RR ; IC   ; 1      ; M9K_X51_Y42_N0    ; u_rx_fifo|fifo_rtl_0|auto_generated|ram_block1a0|portadatain[1]                                         ;
+;   1.974 ;   0.036 ; RR ; CELL ; 0      ; M9K_X51_Y42_N0    ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0 ;
++---------+---------+----+------+--------+-------------------+---------------------------------------------------------------------------------------------------------+
+
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Data Required Path                                                                                                                                                    ;
++---------+----------+----+------+--------+-------------------+---------------------------------------------------------------------------------------------------------+
+; Total   ; Incr     ; RF ; Type ; Fanout ; Location          ; Element                                                                                                 ;
++---------+----------+----+------+--------+-------------------+---------------------------------------------------------------------------------------------------------+
+; 0.000   ; 0.000    ;    ;      ;        ;                   ; latch edge time                                                                                         ;
+; 1.722   ; 1.722    ;    ;      ;        ;                   ; clock path                                                                                              ;
+;   0.000 ;   0.000  ;    ;      ;        ;                   ; source latency                                                                                          ;
+;   0.000 ;   0.000  ;    ;      ; 1      ; PIN_Y2            ; clk                                                                                                     ;
+;   0.000 ;   0.000  ; RR ; IC   ; 1      ; IOIBUF_X0_Y36_N15 ; clk~input|i                                                                                             ;
+;   0.273 ;   0.273  ; RR ; CELL ; 1      ; IOIBUF_X0_Y36_N15 ; clk~input|o                                                                                             ;
+;   0.372 ;   0.099  ; RR ; IC   ; 1      ; CLKCTRL_G4        ; clk~inputclkctrl|inclk[0]                                                                               ;
+;   0.372 ;   0.000  ; RR ; CELL ; 170    ; CLKCTRL_G4        ; clk~inputclkctrl|outclk                                                                                 ;
+;   1.262 ;   0.890  ; RR ; IC   ; 4      ; M9K_X51_Y42_N0    ; u_rx_fifo|fifo_rtl_0|auto_generated|ram_block1a0|clk0                                                   ;
+;   1.742 ;   0.480  ; RR ; CELL ; 0      ; M9K_X51_Y42_N0    ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0 ;
+;   1.722 ;   -0.020 ;    ;      ;        ;                   ; clock pessimism removed                                                                                 ;
+; 1.722   ; 0.000    ;    ;      ;        ;                   ; clock uncertainty                                                                                       ;
+; 1.826   ; 0.104    ;    ; uTh  ; 0      ; M9K_X51_Y42_N0    ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0 ;
++---------+----------+----+------+--------+-------------------+---------------------------------------------------------------------------------------------------------+
+
+----------------------------
+; Extra Fitter Information ;
+----------------------------
+HTML report is unavailable in plain text report export.
+
+
+Path #7: Hold slack is 0.151 
+===============================================================================
++------------------------------------------------------------------------------------------------------------------------------+
+; Path Summary                                                                                                                 ;
++--------------------+---------------------------------------------------------------------------------------------------------+
+; Property           ; Value                                                                                                   ;
++--------------------+---------------------------------------------------------------------------------------------------------+
+; From Node          ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[0]                                                       ;
+; To Node            ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0 ;
+; Launch Clock       ; clk                                                                                                     ;
+; Latch Clock        ; clk                                                                                                     ;
+; Data Arrival Time  ; 1.977                                                                                                   ;
+; Data Required Time ; 1.826                                                                                                   ;
+; Slack              ; 0.151                                                                                                   ;
++--------------------+---------------------------------------------------------------------------------------------------------+
+
++-----------------------------------------------------------------------------------+
+; Statistics                                                                        ;
++------------------------+-------+-------+-------------+------------+-------+-------+
+; Property               ; Value ; Count ; Total Delay ; % of Total ; Min   ; Max   ;
++------------------------+-------+-------+-------------+------------+-------+-------+
+; Hold Relationship      ; 0.000 ;       ;             ;            ;       ;       ;
+; Clock Skew             ; 0.232 ;       ;             ;            ;       ;       ;
+; Data Delay             ; 0.487 ;       ;             ;            ;       ;       ;
+; Number of Logic Levels ;       ; 0     ;             ;            ;       ;       ;
+; Physical Delays        ;       ;       ;             ;            ;       ;       ;
+;  Arrival Path          ;       ;       ;             ;            ;       ;       ;
+;   Clock                ;       ;       ;             ;            ;       ;       ;
+;    IC                  ;       ; 3     ; 0.944       ; 63         ; 0.000 ; 0.849 ;
+;    Cell                ;       ; 3     ; 0.546       ; 37         ; 0.000 ; 0.273 ;
+;   Data                 ;       ;       ;             ;            ;       ;       ;
+;    IC                  ;       ; 1     ; 0.346       ; 71         ; 0.346 ; 0.346 ;
+;    Cell                ;       ; 2     ; 0.036       ; 7          ; 0.000 ; 0.036 ;
+;    uTco                ;       ; 1     ; 0.105       ; 22         ; 0.105 ; 0.105 ;
+;  Required Path         ;       ;       ;             ;            ;       ;       ;
+;   Clock                ;       ;       ;             ;            ;       ;       ;
+;    IC                  ;       ; 3     ; 0.989       ; 57         ; 0.000 ; 0.890 ;
+;    Cell                ;       ; 3     ; 0.753       ; 43         ; 0.000 ; 0.480 ;
++------------------------+-------+-------+-------------+------------+-------+-------+
+Note: Negative delays are omitted from totals when calculating percentages
+
++----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Data Arrival Path                                                                                                                                                    ;
++---------+---------+----+------+--------+-------------------+---------------------------------------------------------------------------------------------------------+
+; Total   ; Incr    ; RF ; Type ; Fanout ; Location          ; Element                                                                                                 ;
++---------+---------+----+------+--------+-------------------+---------------------------------------------------------------------------------------------------------+
+; 0.000   ; 0.000   ;    ;      ;        ;                   ; launch edge time                                                                                        ;
+; 1.490   ; 1.490   ;    ;      ;        ;                   ; clock path                                                                                              ;
+;   0.000 ;   0.000 ;    ;      ;        ;                   ; source latency                                                                                          ;
+;   0.000 ;   0.000 ;    ;      ; 1      ; PIN_Y2            ; clk                                                                                                     ;
+;   0.000 ;   0.000 ; RR ; IC   ; 1      ; IOIBUF_X0_Y36_N15 ; clk~input|i                                                                                             ;
+;   0.273 ;   0.273 ; RR ; CELL ; 1      ; IOIBUF_X0_Y36_N15 ; clk~input|o                                                                                             ;
+;   0.368 ;   0.095 ; RR ; IC   ; 1      ; CLKCTRL_G4        ; clk~inputclkctrl|inclk[0]                                                                               ;
+;   0.368 ;   0.000 ; RR ; CELL ; 170    ; CLKCTRL_G4        ; clk~inputclkctrl|outclk                                                                                 ;
+;   1.217 ;   0.849 ; RR ; IC   ; 1      ; FF_X47_Y42_N9     ; u_rx_uart|deframe_inst|rx_data[0]|clk                                                                   ;
+;   1.490 ;   0.273 ; RR ; CELL ; 1      ; FF_X47_Y42_N9     ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[0]                                                       ;
+; 1.977   ; 0.487   ;    ;      ;        ;                   ; data path                                                                                               ;
+;   1.595 ;   0.105 ;    ; uTco ; 1      ; FF_X47_Y42_N9     ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[0]                                                       ;
+;   1.595 ;   0.000 ; RR ; CELL ; 3      ; FF_X47_Y42_N9     ; u_rx_uart|deframe_inst|rx_data[0]|q                                                                     ;
+;   1.941 ;   0.346 ; RR ; IC   ; 1      ; M9K_X51_Y42_N0    ; u_rx_fifo|fifo_rtl_0|auto_generated|ram_block1a0|portadatain[0]                                         ;
+;   1.977 ;   0.036 ; RR ; CELL ; 0      ; M9K_X51_Y42_N0    ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0 ;
++---------+---------+----+------+--------+-------------------+---------------------------------------------------------------------------------------------------------+
+
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Data Required Path                                                                                                                                                    ;
++---------+----------+----+------+--------+-------------------+---------------------------------------------------------------------------------------------------------+
+; Total   ; Incr     ; RF ; Type ; Fanout ; Location          ; Element                                                                                                 ;
++---------+----------+----+------+--------+-------------------+---------------------------------------------------------------------------------------------------------+
+; 0.000   ; 0.000    ;    ;      ;        ;                   ; latch edge time                                                                                         ;
+; 1.722   ; 1.722    ;    ;      ;        ;                   ; clock path                                                                                              ;
+;   0.000 ;   0.000  ;    ;      ;        ;                   ; source latency                                                                                          ;
+;   0.000 ;   0.000  ;    ;      ; 1      ; PIN_Y2            ; clk                                                                                                     ;
+;   0.000 ;   0.000  ; RR ; IC   ; 1      ; IOIBUF_X0_Y36_N15 ; clk~input|i                                                                                             ;
+;   0.273 ;   0.273  ; RR ; CELL ; 1      ; IOIBUF_X0_Y36_N15 ; clk~input|o                                                                                             ;
+;   0.372 ;   0.099  ; RR ; IC   ; 1      ; CLKCTRL_G4        ; clk~inputclkctrl|inclk[0]                                                                               ;
+;   0.372 ;   0.000  ; RR ; CELL ; 170    ; CLKCTRL_G4        ; clk~inputclkctrl|outclk                                                                                 ;
+;   1.262 ;   0.890  ; RR ; IC   ; 4      ; M9K_X51_Y42_N0    ; u_rx_fifo|fifo_rtl_0|auto_generated|ram_block1a0|clk0                                                   ;
+;   1.742 ;   0.480  ; RR ; CELL ; 0      ; M9K_X51_Y42_N0    ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0 ;
+;   1.722 ;   -0.020 ;    ;      ;        ;                   ; clock pessimism removed                                                                                 ;
+; 1.722   ; 0.000    ;    ;      ;        ;                   ; clock uncertainty                                                                                       ;
+; 1.826   ; 0.104    ;    ; uTh  ; 0      ; M9K_X51_Y42_N0    ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0 ;
++---------+----------+----+------+--------+-------------------+---------------------------------------------------------------------------------------------------------+
+
+----------------------------
+; Extra Fitter Information ;
+----------------------------
+HTML report is unavailable in plain text report export.
+
+
+Path #8: Hold slack is 0.153 
+===============================================================================
++-------------------------------------------------------------------------------------------------------------------------------+
+; Path Summary                                                                                                                  ;
++--------------------+----------------------------------------------------------------------------------------------------------+
+; Property           ; Value                                                                                                    ;
++--------------------+----------------------------------------------------------------------------------------------------------+
+; From Node          ; sync_fifo:u_rx_fifo|wptr[0]                                                                              ;
+; To Node            ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_address_reg0 ;
+; Launch Clock       ; clk                                                                                                      ;
+; Latch Clock        ; clk                                                                                                      ;
+; Data Arrival Time  ; 1.977                                                                                                    ;
+; Data Required Time ; 1.824                                                                                                    ;
+; Slack              ; 0.153                                                                                                    ;
++--------------------+----------------------------------------------------------------------------------------------------------+
+
++-----------------------------------------------------------------------------------+
+; Statistics                                                                        ;
++------------------------+-------+-------+-------------+------------+-------+-------+
+; Property               ; Value ; Count ; Total Delay ; % of Total ; Min   ; Max   ;
++------------------------+-------+-------+-------------+------------+-------+-------+
+; Hold Relationship      ; 0.000 ;       ;             ;            ;       ;       ;
+; Clock Skew             ; 0.225 ;       ;             ;            ;       ;       ;
+; Data Delay             ; 0.482 ;       ;             ;            ;       ;       ;
+; Number of Logic Levels ;       ; 0     ;             ;            ;       ;       ;
+; Physical Delays        ;       ;       ;             ;            ;       ;       ;
+;  Arrival Path          ;       ;       ;             ;            ;       ;       ;
+;   Clock                ;       ;       ;             ;            ;       ;       ;
+;    IC                  ;       ; 3     ; 0.949       ; 63         ; 0.000 ; 0.854 ;
+;    Cell                ;       ; 3     ; 0.546       ; 37         ; 0.000 ; 0.273 ;
+;   Data                 ;       ;       ;             ;            ;       ;       ;
+;    IC                  ;       ; 1     ; 0.340       ; 71         ; 0.340 ; 0.340 ;
+;    Cell                ;       ; 2     ; 0.037       ; 8          ; 0.000 ; 0.037 ;
+;    uTco                ;       ; 1     ; 0.105       ; 22         ; 0.105 ; 0.105 ;
+;  Required Path         ;       ;       ;             ;            ;       ;       ;
+;   Clock                ;       ;       ;             ;            ;       ;       ;
+;    IC                  ;       ; 3     ; 0.989       ; 57         ; 0.000 ; 0.890 ;
+;    Cell                ;       ; 3     ; 0.751       ; 43         ; 0.000 ; 0.478 ;
++------------------------+-------+-------+-------------+------------+-------+-------+
+Note: Negative delays are omitted from totals when calculating percentages
+
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Data Arrival Path                                                                                                                                                     ;
++---------+---------+----+------+--------+-------------------+----------------------------------------------------------------------------------------------------------+
+; Total   ; Incr    ; RF ; Type ; Fanout ; Location          ; Element                                                                                                  ;
++---------+---------+----+------+--------+-------------------+----------------------------------------------------------------------------------------------------------+
+; 0.000   ; 0.000   ;    ;      ;        ;                   ; launch edge time                                                                                         ;
+; 1.495   ; 1.495   ;    ;      ;        ;                   ; clock path                                                                                               ;
+;   0.000 ;   0.000 ;    ;      ;        ;                   ; source latency                                                                                           ;
+;   0.000 ;   0.000 ;    ;      ; 1      ; PIN_Y2            ; clk                                                                                                      ;
+;   0.000 ;   0.000 ; RR ; IC   ; 1      ; IOIBUF_X0_Y36_N15 ; clk~input|i                                                                                              ;
+;   0.273 ;   0.273 ; RR ; CELL ; 1      ; IOIBUF_X0_Y36_N15 ; clk~input|o                                                                                              ;
+;   0.368 ;   0.095 ; RR ; IC   ; 1      ; CLKCTRL_G4        ; clk~inputclkctrl|inclk[0]                                                                                ;
+;   0.368 ;   0.000 ; RR ; CELL ; 170    ; CLKCTRL_G4        ; clk~inputclkctrl|outclk                                                                                  ;
+;   1.222 ;   0.854 ; RR ; IC   ; 1      ; FF_X52_Y42_N3     ; u_rx_fifo|wptr[0]|clk                                                                                    ;
+;   1.495 ;   0.273 ; RR ; CELL ; 1      ; FF_X52_Y42_N3     ; sync_fifo:u_rx_fifo|wptr[0]                                                                              ;
+; 1.977   ; 0.482   ;    ;      ;        ;                   ; data path                                                                                                ;
+;   1.600 ;   0.105 ;    ; uTco ; 1      ; FF_X52_Y42_N3     ; sync_fifo:u_rx_fifo|wptr[0]                                                                              ;
+;   1.600 ;   0.000 ; RR ; CELL ; 6      ; FF_X52_Y42_N3     ; u_rx_fifo|wptr[0]|q                                                                                      ;
+;   1.940 ;   0.340 ; RR ; IC   ; 1      ; M9K_X51_Y42_N0    ; u_rx_fifo|fifo_rtl_0|auto_generated|ram_block1a0|portaaddr[0]                                            ;
+;   1.977 ;   0.037 ; RR ; CELL ; 0      ; M9K_X51_Y42_N0    ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_address_reg0 ;
++---------+---------+----+------+--------+-------------------+----------------------------------------------------------------------------------------------------------+
+
++------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Data Required Path                                                                                                                                                     ;
++---------+----------+----+------+--------+-------------------+----------------------------------------------------------------------------------------------------------+
+; Total   ; Incr     ; RF ; Type ; Fanout ; Location          ; Element                                                                                                  ;
++---------+----------+----+------+--------+-------------------+----------------------------------------------------------------------------------------------------------+
+; 0.000   ; 0.000    ;    ;      ;        ;                   ; latch edge time                                                                                          ;
+; 1.720   ; 1.720    ;    ;      ;        ;                   ; clock path                                                                                               ;
+;   0.000 ;   0.000  ;    ;      ;        ;                   ; source latency                                                                                           ;
+;   0.000 ;   0.000  ;    ;      ; 1      ; PIN_Y2            ; clk                                                                                                      ;
+;   0.000 ;   0.000  ; RR ; IC   ; 1      ; IOIBUF_X0_Y36_N15 ; clk~input|i                                                                                              ;
+;   0.273 ;   0.273  ; RR ; CELL ; 1      ; IOIBUF_X0_Y36_N15 ; clk~input|o                                                                                              ;
+;   0.372 ;   0.099  ; RR ; IC   ; 1      ; CLKCTRL_G4        ; clk~inputclkctrl|inclk[0]                                                                                ;
+;   0.372 ;   0.000  ; RR ; CELL ; 170    ; CLKCTRL_G4        ; clk~inputclkctrl|outclk                                                                                  ;
+;   1.262 ;   0.890  ; RR ; IC   ; 4      ; M9K_X51_Y42_N0    ; u_rx_fifo|fifo_rtl_0|auto_generated|ram_block1a0|clk0                                                    ;
+;   1.740 ;   0.478  ; RR ; CELL ; 0      ; M9K_X51_Y42_N0    ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_address_reg0 ;
+;   1.720 ;   -0.020 ;    ;      ;        ;                   ; clock pessimism removed                                                                                  ;
+; 1.720   ; 0.000    ;    ;      ;        ;                   ; clock uncertainty                                                                                        ;
+; 1.824   ; 0.104    ;    ; uTh  ; 0      ; M9K_X51_Y42_N0    ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_address_reg0 ;
++---------+----------+----+------+--------+-------------------+----------------------------------------------------------------------------------------------------------+
+
+----------------------------
+; Extra Fitter Information ;
+----------------------------
+HTML report is unavailable in plain text report export.
+
+
+Path #9: Hold slack is 0.154 
+===============================================================================
++-------------------------------------------------------------------------------------------------------------------------------+
+; Path Summary                                                                                                                  ;
++--------------------+----------------------------------------------------------------------------------------------------------+
+; Property           ; Value                                                                                                    ;
++--------------------+----------------------------------------------------------------------------------------------------------+
+; From Node          ; sync_fifo:u_rx_fifo|wptr[1]                                                                              ;
+; To Node            ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_address_reg0 ;
+; Launch Clock       ; clk                                                                                                      ;
+; Latch Clock        ; clk                                                                                                      ;
+; Data Arrival Time  ; 1.978                                                                                                    ;
+; Data Required Time ; 1.824                                                                                                    ;
+; Slack              ; 0.154                                                                                                    ;
++--------------------+----------------------------------------------------------------------------------------------------------+
+
++-----------------------------------------------------------------------------------+
+; Statistics                                                                        ;
++------------------------+-------+-------+-------------+------------+-------+-------+
+; Property               ; Value ; Count ; Total Delay ; % of Total ; Min   ; Max   ;
++------------------------+-------+-------+-------------+------------+-------+-------+
+; Hold Relationship      ; 0.000 ;       ;             ;            ;       ;       ;
+; Clock Skew             ; 0.225 ;       ;             ;            ;       ;       ;
+; Data Delay             ; 0.483 ;       ;             ;            ;       ;       ;
+; Number of Logic Levels ;       ; 0     ;             ;            ;       ;       ;
+; Physical Delays        ;       ;       ;             ;            ;       ;       ;
+;  Arrival Path          ;       ;       ;             ;            ;       ;       ;
+;   Clock                ;       ;       ;             ;            ;       ;       ;
+;    IC                  ;       ; 3     ; 0.949       ; 63         ; 0.000 ; 0.854 ;
+;    Cell                ;       ; 3     ; 0.546       ; 37         ; 0.000 ; 0.273 ;
+;   Data                 ;       ;       ;             ;            ;       ;       ;
+;    IC                  ;       ; 1     ; 0.341       ; 71         ; 0.341 ; 0.341 ;
+;    Cell                ;       ; 2     ; 0.037       ; 8          ; 0.000 ; 0.037 ;
+;    uTco                ;       ; 1     ; 0.105       ; 22         ; 0.105 ; 0.105 ;
+;  Required Path         ;       ;       ;             ;            ;       ;       ;
+;   Clock                ;       ;       ;             ;            ;       ;       ;
+;    IC                  ;       ; 3     ; 0.989       ; 57         ; 0.000 ; 0.890 ;
+;    Cell                ;       ; 3     ; 0.751       ; 43         ; 0.000 ; 0.478 ;
++------------------------+-------+-------+-------------+------------+-------+-------+
+Note: Negative delays are omitted from totals when calculating percentages
+
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Data Arrival Path                                                                                                                                                     ;
++---------+---------+----+------+--------+-------------------+----------------------------------------------------------------------------------------------------------+
+; Total   ; Incr    ; RF ; Type ; Fanout ; Location          ; Element                                                                                                  ;
++---------+---------+----+------+--------+-------------------+----------------------------------------------------------------------------------------------------------+
+; 0.000   ; 0.000   ;    ;      ;        ;                   ; launch edge time                                                                                         ;
+; 1.495   ; 1.495   ;    ;      ;        ;                   ; clock path                                                                                               ;
+;   0.000 ;   0.000 ;    ;      ;        ;                   ; source latency                                                                                           ;
+;   0.000 ;   0.000 ;    ;      ; 1      ; PIN_Y2            ; clk                                                                                                      ;
+;   0.000 ;   0.000 ; RR ; IC   ; 1      ; IOIBUF_X0_Y36_N15 ; clk~input|i                                                                                              ;
+;   0.273 ;   0.273 ; RR ; CELL ; 1      ; IOIBUF_X0_Y36_N15 ; clk~input|o                                                                                              ;
+;   0.368 ;   0.095 ; RR ; IC   ; 1      ; CLKCTRL_G4        ; clk~inputclkctrl|inclk[0]                                                                                ;
+;   0.368 ;   0.000 ; RR ; CELL ; 170    ; CLKCTRL_G4        ; clk~inputclkctrl|outclk                                                                                  ;
+;   1.222 ;   0.854 ; RR ; IC   ; 1      ; FF_X52_Y42_N13    ; u_rx_fifo|wptr[1]|clk                                                                                    ;
+;   1.495 ;   0.273 ; RR ; CELL ; 1      ; FF_X52_Y42_N13    ; sync_fifo:u_rx_fifo|wptr[1]                                                                              ;
+; 1.978   ; 0.483   ;    ;      ;        ;                   ; data path                                                                                                ;
+;   1.600 ;   0.105 ;    ; uTco ; 1      ; FF_X52_Y42_N13    ; sync_fifo:u_rx_fifo|wptr[1]                                                                              ;
+;   1.600 ;   0.000 ; RR ; CELL ; 5      ; FF_X52_Y42_N13    ; u_rx_fifo|wptr[1]|q                                                                                      ;
+;   1.941 ;   0.341 ; RR ; IC   ; 1      ; M9K_X51_Y42_N0    ; u_rx_fifo|fifo_rtl_0|auto_generated|ram_block1a0|portaaddr[1]                                            ;
+;   1.978 ;   0.037 ; RR ; CELL ; 0      ; M9K_X51_Y42_N0    ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_address_reg0 ;
++---------+---------+----+------+--------+-------------------+----------------------------------------------------------------------------------------------------------+
+
++------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Data Required Path                                                                                                                                                     ;
++---------+----------+----+------+--------+-------------------+----------------------------------------------------------------------------------------------------------+
+; Total   ; Incr     ; RF ; Type ; Fanout ; Location          ; Element                                                                                                  ;
++---------+----------+----+------+--------+-------------------+----------------------------------------------------------------------------------------------------------+
+; 0.000   ; 0.000    ;    ;      ;        ;                   ; latch edge time                                                                                          ;
+; 1.720   ; 1.720    ;    ;      ;        ;                   ; clock path                                                                                               ;
+;   0.000 ;   0.000  ;    ;      ;        ;                   ; source latency                                                                                           ;
+;   0.000 ;   0.000  ;    ;      ; 1      ; PIN_Y2            ; clk                                                                                                      ;
+;   0.000 ;   0.000  ; RR ; IC   ; 1      ; IOIBUF_X0_Y36_N15 ; clk~input|i                                                                                              ;
+;   0.273 ;   0.273  ; RR ; CELL ; 1      ; IOIBUF_X0_Y36_N15 ; clk~input|o                                                                                              ;
+;   0.372 ;   0.099  ; RR ; IC   ; 1      ; CLKCTRL_G4        ; clk~inputclkctrl|inclk[0]                                                                                ;
+;   0.372 ;   0.000  ; RR ; CELL ; 170    ; CLKCTRL_G4        ; clk~inputclkctrl|outclk                                                                                  ;
+;   1.262 ;   0.890  ; RR ; IC   ; 4      ; M9K_X51_Y42_N0    ; u_rx_fifo|fifo_rtl_0|auto_generated|ram_block1a0|clk0                                                    ;
+;   1.740 ;   0.478  ; RR ; CELL ; 0      ; M9K_X51_Y42_N0    ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_address_reg0 ;
+;   1.720 ;   -0.020 ;    ;      ;        ;                   ; clock pessimism removed                                                                                  ;
+; 1.720   ; 0.000    ;    ;      ;        ;                   ; clock uncertainty                                                                                        ;
+; 1.824   ; 0.104    ;    ; uTh  ; 0      ; M9K_X51_Y42_N0    ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_address_reg0 ;
++---------+----------+----+------+--------+-------------------+----------------------------------------------------------------------------------------------------------+
+
+----------------------------
+; Extra Fitter Information ;
+----------------------------
+HTML report is unavailable in plain text report export.
+
+
+Path #10: Hold slack is 0.170 
+===============================================================================
++------------------------------------------------------------------------------------------------------------------------------+
+; Path Summary                                                                                                                 ;
++--------------------+---------------------------------------------------------------------------------------------------------+
+; Property           ; Value                                                                                                   ;
++--------------------+---------------------------------------------------------------------------------------------------------+
+; From Node          ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[6]                                                       ;
+; To Node            ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0 ;
+; Launch Clock       ; clk                                                                                                     ;
+; Latch Clock        ; clk                                                                                                     ;
+; Data Arrival Time  ; 1.996                                                                                                   ;
+; Data Required Time ; 1.826                                                                                                   ;
+; Slack              ; 0.170                                                                                                   ;
++--------------------+---------------------------------------------------------------------------------------------------------+
+
++-----------------------------------------------------------------------------------+
+; Statistics                                                                        ;
++------------------------+-------+-------+-------------+------------+-------+-------+
+; Property               ; Value ; Count ; Total Delay ; % of Total ; Min   ; Max   ;
++------------------------+-------+-------+-------------+------------+-------+-------+
+; Hold Relationship      ; 0.000 ;       ;             ;            ;       ;       ;
+; Clock Skew             ; 0.231 ;       ;             ;            ;       ;       ;
+; Data Delay             ; 0.505 ;       ;             ;            ;       ;       ;
+; Number of Logic Levels ;       ; 0     ;             ;            ;       ;       ;
+; Physical Delays        ;       ;       ;             ;            ;       ;       ;
+;  Arrival Path          ;       ;       ;             ;            ;       ;       ;
+;   Clock                ;       ;       ;             ;            ;       ;       ;
+;    IC                  ;       ; 3     ; 0.945       ; 63         ; 0.000 ; 0.850 ;
+;    Cell                ;       ; 3     ; 0.546       ; 37         ; 0.000 ; 0.273 ;
+;   Data                 ;       ;       ;             ;            ;       ;       ;
+;    IC                  ;       ; 1     ; 0.364       ; 72         ; 0.364 ; 0.364 ;
+;    Cell                ;       ; 2     ; 0.036       ; 7          ; 0.000 ; 0.036 ;
+;    uTco                ;       ; 1     ; 0.105       ; 21         ; 0.105 ; 0.105 ;
+;  Required Path         ;       ;       ;             ;            ;       ;       ;
+;   Clock                ;       ;       ;             ;            ;       ;       ;
+;    IC                  ;       ; 3     ; 0.989       ; 57         ; 0.000 ; 0.890 ;
+;    Cell                ;       ; 3     ; 0.753       ; 43         ; 0.000 ; 0.480 ;
++------------------------+-------+-------+-------------+------------+-------+-------+
+Note: Negative delays are omitted from totals when calculating percentages
+
++----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Data Arrival Path                                                                                                                                                    ;
++---------+---------+----+------+--------+-------------------+---------------------------------------------------------------------------------------------------------+
+; Total   ; Incr    ; RF ; Type ; Fanout ; Location          ; Element                                                                                                 ;
++---------+---------+----+------+--------+-------------------+---------------------------------------------------------------------------------------------------------+
+; 0.000   ; 0.000   ;    ;      ;        ;                   ; launch edge time                                                                                        ;
+; 1.491   ; 1.491   ;    ;      ;        ;                   ; clock path                                                                                              ;
+;   0.000 ;   0.000 ;    ;      ;        ;                   ; source latency                                                                                          ;
+;   0.000 ;   0.000 ;    ;      ; 1      ; PIN_Y2            ; clk                                                                                                     ;
+;   0.000 ;   0.000 ; RR ; IC   ; 1      ; IOIBUF_X0_Y36_N15 ; clk~input|i                                                                                             ;
+;   0.273 ;   0.273 ; RR ; CELL ; 1      ; IOIBUF_X0_Y36_N15 ; clk~input|o                                                                                             ;
+;   0.368 ;   0.095 ; RR ; IC   ; 1      ; CLKCTRL_G4        ; clk~inputclkctrl|inclk[0]                                                                               ;
+;   0.368 ;   0.000 ; RR ; CELL ; 170    ; CLKCTRL_G4        ; clk~inputclkctrl|outclk                                                                                 ;
+;   1.218 ;   0.850 ; RR ; IC   ; 1      ; FF_X48_Y42_N19    ; u_rx_uart|deframe_inst|rx_data[6]|clk                                                                   ;
+;   1.491 ;   0.273 ; RR ; CELL ; 1      ; FF_X48_Y42_N19    ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[6]                                                       ;
+; 1.996   ; 0.505   ;    ;      ;        ;                   ; data path                                                                                               ;
+;   1.596 ;   0.105 ;    ; uTco ; 1      ; FF_X48_Y42_N19    ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[6]                                                       ;
+;   1.596 ;   0.000 ; RR ; CELL ; 3      ; FF_X48_Y42_N19    ; u_rx_uart|deframe_inst|rx_data[6]|q                                                                     ;
+;   1.960 ;   0.364 ; RR ; IC   ; 1      ; M9K_X51_Y42_N0    ; u_rx_fifo|fifo_rtl_0|auto_generated|ram_block1a0|portadatain[6]                                         ;
+;   1.996 ;   0.036 ; RR ; CELL ; 0      ; M9K_X51_Y42_N0    ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0 ;
++---------+---------+----+------+--------+-------------------+---------------------------------------------------------------------------------------------------------+
+
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Data Required Path                                                                                                                                                    ;
++---------+----------+----+------+--------+-------------------+---------------------------------------------------------------------------------------------------------+
+; Total   ; Incr     ; RF ; Type ; Fanout ; Location          ; Element                                                                                                 ;
++---------+----------+----+------+--------+-------------------+---------------------------------------------------------------------------------------------------------+
+; 0.000   ; 0.000    ;    ;      ;        ;                   ; latch edge time                                                                                         ;
+; 1.722   ; 1.722    ;    ;      ;        ;                   ; clock path                                                                                              ;
+;   0.000 ;   0.000  ;    ;      ;        ;                   ; source latency                                                                                          ;
+;   0.000 ;   0.000  ;    ;      ; 1      ; PIN_Y2            ; clk                                                                                                     ;
+;   0.000 ;   0.000  ; RR ; IC   ; 1      ; IOIBUF_X0_Y36_N15 ; clk~input|i                                                                                             ;
+;   0.273 ;   0.273  ; RR ; CELL ; 1      ; IOIBUF_X0_Y36_N15 ; clk~input|o                                                                                             ;
+;   0.372 ;   0.099  ; RR ; IC   ; 1      ; CLKCTRL_G4        ; clk~inputclkctrl|inclk[0]                                                                               ;
+;   0.372 ;   0.000  ; RR ; CELL ; 170    ; CLKCTRL_G4        ; clk~inputclkctrl|outclk                                                                                 ;
+;   1.262 ;   0.890  ; RR ; IC   ; 4      ; M9K_X51_Y42_N0    ; u_rx_fifo|fifo_rtl_0|auto_generated|ram_block1a0|clk0                                                   ;
+;   1.742 ;   0.480  ; RR ; CELL ; 0      ; M9K_X51_Y42_N0    ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0 ;
+;   1.722 ;   -0.020 ;    ;      ;        ;                   ; clock pessimism removed                                                                                 ;
+; 1.722   ; 0.000    ;    ;      ;        ;                   ; clock uncertainty                                                                                       ;
+; 1.826   ; 0.104    ;    ; uTh  ; 0      ; M9K_X51_Y42_N0    ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0 ;
++---------+----------+----+------+--------+-------------------+---------------------------------------------------------------------------------------------------------+
+
+----------------------------
+; Extra Fitter Information ;
+----------------------------
+HTML report is unavailable in plain text report export.
+
+

@@ -23,7 +23,7 @@
     {},
     {
       "name": "state (FSM)",
-      "wave": "3.45................6.3.",
+      "wave": "3.4.5...............6.3.",
       "data": [
         "IDLE",
         "CENTER",
@@ -74,6 +74,6 @@
     "text": "UART RX Timing Diagram (Frame: 8-N-1, Data = 0xA5)"
   },
   "config": {
-    "hscale": 2
+    "hscale": 1
   }
 }

@@ -1,3 +1,7 @@
+> **Ba chế độ demo:** `run_shell_demo.sh`, `run_irq_demo.sh`, `run_scope_demo.sh`. Xem [hướng dẫn đo sóng TX và chọn demo](doc/HUONG_DAN_OSCILLOSCOPE_TX_DEMO.md).
+
+> **Cập nhật IRQ 17/10/2026:** Project mới là `fpga/NIOS.qpf` (Nios V/m). Xem [hướng dẫn IRQ và demo](doc/HUONG_DAN_NIOSV_IRQ_DEMO.md). Nội dung V/c bên dưới là kiến trúc cũ; V/c Standard đang cài không có cổng IRQ. Đã build và nạp `.sof` IRQ bằng license IP-NIOSVM; xem [báo cáo chạy kit](doc/BAO_CAO_NAP_LICENSE_VA_CHAY_KIT_2026-10-17.md).
+
 # Sổ Tay Vận Hành & Kiến Trúc Hệ Thống Nios V (RISC-V) Trên FPGA DE2-115
 
 Tài liệu này cung cấp cái nhìn tổng quan toàn diện nhất về kiến trúc hệ thống vi xử lý **Nios V/c (RISC-V)** được xây dựng trên kit **Terasic DE2-115 (Altera Cyclone IV EP4CE115)** cùng quy trình vận hành, chỉnh sửa phần mềm và theo dõi kết quả.

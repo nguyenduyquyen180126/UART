@@ -1,0 +1,485 @@
+Info: *******************************************************************
+Info: Running Quartus Prime Shell
+    Info: Version 24.1std.0 Build 1077 03/04/2025 SC Lite Edition
+    Info: Copyright (C) 2025  Altera Corporation. All rights reserved.
+    Info: Your use of Altera Corporation's design tools, logic functions 
+    Info: and other software and tools, and any partner logic 
+    Info: functions, and any output files from any of the foregoing 
+    Info: (including device programming or simulation files), and any 
+    Info: associated documentation or information are expressly subject 
+    Info: to the terms and conditions of the Altera Program License 
+    Info: Subscription Agreement, the Altera Quartus Prime License Agreement,
+    Info: the Altera IP License Agreement, or other applicable license
+    Info: agreement, including, without limitation, that your use is for
+    Info: the sole purpose of programming logic devices manufactured by
+    Info: Altera and sold by Altera or its authorized distributors.  Please
+    Info: refer to the Altera Software License Subscription Agreements 
+    Info: on the Quartus Prime software download page.
+    Info: Processing started: Sat Oct 17 13:50:54 2026
+Info: Command: quartus_sh --flow compile uart_metrics
+Info: Quartus(args): compile uart_metrics
+Info: Project Name = /home/vietanh/Downloads/code/UART/UART/build/uart_metrics/uart_metrics
+Info: Revision Name = uart_metrics
+Info: *******************************************************************
+Info: Running Quartus Prime Analysis & Synthesis
+    Info: Version 24.1std.0 Build 1077 03/04/2025 SC Lite Edition
+    Info: Processing started: Sat Oct 17 13:50:55 2026
+Info: Command: quartus_map --read_settings_files=on --write_settings_files=off uart_metrics -c uart_metrics
+Warning (18236): Number of processors has not been specified which may cause overloading on shared machines.  Set the global assignment NUM_PARALLEL_PROCESSORS in your QSF to an appropriate value for best performance.
+Info (20030): Parallel compilation is enabled and will use 8 of the 8 processors detected
+Info (12021): Found 1 design units, including 1 entities, in source file /home/vietanh/Downloads/code/UART/UART/rtl/apb_slave.v
+    Info (12023): Found entity 1: apb_slave File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_slave.v Line: 1
+Info (12021): Found 1 design units, including 1 entities, in source file /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v
+    Info (12023): Found entity 1: apb_uart File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 1
+Info (12021): Found 1 design units, including 1 entities, in source file /home/vietanh/Downloads/code/UART/UART/rtl/bit_cnt.v
+    Info (12023): Found entity 1: bit_cnt File: /home/vietanh/Downloads/code/UART/UART/rtl/bit_cnt.v Line: 1
+Info (12021): Found 1 design units, including 1 entities, in source file /home/vietanh/Downloads/code/UART/UART/rtl/data_b_num.v
+    Info (12023): Found entity 1: data_b_num File: /home/vietanh/Downloads/code/UART/UART/rtl/data_b_num.v Line: 1
+Info (12021): Found 1 design units, including 1 entities, in source file /home/vietanh/Downloads/code/UART/UART/rtl/deframe.v
+    Info (12023): Found entity 1: deframe File: /home/vietanh/Downloads/code/UART/UART/rtl/deframe.v Line: 1
+Info (12021): Found 1 design units, including 1 entities, in source file /home/vietanh/Downloads/code/UART/UART/rtl/error_check.v
+    Info (12023): Found entity 1: error_check File: /home/vietanh/Downloads/code/UART/UART/rtl/error_check.v Line: 1
+Info (12021): Found 1 design units, including 1 entities, in source file /home/vietanh/Downloads/code/UART/UART/rtl/rx_baud_gen.v
+    Info (12023): Found entity 1: rx_baud_gen File: /home/vietanh/Downloads/code/UART/UART/rtl/rx_baud_gen.v Line: 1
+Info (12021): Found 1 design units, including 1 entities, in source file /home/vietanh/Downloads/code/UART/UART/rtl/rx_controller.v
+    Info (12023): Found entity 1: rx_controller File: /home/vietanh/Downloads/code/UART/UART/rtl/rx_controller.v Line: 1
+Info (12021): Found 1 design units, including 1 entities, in source file /home/vietanh/Downloads/code/UART/UART/rtl/rx_uart.v
+    Info (12023): Found entity 1: rx_uart File: /home/vietanh/Downloads/code/UART/UART/rtl/rx_uart.v Line: 1
+Info (12021): Found 1 design units, including 1 entities, in source file /home/vietanh/Downloads/code/UART/UART/rtl/sipo.v
+    Info (12023): Found entity 1: sipo File: /home/vietanh/Downloads/code/UART/UART/rtl/sipo.v Line: 1
+Info (12021): Found 1 design units, including 1 entities, in source file /home/vietanh/Downloads/code/UART/UART/rtl/stop_b_num.v
+    Info (12023): Found entity 1: stop_b_num File: /home/vietanh/Downloads/code/UART/UART/rtl/stop_b_num.v Line: 1
+Info (12021): Found 1 design units, including 1 entities, in source file /home/vietanh/Downloads/code/UART/UART/rtl/sync_fifo.v
+    Info (12023): Found entity 1: sync_fifo File: /home/vietanh/Downloads/code/UART/UART/rtl/sync_fifo.v Line: 3
+Info (12021): Found 1 design units, including 1 entities, in source file /home/vietanh/Downloads/code/UART/UART/rtl/tick_cnt.v
+    Info (12023): Found entity 1: tick_cnt File: /home/vietanh/Downloads/code/UART/UART/rtl/tick_cnt.v Line: 1
+Info (12021): Found 1 design units, including 1 entities, in source file /home/vietanh/Downloads/code/UART/UART/rtl/tx_baud_gen.v
+    Info (12023): Found entity 1: tx_baud_gen File: /home/vietanh/Downloads/code/UART/UART/rtl/tx_baud_gen.v Line: 1
+Info (12021): Found 1 design units, including 1 entities, in source file /home/vietanh/Downloads/code/UART/UART/rtl/tx_bit_cnt.v
+    Info (12023): Found entity 1: tx_bit_cnt File: /home/vietanh/Downloads/code/UART/UART/rtl/tx_bit_cnt.v Line: 1
+Info (12021): Found 1 design units, including 1 entities, in source file /home/vietanh/Downloads/code/UART/UART/rtl/tx_controller.v
+    Info (12023): Found entity 1: tx_controller File: /home/vietanh/Downloads/code/UART/UART/rtl/tx_controller.v Line: 1
+Info (12021): Found 1 design units, including 1 entities, in source file /home/vietanh/Downloads/code/UART/UART/rtl/tx_parity.v
+    Info (12023): Found entity 1: parity File: /home/vietanh/Downloads/code/UART/UART/rtl/tx_parity.v Line: 1
+Info (12021): Found 1 design units, including 1 entities, in source file /home/vietanh/Downloads/code/UART/UART/rtl/tx_piso.v
+    Info (12023): Found entity 1: piso File: /home/vietanh/Downloads/code/UART/UART/rtl/tx_piso.v Line: 1
+Info (12021): Found 1 design units, including 1 entities, in source file /home/vietanh/Downloads/code/UART/UART/rtl/tx_stop_cnt.v
+    Info (12023): Found entity 1: tx_stop_cnt File: /home/vietanh/Downloads/code/UART/UART/rtl/tx_stop_cnt.v Line: 1
+Info (12021): Found 1 design units, including 1 entities, in source file /home/vietanh/Downloads/code/UART/UART/rtl/tx_tick_cnt.v
+    Info (12023): Found entity 1: tx_tick_cnt File: /home/vietanh/Downloads/code/UART/UART/rtl/tx_tick_cnt.v Line: 1
+Info (12021): Found 1 design units, including 1 entities, in source file /home/vietanh/Downloads/code/UART/UART/rtl/tx_uart.v
+    Info (12023): Found entity 1: tx_uart File: /home/vietanh/Downloads/code/UART/UART/rtl/tx_uart.v Line: 1
+Info (12021): Found 1 design units, including 1 entities, in source file /home/vietanh/Downloads/code/UART/UART/rtl/uart_regs.v
+    Info (12023): Found entity 1: uart_regs File: /home/vietanh/Downloads/code/UART/UART/rtl/uart_regs.v Line: 1
+Info (12127): Elaborating entity "apb_uart" for the top level hierarchy
+Info (12128): Elaborating entity "apb_slave" for hierarchy "apb_slave:u_apb_slave" File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 43
+Info (12128): Elaborating entity "uart_regs" for hierarchy "uart_regs:u_uart_regs" File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 89
+Info (10264): Verilog HDL Case Statement information at uart_regs.v(89): all case item expressions in this case statement are onehot File: /home/vietanh/Downloads/code/UART/UART/rtl/uart_regs.v Line: 89
+Info (12128): Elaborating entity "sync_fifo" for hierarchy "sync_fifo:u_tx_fifo" File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 103
+Info (12128): Elaborating entity "sync_fifo" for hierarchy "sync_fifo:u_rx_fifo" File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 123
+Info (12128): Elaborating entity "tx_uart" for hierarchy "tx_uart:u_tx_uart" File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 139
+Info (12128): Elaborating entity "tx_controller" for hierarchy "tx_uart:u_tx_uart|tx_controller:controller" File: /home/vietanh/Downloads/code/UART/UART/rtl/tx_uart.v Line: 48
+Info (12128): Elaborating entity "tx_baud_gen" for hierarchy "tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen" File: /home/vietanh/Downloads/code/UART/UART/rtl/tx_uart.v Line: 58
+Warning (10230): Verilog HDL assignment warning at tx_baud_gen.v(18): truncated value with size 32 to match size of target (15) File: /home/vietanh/Downloads/code/UART/UART/rtl/tx_baud_gen.v Line: 18
+Warning (10230): Verilog HDL assignment warning at tx_baud_gen.v(19): truncated value with size 32 to match size of target (15) File: /home/vietanh/Downloads/code/UART/UART/rtl/tx_baud_gen.v Line: 19
+Warning (10230): Verilog HDL assignment warning at tx_baud_gen.v(20): truncated value with size 32 to match size of target (15) File: /home/vietanh/Downloads/code/UART/UART/rtl/tx_baud_gen.v Line: 20
+Warning (10230): Verilog HDL assignment warning at tx_baud_gen.v(21): truncated value with size 32 to match size of target (15) File: /home/vietanh/Downloads/code/UART/UART/rtl/tx_baud_gen.v Line: 21
+Warning (10230): Verilog HDL assignment warning at tx_baud_gen.v(22): truncated value with size 32 to match size of target (15) File: /home/vietanh/Downloads/code/UART/UART/rtl/tx_baud_gen.v Line: 22
+Info (12128): Elaborating entity "tx_bit_cnt" for hierarchy "tx_uart:u_tx_uart|tx_bit_cnt:u_bit_cnt" File: /home/vietanh/Downloads/code/UART/UART/rtl/tx_uart.v Line: 66
+Info (12128): Elaborating entity "tx_stop_cnt" for hierarchy "tx_uart:u_tx_uart|tx_stop_cnt:u_stop_cnt" File: /home/vietanh/Downloads/code/UART/UART/rtl/tx_uart.v Line: 87
+Info (12128): Elaborating entity "parity" for hierarchy "tx_uart:u_tx_uart|parity:u_parity" File: /home/vietanh/Downloads/code/UART/UART/rtl/tx_uart.v Line: 107
+Info (12128): Elaborating entity "piso" for hierarchy "tx_uart:u_tx_uart|piso:u_piso" File: /home/vietanh/Downloads/code/UART/UART/rtl/tx_uart.v Line: 123
+Info (12128): Elaborating entity "rx_uart" for hierarchy "rx_uart:u_rx_uart" File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 154
+Info (12128): Elaborating entity "rx_baud_gen" for hierarchy "rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen" File: /home/vietanh/Downloads/code/UART/UART/rtl/rx_uart.v Line: 57
+Warning (10230): Verilog HDL assignment warning at rx_baud_gen.v(18): truncated value with size 32 to match size of target (15) File: /home/vietanh/Downloads/code/UART/UART/rtl/rx_baud_gen.v Line: 18
+Warning (10230): Verilog HDL assignment warning at rx_baud_gen.v(19): truncated value with size 32 to match size of target (15) File: /home/vietanh/Downloads/code/UART/UART/rtl/rx_baud_gen.v Line: 19
+Warning (10230): Verilog HDL assignment warning at rx_baud_gen.v(20): truncated value with size 32 to match size of target (15) File: /home/vietanh/Downloads/code/UART/UART/rtl/rx_baud_gen.v Line: 20
+Warning (10230): Verilog HDL assignment warning at rx_baud_gen.v(21): truncated value with size 32 to match size of target (15) File: /home/vietanh/Downloads/code/UART/UART/rtl/rx_baud_gen.v Line: 21
+Warning (10230): Verilog HDL assignment warning at rx_baud_gen.v(22): truncated value with size 32 to match size of target (15) File: /home/vietanh/Downloads/code/UART/UART/rtl/rx_baud_gen.v Line: 22
+Info (12128): Elaborating entity "rx_controller" for hierarchy "rx_uart:u_rx_uart|rx_controller:rx_controller_inst" File: /home/vietanh/Downloads/code/UART/UART/rtl/rx_uart.v Line: 75
+Info (12128): Elaborating entity "data_b_num" for hierarchy "rx_uart:u_rx_uart|data_b_num:data_b_num_inst" File: /home/vietanh/Downloads/code/UART/UART/rtl/rx_uart.v Line: 79
+Info (12128): Elaborating entity "stop_b_num" for hierarchy "rx_uart:u_rx_uart|stop_b_num:stop_b_num_inst" File: /home/vietanh/Downloads/code/UART/UART/rtl/rx_uart.v Line: 83
+Info (12128): Elaborating entity "bit_cnt" for hierarchy "rx_uart:u_rx_uart|bit_cnt:bit_cnt_inst" File: /home/vietanh/Downloads/code/UART/UART/rtl/rx_uart.v Line: 93
+Info (12128): Elaborating entity "tick_cnt" for hierarchy "rx_uart:u_rx_uart|tick_cnt:tick_cnt_inst" File: /home/vietanh/Downloads/code/UART/UART/rtl/rx_uart.v Line: 100
+Info (12128): Elaborating entity "sipo" for hierarchy "rx_uart:u_rx_uart|sipo:sipo_inst" File: /home/vietanh/Downloads/code/UART/UART/rtl/rx_uart.v Line: 107
+Info (12128): Elaborating entity "deframe" for hierarchy "rx_uart:u_rx_uart|deframe:deframe_inst" File: /home/vietanh/Downloads/code/UART/UART/rtl/rx_uart.v Line: 118
+Info (12128): Elaborating entity "error_check" for hierarchy "rx_uart:u_rx_uart|error_check:error_check_inst" File: /home/vietanh/Downloads/code/UART/UART/rtl/rx_uart.v Line: 125
+Warning (276020): Inferred RAM node "sync_fifo:u_rx_fifo|fifo_rtl_0" from synchronous design logic.  Pass-through logic has been added to match the read-during-write behavior of the original design.
+Warning (276020): Inferred RAM node "sync_fifo:u_tx_fifo|fifo_rtl_0" from synchronous design logic.  Pass-through logic has been added to match the read-during-write behavior of the original design.
+Info (19000): Inferred 2 megafunctions from design logic
+    Info (276029): Inferred altsyncram megafunction from the following design logic: "sync_fifo:u_rx_fifo|fifo_rtl_0" 
+        Info (286033): Parameter OPERATION_MODE set to DUAL_PORT
+        Info (286033): Parameter WIDTH_A set to 9
+        Info (286033): Parameter WIDTHAD_A set to 4
+        Info (286033): Parameter NUMWORDS_A set to 16
+        Info (286033): Parameter WIDTH_B set to 9
+        Info (286033): Parameter WIDTHAD_B set to 4
+        Info (286033): Parameter NUMWORDS_B set to 16
+        Info (286033): Parameter ADDRESS_ACLR_A set to NONE
+        Info (286033): Parameter OUTDATA_REG_B set to UNREGISTERED
+        Info (286033): Parameter ADDRESS_ACLR_B set to NONE
+        Info (286033): Parameter OUTDATA_ACLR_B set to NONE
+        Info (286033): Parameter ADDRESS_REG_B set to CLOCK0
+        Info (286033): Parameter INDATA_ACLR_A set to NONE
+        Info (286033): Parameter WRCONTROL_ACLR_A set to NONE
+    Info (276029): Inferred altsyncram megafunction from the following design logic: "sync_fifo:u_tx_fifo|fifo_rtl_0" 
+        Info (286033): Parameter OPERATION_MODE set to DUAL_PORT
+        Info (286033): Parameter WIDTH_A set to 8
+        Info (286033): Parameter WIDTHAD_A set to 4
+        Info (286033): Parameter NUMWORDS_A set to 16
+        Info (286033): Parameter WIDTH_B set to 8
+        Info (286033): Parameter WIDTHAD_B set to 4
+        Info (286033): Parameter NUMWORDS_B set to 16
+        Info (286033): Parameter ADDRESS_ACLR_A set to NONE
+        Info (286033): Parameter OUTDATA_REG_B set to UNREGISTERED
+        Info (286033): Parameter ADDRESS_ACLR_B set to NONE
+        Info (286033): Parameter OUTDATA_ACLR_B set to NONE
+        Info (286033): Parameter ADDRESS_REG_B set to CLOCK0
+        Info (286033): Parameter INDATA_ACLR_A set to NONE
+        Info (286033): Parameter WRCONTROL_ACLR_A set to NONE
+Info (12130): Elaborated megafunction instantiation "sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0"
+Info (12133): Instantiated megafunction "sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0" with the following parameter:
+    Info (12134): Parameter "OPERATION_MODE" = "DUAL_PORT"
+    Info (12134): Parameter "WIDTH_A" = "9"
+    Info (12134): Parameter "WIDTHAD_A" = "4"
+    Info (12134): Parameter "NUMWORDS_A" = "16"
+    Info (12134): Parameter "WIDTH_B" = "9"
+    Info (12134): Parameter "WIDTHAD_B" = "4"
+    Info (12134): Parameter "NUMWORDS_B" = "16"
+    Info (12134): Parameter "ADDRESS_ACLR_A" = "NONE"
+    Info (12134): Parameter "OUTDATA_REG_B" = "UNREGISTERED"
+    Info (12134): Parameter "ADDRESS_ACLR_B" = "NONE"
+    Info (12134): Parameter "OUTDATA_ACLR_B" = "NONE"
+    Info (12134): Parameter "ADDRESS_REG_B" = "CLOCK0"
+    Info (12134): Parameter "INDATA_ACLR_A" = "NONE"
+    Info (12134): Parameter "WRCONTROL_ACLR_A" = "NONE"
+Info (12021): Found 1 design units, including 1 entities, in source file db/altsyncram_7pd1.tdf
+    Info (12023): Found entity 1: altsyncram_7pd1 File: /home/vietanh/Downloads/code/UART/UART/build/uart_metrics/db/altsyncram_7pd1.tdf Line: 28
+Info (12130): Elaborated megafunction instantiation "sync_fifo:u_tx_fifo|altsyncram:fifo_rtl_0"
+Info (12133): Instantiated megafunction "sync_fifo:u_tx_fifo|altsyncram:fifo_rtl_0" with the following parameter:
+    Info (12134): Parameter "OPERATION_MODE" = "DUAL_PORT"
+    Info (12134): Parameter "WIDTH_A" = "8"
+    Info (12134): Parameter "WIDTHAD_A" = "4"
+    Info (12134): Parameter "NUMWORDS_A" = "16"
+    Info (12134): Parameter "WIDTH_B" = "8"
+    Info (12134): Parameter "WIDTHAD_B" = "4"
+    Info (12134): Parameter "NUMWORDS_B" = "16"
+    Info (12134): Parameter "ADDRESS_ACLR_A" = "NONE"
+    Info (12134): Parameter "OUTDATA_REG_B" = "UNREGISTERED"
+    Info (12134): Parameter "ADDRESS_ACLR_B" = "NONE"
+    Info (12134): Parameter "OUTDATA_ACLR_B" = "NONE"
+    Info (12134): Parameter "ADDRESS_REG_B" = "CLOCK0"
+    Info (12134): Parameter "INDATA_ACLR_A" = "NONE"
+    Info (12134): Parameter "WRCONTROL_ACLR_A" = "NONE"
+Info (12021): Found 1 design units, including 1 entities, in source file db/altsyncram_5pd1.tdf
+    Info (12023): Found entity 1: altsyncram_5pd1 File: /home/vietanh/Downloads/code/UART/UART/build/uart_metrics/db/altsyncram_5pd1.tdf Line: 28
+Info (13000): Registers with preset signals will power-up high File: /home/vietanh/Downloads/code/UART/UART/rtl/rx_uart.v Line: 38
+Info (13003): DEV_CLRn pin will set, and not reset, register with preset signal due to NOT Gate Push-Back
+Warning (13024): Output pins are stuck at VCC or GND
+    Warning (13410): Pin "prdata[9]" is stuck at GND File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 13
+    Warning (13410): Pin "prdata[10]" is stuck at GND File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 13
+    Warning (13410): Pin "prdata[11]" is stuck at GND File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 13
+    Warning (13410): Pin "prdata[12]" is stuck at GND File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 13
+    Warning (13410): Pin "prdata[13]" is stuck at GND File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 13
+    Warning (13410): Pin "prdata[14]" is stuck at GND File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 13
+    Warning (13410): Pin "prdata[15]" is stuck at GND File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 13
+    Warning (13410): Pin "prdata[16]" is stuck at GND File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 13
+    Warning (13410): Pin "prdata[17]" is stuck at GND File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 13
+    Warning (13410): Pin "prdata[18]" is stuck at GND File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 13
+    Warning (13410): Pin "prdata[19]" is stuck at GND File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 13
+    Warning (13410): Pin "prdata[20]" is stuck at GND File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 13
+    Warning (13410): Pin "prdata[21]" is stuck at GND File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 13
+    Warning (13410): Pin "prdata[22]" is stuck at GND File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 13
+    Warning (13410): Pin "prdata[23]" is stuck at GND File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 13
+    Warning (13410): Pin "prdata[24]" is stuck at GND File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 13
+    Warning (13410): Pin "prdata[25]" is stuck at GND File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 13
+    Warning (13410): Pin "prdata[26]" is stuck at GND File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 13
+    Warning (13410): Pin "prdata[27]" is stuck at GND File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 13
+    Warning (13410): Pin "prdata[28]" is stuck at GND File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 13
+    Warning (13410): Pin "prdata[29]" is stuck at GND File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 13
+    Warning (13410): Pin "prdata[30]" is stuck at GND File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 13
+    Warning (13410): Pin "prdata[31]" is stuck at GND File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 13
+Info (286030): Timing-Driven Synthesis is running
+Info (17049): 4 registers lost all their fanouts during netlist optimizations.
+Info (16010): Generating hard_block partition "hard_block:auto_generated_inst"
+    Info (16011): Adding 0 node(s), including 0 DDIO, 0 PLL, 0 transceiver and 0 LCELL
+Info (15717): Design contains 85 virtual pins; timing numbers associated with paths containing virtual pins are estimates
+    Info (15718): Pin "pwdata[8]" is virtual input pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 10
+    Info (15718): Pin "pwdata[9]" is virtual input pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 10
+    Info (15718): Pin "pwdata[10]" is virtual input pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 10
+    Info (15718): Pin "pwdata[11]" is virtual input pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 10
+    Info (15718): Pin "pwdata[12]" is virtual input pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 10
+    Info (15718): Pin "pwdata[13]" is virtual input pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 10
+    Info (15718): Pin "pwdata[14]" is virtual input pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 10
+    Info (15718): Pin "pwdata[15]" is virtual input pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 10
+    Info (15718): Pin "pwdata[16]" is virtual input pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 10
+    Info (15718): Pin "pwdata[17]" is virtual input pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 10
+    Info (15718): Pin "pwdata[18]" is virtual input pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 10
+    Info (15718): Pin "pwdata[19]" is virtual input pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 10
+    Info (15718): Pin "pwdata[20]" is virtual input pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 10
+    Info (15718): Pin "pwdata[21]" is virtual input pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 10
+    Info (15718): Pin "pwdata[22]" is virtual input pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 10
+    Info (15718): Pin "pwdata[23]" is virtual input pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 10
+    Info (15718): Pin "pwdata[24]" is virtual input pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 10
+    Info (15718): Pin "pwdata[25]" is virtual input pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 10
+    Info (15718): Pin "pwdata[26]" is virtual input pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 10
+    Info (15718): Pin "pwdata[27]" is virtual input pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 10
+    Info (15718): Pin "pwdata[28]" is virtual input pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 10
+    Info (15718): Pin "pwdata[29]" is virtual input pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 10
+    Info (15718): Pin "pwdata[30]" is virtual input pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 10
+    Info (15718): Pin "pwdata[31]" is virtual input pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 10
+    Info (15719): Pin "pready" is virtual output pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 11
+    Info (15719): Pin "pslverr" is virtual output pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 12
+    Info (15719): Pin "prdata[0]" is virtual output pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 13
+    Info (15719): Pin "prdata[1]" is virtual output pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 13
+    Info (15719): Pin "prdata[2]" is virtual output pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 13
+    Info (15719): Pin "prdata[3]" is virtual output pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 13
+    Info (15719): Pin "prdata[4]" is virtual output pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 13
+    Info (15719): Pin "prdata[5]" is virtual output pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 13
+    Info (15719): Pin "prdata[6]" is virtual output pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 13
+    Info (15719): Pin "prdata[7]" is virtual output pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 13
+    Info (15719): Pin "prdata[8]" is virtual output pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 13
+    Info (15719): Pin "prdata[9]" is virtual output pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 13
+    Info (15719): Pin "prdata[10]" is virtual output pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 13
+    Info (15719): Pin "prdata[11]" is virtual output pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 13
+    Info (15719): Pin "prdata[12]" is virtual output pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 13
+    Info (15719): Pin "prdata[13]" is virtual output pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 13
+    Info (15719): Pin "prdata[14]" is virtual output pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 13
+    Info (15719): Pin "prdata[15]" is virtual output pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 13
+    Info (15719): Pin "prdata[16]" is virtual output pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 13
+    Info (15719): Pin "prdata[17]" is virtual output pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 13
+    Info (15719): Pin "prdata[18]" is virtual output pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 13
+    Info (15719): Pin "prdata[19]" is virtual output pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 13
+    Info (15719): Pin "prdata[20]" is virtual output pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 13
+    Info (15719): Pin "prdata[21]" is virtual output pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 13
+    Info (15719): Pin "prdata[22]" is virtual output pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 13
+    Info (15719): Pin "prdata[23]" is virtual output pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 13
+    Info (15719): Pin "prdata[24]" is virtual output pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 13
+    Info (15719): Pin "prdata[25]" is virtual output pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 13
+    Info (15719): Pin "prdata[26]" is virtual output pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 13
+    Info (15719): Pin "prdata[27]" is virtual output pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 13
+    Info (15719): Pin "prdata[28]" is virtual output pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 13
+    Info (15719): Pin "prdata[29]" is virtual output pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 13
+    Info (15719): Pin "prdata[30]" is virtual output pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 13
+    Info (15719): Pin "prdata[31]" is virtual output pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 13
+    Info (15719): Pin "tx" is virtual output pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 15
+    Info (15719): Pin "irq" is virtual output pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 18
+    Info (15718): Pin "psel" is virtual input pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 6
+    Info (15718): Pin "penable" is virtual input pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 7
+    Info (15718): Pin "pwrite" is virtual input pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 8
+    Info (15718): Pin "paddr[0]" is virtual input pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 9
+    Info (15718): Pin "paddr[1]" is virtual input pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 9
+    Info (15718): Pin "paddr[5]" is virtual input pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 9
+    Info (15718): Pin "paddr[6]" is virtual input pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 9
+    Info (15718): Pin "paddr[7]" is virtual input pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 9
+    Info (15718): Pin "paddr[8]" is virtual input pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 9
+    Info (15718): Pin "paddr[9]" is virtual input pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 9
+    Info (15718): Pin "paddr[10]" is virtual input pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 9
+    Info (15718): Pin "paddr[11]" is virtual input pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 9
+    Info (15718): Pin "paddr[2]" is virtual input pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 9
+    Info (15718): Pin "paddr[3]" is virtual input pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 9
+    Info (15718): Pin "paddr[4]" is virtual input pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 9
+    Info (15718): Pin "rst_n" is virtual input pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 5
+    Info (15718): Pin "pwdata[0]" is virtual input pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 10
+    Info (15718): Pin "pwdata[1]" is virtual input pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 10
+    Info (15718): Pin "pwdata[2]" is virtual input pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 10
+    Info (15718): Pin "pwdata[3]" is virtual input pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 10
+    Info (15718): Pin "pwdata[4]" is virtual input pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 10
+    Info (15718): Pin "pwdata[5]" is virtual input pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 10
+    Info (15718): Pin "pwdata[6]" is virtual input pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 10
+    Info (15718): Pin "pwdata[7]" is virtual input pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 10
+    Info (15718): Pin "rx" is virtual input pin File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 16
+Info (21057): Implemented 511 device resources after synthesis - the final resource count might be different
+    Info (21058): Implemented 1 input pins
+    Info (21059): Implemented 0 output pins
+    Info (21061): Implemented 493 logic cells
+    Info (21064): Implemented 17 RAM segments
+Info: Quartus Prime Analysis & Synthesis was successful. 0 errors, 37 warnings
+    Info: Peak virtual memory: 480 megabytes
+    Info: Processing ended: Sat Oct 17 13:51:03 2026
+    Info: Elapsed time: 00:00:08
+    Info: Total CPU time (on all processors): 00:00:21
+Info: *******************************************************************
+Info: Running Quartus Prime Fitter
+    Info: Version 24.1std.0 Build 1077 03/04/2025 SC Lite Edition
+    Info: Processing started: Sat Oct 17 13:51:04 2026
+Info: Command: quartus_fit --read_settings_files=off --write_settings_files=off uart_metrics -c uart_metrics
+Info: qfit2_default_script.tcl version: #1
+Info: Project  = uart_metrics
+Info: Revision = uart_metrics
+Warning (18236): Number of processors has not been specified which may cause overloading on shared machines.  Set the global assignment NUM_PARALLEL_PROCESSORS in your QSF to an appropriate value for best performance.
+Info (20030): Parallel compilation is enabled and will use 8 of the 8 processors detected
+Info (119006): Selected device EP4CE115F29C7 for design "uart_metrics"
+Info (21077): Low junction temperature is 0 degrees C
+Info (21077): High junction temperature is 85 degrees C
+Info (171003): Fitter is performing an Auto Fit compilation, which may decrease Fitter effort to reduce compilation time
+Warning (292013): Feature LogicLock is only available with a valid subscription license. You can purchase a software subscription to gain full access to this feature.
+Info (176444): Device migration not selected. If you intend to use device migration later, you may need to change the pin assignments as they may be incompatible with other devices
+    Info (176445): Device EP4CE40F29C7 is compatible
+    Info (176445): Device EP4CE40F29I7 is compatible
+    Info (176445): Device EP4CE30F29C7 is compatible
+    Info (176445): Device EP4CE30F29I7 is compatible
+    Info (176445): Device EP4CE55F29C7 is compatible
+    Info (176445): Device EP4CE55F29I7 is compatible
+    Info (176445): Device EP4CE75F29C7 is compatible
+    Info (176445): Device EP4CE75F29I7 is compatible
+    Info (176445): Device EP4CE115F29I7 is compatible
+Info (169124): Fitter converted 5 user pins into dedicated programming pins
+    Info (169125): Pin ~ALTERA_ASDO_DATA1~ is reserved at location F4
+    Info (169125): Pin ~ALTERA_FLASH_nCE_nCSO~ is reserved at location E2
+    Info (169125): Pin ~ALTERA_DCLK~ is reserved at location P3
+    Info (169125): Pin ~ALTERA_DATA0~ is reserved at location N7
+    Info (169125): Pin ~ALTERA_nCEO~ is reserved at location P28
+Info (176045): Design uses memory blocks. Violating setup or hold times of memory block address registers for either read or write operations could cause memory contents to be corrupted. Make sure that all memory block address registers meet the setup and hold time requirements.
+Info (332104): Reading SDC File: '../../scripts/uart_metrics/uart_metrics.sdc'
+Info (332151): Clock uncertainty is not calculated until you update the timing netlist.
+Info (332154): The derive_clock_uncertainty command did not apply clock uncertainty to any clock-to-clock transfers.
+Info (332129): Detected timing requirements -- optimizing circuit to achieve only the specified requirements
+Info (332111): Found 1 clocks
+    Info (332111):   Period   Clock Name
+    Info (332111): ======== ============
+    Info (332111):   20.000          clk
+Info (176353): Automatically promoted node clk~input (placed in PIN Y2 (CLK2, DIFFCLK_1p)) File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 4
+    Info (176355): Automatically promoted destinations to use location or clock signal Global Clock CLKCTRL_G4
+Info (176353): Automatically promoted node rst_n  File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 5
+    Info (176355): Automatically promoted destinations to use location or clock signal Global Clock
+Info (176233): Starting register packing
+Info (176235): Finished register packing
+    Extra Info (176219): No registers were packed into other blocks
+Info (171121): Fitter preparation operations ending: elapsed time is 00:00:01
+Info (14896): Fitter has disabled Advanced Physical Optimization because it is not supported for the current family.
+Info (170189): Fitter placement preparation operations beginning
+Info (170190): Fitter placement preparation operations ending: elapsed time is 00:00:00
+Info (170191): Fitter placement operations beginning
+Info (170137): Fitter placement was successful
+Info (170192): Fitter placement operations ending: elapsed time is 00:00:01
+Info (170193): Fitter routing operations beginning
+Info (170195): Router estimated average interconnect usage is 0% of the available device resources
+    Info (170196): Router estimated peak interconnect usage is 3% of the available device resources in the region that extends from location X46_Y37 to location X57_Y48
+Info (170199): The Fitter performed an Auto Fit compilation.  Optimizations were skipped to reduce compilation time.
+    Info (170201): Optimizations that may affect the design's routability were skipped
+    Info (170200): Optimizations that may affect the design's timing were skipped
+Info (170194): Fitter routing operations ending: elapsed time is 00:00:00
+Info (11888): Total time spent on timing analysis during the Fitter is 0.14 seconds.
+Info (334003): Started post-fitting delay annotation
+Info (334004): Delay annotation completed successfully
+Info (334003): Started post-fitting delay annotation
+Info (334004): Delay annotation completed successfully
+Info (11218): Fitter post-fit operations ending: elapsed time is 00:00:01
+Warning (169177): 1 pins must meet Intel FPGA requirements for 3.3-, 3.0-, and 2.5-V interfaces. For more information, refer to AN 447: Interfacing Cyclone IV E Devices with 3.3/3.0/2.5-V LVTTL/LVCMOS I/O Systems.
+    Info (169178): Pin clk uses I/O standard 3.3-V LVTTL at Y2 File: /home/vietanh/Downloads/code/UART/UART/rtl/apb_uart.v Line: 4
+Info (144001): Generated suppressed messages file /home/vietanh/Downloads/code/UART/UART/build/uart_metrics/output_files/uart_metrics.fit.smsg
+Info: Quartus Prime Fitter was successful. 0 errors, 3 warnings
+    Info: Peak virtual memory: 1446 megabytes
+    Info: Processing ended: Sat Oct 17 13:51:12 2026
+    Info: Elapsed time: 00:00:08
+    Info: Total CPU time (on all processors): 00:00:14
+Info: *******************************************************************
+Info: Running Quartus Prime Assembler
+    Info: Version 24.1std.0 Build 1077 03/04/2025 SC Lite Edition
+    Info: Processing started: Sat Oct 17 13:51:13 2026
+Info: Command: quartus_asm --read_settings_files=off --write_settings_files=off uart_metrics -c uart_metrics
+Warning (18236): Number of processors has not been specified which may cause overloading on shared machines.  Set the global assignment NUM_PARALLEL_PROCESSORS in your QSF to an appropriate value for best performance.
+Info (115031): Writing out detailed assembly data for power analysis
+Info (115030): Assembler is generating device programming files
+Info: Quartus Prime Assembler was successful. 0 errors, 1 warning
+    Info: Peak virtual memory: 363 megabytes
+    Info: Processing ended: Sat Oct 17 13:51:16 2026
+    Info: Elapsed time: 00:00:03
+    Info: Total CPU time (on all processors): 00:00:03
+Info (293026): Skipped module Power Analyzer due to the assignment FLOW_ENABLE_POWER_ANALYZER
+Info: *******************************************************************
+Info: Running Quartus Prime Timing Analyzer
+    Info: Version 24.1std.0 Build 1077 03/04/2025 SC Lite Edition
+    Info: Processing started: Sat Oct 17 13:51:17 2026
+Info: Command: quartus_sta uart_metrics -c uart_metrics
+Info: qsta_default_script.tcl version: #1
+Warning (18236): Number of processors has not been specified which may cause overloading on shared machines.  Set the global assignment NUM_PARALLEL_PROCESSORS in your QSF to an appropriate value for best performance.
+Info (20030): Parallel compilation is enabled and will use 8 of the 8 processors detected
+Info (21077): Low junction temperature is 0 degrees C
+Info (21077): High junction temperature is 85 degrees C
+Info (332104): Reading SDC File: '../../scripts/uart_metrics/uart_metrics.sdc'
+Info (332151): Clock uncertainty is not calculated until you update the timing netlist.
+Info (332123): Deriving Clock Uncertainty. Please refer to report_sdc in the Timing Analyzer to see clock uncertainties.
+Info: Found TIMING_ANALYZER_REPORT_SCRIPT_INCLUDE_DEFAULT_ANALYSIS = ON
+Info: Analyzing Slow 1200mV 85C Model
+Info (332146): Worst-case setup slack is 7.104
+    Info (332119):     Slack       End Point TNS Clock 
+    Info (332119): ========= =================== =====================
+    Info (332119):     7.104               0.000 clk 
+Info (332146): Worst-case hold slack is 0.342
+    Info (332119):     Slack       End Point TNS Clock 
+    Info (332119): ========= =================== =====================
+    Info (332119):     0.342               0.000 clk 
+Info (332140): No Recovery paths to report
+Info (332140): No Removal paths to report
+Info (332146): Worst-case minimum pulse width slack is 9.553
+    Info (332119):     Slack       End Point TNS Clock 
+    Info (332119): ========= =================== =====================
+    Info (332119):     9.553               0.000 clk 
+Info (332114): Report Metastability: Found 1 synchronizer chains.
+    Info (332114): The design MTBF is not calculated because there are no specified synchronizers in the design.
+    Info (332114): Number of Synchronizer Chains Found: 1
+    Info (332114): Shortest Synchronizer Chain: 2 Registers
+    Info (332114): Fraction of Chains for which MTBFs Could Not be Calculated: 1.000
+    Info (332114): Worst Case Available Settling Time: 33.750 ns
+Info: Analyzing Slow 1200mV 0C Model
+Info (334003): Started post-fitting delay annotation
+Info (334004): Delay annotation completed successfully
+Info (332123): Deriving Clock Uncertainty. Please refer to report_sdc in the Timing Analyzer to see clock uncertainties.
+Info (332146): Worst-case setup slack is 7.997
+    Info (332119):     Slack       End Point TNS Clock 
+    Info (332119): ========= =================== =====================
+    Info (332119):     7.997               0.000 clk 
+Info (332146): Worst-case hold slack is 0.341
+    Info (332119):     Slack       End Point TNS Clock 
+    Info (332119): ========= =================== =====================
+    Info (332119):     0.341               0.000 clk 
+Info (332140): No Recovery paths to report
+Info (332140): No Removal paths to report
+Info (332146): Worst-case minimum pulse width slack is 9.558
+    Info (332119):     Slack       End Point TNS Clock 
+    Info (332119): ========= =================== =====================
+    Info (332119):     9.558               0.000 clk 
+Info (332114): Report Metastability: Found 1 synchronizer chains.
+    Info (332114): The design MTBF is not calculated because there are no specified synchronizers in the design.
+    Info (332114): Number of Synchronizer Chains Found: 1
+    Info (332114): Shortest Synchronizer Chain: 2 Registers
+    Info (332114): Fraction of Chains for which MTBFs Could Not be Calculated: 1.000
+    Info (332114): Worst Case Available Settling Time: 34.242 ns
+Info: Analyzing Fast 1200mV 0C Model
+Info (332123): Deriving Clock Uncertainty. Please refer to report_sdc in the Timing Analyzer to see clock uncertainties.
+Info (332146): Worst-case setup slack is 11.898
+    Info (332119):     Slack       End Point TNS Clock 
+    Info (332119): ========= =================== =====================
+    Info (332119):    11.898               0.000 clk 
+Info (332146): Worst-case hold slack is 0.139
+    Info (332119):     Slack       End Point TNS Clock 
+    Info (332119): ========= =================== =====================
+    Info (332119):     0.139               0.000 clk 
+Info (332140): No Recovery paths to report
+Info (332140): No Removal paths to report
+Info (332146): Worst-case minimum pulse width slack is 9.200
+    Info (332119):     Slack       End Point TNS Clock 
+    Info (332119): ========= =================== =====================
+    Info (332119):     9.200               0.000 clk 
+Info (332114): Report Metastability: Found 1 synchronizer chains.
+    Info (332114): The design MTBF is not calculated because there are no specified synchronizers in the design.
+    Info (332114): Number of Synchronizer Chains Found: 1
+    Info (332114): Shortest Synchronizer Chain: 2 Registers
+    Info (332114): Fraction of Chains for which MTBFs Could Not be Calculated: 1.000
+    Info (332114): Worst Case Available Settling Time: 36.863 ns
+Info (332101): Design is fully constrained for setup requirements
+Info (332101): Design is fully constrained for hold requirements
+Info: Quartus Prime Timing Analyzer was successful. 0 errors, 1 warning
+    Info: Peak virtual memory: 619 megabytes
+    Info: Processing ended: Sat Oct 17 13:51:19 2026
+    Info: Elapsed time: 00:00:02
+    Info: Total CPU time (on all processors): 00:00:02
+Info (293000): Quartus Prime Full Compilation was successful. 0 errors, 42 warnings
+Info (23030): Evaluation of Tcl script /home/vietanh/altera_lite/24.1std/quartus/common/tcl/internal/qsh_flow.tcl was successful
+Info: Quartus Prime Shell was successful. 0 errors, 42 warnings
+    Info: Peak virtual memory: 471 megabytes
+    Info: Processing ended: Sat Oct 17 13:51:20 2026
+    Info: Elapsed time: 00:00:26
+    Info: Total CPU time (on all processors): 00:00:43

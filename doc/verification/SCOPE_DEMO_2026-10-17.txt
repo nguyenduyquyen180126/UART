@@ -1,0 +1,145 @@
+Scope demo verification - 2026-10-17
+No board programmed; no physical oscilloscope measurement in this change.
+
+FILE: build/logs/scope-tests.log
+cc -std=c11 -Wall -Wextra -Werror -I tb/host_uart_irq -I software tb/test_scope_demo.c -o /tmp/uart_scope_demo_test
+/tmp/uart_scope_demo_test
+PASS scope firmware: only A, TX queue retry, RX discard, >=5ms delay after TX completion across 4 cycles
+mkdir -p build
+iverilog -g2012 -s tb_scope_demo -o /tmp/uart_scope_waveform tb/tb_scope_demo.v rtl/*.v
+vvp /tmp/uart_scope_waveform
+VCD info: dumpfile build/scope_demo_tx.vcd opened for output.
+PASS scope RTL: 4 x 0x41, 9600 8N1, bit=104160 ns, frame=1041600 ns, idle>=5ms
+tb/tb_scope_demo.v:60: $finish called at 24167080000 (1ps)
+
+
+FILE: build/logs/scope-regression.log
+cc -std=c11 -Wall -Wextra -Werror -I tb/host_uart_irq -I software software/uart_config.c tb/test_runtime_config.c -o /tmp/uart_runtime_config_test
+/tmp/uart_runtime_config_test
+PASS real shell: T1/T2 dispatch, CRLF, old-profile ACK, TX drain, RX quiet, apply, timeout and validation
+cc -std=c11 -Wall -Wextra -Werror -I software software/uart_config.c tb/test_uart_config.c -o /tmp/uart_config_test
+/tmp/uart_config_test
+PASS: all 96 UART formats, baud preserves frame, query, strict rejection of invalid commands
+cc -std=c11 -Wall -Wextra -Werror -I tb/host_uart_irq -I software software/uart_irq.c tb/test_uart_irq.c -o /tmp/uart_irq_driver_test
+/tmp/uart_irq_driver_test
+PASS: real ISR registration, RX only in ISR, byte/error order, TX bursts, idle IRQ masking, ring overflow
+cc -std=c11 -Wall -Wextra -Werror -I software tb/test_demo_clock.c -o /tmp/uart_demo_clock_test
+/tmp/uart_demo_clock_test
+PASS: 37.45s pauses across RX/echo then resumes at 38s; inclusive 60 rolls over to 00
+
+
+FILE: build/logs/scope-launcher-tests.log
+PASS launchers: separate shell/scope images, optional build, reject invalid options; no hardware invoked
+
+
+FILE: build/logs/scope-vcd-check.log
+PASS actual VCD edges: A waveform has exact 104.160us bits and >=5ms idle gap; four frames, no extra TX frames
+RTL start periods (us): [6041.7, 6041.7, 6041.7]
+
+
+FILE: build/logs/scope-licensed-asm.log
+Info: *******************************************************************
+Info: Running Quartus Prime Assembler
+    Info: Version 24.1std.0 Build 1077 03/04/2025 SC Lite Edition
+    Info: Copyright (C) 2025  Altera Corporation. All rights reserved.
+    Info: Your use of Altera Corporation's design tools, logic functions 
+    Info: and other software and tools, and any partner logic 
+    Info: functions, and any output files from any of the foregoing 
+    Info: (including device programming or simulation files), and any 
+    Info: associated documentation or information are expressly subject 
+    Info: to the terms and conditions of the Altera Program License 
+    Info: Subscription Agreement, the Altera Quartus Prime License Agreement,
+    Info: the Altera IP License Agreement, or other applicable license
+    Info: agreement, including, without limitation, that your use is for
+    Info: the sole purpose of programming logic devices manufactured by
+    Info: Altera and sold by Altera or its authorized distributors.  Please
+    Info: refer to the Altera Software License Subscription Agreements 
+    Info: on the Quartus Prime software download page.
+    Info: Processing started: Sat Oct 17 14:45:58 2026
+Info: Command: quartus_asm NIOS
+Info (115031): Writing out detailed assembly data for power analysis
+Info (115030): Assembler is generating device programming files
+Info: Quartus Prime Assembler was successful. 0 errors, 0 warnings
+    Info: Peak virtual memory: 383 megabytes
+    Info: Processing ended: Sat Oct 17 14:46:06 2026
+    Info: Elapsed time: 00:00:08
+    Info: Total CPU time (on all processors): 00:00:08
+
+
+FILE: build/logs/asm-scope.log
+Info: *******************************************************************
+Info: Running Quartus Prime Assembler
+    Info: Version 24.1std.0 Build 1077 03/04/2025 SC Lite Edition
+    Info: Copyright (C) 2025  Altera Corporation. All rights reserved.
+    Info: Your use of Altera Corporation's design tools, logic functions 
+    Info: and other software and tools, and any partner logic 
+    Info: functions, and any output files from any of the foregoing 
+    Info: (including device programming or simulation files), and any 
+    Info: associated documentation or information are expressly subject 
+    Info: to the terms and conditions of the Altera Program License 
+    Info: Subscription Agreement, the Altera Quartus Prime License Agreement,
+    Info: the Altera IP License Agreement, or other applicable license
+    Info: agreement, including, without limitation, that your use is for
+    Info: the sole purpose of programming logic devices manufactured by
+    Info: Altera and sold by Altera or its authorized distributors.  Please
+    Info: refer to the Altera Software License Subscription Agreements 
+    Info: on the Quartus Prime software download page.
+    Info: Processing started: Sat Oct 17 14:46:22 2026
+Info: Command: quartus_asm NIOS
+Info (115031): Writing out detailed assembly data for power analysis
+Info (115030): Assembler is generating device programming files
+Info: Quartus Prime Assembler was successful. 0 errors, 0 warnings
+    Info: Peak virtual memory: 383 megabytes
+    Info: Processing ended: Sat Oct 17 14:46:30 2026
+    Info: Elapsed time: 00:00:08
+    Info: Total CPU time (on all processors): 00:00:09
+
+
+FILE: build/logs/asm-shell.log
+Info: *******************************************************************
+Info: Running Quartus Prime Assembler
+    Info: Version 24.1std.0 Build 1077 03/04/2025 SC Lite Edition
+    Info: Copyright (C) 2025  Altera Corporation. All rights reserved.
+    Info: Your use of Altera Corporation's design tools, logic functions 
+    Info: and other software and tools, and any partner logic 
+    Info: functions, and any output files from any of the foregoing 
+    Info: (including device programming or simulation files), and any 
+    Info: associated documentation or information are expressly subject 
+    Info: to the terms and conditions of the Altera Program License 
+    Info: Subscription Agreement, the Altera Quartus Prime License Agreement,
+    Info: the Altera IP License Agreement, or other applicable license
+    Info: agreement, including, without limitation, that your use is for
+    Info: the sole purpose of programming logic devices manufactured by
+    Info: Altera and sold by Altera or its authorized distributors.  Please
+    Info: refer to the Altera Software License Subscription Agreements 
+    Info: on the Quartus Prime software download page.
+    Info: Processing started: Sat Oct 17 14:46:34 2026
+Info: Command: quartus_asm NIOS
+Info (115031): Writing out detailed assembly data for power analysis
+Info (115030): Assembler is generating device programming files
+Info: Quartus Prime Assembler was successful. 0 errors, 0 warnings
+    Info: Peak virtual memory: 383 megabytes
+    Info: Processing ended: Sat Oct 17 14:46:42 2026
+    Info: Elapsed time: 00:00:08
+    Info: Total CPU time (on all processors): 00:00:09
+
+
+PRESERVED SOURCE HASHES (checked successfully against initial task snapshot)
+209a17d00685f3801231da3338da543af787b01833bec47e1ab6524ad004859b  main.c
+b5f3959907564102c0cb9d3155488e0685fdae5eb0b4900da0bd8723faf238e6  software/irq_demo.c
+a0c4108761e03340b4507c7b41e2d1134ff2ea39c0660fe30555a2f81a4fbe91  software/uart_irq.c
+0aa33b421e303eb57c824cb2ada0f8fe3974425ac6d963f1fb2a1db9aa12dff9  fpga/NIOS.v
+65683459b60354bce4aada986cd3d914e6b51b8526de27adc044a6f67d4eea73  fpga/NIOS.qsf
+81b388fcc08cfddc1cc2321857d24ddb1646c5704e62fc8ccab0e324ddac8bfa  fpga/system.qsys
+
+IMAGE SHA256
+8453ab98aa02cccb25b9de04a5f511e821ba28177453da221d17523cd6e04b7a  build/images/shell.sof
+067d8b75c81015eedca6a62cdc85ee4da1f0b73530297f0290ec682c9edf5b7c  build/images/shell.elf
+ae62235ddb461cada4bb029e8075a3c8570cfe22db2359481f87875d3ba9858a  build/images/demo.sof
+ea9987434a73c8533449892ee5f0ccc2ffd3cd4997d8ceba3627688e82d6a88d  build/images/demo.elf
+b208fd5280bcb59ca3df0daa7d0b3e0eeaee65e736cd4f57daf3e0daf45fa8c2  build/images/scope.sof
+9a74b84bfbb97994b0eca469167fa5b196822c6000e62385b3abeedc43faa6da  build/images/scope.elf
+
+Original sandboxed assembly could not see the valid host-bound Nios V/m license.
+Re-running Quartus Assembler outside the sandbox generated the licensed SOFs;
+no licensing bypass or RTL modification was performed.

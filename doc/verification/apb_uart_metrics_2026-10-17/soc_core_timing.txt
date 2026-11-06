@@ -1,0 +1,151 @@
+Info: *******************************************************************
+Info: Running Quartus Prime Timing Analyzer
+    Info: Version 24.1std.0 Build 1077 03/04/2025 SC Lite Edition
+    Info: Copyright (C) 2025  Altera Corporation. All rights reserved.
+    Info: Your use of Altera Corporation's design tools, logic functions 
+    Info: and other software and tools, and any partner logic 
+    Info: functions, and any output files from any of the foregoing 
+    Info: (including device programming or simulation files), and any 
+    Info: associated documentation or information are expressly subject 
+    Info: to the terms and conditions of the Altera Program License 
+    Info: Subscription Agreement, the Altera Quartus Prime License Agreement,
+    Info: the Altera IP License Agreement, or other applicable license
+    Info: agreement, including, without limitation, that your use is for
+    Info: the sole purpose of programming logic devices manufactured by
+    Info: Altera and sold by Altera or its authorized distributors.  Please
+    Info: refer to the Altera Software License Subscription Agreements 
+    Info: on the Quartus Prime software download page.
+    Info: Processing started: Sat Oct 17 13:51:44 2026
+Info: Command: quartus_sta -t ../scripts/uart_metrics/report_timing.tcl NIOS *|apb_uart:apb_uart_0|*
+Info: Quartus(args): NIOS *|apb_uart:apb_uart_0|*
+Info (20032): Parallel compilation is enabled and will use up to 4 processors
+Info (21077): Low junction temperature is 0 degrees C
+Info (21077): High junction temperature is 85 degrees C
+Info (332164): Evaluating HDL-embedded SDC commands
+    Info (332165): Entity alt_jtag_atlantic
+        Info (332166): set_false_path -from [get_registers {*|alt_jtag_atlantic:*|jupdate}] -to [get_registers {*|alt_jtag_atlantic:*|jupdate1*}] 
+        Info (332166): set_false_path -from [get_registers {*|alt_jtag_atlantic:*|rdata[*]}] -to [get_registers {*|alt_jtag_atlantic*|td_shift[*]}]
+        Info (332166): set_false_path -from [get_registers {*|alt_jtag_atlantic:*|rdata[*]}] -to [get_registers {*|alt_jtag_atlantic*|td_shift[*]}]
+        Info (332166): set_false_path -from [get_registers {*|alt_jtag_atlantic:*|rdata[*]}] -to [get_registers {*|alt_jtag_atlantic*|td_shift[*]}]
+        Info (332166): set_false_path -from [get_registers {*|alt_jtag_atlantic:*|rdata[*]}] -to [get_registers {*|alt_jtag_atlantic*|td_shift[*]}]
+        Info (332166): set_false_path -from [get_registers {*|alt_jtag_atlantic:*|rdata[*]}] -to [get_registers {*|alt_jtag_atlantic*|td_shift[*]}]
+        Info (332166): set_false_path -from [get_registers {*|alt_jtag_atlantic:*|rdata[*]}] -to [get_registers {*|alt_jtag_atlantic*|td_shift[*]}]
+        Info (332166): set_false_path -from [get_registers {*|alt_jtag_atlantic:*|rdata[*]}] -to [get_registers {*|alt_jtag_atlantic*|td_shift[*]}]
+        Info (332166): set_false_path -from [get_registers {*|alt_jtag_atlantic:*|rdata[*]}] -to [get_registers {*|alt_jtag_atlantic*|td_shift[*]}]
+        Info (332166): set_false_path -from [get_registers {*|alt_jtag_atlantic:*|read}] -to [get_registers {*|alt_jtag_atlantic:*|read1*}] 
+        Info (332166): set_false_path -from [get_registers {*|alt_jtag_atlantic:*|read_req}]
+        Info (332166): set_false_path -from [get_registers {*|alt_jtag_atlantic:*|rvalid}] -to [get_registers {*|alt_jtag_atlantic*|td_shift[*]}]
+        Info (332166): set_false_path -from [get_registers {*|t_dav}] -to [get_registers {*|alt_jtag_atlantic:*|tck_t_dav}]
+        Info (332166): set_false_path -from [get_registers {*|alt_jtag_atlantic:*|user_saw_rvalid}] -to [get_registers {*|alt_jtag_atlantic:*|rvalid0*}]
+        Info (332166): set_false_path -from [get_registers {*|alt_jtag_atlantic:*|wdata[*]}] -to [get_registers {*}]
+        Info (332166): set_false_path -from [get_registers {*|alt_jtag_atlantic:*|wdata[*]}] -to [get_registers {*}]
+        Info (332166): set_false_path -from [get_registers {*|alt_jtag_atlantic:*|wdata[*]}] -to [get_registers {*}]
+        Info (332166): set_false_path -from [get_registers {*|alt_jtag_atlantic:*|wdata[*]}] -to [get_registers {*}]
+        Info (332166): set_false_path -from [get_registers {*|alt_jtag_atlantic:*|wdata[*]}] -to [get_registers {*}]
+        Info (332166): set_false_path -from [get_registers {*|alt_jtag_atlantic:*|wdata[*]}] -to [get_registers {*}]
+        Info (332166): set_false_path -from [get_registers {*|alt_jtag_atlantic:*|wdata[*]}] -to [get_registers {*}]
+        Info (332166): set_false_path -from [get_registers {*|alt_jtag_atlantic:*|wdata[*]}] -to [get_registers {*}]
+        Info (332166): set_false_path -from [get_registers {*|alt_jtag_atlantic:*|write}] -to [get_registers {*|alt_jtag_atlantic:*|write1*}] 
+        Info (332166): set_false_path -from [get_registers {*|alt_jtag_atlantic:*|write_stalled}] -to [get_registers {*|alt_jtag_atlantic:*|t_ena*}]
+        Info (332166): set_false_path -from [get_registers {*|alt_jtag_atlantic:*|write_stalled}] -to [get_registers {*|alt_jtag_atlantic:*|t_pause*}]
+        Info (332166): set_false_path -from [get_registers {*|alt_jtag_atlantic:*|write_valid}]
+    Info (332165): Entity sld_hub
+        Info (332166): create_clock -name altera_reserved_tck [get_ports {altera_reserved_tck}] -period 10MHz   
+        Info (332166): set_clock_groups -asynchronous -group {altera_reserved_tck}
+Info (332104): Reading SDC File: 'NIOS.sdc'
+Info (332151): Clock uncertainty is not calculated until you update the timing netlist.
+Info (332104): Reading SDC File: '/home/vietanh/Downloads/code/UART/UART/fpga/db/ip/system/submodules/altera_reset_controller.sdc'
+Info (332123): Deriving Clock Uncertainty. Please refer to report_sdc in the Timing Analyzer to see clock uncertainties.
+CORE_REGISTER_COLLECTION=184
+Info (332123): Deriving Clock Uncertainty. Please refer to report_sdc in the Timing Analyzer to see clock uncertainties.
+Info (332115): Report Timing: Found 10 setup paths (0 violated).  Worst case slack is 10.514
+    Info (332115): -from [get_registers {*|apb_uart:apb_uart_0|*}]
+    Info (332115): -to [get_registers {*|apb_uart:apb_uart_0|*}]
+    Info (332115): -setup
+    Info (332115): -npaths 10
+    Info (332115): -detail full_path
+    Info (332115): -file {core_setup_7_slow_1200mv_85c.rpt}
+Info (332115): Report Timing: Found 10 hold paths (0 violated).  Worst case slack is 0.362
+    Info (332115): -from [get_registers {*|apb_uart:apb_uart_0|*}]
+    Info (332115): -to [get_registers {*|apb_uart:apb_uart_0|*}]
+    Info (332115): -hold
+    Info (332115): -npaths 10
+    Info (332115): -detail full_path
+    Info (332115): -file {core_hold_7_slow_1200mv_85c.rpt}
+Info (332115): Report Timing: No recovery paths were found
+    Info (332115): -from [get_registers {*|apb_uart:apb_uart_0|*}]
+    Info (332115): -to [get_registers {*|apb_uart:apb_uart_0|*}]
+    Info (332115): -recovery
+    Info (332115): -npaths 10
+    Info (332115): -file {core_recovery_7_slow_1200mv_85c.rpt}
+Info (332115): Report Timing: No removal paths were found
+    Info (332115): -from [get_registers {*|apb_uart:apb_uart_0|*}]
+    Info (332115): -to [get_registers {*|apb_uart:apb_uart_0|*}]
+    Info (332115): -removal
+    Info (332115): -npaths 10
+    Info (332115): -file {core_removal_7_slow_1200mv_85c.rpt}
+CORE_SETUP_CORNER=7_slow_1200mv_85c SLACK_NS=10.514 PERIOD_NS=20.000 IMPLIED_REG_REG_FMAX_MHZ=105.418511491
+Info (332123): Deriving Clock Uncertainty. Please refer to report_sdc in the Timing Analyzer to see clock uncertainties.
+Info (332115): Report Timing: Found 10 setup paths (0 violated).  Worst case slack is 11.424
+    Info (332115): -from [get_registers {*|apb_uart:apb_uart_0|*}]
+    Info (332115): -to [get_registers {*|apb_uart:apb_uart_0|*}]
+    Info (332115): -setup
+    Info (332115): -npaths 10
+    Info (332115): -detail full_path
+    Info (332115): -file {core_setup_7_slow_1200mv_0c.rpt}
+Info (332115): Report Timing: Found 10 hold paths (0 violated).  Worst case slack is 0.353
+    Info (332115): -from [get_registers {*|apb_uart:apb_uart_0|*}]
+    Info (332115): -to [get_registers {*|apb_uart:apb_uart_0|*}]
+    Info (332115): -hold
+    Info (332115): -npaths 10
+    Info (332115): -detail full_path
+    Info (332115): -file {core_hold_7_slow_1200mv_0c.rpt}
+Info (332115): Report Timing: No recovery paths were found
+    Info (332115): -from [get_registers {*|apb_uart:apb_uart_0|*}]
+    Info (332115): -to [get_registers {*|apb_uart:apb_uart_0|*}]
+    Info (332115): -recovery
+    Info (332115): -npaths 10
+    Info (332115): -file {core_recovery_7_slow_1200mv_0c.rpt}
+Info (332115): Report Timing: No removal paths were found
+    Info (332115): -from [get_registers {*|apb_uart:apb_uart_0|*}]
+    Info (332115): -to [get_registers {*|apb_uart:apb_uart_0|*}]
+    Info (332115): -removal
+    Info (332115): -npaths 10
+    Info (332115): -file {core_removal_7_slow_1200mv_0c.rpt}
+CORE_SETUP_CORNER=7_slow_1200mv_0c SLACK_NS=11.424 PERIOD_NS=20.000 IMPLIED_REG_REG_FMAX_MHZ=116.604477612
+Info (332123): Deriving Clock Uncertainty. Please refer to report_sdc in the Timing Analyzer to see clock uncertainties.
+Info (332115): Report Timing: Found 10 setup paths (0 violated).  Worst case slack is 15.375
+    Info (332115): -from [get_registers {*|apb_uart:apb_uart_0|*}]
+    Info (332115): -to [get_registers {*|apb_uart:apb_uart_0|*}]
+    Info (332115): -setup
+    Info (332115): -npaths 10
+    Info (332115): -detail full_path
+    Info (332115): -file {core_setup_MIN_fast_1200mv_0c.rpt}
+Info (332115): Report Timing: Found 10 hold paths (0 violated).  Worst case slack is 0.148
+    Info (332115): -from [get_registers {*|apb_uart:apb_uart_0|*}]
+    Info (332115): -to [get_registers {*|apb_uart:apb_uart_0|*}]
+    Info (332115): -hold
+    Info (332115): -npaths 10
+    Info (332115): -detail full_path
+    Info (332115): -file {core_hold_MIN_fast_1200mv_0c.rpt}
+Info (332115): Report Timing: No recovery paths were found
+    Info (332115): -from [get_registers {*|apb_uart:apb_uart_0|*}]
+    Info (332115): -to [get_registers {*|apb_uart:apb_uart_0|*}]
+    Info (332115): -recovery
+    Info (332115): -npaths 10
+    Info (332115): -file {core_recovery_MIN_fast_1200mv_0c.rpt}
+Info (332115): Report Timing: No removal paths were found
+    Info (332115): -from [get_registers {*|apb_uart:apb_uart_0|*}]
+    Info (332115): -to [get_registers {*|apb_uart:apb_uart_0|*}]
+    Info (332115): -removal
+    Info (332115): -npaths 10
+    Info (332115): -file {core_removal_MIN_fast_1200mv_0c.rpt}
+CORE_SETUP_CORNER=MIN_fast_1200mv_0c SLACK_NS=15.375 PERIOD_NS=20.000 IMPLIED_REG_REG_FMAX_MHZ=216.216216216
+Info (332102): Design is not fully constrained for setup requirements
+Info (332102): Design is not fully constrained for hold requirements
+Info (23030): Evaluation of Tcl script ../scripts/uart_metrics/report_timing.tcl was successful
+Info: Quartus Prime Timing Analyzer was successful. 0 errors, 0 warnings
+    Info: Peak virtual memory: 521 megabytes
+    Info: Processing ended: Sat Oct 17 13:51:45 2026
+    Info: Elapsed time: 00:00:01
+    Info: Total CPU time (on all processors): 00:00:02

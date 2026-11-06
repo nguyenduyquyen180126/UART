@@ -1,0 +1,143 @@
+{
+  "device": "EP4CE115F29C7",
+  "clock_mhz": 50,
+  "parameter_clk_freq": 50000000,
+  "standalone": {
+    "logic_elements": 349,
+    "dedicated_registers": 168,
+    "memory_bits": 272,
+    "m9k": 2,
+    "dsp_elements": 0,
+    "lut_only_lcs": 181,
+    "register_only_lcs": 15,
+    "lut_register_lcs": 153,
+    "lut_lcs": 334
+  },
+  "standalone_core_timing": [
+    {
+      "corner": "7_slow_1200mv_85c",
+      "setup_slack_ns": 8.929,
+      "reg_reg_equivalent_fmax_mhz": 90.3260771385
+    },
+    {
+      "corner": "7_slow_1200mv_0c",
+      "setup_slack_ns": 9.978,
+      "reg_reg_equivalent_fmax_mhz": 99.7804829375
+    },
+    {
+      "corner": "MIN_fast_1200mv_0c",
+      "setup_slack_ns": 14.615,
+      "reg_reg_equivalent_fmax_mhz": 185.701021356
+    }
+  ],
+  "power": {
+    "idle": {
+      "Power Analyzer Status": "Successful - Sat Oct 17 13:51:56 2026",
+      "Quartus Prime Version": "24.1std.0 Build 1077 03/04/2025 SC Lite Edition",
+      "Revision Name": "uart_metrics",
+      "Top-level Entity Name": "apb_uart",
+      "Family": "Cyclone IV E",
+      "Device": "EP4CE115F29C7",
+      "Power Models": "Final",
+      "Total Thermal Power Dissipation": "142.57 mW",
+      "Core Dynamic Thermal Power Dissipation": "3.74 mW",
+      "Core Static Thermal Power Dissipation": "98.10 mW",
+      "I/O Thermal Power Dissipation": "40.73 mW",
+      "Power Estimation Confidence": "Low: user provided insufficient toggle rate data"
+    },
+    "active": {
+      "Power Analyzer Status": "Successful - Sat Oct 17 13:52:05 2026",
+      "Quartus Prime Version": "24.1std.0 Build 1077 03/04/2025 SC Lite Edition",
+      "Revision Name": "uart_metrics",
+      "Top-level Entity Name": "apb_uart",
+      "Family": "Cyclone IV E",
+      "Device": "EP4CE115F29C7",
+      "Power Models": "Final",
+      "Total Thermal Power Dissipation": "142.80 mW",
+      "Core Dynamic Thermal Power Dissipation": "3.97 mW",
+      "Core Static Thermal Power Dissipation": "98.10 mW",
+      "I/O Thermal Power Dissipation": "40.73 mW",
+      "Power Estimation Confidence": "Low: user provided insufficient toggle rate data"
+    },
+    "idle_gate": {
+      "Power Analyzer Status": "Successful - Sat Oct 17 13:54:16 2026",
+      "Quartus Prime Version": "24.1std.0 Build 1077 03/04/2025 SC Lite Edition",
+      "Revision Name": "uart_metrics",
+      "Top-level Entity Name": "apb_uart",
+      "Family": "Cyclone IV E",
+      "Device": "EP4CE115F29C7",
+      "Power Models": "Final",
+      "Total Thermal Power Dissipation": "142.42 mW",
+      "Core Dynamic Thermal Power Dissipation": "3.61 mW",
+      "Core Static Thermal Power Dissipation": "98.10 mW",
+      "I/O Thermal Power Dissipation": "40.71 mW",
+      "Power Estimation Confidence": "Medium: user provided moderately complete toggle rate data"
+    },
+    "active_gate": {
+      "Power Analyzer Status": "Successful - Sat Oct 17 13:58:23 2026",
+      "Quartus Prime Version": "24.1std.0 Build 1077 03/04/2025 SC Lite Edition",
+      "Revision Name": "uart_metrics",
+      "Top-level Entity Name": "apb_uart",
+      "Family": "Cyclone IV E",
+      "Device": "EP4CE115F29C7",
+      "Power Models": "Final",
+      "Total Thermal Power Dissipation": "142.49 mW",
+      "Core Dynamic Thermal Power Dissipation": "3.68 mW",
+      "Core Static Thermal Power Dissipation": "98.10 mW",
+      "I/O Thermal Power Dissipation": "40.71 mW",
+      "Power Estimation Confidence": "Medium: user provided moderately complete toggle rate data"
+    }
+  },
+  "in_soc": {
+    "logic_elements": 340,
+    "dedicated_registers": 176,
+    "memory_bits": 272,
+    "m9k": 2,
+    "dsp_elements": 0,
+    "lut_only_lcs": 151,
+    "register_only_lcs": 22,
+    "lut_register_lcs": 167,
+    "lut_lcs": 318
+  },
+  "in_soc_core_timing": [
+    {
+      "corner": "7_slow_1200mv_85c",
+      "setup_slack_ns": 10.514,
+      "reg_reg_equivalent_fmax_mhz": 105.418511491
+    },
+    {
+      "corner": "7_slow_1200mv_0c",
+      "setup_slack_ns": 11.424,
+      "reg_reg_equivalent_fmax_mhz": 116.604477612
+    },
+    {
+      "corner": "MIN_fast_1200mv_0c",
+      "setup_slack_ns": 15.375,
+      "reg_reg_equivalent_fmax_mhz": 216.216216216
+    }
+  ],
+  "rtl_sha256": {
+    "rtl/apb_slave.v": "6d96e06de4775d850ee3ce8c8c8d49e7a2a96b6d555b91252feb6a456dafe098",
+    "rtl/apb_uart.v": "f93bdc093c140a675cc752ad2af8e5eec53f0ce6986aa4191dabcb261fb10ffa",
+    "rtl/bit_cnt.v": "82a01b958441af5bddefcd7e087a4ad755bdb48255ceac7d2ca81728d76b926c",
+    "rtl/data_b_num.v": "b0c30a09d70e83b5b4a2267da3c9cdf29dc1d670f136b132155cfa558a2f17e2",
+    "rtl/deframe.v": "9a65ae28ddc08922d0e5a4ef4d6a75ff209948ee392949ad8b971db12a37a468",
+    "rtl/error_check.v": "70f24f37d0c42c851627a58ac9c8e566ebba8e7c76e6f0d0616970a856fb96dd",
+    "rtl/rx_baud_gen.v": "59e8c9eab8d9717004a900a7ea57b6ac1db9a536e96f26734fa8ea9980580ae9",
+    "rtl/rx_controller.v": "666ca69872bc84b9bf115a366a16ff5913a34003551c2fa6983b060c89baf7c7",
+    "rtl/rx_uart.v": "55c0717e206255e65a4de6a5fdeae4cc6d92359635a7671d292fb62310ed5275",
+    "rtl/sipo.v": "7c3d34a1ea9b9d975429243ef0a4c949d8372716aef7f7ea2db15b7614f64bb7",
+    "rtl/stop_b_num.v": "1e5de452d34718a902eda027050686f99cdd92fc49956a0e82b45855e2b4c317",
+    "rtl/sync_fifo.v": "7014937cce7c9c33710be14fd92693a60d3ce01111b7827719f711f9ed64da4b",
+    "rtl/tick_cnt.v": "98aa470034cccee744ee4dea7ea19e3c45bccde525a712f76ef41c0e44ded335",
+    "rtl/tx_baud_gen.v": "6c305655601532698869fd4f6294d9803e8c05822eb5538a0438089cec179529",
+    "rtl/tx_bit_cnt.v": "cb8fc8790de7f07e38c3e455acc053c422ee638f391ec8ebe4cbf10c084616ea",
+    "rtl/tx_controller.v": "71f3ec6503513dcf05827cb27495fb69b634e0181e38b139049f2cb568787e5a",
+    "rtl/tx_parity.v": "5d6bbdcbda9b87e24c85dacad2b04e2f60b9936055f16b8d1b30f79b1909f9f7",
+    "rtl/tx_piso.v": "eaf7c3f3fe1b546dec5b39829a12f9a70936e75c1b6a475c33364c26e86a4859",
+    "rtl/tx_stop_cnt.v": "907ede1f82f93e6e5a214edb1c9c1104eb7f553032f8737fdd1bf56d54fdaf21",
+    "rtl/tx_tick_cnt.v": "651ffa374646eb171838f0f078313e143bf4b02dcc6d130acbbbd6822e50d01e",
+    "rtl/tx_uart.v": "92b245ed243a16fbfba9c8e3c7170aade05d9829eadde889c100848e1b6fecaf",
+    "rtl/uart_regs.v": "f7d858af9799f344bc355d381fccc68a9472ee25c2f66be1df2c23808c8f397b"
+  }
+}

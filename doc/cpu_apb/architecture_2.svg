@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1160" viewBox="0 0 1800 1160">
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="context-stroke"/></marker></defs>
+<rect width="100%" height="100%" fill="#fff"/>
+<text x="30" y="45" font-family="DejaVu Sans,sans-serif" font-size="28" font-weight="bold" fill="#1b2c47">02 CPU đến từng chân APB</text>
+<text x="30" y="85" font-family="DejaVu Sans,sans-serif" font-size="18" fill="#475569">Dây thật trong HDL | APB master nằm trong agent; APB slave nằm trong UART</text>
+<polyline points="340,220 440,220" fill="none" stroke="#315fc1" stroke-width="2.5" marker-end="url(#arrow)" marker-start="url(#arrow)"/>
+<text x="390.0" y="210.0" text-anchor="middle" font-family="DejaVu Sans,sans-serif" font-size="16" fill="#315fc1" stroke="#fff" stroke-width="6" paint-order="stroke">AXI4-Lite</text>
+<polyline points="795,220 895,220" fill="none" stroke="#315fc1" stroke-width="2.5" marker-end="url(#arrow)" marker-start="url(#arrow)"/>
+<text x="845.0" y="210.0" text-anchor="middle" font-family="DejaVu Sans,sans-serif" font-size="16" fill="#315fc1" stroke="#fff" stroke-width="6" paint-order="stroke">packets</text>
+<polyline points="1255,220 1355,220" fill="none" stroke="#315fc1" stroke-width="2.5" marker-end="url(#arrow)" marker-start="url(#arrow)"/>
+<text x="1305.0" y="210.0" text-anchor="middle" font-family="DejaVu Sans,sans-serif" font-size="16" fill="#315fc1" stroke="#fff" stroke-width="6" paint-order="stroke">cp / rp</text>
+<polyline points="1550,295 1550,440" fill="none" stroke="#315fc1" stroke-width="2.5" marker-end="url(#arrow)" marker-start="url(#arrow)"/>
+<text x="1560.0" y="357.5" text-anchor="middle" font-family="DejaVu Sans,sans-serif" font-size="16" fill="#315fc1" stroke="#fff" stroke-width="6" paint-order="stroke">APB</text>
+<polyline points="1095,455 670,455" fill="none" stroke="#315fc1" stroke-width="2.5" marker-end="url(#arrow)"/>
+<text x="882.5" y="445.0" text-anchor="middle" font-family="DejaVu Sans,sans-serif" font-size="16" fill="#315fc1" stroke="#fff" stroke-width="6" paint-order="stroke">PADDR[11:0], PSEL, PENABLE</text>
+<polyline points="1095,490 670,490" fill="none" stroke="#315fc1" stroke-width="2.5" marker-end="url(#arrow)"/>
+<text x="882.5" y="480.0" text-anchor="middle" font-family="DejaVu Sans,sans-serif" font-size="16" fill="#315fc1" stroke="#fff" stroke-width="6" paint-order="stroke">PWRITE, PWDATA[31:0]</text>
+<polyline points="670,535 1095,535" fill="none" stroke="#bb6c23" stroke-width="2.5" marker-end="url(#arrow)"/>
+<text x="882.5" y="525.0" text-anchor="middle" font-family="DejaVu Sans,sans-serif" font-size="16" fill="#bb6c23" stroke="#fff" stroke-width="6" paint-order="stroke">PRDATA[31:0], PREADY, PSLVERR</text>
+<polyline points="245,660 245,800" fill="none" stroke="#315fc1" stroke-width="2.5" marker-end="url(#arrow)"/>
+<text x="255.0" y="698.0" text-anchor="middle" font-family="DejaVu Sans,sans-serif" font-size="16" fill="#315fc1" stroke="#fff" stroke-width="6" paint-order="stroke">reg_paddr[11:0]</text>
+<text x="255.0" y="720.0" text-anchor="middle" font-family="DejaVu Sans,sans-serif" font-size="16" fill="#315fc1" stroke="#fff" stroke-width="6" paint-order="stroke">reg_pwdata[31:0]</text>
+<text x="255.0" y="742.0" text-anchor="middle" font-family="DejaVu Sans,sans-serif" font-size="16" fill="#315fc1" stroke="#fff" stroke-width="6" paint-order="stroke">reg_pread / reg_pwrite</text>
+<polyline points="510,800 510,660" fill="none" stroke="#bb6c23" stroke-width="2.5" marker-end="url(#arrow)"/>
+<text x="520.0" y="709.0" text-anchor="middle" font-family="DejaVu Sans,sans-serif" font-size="16" fill="#bb6c23" stroke="#fff" stroke-width="6" paint-order="stroke">reg_prdata[31:0]</text>
+<text x="520.0" y="731.0" text-anchor="middle" font-family="DejaVu Sans,sans-serif" font-size="16" fill="#bb6c23" stroke="#fff" stroke-width="6" paint-order="stroke">reg_ack_err</text>
+<polyline points="670,900 1095,900" fill="none" stroke="#418552" stroke-width="2.5" marker-end="url(#arrow)" marker-start="url(#arrow)"/>
+<text x="882.5" y="890.0" text-anchor="middle" font-family="DejaVu Sans,sans-serif" font-size="16" fill="#418552" stroke="#fff" stroke-width="6" paint-order="stroke">Tin hieu noi bo rieng</text>
+<rect x="40" y="150" width="300" height="145" rx="10" fill="#e7efff" stroke="#4567a0" stroke-width="2"/>
+<text x="190.0" y="189.5" text-anchor="middle" font-family="DejaVu Sans,sans-serif" font-size="18" fill="#17243b">Nios V/c data_manager</text>
+<text x="190.0" y="215.5" text-anchor="middle" font-family="DejaVu Sans,sans-serif" font-size="18" fill="#17243b">AW / W / B / AR / R</text>
+<text x="190.0" y="241.5" text-anchor="middle" font-family="DejaVu Sans,sans-serif" font-size="18" fill="#17243b">ADDR 32, DATA 32, WSTRB 4</text>
+<text x="190.0" y="267.5" text-anchor="middle" font-family="DejaVu Sans,sans-serif" font-size="18" fill="#17243b">Moi kenh: VALID &amp; READY</text>
+<rect x="440" y="150" width="355" height="145" rx="10" fill="#fff2cc" stroke="#b68b21" stroke-width="2"/>
+<text x="617.5" y="189.5" text-anchor="middle" font-family="DejaVu Sans,sans-serif" font-size="18" fill="#17243b">intel_niosv_c_0_</text>
+<text x="617.5" y="215.5" text-anchor="middle" font-family="DejaVu Sans,sans-serif" font-size="18" fill="#17243b">data_manager_agent</text>
+<text x="617.5" y="241.5" text-anchor="middle" font-family="DejaVu Sans,sans-serif" font-size="18" fill="#17243b">altera_merlin_axi_master_ni</text>
+<text x="617.5" y="267.5" text-anchor="middle" font-family="DejaVu Sans,sans-serif" font-size="18" fill="#17243b">AXI_VERSION = AXI4Lite</text>
+<rect x="895" y="150" width="360" height="145" rx="10" fill="#fff2cc" stroke="#b68b21" stroke-width="2"/>
+<text x="1075.0" y="189.5" text-anchor="middle" font-family="DejaVu Sans,sans-serif" font-size="18" fill="#17243b">Merlin command / response</text>
+<text x="1075.0" y="215.5" text-anchor="middle" font-family="DejaVu Sans,sans-serif" font-size="18" fill="#17243b">Packet DATA 106 bit</text>
+<text x="1075.0" y="241.5" text-anchor="middle" font-family="DejaVu Sans,sans-serif" font-size="18" fill="#17243b">valid, ready, SOP, EOP</text>
+<text x="1075.0" y="267.5" text-anchor="middle" font-family="DejaVu Sans,sans-serif" font-size="18" fill="#17243b">Router chon UART tai 0x20000</text>
+<rect x="1355" y="150" width="390" height="145" rx="10" fill="#e8dcff" stroke="#8155a5" stroke-width="2"/>
+<text x="1550.0" y="189.5" text-anchor="middle" font-family="DejaVu Sans,sans-serif" font-size="18" fill="#17243b">apb_uart_0_apb_slave_agent</text>
+<text x="1550.0" y="215.5" text-anchor="middle" font-family="DejaVu Sans,sans-serif" font-size="18" fill="#17243b">altera_merlin_apb_slave_agent</text>
+<text x="1550.0" y="241.5" text-anchor="middle" font-family="DejaVu Sans,sans-serif" font-size="18" fill="#17243b">IDLE -&gt; SET_UP -&gt; ACCESS</text>
+<text x="1550.0" y="267.5" text-anchor="middle" font-family="DejaVu Sans,sans-serif" font-size="18" fill="#17243b">-&gt; SEND_RESPONSE</text>
+<rect x="1095" y="440" width="650" height="100" rx="10" fill="#e8dcff" stroke="#8155a5" stroke-width="2"/>
+<text x="1420.0" y="470.0" text-anchor="middle" font-family="DejaVu Sans,sans-serif" font-size="18" fill="#17243b">apb_uart_0_apb_slave_translator</text>
+<text x="1420.0" y="496.0" text-anchor="middle" font-family="DejaVu Sans,sans-serif" font-size="18" fill="#17243b">ADDR_WIDTH=12, DATA_WIDTH=32, USE_M0_PSLVERR=1</text>
+<text x="1420.0" y="522.0" text-anchor="middle" font-family="DejaVu Sans,sans-serif" font-size="18" fill="#17243b">Pass-through APB; khong phai FSM doi AXI thanh APB</text>
+<rect x="80" y="430" width="590" height="230" rx="10" fill="#ffe9df" stroke="#b65b37" stroke-width="2"/>
+<text x="375.0" y="486.0" text-anchor="middle" font-family="DejaVu Sans,sans-serif" font-size="18" fill="#17243b">apb_uart_0.u_apb_slave</text>
+<text x="375.0" y="512.0" text-anchor="middle" font-family="DejaVu Sans,sans-serif" font-size="18" fill="#17243b">PREADY = PSEL &amp; PENABLE</text>
+<text x="375.0" y="538.0" text-anchor="middle" font-family="DejaVu Sans,sans-serif" font-size="18" fill="#17243b">addr_valid: aligned, 0x000 .. 0x010</text>
+<text x="375.0" y="564.0" text-anchor="middle" font-family="DejaVu Sans,sans-serif" font-size="18" fill="#17243b">reg_pwrite = PSEL &amp; PENABLE &amp; valid &amp; PWRITE</text>
+<text x="375.0" y="590.0" text-anchor="middle" font-family="DejaVu Sans,sans-serif" font-size="18" fill="#17243b">reg_pread = PSEL &amp; PENABLE &amp; valid &amp; ~PWRITE</text>
+<text x="375.0" y="616.0" text-anchor="middle" font-family="DejaVu Sans,sans-serif" font-size="18" fill="#17243b">PSLVERR = ACCESS &amp; (bad_addr | reg_ack_err)</text>
+<rect x="80" y="800" width="590" height="190" rx="10" fill="#e4f6e7" stroke="#418552" stroke-width="2"/>
+<text x="375.0" y="849.0" text-anchor="middle" font-family="DejaVu Sans,sans-serif" font-size="18" fill="#17243b">apb_uart_0.u_uart_regs</text>
+<text x="375.0" y="875.0" text-anchor="middle" font-family="DejaVu Sans,sans-serif" font-size="18" fill="#17243b">TX 0x00 | RX 0x04 | CFG 0x08</text>
+<text x="375.0" y="901.0" text-anchor="middle" font-family="DejaVu Sans,sans-serif" font-size="18" fill="#17243b">STT 0x0C | IER 0x10</text>
+<text x="375.0" y="927.0" text-anchor="middle" font-family="DejaVu Sans,sans-serif" font-size="18" fill="#17243b">Clocked writes + FIFO side effects</text>
+<text x="375.0" y="953.0" text-anchor="middle" font-family="DejaVu Sans,sans-serif" font-size="18" fill="#17243b">Combinational read mux</text>
+<rect x="1095" y="800" width="650" height="190" rx="10" fill="#e4f6e7" stroke="#418552" stroke-width="2"/>
+<text x="1420.0" y="849.0" text-anchor="middle" font-family="DejaVu Sans,sans-serif" font-size="18" fill="#17243b">TX write: wr_en + pwdata[7:0] -&gt; FIFO -&gt; TX</text>
+<text x="1420.0" y="875.0" text-anchor="middle" font-family="DejaVu Sans,sans-serif" font-size="18" fill="#17243b">RX read: FIFO head -&gt; prdata; pop at clock edge</text>
+<text x="1420.0" y="901.0" text-anchor="middle" font-family="DejaVu Sans,sans-serif" font-size="18" fill="#17243b">CFG -&gt; baud_sel/data_bits/stop/parity</text>
+<text x="1420.0" y="927.0" text-anchor="middle" font-family="DejaVu Sans,sans-serif" font-size="18" fill="#17243b">IRQ = enabled RX ready / TX idle / overrun</text>
+<text x="1420.0" y="953.0" text-anchor="middle" font-family="DejaVu Sans,sans-serif" font-size="18" fill="#17243b">IRQ chua duoc noi den CPU</text>
+<rect x="80" y="1040" width="1665" height="65" rx="10" fill="#f1f2f5" stroke="#687386" stroke-width="2"/>
+<text x="912.5" y="1078.5" text-anchor="middle" font-family="DejaVu Sans,sans-serif" font-size="18" fill="#17243b">PCLK dung clk 50 MHz chung; reset UART la rst_n. APB request = 47 bit, response = 34 bit; tong 81 day logic, chua tinh clock/reset.</text>
+</svg>

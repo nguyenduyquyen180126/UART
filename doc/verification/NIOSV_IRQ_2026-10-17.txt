@@ -1,0 +1,218 @@
+Verification snapshot 2026-10-17, EP4CE115F29C7, Quartus Lite 24.1std.0 Build 1077
+Source commit at start: b471d810ee81e2619bfae26c4d00efdc5e82b8bf
+IMPORTANT: no SOF was generated; missing no-cost IP-NIOSVM license. No board attached.
+
+CPU interfaces reported by Platform Designer:
+CPU=intel_niosv_c INTERFACES=clk data_manager instruction_manager reset PARAMETERS=AUTO_CLK_CLOCK_DOMAIN AUTO_CLK_RESET_DOMAIN AUTO_DEVICE AUTO_DEVICE_SPEEDGRADE clockFrequency dataSlaveMapParam deviceFamily enableAvalonInterface enableECCLite instSlaveMapParam numGpr resetOffset resetSlave useResetReq
+CPU=intel_niosv_m INTERFACES=clk data_manager dm_agent instruction_manager platform_irq_rx reset timer_sw_agent PARAMETERS=AUTO_CLK_CLOCK_DOMAIN AUTO_CLK_RESET_DOMAIN AUTO_DEVICE AUTO_DEVICE_SPEEDGRADE AUTO_PLATFORM_IRQ_RX_INTERRUPTS_USED clockFrequency dataSlaveMapParam deviceFamily enableAvalonInterface enableDebug enableDebugReset enableECCLite hartId instSlaveMapParam interruptMode numGpr pipelineArch resetOffset resetSlave useResetReq
+CPU=intel_niosv_g INTERFACES=clk data_manager dm_agent instruction_manager platform_irq_rx reset timer_sw_agent PARAMETERS=AUTO_CLK_CLOCK_DOMAIN AUTO_CLK_RESET_DOMAIN AUTO_DEVICE AUTO_DEVICE_SPEEDGRADE Blind_Window_Period CLICenabledInterruptMode CLICenabledShadowRegisterFiles CUSTOM_OP Default_Timeout_Period SUB_OP alignCLICVectorTable basicInterruptMode basicShadowRegisterFiles clockFrequency dataCacheSize dataSlaveMapParam deviceFamily disableFsqrtFdiv dtcm1Base dtcm1InitFile dtcm1Size dtcm2Base dtcm2InitFile dtcm2Size enableBranchPrediction enableCLICInterruptEdgeTriggerConfig enableCLICInterruptPolarityConfig enableCLICSelectiveHardwareVectoring enableCoreLevelInterruptController enableDebug enableDebugReset enableECCFull enableECCLite enableFPU enableLockstep enableLockstepExtRst enableMulDiv funct3 funct7_l funct7_u hartId instCacheSize instSlaveMapParam itcm1Base itcm1InitFile itcm1Size itcm2Base itcm2InitFile itcm2Size mnemonic numCLICDebugTriggers numCLICLevels numCLICPlatformInterrupts numCLICPriorities opcode peripheralRegionABase peripheralRegionASize peripheralRegionBBase peripheralRegionBSize resetOffset resetSlave useResetReq
+
+RTL regression summaries:
+  SO TESTCASE PASS : 3 / 3
+  SO TESTCASE FAIL : 0 / 3
+  SO TESTCASE PASS : 9 / 9
+  SO TESTCASE FAIL : 0 / 9
+  SO TEST CASE PASS : 7
+  SO TEST CASE FAIL : 0
+[UART AO] TX checked=122 RX checked=153 errors=0
+  TONG SO TEST : 149
+  SO TEST PASS : 149
+  SO TEST FAIL : 0
+
+Fitter summary:
+Fitter Status : Successful - Sat Oct 17 09:21:58 2026
+Quartus Prime Version : 24.1std.0 Build 1077 03/04/2025 SC Lite Edition
+Revision Name : NIOS
+Top-level Entity Name : NIOS
+Family : Cyclone IV E
+Device : EP4CE115F29C7
+Timing Models : Final
+Total logic elements : 4,139 / 114,480 ( 4 % )
+    Total combinational functions : 3,707 / 114,480 ( 3 % )
+    Dedicated logic registers : 2,258 / 114,480 ( 2 % )
+Total registers : 2258
+Total pins : 49 / 529 ( 9 % )
+Total virtual pins : 0
+Total memory bits : 527,632 / 3,981,312 ( 13 % )
+Embedded Multiplier 9-bit elements : 0 / 532 ( 0 % )
+Total PLLs : 0 / 4 ( 0 % )
+
+Timing summary:
+------------------------------------------------------------
+Timing Analyzer Summary
+------------------------------------------------------------
+
+Type  : Slow 1200mV 85C Model Setup 'CLOCK_50'
+Slack : 5.410
+TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Setup 'altera_reserved_tck'
+Slack : 45.959
+TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Hold 'CLOCK_50'
+Slack : 0.356
+TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Hold 'altera_reserved_tck'
+Slack : 0.403
+TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Recovery 'CLOCK_50'
+Slack : 13.687
+TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Recovery 'altera_reserved_tck'
+Slack : 47.387
+TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Removal 'altera_reserved_tck'
+Slack : 1.199
+TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Removal 'CLOCK_50'
+Slack : 5.447
+TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Minimum Pulse Width 'CLOCK_50'
+Slack : 9.553
+TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Minimum Pulse Width 'altera_reserved_tck'
+Slack : 49.623
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Setup 'CLOCK_50'
+Slack : 6.726
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Setup 'altera_reserved_tck'
+Slack : 46.342
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Hold 'CLOCK_50'
+Slack : 0.352
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Hold 'altera_reserved_tck'
+Slack : 0.354
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Recovery 'CLOCK_50'
+Slack : 14.221
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Recovery 'altera_reserved_tck'
+Slack : 47.690
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Removal 'altera_reserved_tck'
+Slack : 1.104
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Removal 'CLOCK_50'
+Slack : 4.884
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Minimum Pulse Width 'CLOCK_50'
+Slack : 9.558
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Minimum Pulse Width 'altera_reserved_tck'
+Slack : 49.565
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Setup 'CLOCK_50'
+Slack : 12.930
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Setup 'altera_reserved_tck'
+Slack : 48.175
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Hold 'CLOCK_50'
+Slack : 0.148
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Hold 'altera_reserved_tck'
+Slack : 0.180
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Recovery 'CLOCK_50'
+Slack : 16.562
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Recovery 'altera_reserved_tck'
+Slack : 48.856
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Removal 'altera_reserved_tck'
+Slack : 0.558
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Removal 'CLOCK_50'
+Slack : 2.807
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Minimum Pulse Width 'CLOCK_50'
+Slack : 9.200
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Minimum Pulse Width 'altera_reserved_tck'
+Slack : 49.473
+TNS   : 0.000
+
+------------------------------------------------------------
+
+
+Fitted IRQ timing path excerpt:
+----------------
+; Command Info ;
+----------------
+Report Timing: Found 4 setup paths (0 violated).  Worst case slack is 15.528 
+
+Tcl Command:
+    report_timing -setup -file ../build/logs/fitted-irq-path.rpt -from [get_registers {*apb_uart_0*}] -to [get_registers {*irq_inst*plat_irq*}] -npaths 4 -detail full_path
+
+Options:
+    -from [get_registers {*apb_uart_0*}] 
+    -to [get_registers {*irq_inst*plat_irq*}] 
+    -setup 
+    -npaths 4 
+    -detail full_path 
+    -file {../build/logs/fitted-irq-path.rpt} 
+
+Delay Model:
+    Slow 1200mV 85C Model
+
++-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Summary of Paths                                                                                                                                                                                                                                                                                                                          ;
++--------+-----------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------+-------------+--------------+------------+------------+
+; Slack  ; From Node                                                 ; To Node                                                                                                                                                                                        ; Launch Clock ; Latch Clock ; Relationship ; Clock Skew ; Data Delay ;
++--------+-----------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------+-------------+--------------+------------+------------+
+; 15.528 ; system:u0|apb_uart:apb_uart_0|sync_fifo:u_rx_fifo|wptr[0] ; system:u0|system_intel_niosv_m_0:intel_niosv_m_0|system_intel_niosv_m_0_hart:hart|niosv_m_core:m_core.niosv_m_full_inst|niosv_csr:csr_inst|niosv_interrupt_handler:irq_inst|A0_plat_irq_vec[0] ; CLOCK_50     ; CLOCK_50    ; 20.000       ; -0.086     ; 4.384      ;
+; 15.618 ; system:u0|apb_uart:apb_uart_0|sync_fifo:u_rx_fifo|wptr[1] ; system:u0|system_intel_niosv_m_0:intel_niosv_m_0|system_intel_niosv_m_0_hart:hart|niosv_m_core:m_core.niosv_m_full_inst|niosv_csr:csr_inst|niosv_interrupt_handler:irq_inst|A0_plat_irq_vec[0] ; CLOCK_50     ; CLOCK_50    ; 20.000       ; -0.086     ; 4.294      ;
+; 15.702 ; system:u0|apb_uart:apb_uart_0|sync_fifo:u_tx_fifo|wptr[2] ; system:u0|system_intel_niosv_m_0:intel_niosv_m_0|system_intel_niosv_m_0_hart:hart|niosv_m_core:m_core.niosv_m_full_inst|niosv_csr:csr_inst|niosv_interrupt_handler:irq_inst|A0_plat_irq_vec[0] ; CLOCK_50     ; CLOCK_50    ; 20.000       ; -0.080     ; 4.216      ;
+; 15.837 ; system:u0|apb_uart:apb_uart_0|sync_fifo:u_rx_fifo|rptr[0] ; system:u0|system_intel_niosv_m_0:intel_niosv_m_0|system_intel_niosv_m_0_hart:hart|niosv_m_core:m_core.niosv_m_full_inst|niosv_csr:csr_inst|niosv_interrupt_handler:irq_inst|A0_plat_irq_vec[0] ; CLOCK_50     ; CLOCK_50    ; 20.000       ; -0.089     ; 4.072      ;
++--------+-----------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------+-------------+--------------+------------+------------+
+
+Path #1: Setup slack is 15.528 
+===============================================================================
+
+License / programming-file warnings:
+Warning (24850): Failed to acquire license for  (6AF7_D036). Error when acquiring Intel® FPGA IP IP-NIOSVM: Client token expired.Server returned http code [401].
+Warning (24850): Failed to acquire license for  (6AF7_D036). Error when acquiring Intel® FPGA IP IP-NIOSVM: Client token expired.Server returned http code [401].
+Warning (115003): Can't generate programming files for your current project because you do not have a valid license for the following IP core or cores.
+    Warning (115005): Unlicensed IP: "Unknown(6AF7 D036)"
+
+Unconstrained external ports reported by STA: altera_reserved_tdi, altera_reserved_tms, altera_reserved_tdo.
+Board inputs/outputs are explicitly excepted in NIOS.sdc because they are asynchronous / human-visible.
+Observed CLOCK_50 slow 85C fmax: 68.54 MHz; setup +5.410 ns; minimum hold over corners +0.148 ns.
+Host C driver test PASS; host demo-clock state test PASS (see make test_irq_driver test_demo_clock).
+Host tests do not execute instructions on the Nios V CPU. Hardware testing remains required.
+
+Final end-to-end scripts/build_soc.sh run completed 2026-10-17 09:29:30 +07.
+Generate + BSP + both C builds + full fit/STA + fitted IRQ path: PASS.
+Script correctly exited 1 because Quartus did not produce NIOS.sof (unlicensed IP-NIOSVM).
+All 49 top-level pin locations and I/O standards matched the local DE2-115 CSV.
+flash_fpga.sh correctly refused to program because build/images/shell.sof is absent.

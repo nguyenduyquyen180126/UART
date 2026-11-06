@@ -1,0 +1,68 @@
+Hardware verification snapshot 2026-10-17, license installed and kit connected.
+Device EP4CE115F29C7; JTAG 020F70DD; USB-Blaster [3-11]; CP2102 /dev/ttyUSB0.
+User confirmed ESP32 EN tied to GND and HEX3:HEX2 visibly counts.
+License features 6AF7_D036 / 6AF8_D036, expires 16-oct-2027.
+No license contents, signature or host identifier are copied here.
+Initial test observed A -> FF once; cause not established, later fresh-load tests PASS.
+Final board state: demo.sof running; test serial/JTAG handles closed.
+
+hardware-demo-round1.log
+PASS exact echo 1 bytes
+PASS exact echo 1 bytes
+PASS counter holds at 49; ISR and timer continue
+PASS exact echo 1 bytes
+PASS counter resumes 49 -> 51
+PASS exact echo 3 bytes
+PASS exact echo 95 bytes
+PASS exact echo 1024 bytes
+PASS hardware demo: RX ISR evidence, pause/resume, short/burst/binary echo
+
+
+hardware-demo-round2.log
+PASS exact echo 1 bytes
+PASS exact echo 1 bytes
+PASS counter holds at 04; ISR and timer continue
+PASS exact echo 1 bytes
+PASS counter resumes 04 -> 05
+PASS exact echo 3 bytes
+PASS exact echo 95 bytes
+PASS exact echo 1024 bytes
+PASS hardware demo: RX ISR evidence, pause/resume, short/burst/binary echo
+
+
+hardware-demo-final.log
+PASS exact echo 1 bytes
+PASS exact echo 1 bytes
+PASS counter holds at 04; ISR and timer continue
+PASS exact echo 1 bytes
+PASS counter resumes 04 -> 05
+PASS exact echo 3 bytes
+PASS exact echo 95 bytes
+PASS exact echo 1024 bytes
+PASS exact echo 1 bytes
+Waiting 55s for counter near 60 (current 05)
+PASS exact echo 1 bytes
+PASS exact echo 1 bytes
+PASS 60-to-00 rollover: 59 -> 01; timer never reset
+PASS hardware demo: RX ISR evidence, pause/resume, short/burst/binary echo
+
+
+hardware-shell-check.log
+PASS PC -> shell echo: b'IRQ-shell-test\r\n'
+PASS shell IRQ/RX/dropped/errors/overruns: (46, 15, 0, 0, 0)
+PASS JTAG shell -> PC: b'NIOS-to-PC\r\n'
+
+
+Bitstream hashes:
+1dc279f7e549de29b80c7fdbb0cc73ae201a8b731e7acc4f15c6b007f53d6a47 demo.sof
+38bcc4d4179897fbe54a25dc401353a7a7f3fd6f98eb4a64407444966d7d3880 shell.sof
+
+Final JTAG rollover records:
+RX=00000045 seconds=00000005 ISR=00000315 ticks=0000030D
+RX=00000046 seconds=00000005 ISR=00000317 ticks=0000030D
+RX=00000045 seconds=00000005 ISR=00000495 ticks=00000328
+RX=00000046 seconds=00000005 ISR=00000497 ticks=00000328
+RX=00000045 seconds=00000005 ISR=000005EB ticks=00000342
+RX=00000046 seconds=00000005 ISR=000005EC ticks=00000342
+RX=00000045 seconds=0000003B ISR=000006E8 ticks=00001919
+RX=00000046 seconds=00000001 ISR=000006EA ticks=00001A74

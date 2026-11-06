@@ -1,0 +1,3 @@
+VCD info: dumpfile idle_raw.vcd opened for output.
+PASS idle: 5 ms, 50 MHz, 19200 8N1, no APB traffic
+scripts/uart_metrics/tb_uart_power.v:59: $finish called at 5001320000 (1ps)

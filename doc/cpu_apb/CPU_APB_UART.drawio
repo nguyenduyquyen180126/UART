@@ -1,0 +1,268 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxfile host="app.diagrams.net" type="device">
+  <diagram id="page0" name="01 SoC — HDL đã sinh">
+    <mxGraphModel dx="1800" dy="1100" grid="1" gridSize="10" page="1" pageWidth="1800" pageHeight="1040">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="01 SoC — HDL đã sinh&lt;br&gt;CPU AXI4-Lite → interconnect Merlin → APB UART | RAM có trong HDL; đang tắt trong system.qsys" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#ffffff;fontSize=18;spacing=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="30" y="20" width="1740" height="95" />
+        </mxCell>
+        <mxCell id="cpu" value="Nios V/c&lt;br&gt;intel_niosv_c_0&lt;br&gt;data: AXI4-Lite&lt;br&gt;instruction: AXI4-Lite" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e7efff;strokeColor=#4567a0;fontSize=18;spacing=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="40" y="190" width="245" height="150" />
+        </mxCell>
+        <mxCell id="fabric" value="mm_interconnect_0&lt;br&gt;AXI master NI&lt;br&gt;Router / mux / demux&lt;br&gt;APB slave agent + translator&lt;br&gt;Avalon agents cho RAM / PIO / JTAG" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#b68b21;fontSize=18;spacing=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="390" y="170" width="370" height="210" />
+        </mxCell>
+        <mxCell id="ram" value="On-chip RAM: 64 KiB&lt;br&gt;0x00000000 .. 0x0000FFFF&lt;br&gt;HDL: co | qsys: enabled=0" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f1f2f5;strokeColor=#687386;fontSize=18;spacing=12;dashed=1;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="970" y="115" width="300" height="105" />
+        </mxCell>
+        <mxCell id="apb" value="apb_uart_0.apb_slave&lt;br&gt;APB: addr 12, data 32&lt;br&gt;0x00020000 .. 0x00020FFF" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8dcff;strokeColor=#8155a5;fontSize=18;spacing=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="970" y="300" width="300" height="100" />
+        </mxCell>
+        <mxCell id="jtag" value="jtag_uart_0&lt;br&gt;Avalon-MM target&lt;br&gt;0x00010010 .. 0x00010017" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e4f6e7;strokeColor=#418552;fontSize=18;spacing=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="970" y="465" width="300" height="90" />
+        </mxCell>
+        <mxCell id="pio" value="PIO output 8 / SW 8 / KEY 1&lt;br&gt;Avalon-MM targets&lt;br&gt;0x10000 / 0x10020 / 0x10030" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e4f6e7;strokeColor=#418552;fontSize=18;spacing=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="970" y="625" width="300" height="105" />
+        </mxCell>
+        <mxCell id="uart" value="Ben trong apb_uart_0&lt;br&gt;apb_slave -&amp;gt; uart_regs&lt;br&gt;TX FIFO 16 x 8 -&amp;gt; TX core&lt;br&gt;RX core -&amp;gt; RX FIFO 16 x 9" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe9df;strokeColor=#b65b37;fontSize=18;spacing=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="1380" y="300" width="340" height="150" />
+        </mxCell>
+        <mxCell id="serial" value="USB-UART TTL 3.3 V&lt;br&gt;TX FPGA -&amp;gt; RX adapter&lt;br&gt;TX adapter -&amp;gt; RX FPGA&lt;br&gt;Chung GND" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e0f5f8;strokeColor=#36808c;fontSize=18;spacing=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="1380" y="540" width="340" height="110" />
+        </mxCell>
+        <mxCell id="pcserial" value="PC: Serial terminal&lt;br&gt;9600 baud, 8N1 trong main.c" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e0f5f8;strokeColor=#36808c;fontSize=18;spacing=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="1380" y="760" width="340" height="80" />
+        </mxCell>
+        <mxCell id="pcjtag" value="PC: JTAG terminal&lt;br&gt;USB-Blaster / JTAG&lt;br&gt;Duong debug rieng" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e4f6e7;strokeColor=#418552;fontSize=18;spacing=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="525" y="500" width="300" height="100" />
+        </mxCell>
+        <mxCell id="clk" value="CLOCK_50 = 50 MHz&lt;br&gt;KEY[0] -&amp;gt; reset controller&lt;br&gt;Clock/reset cap song song cho IP" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f1f2f5;strokeColor=#687386;fontSize=18;spacing=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="40" y="660" width="350" height="100" />
+        </mxCell>
+        <mxCell id="note" value="Duong xanh: giao dich bo nho hai chieu. IRQ UART dang de ho.&lt;br&gt;Khong co instance avalon2apb.v trong HDL nay. Mau bus xac dinh bang interface/HDL, khong bang mau day tren Schematic." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#b68b21;fontSize=18;spacing=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="40" y="880" width="1680" height="90" />
+        </mxCell>
+        <mxCell id="e0" value="AXI4-Lite" style="html=1;rounded=0;endArrow=classic;strokeWidth=2;strokeColor=#315fc1;fontSize=16;labelBackgroundColor=#ffffff;startArrow=classic;exitX=1.0;exitY=0.36666666666666664;entryX=0.0;entryY=0.35714285714285715;exitDx=0;exitDy=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="cpu" target="fabric">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="285" y="245" />
+            <mxPoint as="targetPoint" x="390" y="245" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e1" value="Avalon-MM" style="html=1;rounded=0;endArrow=classic;strokeWidth=2;strokeColor=#315fc1;fontSize=16;labelBackgroundColor=#ffffff;startArrow=classic;exitX=1.0;exitY=0.14285714285714285;entryX=0.0;entryY=0.47619047619047616;exitDx=0;exitDy=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="fabric" target="ram">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="760" y="200" />
+            <mxPoint as="targetPoint" x="970" y="165" />
+            <Array as="points">
+              <mxPoint x="860" y="200" />
+              <mxPoint x="860" y="165" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e2" value="APB" style="html=1;rounded=0;endArrow=classic;strokeWidth=2;strokeColor=#315fc1;fontSize=16;labelBackgroundColor=#ffffff;startArrow=classic;exitX=1.0;exitY=0.8571428571428571;entryX=0.0;entryY=0.5;exitDx=0;exitDy=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="fabric" target="apb">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="760" y="350" />
+            <mxPoint as="targetPoint" x="970" y="350" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e3" value="Avalon-MM" style="html=1;rounded=0;endArrow=classic;strokeWidth=2;strokeColor=#315fc1;fontSize=16;labelBackgroundColor=#ffffff;startArrow=classic;exitX=1.0;exitY=0.9761904761904762;entryX=0.0;entryY=0.5;exitDx=0;exitDy=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="fabric" target="jtag">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="760" y="375" />
+            <mxPoint as="targetPoint" x="970" y="510" />
+            <Array as="points">
+              <mxPoint x="870" y="375" />
+              <mxPoint x="870" y="510" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e4" value="Avalon-MM" style="html=1;rounded=0;endArrow=classic;strokeWidth=2;strokeColor=#315fc1;fontSize=16;labelBackgroundColor=#ffffff;startArrow=classic;exitX=0.5;exitY=1.0;entryX=0.0;entryY=0.47619047619047616;exitDx=0;exitDy=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="fabric" target="pio">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="575" y="380" />
+            <mxPoint as="targetPoint" x="970" y="675" />
+            <Array as="points">
+              <mxPoint x="575" y="430" />
+              <mxPoint x="910" y="430" />
+              <mxPoint x="910" y="675" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e5" value="APB 81 day" style="html=1;rounded=0;endArrow=classic;strokeWidth=2;strokeColor=#315fc1;fontSize=16;labelBackgroundColor=#ffffff;startArrow=classic;exitX=1.0;exitY=0.5;entryX=0.0;entryY=0.3333333333333333;exitDx=0;exitDy=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="apb" target="uart">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="1270" y="350" />
+            <mxPoint as="targetPoint" x="1380" y="350" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e6" value="JTAG" style="html=1;rounded=0;endArrow=classic;strokeWidth=2;strokeColor=#418552;fontSize=16;labelBackgroundColor=#ffffff;startArrow=classic;exitX=0.0;exitY=0.8888888888888888;entryX=1.0;entryY=0.45;exitDx=0;exitDy=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="jtag" target="pcjtag">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="970" y="545" />
+            <mxPoint as="targetPoint" x="825" y="545" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e7" value="UART TX / RX" style="html=1;rounded=0;endArrow=classic;strokeWidth=2;strokeColor=#b65b37;fontSize=16;labelBackgroundColor=#ffffff;startArrow=classic;exitX=0.5;exitY=1.0;entryX=0.5;entryY=0.0;exitDx=0;exitDy=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="uart" target="serial">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="1550" y="450" />
+            <mxPoint as="targetPoint" x="1550" y="540" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e8" value="USB" style="html=1;rounded=0;endArrow=classic;strokeWidth=2;strokeColor=#36808c;fontSize=16;labelBackgroundColor=#ffffff;startArrow=classic;exitX=0.5;exitY=1.0;entryX=0.5;entryY=0.0;exitDx=0;exitDy=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="serial" target="pcserial">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="1550" y="650" />
+            <mxPoint as="targetPoint" x="1550" y="760" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="page1" name="02 CPU đến từng chân APB">
+    <mxGraphModel dx="1800" dy="1100" grid="1" gridSize="10" page="1" pageWidth="1800" pageHeight="1160">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="02 CPU đến từng chân APB&lt;br&gt;Dây thật trong HDL | APB master nằm trong agent; APB slave nằm trong UART" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#ffffff;fontSize=18;spacing=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="30" y="20" width="1740" height="95" />
+        </mxCell>
+        <mxCell id="cpu" value="Nios V/c data_manager&lt;br&gt;AW / W / B / AR / R&lt;br&gt;ADDR 32, DATA 32, WSTRB 4&lt;br&gt;Moi kenh: VALID &amp;amp; READY" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e7efff;strokeColor=#4567a0;fontSize=18;spacing=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="40" y="150" width="300" height="145" />
+        </mxCell>
+        <mxCell id="ni" value="intel_niosv_c_0_&lt;br&gt;data_manager_agent&lt;br&gt;altera_merlin_axi_master_ni&lt;br&gt;AXI_VERSION = AXI4Lite" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#b68b21;fontSize=18;spacing=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="440" y="150" width="355" height="145" />
+        </mxCell>
+        <mxCell id="net" value="Merlin command / response&lt;br&gt;Packet DATA 106 bit&lt;br&gt;valid, ready, SOP, EOP&lt;br&gt;Router chon UART tai 0x20000" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#b68b21;fontSize=18;spacing=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="895" y="150" width="360" height="145" />
+        </mxCell>
+        <mxCell id="agent" value="apb_uart_0_apb_slave_agent&lt;br&gt;altera_merlin_apb_slave_agent&lt;br&gt;IDLE -&amp;gt; SET_UP -&amp;gt; ACCESS&lt;br&gt;-&amp;gt; SEND_RESPONSE" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8dcff;strokeColor=#8155a5;fontSize=18;spacing=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="1355" y="150" width="390" height="145" />
+        </mxCell>
+        <mxCell id="translator" value="apb_uart_0_apb_slave_translator&lt;br&gt;ADDR_WIDTH=12, DATA_WIDTH=32, USE_M0_PSLVERR=1&lt;br&gt;Pass-through APB; khong phai FSM doi AXI thanh APB" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8dcff;strokeColor=#8155a5;fontSize=18;spacing=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="1095" y="440" width="650" height="100" />
+        </mxCell>
+        <mxCell id="slave" value="apb_uart_0.u_apb_slave&lt;br&gt;PREADY = PSEL &amp;amp; PENABLE&lt;br&gt;addr_valid: aligned, 0x000 .. 0x010&lt;br&gt;reg_pwrite = PSEL &amp;amp; PENABLE &amp;amp; valid &amp;amp; PWRITE&lt;br&gt;reg_pread = PSEL &amp;amp; PENABLE &amp;amp; valid &amp;amp; ~PWRITE&lt;br&gt;PSLVERR = ACCESS &amp;amp; (bad_addr | reg_ack_err)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe9df;strokeColor=#b65b37;fontSize=18;spacing=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="80" y="430" width="590" height="230" />
+        </mxCell>
+        <mxCell id="regs" value="apb_uart_0.u_uart_regs&lt;br&gt;TX 0x00 | RX 0x04 | CFG 0x08&lt;br&gt;STT 0x0C | IER 0x10&lt;br&gt;Clocked writes + FIFO side effects&lt;br&gt;Combinational read mux" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e4f6e7;strokeColor=#418552;fontSize=18;spacing=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="80" y="800" width="590" height="190" />
+        </mxCell>
+        <mxCell id="fifo" value="TX write: wr_en + pwdata[7:0] -&amp;gt; FIFO -&amp;gt; TX&lt;br&gt;RX read: FIFO head -&amp;gt; prdata; pop at clock edge&lt;br&gt;CFG -&amp;gt; baud_sel/data_bits/stop/parity&lt;br&gt;IRQ = enabled RX ready / TX idle / overrun&lt;br&gt;IRQ chua duoc noi den CPU" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e4f6e7;strokeColor=#418552;fontSize=18;spacing=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="1095" y="800" width="650" height="190" />
+        </mxCell>
+        <mxCell id="note" value="PCLK dung clk 50 MHz chung; reset UART la rst_n. APB request = 47 bit, response = 34 bit; tong 81 day logic, chua tinh clock/reset." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f1f2f5;strokeColor=#687386;fontSize=18;spacing=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="80" y="1040" width="1665" height="65" />
+        </mxCell>
+        <mxCell id="e0" value="AXI4-Lite" style="html=1;rounded=0;endArrow=classic;strokeWidth=2;strokeColor=#315fc1;fontSize=16;labelBackgroundColor=#ffffff;startArrow=classic;exitX=1.0;exitY=0.4827586206896552;entryX=0.0;entryY=0.4827586206896552;exitDx=0;exitDy=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="cpu" target="ni">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="340" y="220" />
+            <mxPoint as="targetPoint" x="440" y="220" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e1" value="packets" style="html=1;rounded=0;endArrow=classic;strokeWidth=2;strokeColor=#315fc1;fontSize=16;labelBackgroundColor=#ffffff;startArrow=classic;exitX=1.0;exitY=0.4827586206896552;entryX=0.0;entryY=0.4827586206896552;exitDx=0;exitDy=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="ni" target="net">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="795" y="220" />
+            <mxPoint as="targetPoint" x="895" y="220" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e2" value="cp / rp" style="html=1;rounded=0;endArrow=classic;strokeWidth=2;strokeColor=#315fc1;fontSize=16;labelBackgroundColor=#ffffff;startArrow=classic;exitX=1.0;exitY=0.4827586206896552;entryX=0.0;entryY=0.4827586206896552;exitDx=0;exitDy=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="net" target="agent">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="1255" y="220" />
+            <mxPoint as="targetPoint" x="1355" y="220" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e3" value="APB" style="html=1;rounded=0;endArrow=classic;strokeWidth=2;strokeColor=#315fc1;fontSize=16;labelBackgroundColor=#ffffff;startArrow=classic;exitX=0.5;exitY=1.0;entryX=0.7;entryY=0.0;exitDx=0;exitDy=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="agent" target="translator">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="1550" y="295" />
+            <mxPoint as="targetPoint" x="1550" y="440" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e4" value="PADDR[11:0], PSEL, PENABLE" style="html=1;rounded=0;endArrow=classic;strokeWidth=2;strokeColor=#315fc1;fontSize=16;labelBackgroundColor=#ffffff;exitX=0.0;exitY=0.15;entryX=1.0;entryY=0.10869565217391304;exitDx=0;exitDy=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="translator" target="slave">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="1095" y="455" />
+            <mxPoint as="targetPoint" x="670" y="455" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e5" value="PWRITE, PWDATA[31:0]" style="html=1;rounded=0;endArrow=classic;strokeWidth=2;strokeColor=#315fc1;fontSize=16;labelBackgroundColor=#ffffff;exitX=0.0;exitY=0.5;entryX=1.0;entryY=0.2608695652173913;exitDx=0;exitDy=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="translator" target="slave">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="1095" y="490" />
+            <mxPoint as="targetPoint" x="670" y="490" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e6" value="PRDATA[31:0], PREADY, PSLVERR" style="html=1;rounded=0;endArrow=classic;strokeWidth=2;strokeColor=#bb6c23;fontSize=16;labelBackgroundColor=#ffffff;exitX=1.0;exitY=0.45652173913043476;entryX=0.0;entryY=0.95;exitDx=0;exitDy=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="slave" target="translator">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="670" y="535" />
+            <mxPoint as="targetPoint" x="1095" y="535" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e7" value="reg_paddr[11:0]&lt;br&gt;reg_pwdata[31:0]&lt;br&gt;reg_pread / reg_pwrite" style="html=1;rounded=0;endArrow=classic;strokeWidth=2;strokeColor=#315fc1;fontSize=16;labelBackgroundColor=#ffffff;exitX=0.2796610169491525;exitY=1.0;entryX=0.2796610169491525;entryY=0.0;exitDx=0;exitDy=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="slave" target="regs">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="245" y="660" />
+            <mxPoint as="targetPoint" x="245" y="800" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e8" value="reg_prdata[31:0]&lt;br&gt;reg_ack_err" style="html=1;rounded=0;endArrow=classic;strokeWidth=2;strokeColor=#bb6c23;fontSize=16;labelBackgroundColor=#ffffff;exitX=0.7288135593220338;exitY=0.0;entryX=0.7288135593220338;entryY=1.0;exitDx=0;exitDy=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="regs" target="slave">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="510" y="800" />
+            <mxPoint as="targetPoint" x="510" y="660" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e9" value="Tin hieu noi bo rieng" style="html=1;rounded=0;endArrow=classic;strokeWidth=2;strokeColor=#418552;fontSize=16;labelBackgroundColor=#ffffff;startArrow=classic;exitX=1.0;exitY=0.5263157894736842;entryX=0.0;entryY=0.5263157894736842;exitDx=0;exitDy=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="regs" target="fifo">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="670" y="900" />
+            <mxPoint as="targetPoint" x="1095" y="900" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="page2" name="03 Bridge Avalon viết tay">
+    <mxGraphModel dx="1800" dy="1100" grid="1" gridSize="10" page="1" pageWidth="1800" pageHeight="860">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="03 Bridge Avalon viết tay&lt;br&gt;Phương án có trong repo; chưa được instantiate trong SoC Quartus đã kiểm tra" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#ffffff;fontSize=18;spacing=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="30" y="20" width="1740" height="95" />
+        </mxCell>
+        <mxCell id="host" value="Avalon-MM host&lt;br&gt;read / write / chipselect&lt;br&gt;address[11:0]&lt;br&gt;writedata[31:0]&lt;br&gt;byteenable[3:0]&lt;br&gt;readdata / waitrequest / response" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e7efff;strokeColor=#4567a0;fontSize=18;spacing=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="60" y="240" width="360" height="250" />
+        </mxCell>
+        <mxCell id="bridge" value="avalon2apb.v&lt;br&gt;Avalon slave + APB master&lt;br&gt;IDLE -&amp;gt; SETUP -&amp;gt; ACCESS&lt;br&gt;waitrequest=1 trong khi cho&lt;br&gt;ACCESS: waitrequest = !PREADY&lt;br&gt;ADDR_MODE 0: byte | 1: word" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#b68b21;fontSize=18;spacing=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="650" y="240" width="440" height="250" />
+        </mxCell>
+        <mxCell id="uart" value="apb_uart&lt;br&gt;apb_slave -&amp;gt; uart_regs&lt;br&gt;PADDR / PWDATA / PWRITE&lt;br&gt;PSEL / PENABLE&lt;br&gt;PRDATA / PREADY / PSLVERR&lt;br&gt;FIFO va UART TX/RX" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe9df;strokeColor=#b65b37;fontSize=18;spacing=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="1320" y="240" width="360" height="250" />
+        </mxCell>
+        <mxCell id="note" value="Bridge dang bo qua avl_byteenable; APB khong co PSTRB. Chi dung MMIO 32-bit aligned cho cac vi du nay.&lt;br&gt;PREADY=1 la xong giao dich thanh ghi, chua phai UART da phat xong 1 frame.&lt;br&gt;Muon dung trong Platform Designer can dong goi component/tao wrapper va noi interface ro rang." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#b68b21;fontSize=18;spacing=12;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="60" y="590" width="1620" height="150" />
+        </mxCell>
+        <mxCell id="e0" value="Avalon-MM" style="html=1;rounded=0;endArrow=classic;strokeWidth=2;strokeColor=#315fc1;fontSize=16;labelBackgroundColor=#ffffff;startArrow=classic;exitX=1.0;exitY=0.36;entryX=0.0;entryY=0.36;exitDx=0;exitDy=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="host" target="bridge">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="420" y="330" />
+            <mxPoint as="targetPoint" x="650" y="330" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e1" value="APB" style="html=1;rounded=0;endArrow=classic;strokeWidth=2;strokeColor=#315fc1;fontSize=16;labelBackgroundColor=#ffffff;startArrow=classic;exitX=1.0;exitY=0.36;entryX=0.0;entryY=0.36;exitDx=0;exitDy=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="bridge" target="uart">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="1090" y="330" />
+            <mxPoint as="targetPoint" x="1320" y="330" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

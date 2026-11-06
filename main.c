@@ -1,9 +1,16 @@
 #include <stdint.h>
 #include <stdbool.h>
+#include "uart_irq.h"
+#include "uart_config.h"
+#include "intel_niosv.h"
+#include "sys/alt_irq.h"
 #include "system.h"
 #include "io.h"
 #include "altera_avalon_pio_regs.h"
 #include "altera_avalon_jtag_uart_regs.h"
+#ifndef UART_WAIT_IRQ
+#define UART_WAIT_IRQ() __asm__ volatile ("wfi")
+#endif
 
 // ==============================================================================
 // 1. ĐỊNH NGHĨA ĐỊA CHỈ NGOẠI VI TRÊN BUS SOC
@@ -74,6 +81,8 @@ bool apb_uart_has_data(void);
 char apb_uart_getc(void);
 void update_hex_display(uint8_t val);
 void apb_uart_service_rx(void);
+static bool config_command(const char *line, bool from_pc);
+static void config_service(void);
 
 // ==============================================================================
 // 2. CÁC HÀM GIAO TIẾP VỚI JTAG UART (TERMINAL 1 - NIOS V CONSOLE)
@@ -149,24 +158,18 @@ void jtag_put_hex32(uint32_t val) {
 // ==============================================================================
 // Khởi tạo APB UART: Baud 9600, 8 data bits, 1 stop bit, no parity
 void apb_uart_init(void) {
-    uint32_t timeout = 100000;
-    // Chờ TX rảnh trước khi nạp cấu hình CFG để thỏa mãn uart_idle trong RTL
-    while (((IORD_32DIRECT(UART_STT_REG, 0) & UART_STT_TX_DONE) == 0) && --timeout);
-    IOWR_32DIRECT(UART_CFG_REG, 0, (0x2 << 5) | 0x3);
+    if (uart_irq_init() != 0) {
+        jtag_puts("UART ISR registration failed\n");
+        for (;;) { UART_WAIT_IRQ(); }
+    }
 }
 
-// Gửi 1 ký tự ra APB UART (Kèm cơ chế Full-Duplex Interleaved Service & Timeout)
+// Xếp byte vào TX queue; ISR tiếp tục truyền khi UART hoàn tất burst.
 int apb_uart_putc(char c) {
-    uint32_t timeout = 500000;
-    while (((IORD_32DIRECT(UART_STT_REG, 0) & UART_STT_TX_FULL) != 0) && --timeout) {
-        // [FULL-DUPLEX]: Trong khi CPU chờ TX FIFO có chỗ trống,
-        // nếu PC cùng lúc bắn byte vào RX, CPU xen kẽ đọc và lưu vào bộ đệm ngay!
-        apb_uart_service_rx();
+    while (uart_irq_putc((uint8_t)c) != 0) {
+        /* Queue backpressure: the ISR advances TX; do not poll MMIO. */
+        UART_WAIT_IRQ();
     }
-    if (timeout == 0) return -1;
-
-    // Ghi byte vào TX FIFO (Hardware tự động kích phát start_tx = !empty)
-    IOWR_32DIRECT(UART_TX_DATA_REG, 0, (uint32_t)c);
     g_stats.apb_tx_bytes++;
     return 0;
 }
@@ -180,13 +183,13 @@ void apb_uart_puts(const char *s) {
 
 // Kiểm tra APB UART có byte nhận từ PC không
 bool apb_uart_has_data(void) {
-    return (IORD_32DIRECT(UART_STT_REG, 0) & UART_STT_RX_DONE) ? true : false;
+    return uart_irq_rx_pending();
 }
 
-// Đọc 1 ký tự từ APB UART (phần cứng tự pop 1 byte khỏi RX FIFO và xóa cờ Overrun)
+// Lấy byte từ RX queue trong RAM; chỉ ISR đọc/pop RX FIFO phần cứng.
 char apb_uart_getc(void) {
     g_stats.apb_rx_bytes++;
-    return (char)(IORD_32DIRECT(UART_RX_DATA_REG, 0) & 0xFF);
+    return (char)uart_irq_getc();
 }
 
 // Cập nhật LED 7 thanh HEX1-HEX0
@@ -217,6 +220,10 @@ static void handle_pc_rx_char(char pc_char) {
         // Nếu trong bộ đệm có nội dung chuỗi
         if (pc_line_idx > 0) {
             pc_line_buf[pc_line_idx] = '\0';
+            if (pc_line_buf[0] == '@' && config_command(pc_line_buf + 1, true)) {
+                pc_line_idx = 0;
+                return;
+            }
 
             jtag_puts("\r\n[Incoming from PC (APB)]: \"");
             jtag_puts(pc_line_buf);
@@ -304,6 +311,74 @@ uint32_t parse_hex(const char *s) {
     return res;
 }
 
+/* Runtime CFG change. The peer must stop transmitting after the command.
+ * ACK goes at OLD settings; CFG changes only after TX-complete IRQ and 50 ms
+ * RX quiet, with a 200 ms grace. Main continues draining RX while waiting.
+ * Hardware does not expose rx_busy: uncoordinated TX during the final CFG write
+ * is unsupported (RTL rejects CFG during an in-flight frame with PSLVERR). */
+static bool config_pending;
+static uint8_t pending_config;
+static uint32_t config_rx_seen;
+static uint64_t config_started, config_quiet;
+static void config_reply(const char *message, bool from_pc) {
+    jtag_puts(message);
+    if (from_pc) apb_uart_puts(message);
+}
+static bool config_command(const char *line, bool from_pc) {
+    uint8_t value;
+    int action = uart_config_parse(line, uart_irq_config(), &value);
+    if (!action) return false;
+    if (action < 0) {
+        config_reply("\r\nERR: config <2400|4800|9600|19200> <5..8><N|E|O><1|2>; baud <rate>\r\n", from_pc);
+        return true;
+    }
+    if (from_pc && action == 1 && (value & 3u) < 2u) {
+        config_reply("\r\nERR: Terminal 2 commands require 7/8 data bits; use Terminal 1 for 5/6 bits.\r\n", true);
+        return true;
+    }
+    char description[16];
+    uart_config_format(value, description);
+    if (action == 2) {
+        config_reply("\r\nCONFIG ", from_pc);
+        config_reply(description, from_pc);
+        config_reply("\r\n", from_pc);
+        return true;
+    }
+    if (config_pending) {
+        config_reply("\r\nBUSY: configuration change pending\r\n", from_pc);
+        return true;
+    }
+    config_reply("\r\nSWITCH ", from_pc);
+    config_reply(description, from_pc);
+    config_reply("; stop PC TX. Wait APPLIED on Terminal 1, then change PC settings.\r\n", from_pc);
+    pending_config = value;
+    config_rx_seen = uart_rx_count;
+    config_started = config_quiet = alt_niosv_mtime_get();
+    config_pending = true;
+    return true;
+}
+static void config_service(void) {
+    if (!config_pending) return;
+    uint64_t now = alt_niosv_mtime_get();
+    if (uart_rx_count != config_rx_seen) {
+        config_rx_seen = uart_rx_count;
+        config_quiet = now;
+    }
+    if (now - config_started > 2ull * ALT_CPU_CPU_FREQ) {
+        config_pending = false;
+        jtag_puts("\r\nCFG BUSY/TIMEOUT: unchanged; stop traffic and retry.\r\nNIOS-V:/> ");
+        return;
+    }
+    if (now - config_started < ALT_CPU_CPU_FREQ / 5u ||
+        now - config_quiet < ALT_CPU_CPU_FREQ / 20u || uart_irq_tx_busy()) return;
+    if (uart_irq_configure_idle(pending_config)) return;
+    config_pending = false;
+    char description[16];
+    uart_config_format(pending_config, description);
+    jtag_puts("\r\nAPPLIED "); jtag_puts(description);
+    jtag_puts("; now update PC serial settings.\r\nNIOS-V:/> ");
+}
+
 // ==============================================================================
 // 5. TRÌNH PHÂN TÍCH LỆNH COMMAND SHELL (CLI PARSER TRÊN JTAG CONSOLE)
 // ==============================================================================
@@ -325,12 +400,16 @@ void print_banner(void) {
 
 void print_help(void) {
     jtag_puts("\r\n--- DANH SACH LENH HE THONG NIOS-V SHELL ---\r\n");
+    jtag_puts("  config [baud format]: Doc/doi UART, vd config 19200 8E2\r\n");
+    jtag_puts("  baud <rate>         : Doi baud, giu data/parity/stop\r\n");
+    jtag_puts("  Terminal 2          : @config 19200 8N1 / @baud 9600 / @config\r\n");
     jtag_puts("  help                : Hien thi bang tro giup nay\r\n");
     jtag_puts("  send <message>      : Gui tin nhan chuoi qua bus APB sang Terminal PC\r\n");
     jtag_puts("  chat                : Bat/tat che do go truc tiep (Direct Chat Mode)\r\n");
+    jtag_puts("  irq                 : Xem ISR calls, RX errors va dropped bytes\r\n");
     jtag_puts("  status              : Xem thong ke byte truyen/nhan & trang thai bus\r\n");
-    jtag_puts("  peek <offset_hex>   : Doc thanh ghi APB UART (Vi du: peek 0x0C)\r\n");
-    jtag_puts("  poke <offset> <val> : Ghi thanh ghi APB UART (Vi du: poke 0x00 0x41)\r\n");
+    jtag_puts("  peek <08/0C/10>      : Doc CFG/STT/IER; RX do ISR quan ly\r\n");
+    jtag_puts("  poke 00 <val>       : Gui byte qua hang doi IRQ (Vi du: poke 00 41)\r\n");
     jtag_puts("  hex <val_hex>       : Dat so hien thi tren LED 7 thanh HEX1-HEX0\r\n");
     jtag_puts("  echo <on/off>       : Bat/tat che do tu dong echo tin nhan tu PC\r\n");
     jtag_puts("  clear               : Xoa man hinh Terminal JTAG\r\n");
@@ -345,7 +424,10 @@ void execute_command(char *cmd) {
         return;
     }
 
-    if (str_equals(cmd, "help")) {
+    if (config_command(cmd, false)) {
+        /* Handled by the shared runtime configuration parser. */
+    }
+    else if (str_equals(cmd, "help")) {
         print_help();
     }
     else if (str_starts(cmd, "send")) {
@@ -378,11 +460,23 @@ void execute_command(char *cmd) {
         jtag_puts(" - Thanh ghi CFG (0x20008)    : "); jtag_put_hex32(IORD_32DIRECT(UART_CFG_REG, 0)); jtag_puts("\r\n");
         jtag_puts("=========================================\r\n");
     }
+    else if (str_equals(cmd, "irq")) {
+        jtag_puts("\r\nUART ISR calls: "); jtag_put_uint(uart_irq_count);
+        jtag_puts(" RX: "); jtag_put_uint(uart_rx_count);
+        jtag_puts(" dropped: "); jtag_put_uint(uart_rx_dropped);
+        jtag_puts(" errors: "); jtag_put_uint(uart_rx_errors);
+        jtag_puts(" overruns: "); jtag_put_uint(uart_rx_overruns);
+        jtag_puts("\r\n");
+    }
     else if (str_starts(cmd, "peek")) {
         const char *p = cmd + 4;
         while (*p == ' ') p++;
         uint32_t offset = parse_hex(p);
         uint32_t reg_off = offset & 0xFFC;
+        if (reg_off != 8 && reg_off != 12 && reg_off != 16) {
+            jtag_puts("\r\nUse peek 08/0C/10; RX is owned by ISR.\r\nNIOS-V:/> ");
+            return;
+        }
         uint32_t addr = APB_UART_0_BASE + reg_off;
         uint32_t val = IORD_32DIRECT(addr, 0);
         jtag_puts("\r\n[APB Read] Addr: "); jtag_put_hex32(addr);
@@ -397,12 +491,12 @@ void execute_command(char *cmd) {
         uint32_t val = parse_hex(p);
         uint32_t reg_off = offset & 0xFFC;
 
-        // Chốt an toàn: Chặn ghi vào offset 0x0C (UART_STT_REG là read-only, ghi sẽ gây lỗi bus SLVERR)
-        if (reg_off == 0x0C) {
-            jtag_puts("\r\n[Error] Offset 0x0C (UART_STT_REG) is read-only and causes bus exception if written!\r\n");
+        // ISR sở hữu CFG/IER/RX; chỉ cho phép gửi TX qua hàng đợi.
+        if (reg_off != 0x00) {
+            jtag_puts("\r\n[Error] Only poke 00 is allowed while the IRQ driver owns CFG/IER/RX/STT.\r\n");
         } else {
             uint32_t addr = APB_UART_0_BASE + reg_off;
-            IOWR_32DIRECT(addr, 0, val);
+            apb_uart_putc((char)val);
             jtag_puts("\r\n[APB Write] Addr: "); jtag_put_hex32(addr);
             jtag_puts(" <= Data: "); jtag_put_hex32(val); jtag_puts("\r\n");
         }
@@ -462,6 +556,7 @@ int main(void) {
     char prev_jtag_ch = 0;
 
     while (1) {
+        config_service();
         // ----------------------------------------------------------------------
         // [LUỒNG 1]: KIỂM TRA DỮ LIỆU TỪ TERMINAL 1 (JTAG CONSOLE)
         // ----------------------------------------------------------------------

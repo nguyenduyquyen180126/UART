@@ -304,3 +304,38 @@ help:
 	@echo "4. DON DEP:"
 	@echo "   make clean                 : Xoa thu vien work/, *.vvp, *.vcd, transcript"
 	@echo "=========================================================================="
+
+.PHONY: test_irq_driver soc_check soc_build
+# Exercises the production C ISR driver with a host peripheral model.
+test_irq_driver:
+	$(CC) -std=c11 -Wall -Wextra -Werror -I tb/host_uart_irq -I software software/uart_irq.c tb/test_uart_irq.c -o /tmp/uart_irq_driver_test
+	/tmp/uart_irq_driver_test
+
+soc_check:
+	python3 scripts/check_soc.py
+
+soc_build:
+	./scripts/build_soc.sh
+
+.PHONY: test_demo_clock
+test_demo_clock:
+	$(CC) -std=c11 -Wall -Wextra -Werror -I software tb/test_demo_clock.c -o /tmp/uart_demo_clock_test
+	/tmp/uart_demo_clock_test
+
+.PHONY: test_uart_config
+test_uart_config:
+	$(CC) -std=c11 -Wall -Wextra -Werror -I software software/uart_config.c tb/test_uart_config.c -o /tmp/uart_config_test
+	/tmp/uart_config_test
+
+.PHONY: test_runtime_config
+test_runtime_config:
+	$(CC) -std=c11 -Wall -Wextra -Werror -I tb/host_uart_irq -I software software/uart_config.c tb/test_runtime_config.c -o /tmp/uart_runtime_config_test
+	/tmp/uart_runtime_config_test
+
+.PHONY: test_scope_demo
+test_scope_demo:
+	$(CC) -std=c11 -Wall -Wextra -Werror -I tb/host_uart_irq -I software tb/test_scope_demo.c -o /tmp/uart_scope_demo_test
+	/tmp/uart_scope_demo_test
+	mkdir -p build
+	iverilog -g2012 -s tb_scope_demo -o /tmp/uart_scope_waveform tb/tb_scope_demo.v rtl/*.v
+	vvp /tmp/uart_scope_waveform

@@ -1,0 +1,12 @@
+Power Analyzer Status : Successful - Sat Oct 17 13:51:56 2026
+Quartus Prime Version : 24.1std.0 Build 1077 03/04/2025 SC Lite Edition
+Revision Name : uart_metrics
+Top-level Entity Name : apb_uart
+Family : Cyclone IV E
+Device : EP4CE115F29C7
+Power Models : Final
+Total Thermal Power Dissipation : 142.57 mW
+Core Dynamic Thermal Power Dissipation : 3.74 mW
+Core Static Thermal Power Dissipation : 98.10 mW
+I/O Thermal Power Dissipation : 40.73 mW
+Power Estimation Confidence : Low: user provided insufficient toggle rate data

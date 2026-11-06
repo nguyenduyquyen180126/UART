@@ -1,5 +1,6 @@
 {
     "files.associations": {
         "io.h": "c"
-    }
+    },
+    "cmake.sourceDirectory": "/home/vietanh/Downloads/code/UART/UART/software"
 }

@@ -1,0 +1,1170 @@
+Timing Analyzer report for uart_metrics
+Sat Oct 17 13:51:19 2026
+Quartus Prime Version 24.1std.0 Build 1077 03/04/2025 SC Lite Edition
+
+
+---------------------
+; Table of Contents ;
+---------------------
+  1. Legal Notice
+  2. Timing Analyzer Summary
+  3. Parallel Compilation
+  4. SDC File List
+  5. Clocks
+  6. Slow 1200mV 85C Model Fmax Summary
+  7. Timing Closure Recommendations
+  8. Slow 1200mV 85C Model Setup Summary
+  9. Slow 1200mV 85C Model Hold Summary
+ 10. Slow 1200mV 85C Model Recovery Summary
+ 11. Slow 1200mV 85C Model Removal Summary
+ 12. Slow 1200mV 85C Model Minimum Pulse Width Summary
+ 13. Slow 1200mV 85C Model Setup: 'clk'
+ 14. Slow 1200mV 85C Model Hold: 'clk'
+ 15. Slow 1200mV 85C Model Metastability Summary
+ 16. Slow 1200mV 0C Model Fmax Summary
+ 17. Slow 1200mV 0C Model Setup Summary
+ 18. Slow 1200mV 0C Model Hold Summary
+ 19. Slow 1200mV 0C Model Recovery Summary
+ 20. Slow 1200mV 0C Model Removal Summary
+ 21. Slow 1200mV 0C Model Minimum Pulse Width Summary
+ 22. Slow 1200mV 0C Model Setup: 'clk'
+ 23. Slow 1200mV 0C Model Hold: 'clk'
+ 24. Slow 1200mV 0C Model Metastability Summary
+ 25. Fast 1200mV 0C Model Setup Summary
+ 26. Fast 1200mV 0C Model Hold Summary
+ 27. Fast 1200mV 0C Model Recovery Summary
+ 28. Fast 1200mV 0C Model Removal Summary
+ 29. Fast 1200mV 0C Model Minimum Pulse Width Summary
+ 30. Fast 1200mV 0C Model Setup: 'clk'
+ 31. Fast 1200mV 0C Model Hold: 'clk'
+ 32. Fast 1200mV 0C Model Metastability Summary
+ 33. Multicorner Timing Analysis Summary
+ 34. Board Trace Model Assignments
+ 35. Input Transition Times
+ 36. Signal Integrity Metrics (Slow 1200mv 0c Model)
+ 37. Signal Integrity Metrics (Slow 1200mv 85c Model)
+ 38. Signal Integrity Metrics (Fast 1200mv 0c Model)
+ 39. Setup Transfers
+ 40. Hold Transfers
+ 41. Report TCCS
+ 42. Report RSKM
+ 43. Unconstrained Paths Summary
+ 44. Clock Status Summary
+ 45. Timing Analyzer Messages
+
+
+
+----------------
+; Legal Notice ;
+----------------
+Copyright (C) 2025  Altera Corporation. All rights reserved.
+Your use of Altera Corporation's design tools, logic functions 
+and other software and tools, and any partner logic 
+functions, and any output files from any of the foregoing 
+(including device programming or simulation files), and any 
+associated documentation or information are expressly subject 
+to the terms and conditions of the Altera Program License 
+Subscription Agreement, the Altera Quartus Prime License Agreement,
+the Altera IP License Agreement, or other applicable license
+agreement, including, without limitation, that your use is for
+the sole purpose of programming logic devices manufactured by
+Altera and sold by Altera or its authorized distributors.  Please
+refer to the Altera Software License Subscription Agreements 
+on the Quartus Prime software download page.
+
+
+
++---------------------------------------------------------------------------------+
+; Timing Analyzer Summary                                                         ;
++-----------------------+---------------------------------------------------------+
+; Quartus Prime Version ; Version 24.1std.0 Build 1077 03/04/2025 SC Lite Edition ;
+; Timing Analyzer       ; Legacy Timing Analyzer                                  ;
+; Revision Name         ; uart_metrics                                            ;
+; Device Family         ; Cyclone IV E                                            ;
+; Device Name           ; EP4CE115F29C7                                           ;
+; Timing Models         ; Final                                                   ;
+; Delay Model           ; Combined                                                ;
+; Rise/Fall Delays      ; Enabled                                                 ;
++-----------------------+---------------------------------------------------------+
+
+
++------------------------------------------+
+; Parallel Compilation                     ;
++----------------------------+-------------+
+; Processors                 ; Number      ;
++----------------------------+-------------+
+; Number detected on machine ; 16          ;
+; Maximum allowed            ; 8           ;
+;                            ;             ;
+; Average used               ; 1.08        ;
+; Maximum used               ; 8           ;
+;                            ;             ;
+; Usage by Processor         ; % Time Used ;
+;     Processor 1            ; 100.0%      ;
+;     Processor 2            ;   2.4%      ;
+;     Processor 3            ;   1.6%      ;
+;     Processor 4            ;   0.9%      ;
+;     Processors 5-8         ;   0.7%      ;
++----------------------------+-------------+
+
+
++---------------------------------------------------------------------------------+
+; SDC File List                                                                   ;
++---------------------------------------------+--------+--------------------------+
+; SDC File Path                               ; Status ; Read at                  ;
++---------------------------------------------+--------+--------------------------+
+; ../../scripts/uart_metrics/uart_metrics.sdc ; OK     ; Sat Oct 17 13:51:18 2026 ;
++---------------------------------------------+--------+--------------------------+
+
+
++---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Clocks                                                                                                                                                                          ;
++------------+------+--------+-----------+-------+--------+------------+-----------+-------------+-------+--------+-----------+------------+----------+--------+--------+---------+
+; Clock Name ; Type ; Period ; Frequency ; Rise  ; Fall   ; Duty Cycle ; Divide by ; Multiply by ; Phase ; Offset ; Edge List ; Edge Shift ; Inverted ; Master ; Source ; Targets ;
++------------+------+--------+-----------+-------+--------+------------+-----------+-------------+-------+--------+-----------+------------+----------+--------+--------+---------+
+; clk        ; Base ; 20.000 ; 50.0 MHz  ; 0.000 ; 10.000 ;            ;           ;             ;       ;        ;           ;            ;          ;        ;        ; { clk } ;
++------------+------+--------+-----------+-------+--------+------------+-----------+-------------+-------+--------+-----------+------------+----------+--------+--------+---------+
+
+
++-------------------------------------------------+
+; Slow 1200mV 85C Model Fmax Summary              ;
++-----------+-----------------+------------+------+
+; Fmax      ; Restricted Fmax ; Clock Name ; Note ;
++-----------+-----------------+------------+------+
+; 77.54 MHz ; 77.54 MHz       ; clk        ;      ;
++-----------+-----------------+------------+------+
+This panel reports FMAX for every clock in the design, regardless of the user-specified clock periods.  FMAX is only computed for paths where the source and destination registers or ports are driven by the same clock.  Paths of different clocks, including generated clocks, are ignored.  For paths between a clock and its inversion, FMAX is computed as if the rising and falling edges are scaled along with FMAX, such that the duty cycle (in terms of a percentage) is maintained. Altera recommends that you always use clock constraints and other slack reports for sign-off analysis.
+
+
+----------------------------------
+; Timing Closure Recommendations ;
+----------------------------------
+HTML report is unavailable in plain text report export.
+
+
++-------------------------------------+
+; Slow 1200mV 85C Model Setup Summary ;
++-------+-------+---------------------+
+; Clock ; Slack ; End Point TNS       ;
++-------+-------+---------------------+
+; clk   ; 7.104 ; 0.000               ;
++-------+-------+---------------------+
+
+
++------------------------------------+
+; Slow 1200mV 85C Model Hold Summary ;
++-------+-------+--------------------+
+; Clock ; Slack ; End Point TNS      ;
++-------+-------+--------------------+
+; clk   ; 0.342 ; 0.000              ;
++-------+-------+--------------------+
+
+
+------------------------------------------
+; Slow 1200mV 85C Model Recovery Summary ;
+------------------------------------------
+No paths to report.
+
+
+-----------------------------------------
+; Slow 1200mV 85C Model Removal Summary ;
+-----------------------------------------
+No paths to report.
+
+
++---------------------------------------------------+
+; Slow 1200mV 85C Model Minimum Pulse Width Summary ;
++-------+-------+-----------------------------------+
+; Clock ; Slack ; End Point TNS                     ;
++-------+-------+-----------------------------------+
+; clk   ; 9.553 ; 0.000                             ;
++-------+-------+-----------------------------------+
+
+
++----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Slow 1200mV 85C Model Setup: 'clk'                                                                                                                                                                 ;
++-------+----------------------------------------------------------------------------------------------------------+-----------+--------------+-------------+--------------+------------+------------+
+; Slack ; From Node                                                                                                ; To Node   ; Launch Clock ; Latch Clock ; Relationship ; Clock Skew ; Data Delay ;
++-------+----------------------------------------------------------------------------------------------------------+-----------+--------------+-------------+--------------+------------+------------+
+; 7.104 ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~portb_address_reg0 ; prdata[6] ; clk          ; clk         ; 20.000       ; -3.400     ; 7.476      ;
+; 7.627 ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~portb_address_reg0 ; prdata[0] ; clk          ; clk         ; 20.000       ; -3.400     ; 6.953      ;
+; 7.686 ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~portb_address_reg0 ; prdata[2] ; clk          ; clk         ; 20.000       ; -3.400     ; 6.894      ;
+; 7.858 ; paddr[0]                                                                                                 ; prdata[0] ; clk          ; clk         ; 20.000       ; 0.000      ; 8.122      ;
+; 7.926 ; paddr[0]                                                                                                 ; prdata[2] ; clk          ; clk         ; 20.000       ; 0.000      ; 8.054      ;
+; 7.938 ; paddr[0]                                                                                                 ; prdata[1] ; clk          ; clk         ; 20.000       ; 0.000      ; 8.042      ;
+; 8.051 ; paddr[0]                                                                                                 ; prdata[5] ; clk          ; clk         ; 20.000       ; 0.000      ; 7.929      ;
+; 8.122 ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~portb_address_reg0 ; prdata[1] ; clk          ; clk         ; 20.000       ; -3.400     ; 6.458      ;
+; 8.177 ; sync_fifo:u_rx_fifo|rptr[1]                                                                              ; prdata[2] ; clk          ; clk         ; 20.000       ; -3.045     ; 6.758      ;
+; 8.181 ; sync_fifo:u_rx_fifo|wptr[2]                                                                              ; prdata[0] ; clk          ; clk         ; 20.000       ; -3.044     ; 6.755      ;
+; 8.196 ; paddr[5]                                                                                                 ; prdata[0] ; clk          ; clk         ; 20.000       ; 0.000      ; 7.784      ;
+; 8.212 ; sync_fifo:u_rx_fifo|rptr[1]                                                                              ; prdata[0] ; clk          ; clk         ; 20.000       ; -3.045     ; 6.723      ;
+; 8.215 ; sync_fifo:u_rx_fifo|wptr[2]                                                                              ; prdata[2] ; clk          ; clk         ; 20.000       ; -3.044     ; 6.721      ;
+; 8.227 ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~portb_address_reg0 ; prdata[5] ; clk          ; clk         ; 20.000       ; -3.400     ; 6.353      ;
+; 8.227 ; paddr[1]                                                                                                 ; prdata[0] ; clk          ; clk         ; 20.000       ; 0.000      ; 7.753      ;
+; 8.261 ; sync_fifo:u_rx_fifo|wptr[2]                                                                              ; prdata[1] ; clk          ; clk         ; 20.000       ; -3.044     ; 6.675      ;
+; 8.262 ; paddr[10]                                                                                                ; prdata[0] ; clk          ; clk         ; 20.000       ; 0.000      ; 7.718      ;
+; 8.264 ; paddr[5]                                                                                                 ; prdata[2] ; clk          ; clk         ; 20.000       ; 0.000      ; 7.716      ;
+; 8.276 ; paddr[5]                                                                                                 ; prdata[1] ; clk          ; clk         ; 20.000       ; 0.000      ; 7.704      ;
+; 8.278 ; sync_fifo:u_rx_fifo|rptr[0]                                                                              ; prdata[2] ; clk          ; clk         ; 20.000       ; -3.047     ; 6.655      ;
+; 8.292 ; sync_fifo:u_rx_fifo|rptr[1]                                                                              ; prdata[1] ; clk          ; clk         ; 20.000       ; -3.045     ; 6.643      ;
+; 8.295 ; paddr[1]                                                                                                 ; prdata[2] ; clk          ; clk         ; 20.000       ; 0.000      ; 7.685      ;
+; 8.307 ; paddr[1]                                                                                                 ; prdata[1] ; clk          ; clk         ; 20.000       ; 0.000      ; 7.673      ;
+; 8.309 ; sync_fifo:u_rx_fifo|wptr[2]                                                                              ; prdata[5] ; clk          ; clk         ; 20.000       ; -3.044     ; 6.627      ;
+; 8.314 ; sync_fifo:u_rx_fifo|rptr[0]                                                                              ; prdata[0] ; clk          ; clk         ; 20.000       ; -3.047     ; 6.619      ;
+; 8.330 ; paddr[10]                                                                                                ; prdata[2] ; clk          ; clk         ; 20.000       ; 0.000      ; 7.650      ;
+; 8.336 ; sync_fifo:u_rx_fifo|rptr[1]                                                                              ; prdata[5] ; clk          ; clk         ; 20.000       ; -3.045     ; 6.599      ;
+; 8.342 ; paddr[10]                                                                                                ; prdata[1] ; clk          ; clk         ; 20.000       ; 0.000      ; 7.638      ;
+; 8.389 ; paddr[5]                                                                                                 ; prdata[5] ; clk          ; clk         ; 20.000       ; 0.000      ; 7.591      ;
+; 8.390 ; sync_fifo:u_rx_fifo|wptr[1]                                                                              ; prdata[2] ; clk          ; clk         ; 20.000       ; -3.044     ; 6.546      ;
+; 8.394 ; sync_fifo:u_rx_fifo|rptr[0]                                                                              ; prdata[1] ; clk          ; clk         ; 20.000       ; -3.047     ; 6.539      ;
+; 8.395 ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~portb_address_reg0 ; prdata[8] ; clk          ; clk         ; 20.000       ; -3.400     ; 6.185      ;
+; 8.420 ; paddr[1]                                                                                                 ; prdata[5] ; clk          ; clk         ; 20.000       ; 0.000      ; 7.560      ;
+; 8.424 ; sync_fifo:u_rx_fifo|wptr[1]                                                                              ; prdata[0] ; clk          ; clk         ; 20.000       ; -3.044     ; 6.512      ;
+; 8.428 ; paddr[8]                                                                                                 ; prdata[0] ; clk          ; clk         ; 20.000       ; 0.000      ; 7.552      ;
+; 8.437 ; sync_fifo:u_rx_fifo|rptr[0]                                                                              ; prdata[5] ; clk          ; clk         ; 20.000       ; -3.047     ; 6.496      ;
+; 8.441 ; sync_fifo:u_rx_fifo|fifo_rtl_0_bypass[3]                                                                 ; prdata[0] ; clk          ; clk         ; 20.000       ; -3.044     ; 6.495      ;
+; 8.444 ; sync_fifo:u_rx_fifo|fifo_rtl_0_bypass[1]                                                                 ; prdata[0] ; clk          ; clk         ; 20.000       ; -3.044     ; 6.492      ;
+; 8.455 ; paddr[10]                                                                                                ; prdata[5] ; clk          ; clk         ; 20.000       ; 0.000      ; 7.525      ;
+; 8.467 ; sync_fifo:u_rx_fifo|fifo_rtl_0_bypass[6]                                                                 ; prdata[0] ; clk          ; clk         ; 20.000       ; -3.045     ; 6.468      ;
+; 8.474 ; sync_fifo:u_rx_fifo|fifo_rtl_0_bypass[7]                                                                 ; prdata[0] ; clk          ; clk         ; 20.000       ; -3.045     ; 6.461      ;
+; 8.479 ; sync_fifo:u_rx_fifo|wptr[3]                                                                              ; prdata[0] ; clk          ; clk         ; 20.000       ; -3.044     ; 6.457      ;
+; 8.495 ; sync_fifo:u_rx_fifo|fifo_rtl_0_bypass[3]                                                                 ; prdata[2] ; clk          ; clk         ; 20.000       ; -3.044     ; 6.441      ;
+; 8.496 ; paddr[8]                                                                                                 ; prdata[2] ; clk          ; clk         ; 20.000       ; 0.000      ; 7.484      ;
+; 8.503 ; sync_fifo:u_rx_fifo|fifo_rtl_0_bypass[1]                                                                 ; prdata[2] ; clk          ; clk         ; 20.000       ; -3.044     ; 6.433      ;
+; 8.504 ; sync_fifo:u_rx_fifo|wptr[1]                                                                              ; prdata[1] ; clk          ; clk         ; 20.000       ; -3.044     ; 6.432      ;
+; 8.508 ; paddr[8]                                                                                                 ; prdata[1] ; clk          ; clk         ; 20.000       ; 0.000      ; 7.472      ;
+; 8.513 ; sync_fifo:u_rx_fifo|wptr[3]                                                                              ; prdata[2] ; clk          ; clk         ; 20.000       ; -3.044     ; 6.423      ;
+; 8.521 ; sync_fifo:u_rx_fifo|fifo_rtl_0_bypass[3]                                                                 ; prdata[1] ; clk          ; clk         ; 20.000       ; -3.044     ; 6.415      ;
+; 8.524 ; paddr[6]                                                                                                 ; prdata[0] ; clk          ; clk         ; 20.000       ; 0.000      ; 7.456      ;
+; 8.524 ; sync_fifo:u_rx_fifo|fifo_rtl_0_bypass[1]                                                                 ; prdata[1] ; clk          ; clk         ; 20.000       ; -3.044     ; 6.412      ;
+; 8.535 ; sync_fifo:u_rx_fifo|fifo_rtl_0_bypass[6]                                                                 ; prdata[2] ; clk          ; clk         ; 20.000       ; -3.045     ; 6.400      ;
+; 8.539 ; sync_fifo:u_rx_fifo|rptr[3]                                                                              ; prdata[0] ; clk          ; clk         ; 20.000       ; -3.045     ; 6.396      ;
+; 8.542 ; sync_fifo:u_rx_fifo|fifo_rtl_0_bypass[7]                                                                 ; prdata[2] ; clk          ; clk         ; 20.000       ; -3.045     ; 6.393      ;
+; 8.547 ; sync_fifo:u_rx_fifo|fifo_rtl_0_bypass[6]                                                                 ; prdata[1] ; clk          ; clk         ; 20.000       ; -3.045     ; 6.388      ;
+; 8.549 ; sync_fifo:u_rx_fifo|wptr[1]                                                                              ; prdata[5] ; clk          ; clk         ; 20.000       ; -3.044     ; 6.387      ;
+; 8.554 ; sync_fifo:u_rx_fifo|fifo_rtl_0_bypass[7]                                                                 ; prdata[1] ; clk          ; clk         ; 20.000       ; -3.045     ; 6.381      ;
+; 8.559 ; sync_fifo:u_rx_fifo|wptr[3]                                                                              ; prdata[1] ; clk          ; clk         ; 20.000       ; -3.044     ; 6.377      ;
+; 8.567 ; paddr[0]                                                                                                 ; prdata[3] ; clk          ; clk         ; 20.000       ; 0.000      ; 7.413      ;
+; 8.573 ; sync_fifo:u_rx_fifo|rptr[3]                                                                              ; prdata[2] ; clk          ; clk         ; 20.000       ; -3.045     ; 6.362      ;
+; 8.592 ; paddr[6]                                                                                                 ; prdata[2] ; clk          ; clk         ; 20.000       ; 0.000      ; 7.388      ;
+; 8.597 ; paddr[0]                                                                                                 ; prdata[6] ; clk          ; clk         ; 20.000       ; 0.000      ; 7.383      ;
+; 8.604 ; paddr[6]                                                                                                 ; prdata[1] ; clk          ; clk         ; 20.000       ; 0.000      ; 7.376      ;
+; 8.607 ; sync_fifo:u_rx_fifo|wptr[3]                                                                              ; prdata[5] ; clk          ; clk         ; 20.000       ; -3.044     ; 6.329      ;
+; 8.614 ; paddr[0]                                                                                                 ; prdata[7] ; clk          ; clk         ; 20.000       ; 0.000      ; 7.366      ;
+; 8.619 ; sync_fifo:u_rx_fifo|rptr[3]                                                                              ; prdata[1] ; clk          ; clk         ; 20.000       ; -3.045     ; 6.316      ;
+; 8.621 ; paddr[8]                                                                                                 ; prdata[5] ; clk          ; clk         ; 20.000       ; 0.000      ; 7.359      ;
+; 8.623 ; paddr[0]                                                                                                 ; pslverr   ; clk          ; clk         ; 20.000       ; 0.000      ; 7.357      ;
+; 8.639 ; paddr[9]                                                                                                 ; prdata[0] ; clk          ; clk         ; 20.000       ; 0.000      ; 7.341      ;
+; 8.643 ; sync_fifo:u_rx_fifo|fifo_rtl_0_bypass[3]                                                                 ; prdata[5] ; clk          ; clk         ; 20.000       ; -3.044     ; 6.293      ;
+; 8.646 ; sync_fifo:u_rx_fifo|fifo_rtl_0_bypass[1]                                                                 ; prdata[5] ; clk          ; clk         ; 20.000       ; -3.044     ; 6.290      ;
+; 8.667 ; sync_fifo:u_rx_fifo|rptr[3]                                                                              ; prdata[5] ; clk          ; clk         ; 20.000       ; -3.045     ; 6.268      ;
+; 8.669 ; sync_fifo:u_rx_fifo|fifo_rtl_0_bypass[6]                                                                 ; prdata[5] ; clk          ; clk         ; 20.000       ; -3.045     ; 6.266      ;
+; 8.676 ; sync_fifo:u_rx_fifo|fifo_rtl_0_bypass[7]                                                                 ; prdata[5] ; clk          ; clk         ; 20.000       ; -3.045     ; 6.259      ;
+; 8.679 ; paddr[0]                                                                                                 ; prdata[8] ; clk          ; clk         ; 20.000       ; 0.000      ; 7.301      ;
+; 8.702 ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~portb_address_reg0 ; prdata[7] ; clk          ; clk         ; 20.000       ; -3.400     ; 5.878      ;
+; 8.707 ; paddr[9]                                                                                                 ; prdata[2] ; clk          ; clk         ; 20.000       ; 0.000      ; 7.273      ;
+; 8.717 ; paddr[6]                                                                                                 ; prdata[5] ; clk          ; clk         ; 20.000       ; 0.000      ; 7.263      ;
+; 8.717 ; sync_fifo:u_rx_fifo|rptr[2]                                                                              ; prdata[0] ; clk          ; clk         ; 20.000       ; -3.045     ; 6.218      ;
+; 8.719 ; paddr[9]                                                                                                 ; prdata[1] ; clk          ; clk         ; 20.000       ; 0.000      ; 7.261      ;
+; 8.734 ; sync_fifo:u_rx_fifo|wptr[0]                                                                              ; prdata[0] ; clk          ; clk         ; 20.000       ; -3.044     ; 6.202      ;
+; 8.734 ; sync_fifo:u_rx_fifo|rptr[2]                                                                              ; prdata[2] ; clk          ; clk         ; 20.000       ; -3.045     ; 6.201      ;
+; 8.739 ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~portb_address_reg0 ; prdata[3] ; clk          ; clk         ; 20.000       ; -3.400     ; 5.841      ;
+; 8.743 ; sync_fifo:u_rx_fifo|wptr[0]                                                                              ; prdata[2] ; clk          ; clk         ; 20.000       ; -3.044     ; 6.193      ;
+; 8.751 ; paddr[3]                                                                                                 ; prdata[0] ; clk          ; clk         ; 20.000       ; 0.000      ; 7.229      ;
+; 8.793 ; sync_fifo:u_rx_fifo|wptr[4]                                                                              ; prdata[0] ; clk          ; clk         ; 20.000       ; -3.044     ; 6.143      ;
+; 8.796 ; sync_fifo:u_rx_fifo|fifo_rtl_0_bypass[5]                                                                 ; prdata[0] ; clk          ; clk         ; 20.000       ; -3.045     ; 6.139      ;
+; 8.797 ; sync_fifo:u_rx_fifo|rptr[2]                                                                              ; prdata[1] ; clk          ; clk         ; 20.000       ; -3.045     ; 6.138      ;
+; 8.803 ; paddr[7]                                                                                                 ; prdata[0] ; clk          ; clk         ; 20.000       ; 0.000      ; 7.177      ;
+; 8.808 ; sync_fifo:u_rx_fifo|wptr[4]                                                                              ; prdata[2] ; clk          ; clk         ; 20.000       ; -3.044     ; 6.128      ;
+; 8.812 ; paddr[3]                                                                                                 ; prdata[7] ; clk          ; clk         ; 20.000       ; 0.000      ; 7.168      ;
+; 8.814 ; sync_fifo:u_rx_fifo|wptr[0]                                                                              ; prdata[1] ; clk          ; clk         ; 20.000       ; -3.044     ; 6.122      ;
+; 8.816 ; sync_fifo:u_rx_fifo|fifo_rtl_0_bypass[8]                                                                 ; prdata[0] ; clk          ; clk         ; 20.000       ; -3.045     ; 6.119      ;
+; 8.819 ; paddr[3]                                                                                                 ; prdata[2] ; clk          ; clk         ; 20.000       ; 0.000      ; 7.161      ;
+; 8.831 ; paddr[3]                                                                                                 ; prdata[1] ; clk          ; clk         ; 20.000       ; 0.000      ; 7.149      ;
+; 8.832 ; paddr[9]                                                                                                 ; prdata[5] ; clk          ; clk         ; 20.000       ; 0.000      ; 7.148      ;
+; 8.845 ; sync_fifo:u_rx_fifo|rptr[2]                                                                              ; prdata[5] ; clk          ; clk         ; 20.000       ; -3.045     ; 6.090      ;
+; 8.847 ; sync_fifo:u_rx_fifo|fifo_rtl_0_bypass[5]                                                                 ; prdata[2] ; clk          ; clk         ; 20.000       ; -3.045     ; 6.088      ;
+; 8.853 ; paddr[0]                                                                                                 ; prdata[4] ; clk          ; clk         ; 20.000       ; 0.000      ; 7.127      ;
+; 8.862 ; sync_fifo:u_rx_fifo|wptr[0]                                                                              ; prdata[5] ; clk          ; clk         ; 20.000       ; -3.044     ; 6.074      ;
++-------+----------------------------------------------------------------------------------------------------------+-----------+--------------+-------------+--------------+------------+------------+
+
+
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Slow 1200mV 85C Model Hold: 'clk'                                                                                                                                                                                                                               ;
++-------+------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------+--------------+-------------+--------------+------------+------------+
+; Slack ; From Node                                                              ; To Node                                                                                                  ; Launch Clock ; Latch Clock ; Relationship ; Clock Skew ; Data Delay ;
++-------+------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------+--------------+-------------+--------------+------------+------------+
+; 0.342 ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[7]                      ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0  ; clk          ; clk         ; 0.000        ; 0.448      ; 1.012      ;
+; 0.346 ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[2]                      ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0  ; clk          ; clk         ; 0.000        ; 0.448      ; 1.016      ;
+; 0.352 ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[5]                      ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0  ; clk          ; clk         ; 0.000        ; 0.449      ; 1.023      ;
+; 0.356 ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[3]                      ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0  ; clk          ; clk         ; 0.000        ; 0.449      ; 1.027      ;
+; 0.357 ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[4]                      ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0  ; clk          ; clk         ; 0.000        ; 0.449      ; 1.028      ;
+; 0.361 ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[1]                      ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0  ; clk          ; clk         ; 0.000        ; 0.449      ; 1.032      ;
+; 0.364 ; sync_fifo:u_rx_fifo|wptr[0]                                            ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_address_reg0 ; clk          ; clk         ; 0.000        ; 0.436      ; 1.022      ;
+; 0.364 ; sync_fifo:u_rx_fifo|wptr[1]                                            ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_address_reg0 ; clk          ; clk         ; 0.000        ; 0.436      ; 1.022      ;
+; 0.380 ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[0]                      ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0  ; clk          ; clk         ; 0.000        ; 0.449      ; 1.051      ;
+; 0.402 ; sync_fifo:u_rx_fifo|rptr[3]                                            ; sync_fifo:u_rx_fifo|rptr[3]                                                                              ; clk          ; clk         ; 0.000        ; 0.081      ; 0.669      ;
+; 0.402 ; sync_fifo:u_rx_fifo|rptr[1]                                            ; sync_fifo:u_rx_fifo|rptr[1]                                                                              ; clk          ; clk         ; 0.000        ; 0.081      ; 0.669      ;
+; 0.402 ; sync_fifo:u_rx_fifo|rptr[2]                                            ; sync_fifo:u_rx_fifo|rptr[2]                                                                              ; clk          ; clk         ; 0.000        ; 0.081      ; 0.669      ;
+; 0.402 ; sync_fifo:u_rx_fifo|rptr[4]                                            ; sync_fifo:u_rx_fifo|rptr[4]                                                                              ; clk          ; clk         ; 0.000        ; 0.081      ; 0.669      ;
+; 0.402 ; sync_fifo:u_rx_fifo|rptr[0]                                            ; sync_fifo:u_rx_fifo|rptr[0]                                                                              ; clk          ; clk         ; 0.000        ; 0.081      ; 0.669      ;
+; 0.402 ; sync_fifo:u_rx_fifo|wptr[0]                                            ; sync_fifo:u_rx_fifo|wptr[0]                                                                              ; clk          ; clk         ; 0.000        ; 0.081      ; 0.669      ;
+; 0.402 ; rx_uart:u_rx_uart|rx_controller:rx_controller_inst|frame_error_latched ; rx_uart:u_rx_uart|rx_controller:rx_controller_inst|frame_error_latched                                   ; clk          ; clk         ; 0.000        ; 0.081      ; 0.669      ;
+; 0.402 ; sync_fifo:u_tx_fifo|rptr[0]                                            ; sync_fifo:u_tx_fifo|rptr[0]                                                                              ; clk          ; clk         ; 0.000        ; 0.081      ; 0.669      ;
+; 0.402 ; sync_fifo:u_tx_fifo|rptr[4]                                            ; sync_fifo:u_tx_fifo|rptr[4]                                                                              ; clk          ; clk         ; 0.000        ; 0.081      ; 0.669      ;
+; 0.402 ; sync_fifo:u_tx_fifo|rptr[1]                                            ; sync_fifo:u_tx_fifo|rptr[1]                                                                              ; clk          ; clk         ; 0.000        ; 0.081      ; 0.669      ;
+; 0.402 ; sync_fifo:u_tx_fifo|rptr[3]                                            ; sync_fifo:u_tx_fifo|rptr[3]                                                                              ; clk          ; clk         ; 0.000        ; 0.081      ; 0.669      ;
+; 0.402 ; sync_fifo:u_tx_fifo|rptr[2]                                            ; sync_fifo:u_tx_fifo|rptr[2]                                                                              ; clk          ; clk         ; 0.000        ; 0.081      ; 0.669      ;
+; 0.402 ; sync_fifo:u_tx_fifo|wptr[0]                                            ; sync_fifo:u_tx_fifo|wptr[0]                                                                              ; clk          ; clk         ; 0.000        ; 0.081      ; 0.669      ;
+; 0.402 ; tx_uart:u_tx_uart|tx_stop_cnt:u_stop_cnt|cnt                           ; tx_uart:u_tx_uart|tx_stop_cnt:u_stop_cnt|cnt                                                             ; clk          ; clk         ; 0.000        ; 0.081      ; 0.669      ;
+; 0.402 ; tx_uart:u_tx_uart|tx_controller:controller|state.STOP                  ; tx_uart:u_tx_uart|tx_controller:controller|state.STOP                                                    ; clk          ; clk         ; 0.000        ; 0.081      ; 0.669      ;
+; 0.402 ; rx_uart:u_rx_uart|tick_cnt:tick_cnt_inst|tick_cnt[3]                   ; rx_uart:u_rx_uart|tick_cnt:tick_cnt_inst|tick_cnt[3]                                                     ; clk          ; clk         ; 0.000        ; 0.081      ; 0.669      ;
+; 0.402 ; rx_uart:u_rx_uart|tick_cnt:tick_cnt_inst|tick_cnt[2]                   ; rx_uart:u_rx_uart|tick_cnt:tick_cnt_inst|tick_cnt[2]                                                     ; clk          ; clk         ; 0.000        ; 0.081      ; 0.669      ;
+; 0.402 ; rx_uart:u_rx_uart|tick_cnt:tick_cnt_inst|tick_cnt[1]                   ; rx_uart:u_rx_uart|tick_cnt:tick_cnt_inst|tick_cnt[1]                                                     ; clk          ; clk         ; 0.000        ; 0.081      ; 0.669      ;
+; 0.402 ; rx_uart:u_rx_uart|rx_controller:rx_controller_inst|state.IDLE          ; rx_uart:u_rx_uart|rx_controller:rx_controller_inst|state.IDLE                                            ; clk          ; clk         ; 0.000        ; 0.081      ; 0.669      ;
+; 0.402 ; rx_uart:u_rx_uart|rx_controller:rx_controller_inst|first_stop_sampled  ; rx_uart:u_rx_uart|rx_controller:rx_controller_inst|first_stop_sampled                                    ; clk          ; clk         ; 0.000        ; 0.081      ; 0.669      ;
+; 0.403 ; uart_regs:u_uart_regs|overrun_latch                                    ; uart_regs:u_uart_regs|overrun_latch                                                                      ; clk          ; clk         ; 0.000        ; 0.080      ; 0.669      ;
+; 0.403 ; rx_uart:u_rx_uart|deframe:deframe_inst|parity_exp                      ; rx_uart:u_rx_uart|deframe:deframe_inst|parity_exp                                                        ; clk          ; clk         ; 0.000        ; 0.080      ; 0.669      ;
+; 0.403 ; tx_uart:u_tx_uart|tx_controller:controller|state.START                 ; tx_uart:u_tx_uart|tx_controller:controller|state.START                                                   ; clk          ; clk         ; 0.000        ; 0.080      ; 0.669      ;
+; 0.403 ; tx_uart:u_tx_uart|tx_controller:controller|state.PARITY                ; tx_uart:u_tx_uart|tx_controller:controller|state.PARITY                                                  ; clk          ; clk         ; 0.000        ; 0.080      ; 0.669      ;
+; 0.403 ; tx_uart:u_tx_uart|tx_bit_cnt:u_bit_cnt|cnt[2]                          ; tx_uart:u_tx_uart|tx_bit_cnt:u_bit_cnt|cnt[2]                                                            ; clk          ; clk         ; 0.000        ; 0.080      ; 0.669      ;
+; 0.403 ; tx_uart:u_tx_uart|tx_bit_cnt:u_bit_cnt|cnt[1]                          ; tx_uart:u_tx_uart|tx_bit_cnt:u_bit_cnt|cnt[1]                                                            ; clk          ; clk         ; 0.000        ; 0.080      ; 0.669      ;
+; 0.403 ; tx_uart:u_tx_uart|tx_bit_cnt:u_bit_cnt|cnt[0]                          ; tx_uart:u_tx_uart|tx_bit_cnt:u_bit_cnt|cnt[0]                                                            ; clk          ; clk         ; 0.000        ; 0.080      ; 0.669      ;
+; 0.403 ; tx_uart:u_tx_uart|tx_controller:controller|state.DATA                  ; tx_uart:u_tx_uart|tx_controller:controller|state.DATA                                                    ; clk          ; clk         ; 0.000        ; 0.080      ; 0.669      ;
+; 0.403 ; rx_uart:u_rx_uart|bit_cnt:bit_cnt_inst|bit_cnt[1]                      ; rx_uart:u_rx_uart|bit_cnt:bit_cnt_inst|bit_cnt[1]                                                        ; clk          ; clk         ; 0.000        ; 0.080      ; 0.669      ;
+; 0.407 ; rx_uart:u_rx_uart|tick_cnt:tick_cnt_inst|tick_cnt[0]                   ; rx_uart:u_rx_uart|tick_cnt:tick_cnt_inst|tick_cnt[0]                                                     ; clk          ; clk         ; 0.000        ; 0.081      ; 0.674      ;
+; 0.408 ; rx_uart:u_rx_uart|bit_cnt:bit_cnt_inst|bit_cnt[0]                      ; rx_uart:u_rx_uart|bit_cnt:bit_cnt_inst|bit_cnt[0]                                                        ; clk          ; clk         ; 0.000        ; 0.080      ; 0.674      ;
+; 0.409 ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[6]                      ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0  ; clk          ; clk         ; 0.000        ; 0.449      ; 1.080      ;
+; 0.418 ; sync_fifo:u_tx_fifo|wptr[3]                                            ; sync_fifo:u_tx_fifo|altsyncram:fifo_rtl_0|altsyncram_5pd1:auto_generated|ram_block1a0~porta_address_reg0 ; clk          ; clk         ; 0.000        ; 0.435      ; 1.075      ;
+; 0.422 ; sync_fifo:u_tx_fifo|wptr[0]                                            ; sync_fifo:u_tx_fifo|altsyncram:fifo_rtl_0|altsyncram_5pd1:auto_generated|ram_block1a0~porta_address_reg0 ; clk          ; clk         ; 0.000        ; 0.435      ; 1.079      ;
+; 0.433 ; sync_fifo:u_tx_fifo|wptr[4]                                            ; sync_fifo:u_tx_fifo|wptr[4]                                                                              ; clk          ; clk         ; 0.000        ; 0.081      ; 0.700      ;
+; 0.435 ; tx_uart:u_tx_uart|tx_bit_cnt:u_bit_cnt|cnt[0]                          ; tx_uart:u_tx_uart|tx_bit_cnt:u_bit_cnt|cnt[1]                                                            ; clk          ; clk         ; 0.000        ; 0.080      ; 0.701      ;
+; 0.438 ; tx_uart:u_tx_uart|tx_bit_cnt:u_bit_cnt|cnt[0]                          ; tx_uart:u_tx_uart|tx_bit_cnt:u_bit_cnt|cnt[2]                                                            ; clk          ; clk         ; 0.000        ; 0.080      ; 0.704      ;
+; 0.442 ; sync_fifo:u_rx_fifo|wptr[4]                                            ; sync_fifo:u_rx_fifo|wptr[4]                                                                              ; clk          ; clk         ; 0.000        ; 0.081      ; 0.709      ;
+; 0.442 ; rx_uart:u_rx_uart|rx_controller:rx_controller_inst|state.FRAME         ; rx_uart:u_rx_uart|rx_controller:rx_controller_inst|state.HOLD                                            ; clk          ; clk         ; 0.000        ; 0.080      ; 0.708      ;
+; 0.464 ; sync_fifo:u_tx_fifo|rptr[0]                                            ; sync_fifo:u_tx_fifo|rptr[2]                                                                              ; clk          ; clk         ; 0.000        ; 0.081      ; 0.731      ;
+; 0.480 ; tx_uart:u_tx_uart|tx_controller:controller|state.IDLE                  ; sync_fifo:u_tx_fifo|rptr[3]                                                                              ; clk          ; clk         ; 0.000        ; 0.081      ; 0.747      ;
+; 0.557 ; sync_fifo:u_tx_fifo|wptr[1]                                            ; sync_fifo:u_tx_fifo|altsyncram:fifo_rtl_0|altsyncram_5pd1:auto_generated|ram_block1a0~porta_address_reg0 ; clk          ; clk         ; 0.000        ; 0.435      ; 1.214      ;
+; 0.564 ; sync_fifo:u_rx_fifo|rptr[2]                                            ; sync_fifo:u_rx_fifo|fifo_rtl_0_bypass[6]                                                                 ; clk          ; clk         ; 0.000        ; 0.081      ; 0.831      ;
+; 0.577 ; sync_fifo:u_tx_fifo|wptr[2]                                            ; sync_fifo:u_tx_fifo|altsyncram:fifo_rtl_0|altsyncram_5pd1:auto_generated|ram_block1a0~porta_address_reg0 ; clk          ; clk         ; 0.000        ; 0.435      ; 1.234      ;
+; 0.596 ; sync_fifo:u_rx_fifo|wptr[3]                                            ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_address_reg0 ; clk          ; clk         ; 0.000        ; 0.436      ; 1.254      ;
+; 0.598 ; sync_fifo:u_tx_fifo|fifo_rtl_0_bypass[10]                              ; tx_uart:u_tx_uart|piso:u_piso|data[1]                                                                    ; clk          ; clk         ; 0.000        ; 0.079      ; 0.863      ;
+; 0.600 ; tx_uart:u_tx_uart|piso:u_piso|data[5]                                  ; tx_uart:u_tx_uart|piso:u_piso|data[4]                                                                    ; clk          ; clk         ; 0.000        ; 0.080      ; 0.866      ;
+; 0.603 ; tx_uart:u_tx_uart|piso:u_piso|data[3]                                  ; tx_uart:u_tx_uart|piso:u_piso|data[2]                                                                    ; clk          ; clk         ; 0.000        ; 0.080      ; 0.869      ;
+; 0.612 ; sync_fifo:u_rx_fifo|rptr[1]                                            ; sync_fifo:u_rx_fifo|rptr[2]                                                                              ; clk          ; clk         ; 0.000        ; 0.081      ; 0.879      ;
+; 0.615 ; rx_uart:u_rx_uart|sipo:sipo_inst|data_out[11]                          ; rx_uart:u_rx_uart|deframe:deframe_inst|parity_bit                                                        ; clk          ; clk         ; 0.000        ; 0.081      ; 0.882      ;
+; 0.619 ; rx_uart:u_rx_uart|sipo:sipo_inst|data_out[11]                          ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[7]                                                        ; clk          ; clk         ; 0.000        ; 0.081      ; 0.886      ;
+; 0.628 ; rx_uart:u_rx_uart|sipo:sipo_inst|data_out[9]                           ; rx_uart:u_rx_uart|sipo:sipo_inst|data_out[8]                                                             ; clk          ; clk         ; 0.000        ; 0.081      ; 0.895      ;
+; 0.629 ; rx_uart:u_rx_uart|sipo:sipo_inst|data_out[7]                           ; rx_uart:u_rx_uart|sipo:sipo_inst|data_out[6]                                                             ; clk          ; clk         ; 0.000        ; 0.081      ; 0.896      ;
+; 0.630 ; rx_uart:u_rx_uart|sipo:sipo_inst|data_out[8]                           ; rx_uart:u_rx_uart|sipo:sipo_inst|data_out[7]                                                             ; clk          ; clk         ; 0.000        ; 0.081      ; 0.897      ;
+; 0.643 ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[1]                        ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[1]                                                          ; clk          ; clk         ; 0.000        ; 0.081      ; 0.910      ;
+; 0.645 ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[4]                     ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[4]                                                       ; clk          ; clk         ; 0.000        ; 0.080      ; 0.911      ;
+; 0.646 ; sync_fifo:u_rx_fifo|wptr[1]                                            ; sync_fifo:u_rx_fifo|fifo_rtl_0_bypass[3]                                                                 ; clk          ; clk         ; 0.000        ; 0.081      ; 0.913      ;
+; 0.646 ; sync_fifo:u_rx_fifo|wptr[0]                                            ; sync_fifo:u_rx_fifo|fifo_rtl_0_bypass[1]                                                                 ; clk          ; clk         ; 0.000        ; 0.081      ; 0.913      ;
+; 0.646 ; tx_uart:u_tx_uart|tx_controller:controller|state.STOP                  ; tx_uart:u_tx_uart|tx_stop_cnt:u_stop_cnt|cnt                                                             ; clk          ; clk         ; 0.000        ; 0.081      ; 0.913      ;
+; 0.649 ; tx_uart:u_tx_uart|tx_bit_cnt:u_bit_cnt|cnt[1]                          ; tx_uart:u_tx_uart|tx_bit_cnt:u_bit_cnt|cnt[2]                                                            ; clk          ; clk         ; 0.000        ; 0.080      ; 0.915      ;
+; 0.655 ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[5]                        ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[5]                                                          ; clk          ; clk         ; 0.000        ; 0.081      ; 0.922      ;
+; 0.656 ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[5]                     ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[5]                                                       ; clk          ; clk         ; 0.000        ; 0.080      ; 0.922      ;
+; 0.657 ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[2]                        ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[2]                                                          ; clk          ; clk         ; 0.000        ; 0.081      ; 0.924      ;
+; 0.657 ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[3]                        ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[3]                                                          ; clk          ; clk         ; 0.000        ; 0.081      ; 0.924      ;
+; 0.657 ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[4]                        ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[4]                                                          ; clk          ; clk         ; 0.000        ; 0.081      ; 0.924      ;
+; 0.657 ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[12]                       ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[12]                                                         ; clk          ; clk         ; 0.000        ; 0.081      ; 0.924      ;
+; 0.658 ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[11]                       ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[11]                                                         ; clk          ; clk         ; 0.000        ; 0.081      ; 0.925      ;
+; 0.658 ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[7]                        ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[7]                                                          ; clk          ; clk         ; 0.000        ; 0.081      ; 0.925      ;
+; 0.658 ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[9]                        ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[9]                                                          ; clk          ; clk         ; 0.000        ; 0.081      ; 0.925      ;
+; 0.658 ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[10]                       ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[10]                                                         ; clk          ; clk         ; 0.000        ; 0.081      ; 0.925      ;
+; 0.658 ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[13]                       ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[13]                                                         ; clk          ; clk         ; 0.000        ; 0.081      ; 0.925      ;
+; 0.658 ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[12]                    ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[12]                                                      ; clk          ; clk         ; 0.000        ; 0.080      ; 0.924      ;
+; 0.658 ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[1]                     ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[1]                                                       ; clk          ; clk         ; 0.000        ; 0.080      ; 0.924      ;
+; 0.658 ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[2]                     ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[2]                                                       ; clk          ; clk         ; 0.000        ; 0.080      ; 0.924      ;
+; 0.658 ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[3]                     ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[3]                                                       ; clk          ; clk         ; 0.000        ; 0.080      ; 0.924      ;
+; 0.659 ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[14]                       ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[14]                                                         ; clk          ; clk         ; 0.000        ; 0.081      ; 0.926      ;
+; 0.659 ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[10]                    ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[10]                                                      ; clk          ; clk         ; 0.000        ; 0.080      ; 0.925      ;
+; 0.659 ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[7]                     ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[7]                                                       ; clk          ; clk         ; 0.000        ; 0.080      ; 0.925      ;
+; 0.659 ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[9]                     ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[9]                                                       ; clk          ; clk         ; 0.000        ; 0.080      ; 0.925      ;
+; 0.659 ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[11]                    ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[11]                                                      ; clk          ; clk         ; 0.000        ; 0.080      ; 0.925      ;
+; 0.659 ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[13]                    ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[13]                                                      ; clk          ; clk         ; 0.000        ; 0.080      ; 0.925      ;
+; 0.660 ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[14]                    ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[14]                                                      ; clk          ; clk         ; 0.000        ; 0.080      ; 0.926      ;
+; 0.661 ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[6]                        ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[6]                                                          ; clk          ; clk         ; 0.000        ; 0.081      ; 0.928      ;
+; 0.661 ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[8]                        ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[8]                                                          ; clk          ; clk         ; 0.000        ; 0.081      ; 0.928      ;
+; 0.662 ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[6]                     ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[6]                                                       ; clk          ; clk         ; 0.000        ; 0.080      ; 0.928      ;
+; 0.662 ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[8]                     ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[8]                                                       ; clk          ; clk         ; 0.000        ; 0.080      ; 0.928      ;
+; 0.667 ; sync_fifo:u_rx_fifo|wptr[2]                                            ; sync_fifo:u_rx_fifo|wptr[2]                                                                              ; clk          ; clk         ; 0.000        ; 0.081      ; 0.934      ;
+; 0.668 ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[0]                        ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[0]                                                          ; clk          ; clk         ; 0.000        ; 0.081      ; 0.935      ;
+; 0.673 ; sync_fifo:u_tx_fifo|wptr[3]                                            ; sync_fifo:u_tx_fifo|wptr[3]                                                                              ; clk          ; clk         ; 0.000        ; 0.081      ; 0.940      ;
+; 0.674 ; rx_uart:u_rx_uart|tick_cnt:tick_cnt_inst|tick_cnt[0]                   ; rx_uart:u_rx_uart|tick_cnt:tick_cnt_inst|tick_cnt[1]                                                     ; clk          ; clk         ; 0.000        ; 0.081      ; 0.941      ;
+; 0.680 ; rx_uart:u_rx_uart|bit_cnt:bit_cnt_inst|bit_cnt[0]                      ; rx_uart:u_rx_uart|bit_cnt:bit_cnt_inst|bit_cnt[1]                                                        ; clk          ; clk         ; 0.000        ; 0.080      ; 0.946      ;
++-------+------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------+--------------+-------------+--------------+------------+------------+
+
+
+-----------------------------------------------
+; Slow 1200mV 85C Model Metastability Summary ;
+-----------------------------------------------
+The design MTBF is not calculated because there are no specified synchronizers in the design.
+Number of Synchronizer Chains Found: 1
+Shortest Synchronizer Chain: 2 Registers
+Fraction of Chains for which MTBFs Could Not be Calculated: 1.000
+Worst Case Available Settling Time: 33.750 ns
+
+
+
+
++-------------------------------------------------+
+; Slow 1200mV 0C Model Fmax Summary               ;
++-----------+-----------------+------------+------+
+; Fmax      ; Restricted Fmax ; Clock Name ; Note ;
++-----------+-----------------+------------+------+
+; 83.31 MHz ; 83.31 MHz       ; clk        ;      ;
++-----------+-----------------+------------+------+
+This panel reports FMAX for every clock in the design, regardless of the user-specified clock periods.  FMAX is only computed for paths where the source and destination registers or ports are driven by the same clock.  Paths of different clocks, including generated clocks, are ignored.  For paths between a clock and its inversion, FMAX is computed as if the rising and falling edges are scaled along with FMAX, such that the duty cycle (in terms of a percentage) is maintained. Altera recommends that you always use clock constraints and other slack reports for sign-off analysis.
+
+
++------------------------------------+
+; Slow 1200mV 0C Model Setup Summary ;
++-------+-------+--------------------+
+; Clock ; Slack ; End Point TNS      ;
++-------+-------+--------------------+
+; clk   ; 7.997 ; 0.000              ;
++-------+-------+--------------------+
+
+
++-----------------------------------+
+; Slow 1200mV 0C Model Hold Summary ;
++-------+-------+-------------------+
+; Clock ; Slack ; End Point TNS     ;
++-------+-------+-------------------+
+; clk   ; 0.341 ; 0.000             ;
++-------+-------+-------------------+
+
+
+-----------------------------------------
+; Slow 1200mV 0C Model Recovery Summary ;
+-----------------------------------------
+No paths to report.
+
+
+----------------------------------------
+; Slow 1200mV 0C Model Removal Summary ;
+----------------------------------------
+No paths to report.
+
+
++--------------------------------------------------+
+; Slow 1200mV 0C Model Minimum Pulse Width Summary ;
++-------+-------+----------------------------------+
+; Clock ; Slack ; End Point TNS                    ;
++-------+-------+----------------------------------+
+; clk   ; 9.558 ; 0.000                            ;
++-------+-------+----------------------------------+
+
+
++----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Slow 1200mV 0C Model Setup: 'clk'                                                                                                                                                                  ;
++-------+----------------------------------------------------------------------------------------------------------+-----------+--------------+-------------+--------------+------------+------------+
+; Slack ; From Node                                                                                                ; To Node   ; Launch Clock ; Latch Clock ; Relationship ; Clock Skew ; Data Delay ;
++-------+----------------------------------------------------------------------------------------------------------+-----------+--------------+-------------+--------------+------------+------------+
+; 7.997 ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~portb_address_reg0 ; prdata[6] ; clk          ; clk         ; 20.000       ; -3.077     ; 6.906      ;
+; 8.499 ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~portb_address_reg0 ; prdata[0] ; clk          ; clk         ; 20.000       ; -3.077     ; 6.404      ;
+; 8.555 ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~portb_address_reg0 ; prdata[2] ; clk          ; clk         ; 20.000       ; -3.077     ; 6.348      ;
+; 8.605 ; paddr[0]                                                                                                 ; prdata[0] ; clk          ; clk         ; 20.000       ; 0.000      ; 7.375      ;
+; 8.645 ; paddr[0]                                                                                                 ; prdata[1] ; clk          ; clk         ; 20.000       ; 0.000      ; 7.335      ;
+; 8.660 ; paddr[0]                                                                                                 ; prdata[2] ; clk          ; clk         ; 20.000       ; 0.000      ; 7.320      ;
+; 8.739 ; paddr[0]                                                                                                 ; prdata[5] ; clk          ; clk         ; 20.000       ; 0.000      ; 7.241      ;
+; 8.896 ; paddr[5]                                                                                                 ; prdata[0] ; clk          ; clk         ; 20.000       ; 0.000      ; 7.084      ;
+; 8.916 ; paddr[1]                                                                                                 ; prdata[0] ; clk          ; clk         ; 20.000       ; 0.000      ; 7.064      ;
+; 8.936 ; paddr[5]                                                                                                 ; prdata[1] ; clk          ; clk         ; 20.000       ; 0.000      ; 7.044      ;
+; 8.951 ; paddr[5]                                                                                                 ; prdata[2] ; clk          ; clk         ; 20.000       ; 0.000      ; 7.029      ;
+; 8.956 ; paddr[1]                                                                                                 ; prdata[1] ; clk          ; clk         ; 20.000       ; 0.000      ; 7.024      ;
+; 8.965 ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~portb_address_reg0 ; prdata[1] ; clk          ; clk         ; 20.000       ; -3.077     ; 5.938      ;
+; 8.968 ; paddr[10]                                                                                                ; prdata[0] ; clk          ; clk         ; 20.000       ; 0.000      ; 7.012      ;
+; 8.971 ; paddr[1]                                                                                                 ; prdata[2] ; clk          ; clk         ; 20.000       ; 0.000      ; 7.009      ;
+; 9.008 ; paddr[10]                                                                                                ; prdata[1] ; clk          ; clk         ; 20.000       ; 0.000      ; 6.972      ;
+; 9.023 ; paddr[10]                                                                                                ; prdata[2] ; clk          ; clk         ; 20.000       ; 0.000      ; 6.957      ;
+; 9.030 ; paddr[5]                                                                                                 ; prdata[5] ; clk          ; clk         ; 20.000       ; 0.000      ; 6.950      ;
+; 9.035 ; sync_fifo:u_rx_fifo|wptr[2]                                                                              ; prdata[2] ; clk          ; clk         ; 20.000       ; -2.759     ; 6.186      ;
+; 9.050 ; paddr[1]                                                                                                 ; prdata[5] ; clk          ; clk         ; 20.000       ; 0.000      ; 6.930      ;
+; 9.054 ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~portb_address_reg0 ; prdata[5] ; clk          ; clk         ; 20.000       ; -3.077     ; 5.849      ;
+; 9.080 ; sync_fifo:u_rx_fifo|rptr[1]                                                                              ; prdata[2] ; clk          ; clk         ; 20.000       ; -2.761     ; 6.139      ;
+; 9.093 ; sync_fifo:u_rx_fifo|wptr[2]                                                                              ; prdata[0] ; clk          ; clk         ; 20.000       ; -2.759     ; 6.128      ;
+; 9.102 ; paddr[10]                                                                                                ; prdata[5] ; clk          ; clk         ; 20.000       ; 0.000      ; 6.878      ;
+; 9.108 ; paddr[8]                                                                                                 ; prdata[0] ; clk          ; clk         ; 20.000       ; 0.000      ; 6.872      ;
+; 9.110 ; sync_fifo:u_rx_fifo|rptr[1]                                                                              ; prdata[0] ; clk          ; clk         ; 20.000       ; -2.761     ; 6.109      ;
+; 9.114 ; sync_fifo:u_rx_fifo|wptr[2]                                                                              ; prdata[5] ; clk          ; clk         ; 20.000       ; -2.759     ; 6.107      ;
+; 9.127 ; sync_fifo:u_rx_fifo|wptr[2]                                                                              ; prdata[1] ; clk          ; clk         ; 20.000       ; -2.759     ; 6.094      ;
+; 9.147 ; sync_fifo:u_rx_fifo|rptr[0]                                                                              ; prdata[2] ; clk          ; clk         ; 20.000       ; -2.762     ; 6.071      ;
+; 9.148 ; paddr[8]                                                                                                 ; prdata[1] ; clk          ; clk         ; 20.000       ; 0.000      ; 6.832      ;
+; 9.150 ; sync_fifo:u_rx_fifo|rptr[1]                                                                              ; prdata[1] ; clk          ; clk         ; 20.000       ; -2.761     ; 6.069      ;
+; 9.159 ; sync_fifo:u_rx_fifo|rptr[1]                                                                              ; prdata[5] ; clk          ; clk         ; 20.000       ; -2.761     ; 6.060      ;
+; 9.163 ; paddr[8]                                                                                                 ; prdata[2] ; clk          ; clk         ; 20.000       ; 0.000      ; 6.817      ;
+; 9.166 ; paddr[6]                                                                                                 ; prdata[0] ; clk          ; clk         ; 20.000       ; 0.000      ; 6.814      ;
+; 9.205 ; sync_fifo:u_rx_fifo|rptr[0]                                                                              ; prdata[0] ; clk          ; clk         ; 20.000       ; -2.762     ; 6.013      ;
+; 9.206 ; paddr[6]                                                                                                 ; prdata[1] ; clk          ; clk         ; 20.000       ; 0.000      ; 6.774      ;
+; 9.212 ; paddr[0]                                                                                                 ; prdata[3] ; clk          ; clk         ; 20.000       ; 0.000      ; 6.768      ;
+; 9.213 ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~portb_address_reg0 ; prdata[8] ; clk          ; clk         ; 20.000       ; -3.077     ; 5.690      ;
+; 9.221 ; paddr[6]                                                                                                 ; prdata[2] ; clk          ; clk         ; 20.000       ; 0.000      ; 6.759      ;
+; 9.226 ; sync_fifo:u_rx_fifo|rptr[0]                                                                              ; prdata[5] ; clk          ; clk         ; 20.000       ; -2.762     ; 5.992      ;
+; 9.233 ; paddr[0]                                                                                                 ; prdata[7] ; clk          ; clk         ; 20.000       ; 0.000      ; 6.747      ;
+; 9.238 ; paddr[0]                                                                                                 ; prdata[6] ; clk          ; clk         ; 20.000       ; 0.000      ; 6.742      ;
+; 9.239 ; sync_fifo:u_rx_fifo|rptr[0]                                                                              ; prdata[1] ; clk          ; clk         ; 20.000       ; -2.762     ; 5.979      ;
+; 9.242 ; paddr[8]                                                                                                 ; prdata[5] ; clk          ; clk         ; 20.000       ; 0.000      ; 6.738      ;
+; 9.265 ; paddr[0]                                                                                                 ; pslverr   ; clk          ; clk         ; 20.000       ; 0.000      ; 6.715      ;
+; 9.267 ; sync_fifo:u_rx_fifo|fifo_rtl_0_bypass[3]                                                                 ; prdata[0] ; clk          ; clk         ; 20.000       ; -2.760     ; 5.953      ;
+; 9.268 ; paddr[9]                                                                                                 ; prdata[0] ; clk          ; clk         ; 20.000       ; 0.000      ; 6.712      ;
+; 9.268 ; sync_fifo:u_rx_fifo|fifo_rtl_0_bypass[1]                                                                 ; prdata[0] ; clk          ; clk         ; 20.000       ; -2.760     ; 5.952      ;
+; 9.273 ; sync_fifo:u_rx_fifo|wptr[1]                                                                              ; prdata[2] ; clk          ; clk         ; 20.000       ; -2.759     ; 5.948      ;
+; 9.285 ; sync_fifo:u_rx_fifo|wptr[3]                                                                              ; prdata[2] ; clk          ; clk         ; 20.000       ; -2.759     ; 5.936      ;
+; 9.300 ; paddr[6]                                                                                                 ; prdata[5] ; clk          ; clk         ; 20.000       ; 0.000      ; 6.680      ;
+; 9.307 ; sync_fifo:u_rx_fifo|fifo_rtl_0_bypass[3]                                                                 ; prdata[1] ; clk          ; clk         ; 20.000       ; -2.760     ; 5.913      ;
+; 9.308 ; paddr[9]                                                                                                 ; prdata[1] ; clk          ; clk         ; 20.000       ; 0.000      ; 6.672      ;
+; 9.308 ; sync_fifo:u_rx_fifo|fifo_rtl_0_bypass[1]                                                                 ; prdata[1] ; clk          ; clk         ; 20.000       ; -2.760     ; 5.912      ;
+; 9.316 ; sync_fifo:u_rx_fifo|wptr[1]                                                                              ; prdata[0] ; clk          ; clk         ; 20.000       ; -2.759     ; 5.905      ;
+; 9.318 ; paddr[0]                                                                                                 ; prdata[8] ; clk          ; clk         ; 20.000       ; 0.000      ; 6.662      ;
+; 9.322 ; sync_fifo:u_rx_fifo|fifo_rtl_0_bypass[3]                                                                 ; prdata[2] ; clk          ; clk         ; 20.000       ; -2.760     ; 5.898      ;
+; 9.323 ; paddr[9]                                                                                                 ; prdata[2] ; clk          ; clk         ; 20.000       ; 0.000      ; 6.657      ;
+; 9.323 ; sync_fifo:u_rx_fifo|fifo_rtl_0_bypass[1]                                                                 ; prdata[2] ; clk          ; clk         ; 20.000       ; -2.760     ; 5.897      ;
+; 9.335 ; sync_fifo:u_rx_fifo|fifo_rtl_0_bypass[7]                                                                 ; prdata[0] ; clk          ; clk         ; 20.000       ; -2.761     ; 5.884      ;
+; 9.343 ; sync_fifo:u_rx_fifo|wptr[3]                                                                              ; prdata[0] ; clk          ; clk         ; 20.000       ; -2.759     ; 5.878      ;
+; 9.346 ; sync_fifo:u_rx_fifo|fifo_rtl_0_bypass[6]                                                                 ; prdata[0] ; clk          ; clk         ; 20.000       ; -2.761     ; 5.873      ;
+; 9.352 ; sync_fifo:u_rx_fifo|rptr[3]                                                                              ; prdata[2] ; clk          ; clk         ; 20.000       ; -2.761     ; 5.867      ;
+; 9.352 ; sync_fifo:u_rx_fifo|wptr[1]                                                                              ; prdata[5] ; clk          ; clk         ; 20.000       ; -2.759     ; 5.869      ;
+; 9.356 ; sync_fifo:u_rx_fifo|wptr[1]                                                                              ; prdata[1] ; clk          ; clk         ; 20.000       ; -2.759     ; 5.865      ;
+; 9.364 ; paddr[3]                                                                                                 ; prdata[0] ; clk          ; clk         ; 20.000       ; 0.000      ; 6.616      ;
+; 9.364 ; sync_fifo:u_rx_fifo|wptr[3]                                                                              ; prdata[5] ; clk          ; clk         ; 20.000       ; -2.759     ; 5.857      ;
+; 9.375 ; sync_fifo:u_rx_fifo|fifo_rtl_0_bypass[7]                                                                 ; prdata[1] ; clk          ; clk         ; 20.000       ; -2.761     ; 5.844      ;
+; 9.377 ; sync_fifo:u_rx_fifo|wptr[3]                                                                              ; prdata[1] ; clk          ; clk         ; 20.000       ; -2.759     ; 5.844      ;
+; 9.384 ; paddr[3]                                                                                                 ; prdata[7] ; clk          ; clk         ; 20.000       ; 0.000      ; 6.596      ;
+; 9.386 ; sync_fifo:u_rx_fifo|fifo_rtl_0_bypass[6]                                                                 ; prdata[1] ; clk          ; clk         ; 20.000       ; -2.761     ; 5.833      ;
+; 9.390 ; sync_fifo:u_rx_fifo|fifo_rtl_0_bypass[7]                                                                 ; prdata[2] ; clk          ; clk         ; 20.000       ; -2.761     ; 5.829      ;
+; 9.401 ; sync_fifo:u_rx_fifo|fifo_rtl_0_bypass[3]                                                                 ; prdata[5] ; clk          ; clk         ; 20.000       ; -2.760     ; 5.819      ;
+; 9.401 ; sync_fifo:u_rx_fifo|fifo_rtl_0_bypass[6]                                                                 ; prdata[2] ; clk          ; clk         ; 20.000       ; -2.761     ; 5.818      ;
+; 9.402 ; paddr[9]                                                                                                 ; prdata[5] ; clk          ; clk         ; 20.000       ; 0.000      ; 6.578      ;
+; 9.402 ; sync_fifo:u_rx_fifo|fifo_rtl_0_bypass[1]                                                                 ; prdata[5] ; clk          ; clk         ; 20.000       ; -2.760     ; 5.818      ;
+; 9.404 ; paddr[3]                                                                                                 ; prdata[1] ; clk          ; clk         ; 20.000       ; 0.000      ; 6.576      ;
+; 9.405 ; paddr[7]                                                                                                 ; prdata[0] ; clk          ; clk         ; 20.000       ; 0.000      ; 6.575      ;
+; 9.410 ; sync_fifo:u_rx_fifo|rptr[3]                                                                              ; prdata[0] ; clk          ; clk         ; 20.000       ; -2.761     ; 5.809      ;
+; 9.419 ; paddr[3]                                                                                                 ; prdata[2] ; clk          ; clk         ; 20.000       ; 0.000      ; 6.561      ;
+; 9.431 ; sync_fifo:u_rx_fifo|rptr[3]                                                                              ; prdata[5] ; clk          ; clk         ; 20.000       ; -2.761     ; 5.788      ;
+; 9.444 ; sync_fifo:u_rx_fifo|rptr[3]                                                                              ; prdata[1] ; clk          ; clk         ; 20.000       ; -2.761     ; 5.775      ;
+; 9.445 ; paddr[7]                                                                                                 ; prdata[1] ; clk          ; clk         ; 20.000       ; 0.000      ; 6.535      ;
+; 9.460 ; paddr[7]                                                                                                 ; prdata[2] ; clk          ; clk         ; 20.000       ; 0.000      ; 6.520      ;
+; 9.469 ; sync_fifo:u_rx_fifo|fifo_rtl_0_bypass[7]                                                                 ; prdata[5] ; clk          ; clk         ; 20.000       ; -2.761     ; 5.750      ;
+; 9.480 ; sync_fifo:u_rx_fifo|fifo_rtl_0_bypass[6]                                                                 ; prdata[5] ; clk          ; clk         ; 20.000       ; -2.761     ; 5.739      ;
+; 9.485 ; paddr[0]                                                                                                 ; prdata[4] ; clk          ; clk         ; 20.000       ; 0.000      ; 6.495      ;
+; 9.488 ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~portb_address_reg0 ; prdata[7] ; clk          ; clk         ; 20.000       ; -3.077     ; 5.415      ;
+; 9.495 ; paddr[11]                                                                                                ; prdata[0] ; clk          ; clk         ; 20.000       ; 0.000      ; 6.485      ;
+; 9.498 ; paddr[3]                                                                                                 ; prdata[5] ; clk          ; clk         ; 20.000       ; 0.000      ; 6.482      ;
+; 9.503 ; paddr[5]                                                                                                 ; prdata[3] ; clk          ; clk         ; 20.000       ; 0.000      ; 6.477      ;
+; 9.506 ; sync_fifo:u_rx_fifo|rptr[2]                                                                              ; prdata[2] ; clk          ; clk         ; 20.000       ; -2.761     ; 5.713      ;
+; 9.523 ; paddr[1]                                                                                                 ; prdata[3] ; clk          ; clk         ; 20.000       ; 0.000      ; 6.457      ;
+; 9.524 ; paddr[5]                                                                                                 ; prdata[7] ; clk          ; clk         ; 20.000       ; 0.000      ; 6.456      ;
+; 9.529 ; paddr[5]                                                                                                 ; prdata[6] ; clk          ; clk         ; 20.000       ; 0.000      ; 6.451      ;
+; 9.533 ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~portb_address_reg0 ; prdata[3] ; clk          ; clk         ; 20.000       ; -3.077     ; 5.370      ;
+; 9.535 ; paddr[11]                                                                                                ; prdata[1] ; clk          ; clk         ; 20.000       ; 0.000      ; 6.445      ;
+; 9.539 ; paddr[7]                                                                                                 ; prdata[5] ; clk          ; clk         ; 20.000       ; 0.000      ; 6.441      ;
+; 9.544 ; paddr[1]                                                                                                 ; prdata[7] ; clk          ; clk         ; 20.000       ; 0.000      ; 6.436      ;
+; 9.546 ; sync_fifo:u_rx_fifo|wptr[0]                                                                              ; prdata[2] ; clk          ; clk         ; 20.000       ; -2.759     ; 5.675      ;
++-------+----------------------------------------------------------------------------------------------------------+-----------+--------------+-------------+--------------+------------+------------+
+
+
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Slow 1200mV 0C Model Hold: 'clk'                                                                                                                                                                                                                                ;
++-------+------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------+--------------+-------------+--------------+------------+------------+
+; Slack ; From Node                                                              ; To Node                                                                                                  ; Launch Clock ; Latch Clock ; Relationship ; Clock Skew ; Data Delay ;
++-------+------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------+--------------+-------------+--------------+------------+------------+
+; 0.341 ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[7]                      ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0  ; clk          ; clk         ; 0.000        ; 0.400      ; 0.942      ;
+; 0.345 ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[5]                      ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0  ; clk          ; clk         ; 0.000        ; 0.402      ; 0.948      ;
+; 0.346 ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[2]                      ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0  ; clk          ; clk         ; 0.000        ; 0.400      ; 0.947      ;
+; 0.354 ; uart_regs:u_uart_regs|overrun_latch                                    ; uart_regs:u_uart_regs|overrun_latch                                                                      ; clk          ; clk         ; 0.000        ; 0.072      ; 0.597      ;
+; 0.354 ; sync_fifo:u_rx_fifo|rptr[3]                                            ; sync_fifo:u_rx_fifo|rptr[3]                                                                              ; clk          ; clk         ; 0.000        ; 0.072      ; 0.597      ;
+; 0.354 ; sync_fifo:u_rx_fifo|rptr[1]                                            ; sync_fifo:u_rx_fifo|rptr[1]                                                                              ; clk          ; clk         ; 0.000        ; 0.072      ; 0.597      ;
+; 0.354 ; sync_fifo:u_rx_fifo|rptr[2]                                            ; sync_fifo:u_rx_fifo|rptr[2]                                                                              ; clk          ; clk         ; 0.000        ; 0.072      ; 0.597      ;
+; 0.354 ; sync_fifo:u_rx_fifo|rptr[4]                                            ; sync_fifo:u_rx_fifo|rptr[4]                                                                              ; clk          ; clk         ; 0.000        ; 0.072      ; 0.597      ;
+; 0.354 ; sync_fifo:u_rx_fifo|rptr[0]                                            ; sync_fifo:u_rx_fifo|rptr[0]                                                                              ; clk          ; clk         ; 0.000        ; 0.072      ; 0.597      ;
+; 0.354 ; sync_fifo:u_rx_fifo|wptr[0]                                            ; sync_fifo:u_rx_fifo|wptr[0]                                                                              ; clk          ; clk         ; 0.000        ; 0.072      ; 0.597      ;
+; 0.354 ; rx_uart:u_rx_uart|rx_controller:rx_controller_inst|frame_error_latched ; rx_uart:u_rx_uart|rx_controller:rx_controller_inst|frame_error_latched                                   ; clk          ; clk         ; 0.000        ; 0.072      ; 0.597      ;
+; 0.354 ; sync_fifo:u_tx_fifo|rptr[0]                                            ; sync_fifo:u_tx_fifo|rptr[0]                                                                              ; clk          ; clk         ; 0.000        ; 0.072      ; 0.597      ;
+; 0.354 ; sync_fifo:u_tx_fifo|rptr[4]                                            ; sync_fifo:u_tx_fifo|rptr[4]                                                                              ; clk          ; clk         ; 0.000        ; 0.072      ; 0.597      ;
+; 0.354 ; tx_uart:u_tx_uart|tx_controller:controller|state.START                 ; tx_uart:u_tx_uart|tx_controller:controller|state.START                                                   ; clk          ; clk         ; 0.000        ; 0.072      ; 0.597      ;
+; 0.354 ; sync_fifo:u_tx_fifo|rptr[1]                                            ; sync_fifo:u_tx_fifo|rptr[1]                                                                              ; clk          ; clk         ; 0.000        ; 0.072      ; 0.597      ;
+; 0.354 ; sync_fifo:u_tx_fifo|rptr[3]                                            ; sync_fifo:u_tx_fifo|rptr[3]                                                                              ; clk          ; clk         ; 0.000        ; 0.072      ; 0.597      ;
+; 0.354 ; sync_fifo:u_tx_fifo|rptr[2]                                            ; sync_fifo:u_tx_fifo|rptr[2]                                                                              ; clk          ; clk         ; 0.000        ; 0.072      ; 0.597      ;
+; 0.354 ; sync_fifo:u_tx_fifo|wptr[0]                                            ; sync_fifo:u_tx_fifo|wptr[0]                                                                              ; clk          ; clk         ; 0.000        ; 0.072      ; 0.597      ;
+; 0.354 ; tx_uart:u_tx_uart|tx_stop_cnt:u_stop_cnt|cnt                           ; tx_uart:u_tx_uart|tx_stop_cnt:u_stop_cnt|cnt                                                             ; clk          ; clk         ; 0.000        ; 0.072      ; 0.597      ;
+; 0.354 ; tx_uart:u_tx_uart|tx_controller:controller|state.STOP                  ; tx_uart:u_tx_uart|tx_controller:controller|state.STOP                                                    ; clk          ; clk         ; 0.000        ; 0.072      ; 0.597      ;
+; 0.354 ; tx_uart:u_tx_uart|tx_controller:controller|state.PARITY                ; tx_uart:u_tx_uart|tx_controller:controller|state.PARITY                                                  ; clk          ; clk         ; 0.000        ; 0.072      ; 0.597      ;
+; 0.354 ; tx_uart:u_tx_uart|tx_bit_cnt:u_bit_cnt|cnt[2]                          ; tx_uart:u_tx_uart|tx_bit_cnt:u_bit_cnt|cnt[2]                                                            ; clk          ; clk         ; 0.000        ; 0.072      ; 0.597      ;
+; 0.354 ; tx_uart:u_tx_uart|tx_bit_cnt:u_bit_cnt|cnt[1]                          ; tx_uart:u_tx_uart|tx_bit_cnt:u_bit_cnt|cnt[1]                                                            ; clk          ; clk         ; 0.000        ; 0.072      ; 0.597      ;
+; 0.354 ; tx_uart:u_tx_uart|tx_bit_cnt:u_bit_cnt|cnt[0]                          ; tx_uart:u_tx_uart|tx_bit_cnt:u_bit_cnt|cnt[0]                                                            ; clk          ; clk         ; 0.000        ; 0.072      ; 0.597      ;
+; 0.354 ; tx_uart:u_tx_uart|tx_controller:controller|state.DATA                  ; tx_uart:u_tx_uart|tx_controller:controller|state.DATA                                                    ; clk          ; clk         ; 0.000        ; 0.072      ; 0.597      ;
+; 0.354 ; rx_uart:u_rx_uart|tick_cnt:tick_cnt_inst|tick_cnt[3]                   ; rx_uart:u_rx_uart|tick_cnt:tick_cnt_inst|tick_cnt[3]                                                     ; clk          ; clk         ; 0.000        ; 0.072      ; 0.597      ;
+; 0.354 ; rx_uart:u_rx_uart|tick_cnt:tick_cnt_inst|tick_cnt[2]                   ; rx_uart:u_rx_uart|tick_cnt:tick_cnt_inst|tick_cnt[2]                                                     ; clk          ; clk         ; 0.000        ; 0.072      ; 0.597      ;
+; 0.354 ; rx_uart:u_rx_uart|tick_cnt:tick_cnt_inst|tick_cnt[1]                   ; rx_uart:u_rx_uart|tick_cnt:tick_cnt_inst|tick_cnt[1]                                                     ; clk          ; clk         ; 0.000        ; 0.072      ; 0.597      ;
+; 0.354 ; rx_uart:u_rx_uart|bit_cnt:bit_cnt_inst|bit_cnt[1]                      ; rx_uart:u_rx_uart|bit_cnt:bit_cnt_inst|bit_cnt[1]                                                        ; clk          ; clk         ; 0.000        ; 0.072      ; 0.597      ;
+; 0.354 ; rx_uart:u_rx_uart|rx_controller:rx_controller_inst|state.IDLE          ; rx_uart:u_rx_uart|rx_controller:rx_controller_inst|state.IDLE                                            ; clk          ; clk         ; 0.000        ; 0.072      ; 0.597      ;
+; 0.354 ; rx_uart:u_rx_uart|rx_controller:rx_controller_inst|first_stop_sampled  ; rx_uart:u_rx_uart|rx_controller:rx_controller_inst|first_stop_sampled                                    ; clk          ; clk         ; 0.000        ; 0.072      ; 0.597      ;
+; 0.355 ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[3]                      ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0  ; clk          ; clk         ; 0.000        ; 0.401      ; 0.957      ;
+; 0.355 ; rx_uart:u_rx_uart|deframe:deframe_inst|parity_exp                      ; rx_uart:u_rx_uart|deframe:deframe_inst|parity_exp                                                        ; clk          ; clk         ; 0.000        ; 0.071      ; 0.597      ;
+; 0.359 ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[4]                      ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0  ; clk          ; clk         ; 0.000        ; 0.401      ; 0.961      ;
+; 0.362 ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[1]                      ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0  ; clk          ; clk         ; 0.000        ; 0.401      ; 0.964      ;
+; 0.365 ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[0]                      ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0  ; clk          ; clk         ; 0.000        ; 0.402      ; 0.968      ;
+; 0.365 ; rx_uart:u_rx_uart|tick_cnt:tick_cnt_inst|tick_cnt[0]                   ; rx_uart:u_rx_uart|tick_cnt:tick_cnt_inst|tick_cnt[0]                                                     ; clk          ; clk         ; 0.000        ; 0.072      ; 0.608      ;
+; 0.365 ; rx_uart:u_rx_uart|bit_cnt:bit_cnt_inst|bit_cnt[0]                      ; rx_uart:u_rx_uart|bit_cnt:bit_cnt_inst|bit_cnt[0]                                                        ; clk          ; clk         ; 0.000        ; 0.072      ; 0.608      ;
+; 0.370 ; sync_fifo:u_rx_fifo|wptr[0]                                            ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_address_reg0 ; clk          ; clk         ; 0.000        ; 0.390      ; 0.961      ;
+; 0.370 ; sync_fifo:u_rx_fifo|wptr[1]                                            ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_address_reg0 ; clk          ; clk         ; 0.000        ; 0.390      ; 0.961      ;
+; 0.391 ; sync_fifo:u_tx_fifo|wptr[4]                                            ; sync_fifo:u_tx_fifo|wptr[4]                                                                              ; clk          ; clk         ; 0.000        ; 0.072      ; 0.634      ;
+; 0.393 ; tx_uart:u_tx_uart|tx_bit_cnt:u_bit_cnt|cnt[0]                          ; tx_uart:u_tx_uart|tx_bit_cnt:u_bit_cnt|cnt[1]                                                            ; clk          ; clk         ; 0.000        ; 0.072      ; 0.636      ;
+; 0.396 ; tx_uart:u_tx_uart|tx_bit_cnt:u_bit_cnt|cnt[0]                          ; tx_uart:u_tx_uart|tx_bit_cnt:u_bit_cnt|cnt[2]                                                            ; clk          ; clk         ; 0.000        ; 0.072      ; 0.639      ;
+; 0.399 ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[6]                      ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0  ; clk          ; clk         ; 0.000        ; 0.401      ; 1.001      ;
+; 0.400 ; sync_fifo:u_rx_fifo|wptr[4]                                            ; sync_fifo:u_rx_fifo|wptr[4]                                                                              ; clk          ; clk         ; 0.000        ; 0.072      ; 0.643      ;
+; 0.408 ; rx_uart:u_rx_uart|rx_controller:rx_controller_inst|state.FRAME         ; rx_uart:u_rx_uart|rx_controller:rx_controller_inst|state.HOLD                                            ; clk          ; clk         ; 0.000        ; 0.072      ; 0.651      ;
+; 0.420 ; sync_fifo:u_tx_fifo|rptr[0]                                            ; sync_fifo:u_tx_fifo|rptr[2]                                                                              ; clk          ; clk         ; 0.000        ; 0.072      ; 0.663      ;
+; 0.422 ; sync_fifo:u_tx_fifo|wptr[3]                                            ; sync_fifo:u_tx_fifo|altsyncram:fifo_rtl_0|altsyncram_5pd1:auto_generated|ram_block1a0~porta_address_reg0 ; clk          ; clk         ; 0.000        ; 0.388      ; 1.011      ;
+; 0.426 ; sync_fifo:u_tx_fifo|wptr[0]                                            ; sync_fifo:u_tx_fifo|altsyncram:fifo_rtl_0|altsyncram_5pd1:auto_generated|ram_block1a0~porta_address_reg0 ; clk          ; clk         ; 0.000        ; 0.388      ; 1.015      ;
+; 0.433 ; tx_uart:u_tx_uart|tx_controller:controller|state.IDLE                  ; sync_fifo:u_tx_fifo|rptr[3]                                                                              ; clk          ; clk         ; 0.000        ; 0.072      ; 0.676      ;
+; 0.511 ; sync_fifo:u_rx_fifo|rptr[2]                                            ; sync_fifo:u_rx_fifo|fifo_rtl_0_bypass[6]                                                                 ; clk          ; clk         ; 0.000        ; 0.072      ; 0.754      ;
+; 0.526 ; sync_fifo:u_tx_fifo|wptr[1]                                            ; sync_fifo:u_tx_fifo|altsyncram:fifo_rtl_0|altsyncram_5pd1:auto_generated|ram_block1a0~porta_address_reg0 ; clk          ; clk         ; 0.000        ; 0.388      ; 1.115      ;
+; 0.537 ; sync_fifo:u_tx_fifo|wptr[2]                                            ; sync_fifo:u_tx_fifo|altsyncram:fifo_rtl_0|altsyncram_5pd1:auto_generated|ram_block1a0~porta_address_reg0 ; clk          ; clk         ; 0.000        ; 0.388      ; 1.126      ;
+; 0.548 ; tx_uart:u_tx_uart|piso:u_piso|data[5]                                  ; tx_uart:u_tx_uart|piso:u_piso|data[4]                                                                    ; clk          ; clk         ; 0.000        ; 0.072      ; 0.791      ;
+; 0.551 ; tx_uart:u_tx_uart|piso:u_piso|data[3]                                  ; tx_uart:u_tx_uart|piso:u_piso|data[2]                                                                    ; clk          ; clk         ; 0.000        ; 0.072      ; 0.794      ;
+; 0.552 ; sync_fifo:u_tx_fifo|fifo_rtl_0_bypass[10]                              ; tx_uart:u_tx_uart|piso:u_piso|data[1]                                                                    ; clk          ; clk         ; 0.000        ; 0.071      ; 0.794      ;
+; 0.566 ; sync_fifo:u_rx_fifo|wptr[3]                                            ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_address_reg0 ; clk          ; clk         ; 0.000        ; 0.390      ; 1.157      ;
+; 0.568 ; rx_uart:u_rx_uart|sipo:sipo_inst|data_out[11]                          ; rx_uart:u_rx_uart|deframe:deframe_inst|parity_bit                                                        ; clk          ; clk         ; 0.000        ; 0.072      ; 0.811      ;
+; 0.568 ; sync_fifo:u_rx_fifo|rptr[1]                                            ; sync_fifo:u_rx_fifo|rptr[2]                                                                              ; clk          ; clk         ; 0.000        ; 0.072      ; 0.811      ;
+; 0.573 ; rx_uart:u_rx_uart|sipo:sipo_inst|data_out[11]                          ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[7]                                                        ; clk          ; clk         ; 0.000        ; 0.072      ; 0.816      ;
+; 0.574 ; rx_uart:u_rx_uart|sipo:sipo_inst|data_out[9]                           ; rx_uart:u_rx_uart|sipo:sipo_inst|data_out[8]                                                             ; clk          ; clk         ; 0.000        ; 0.072      ; 0.817      ;
+; 0.575 ; rx_uart:u_rx_uart|sipo:sipo_inst|data_out[7]                           ; rx_uart:u_rx_uart|sipo:sipo_inst|data_out[6]                                                             ; clk          ; clk         ; 0.000        ; 0.072      ; 0.818      ;
+; 0.576 ; rx_uart:u_rx_uart|sipo:sipo_inst|data_out[8]                           ; rx_uart:u_rx_uart|sipo:sipo_inst|data_out[7]                                                             ; clk          ; clk         ; 0.000        ; 0.072      ; 0.819      ;
+; 0.588 ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[1]                        ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[1]                                                          ; clk          ; clk         ; 0.000        ; 0.073      ; 0.832      ;
+; 0.589 ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[4]                     ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[4]                                                       ; clk          ; clk         ; 0.000        ; 0.072      ; 0.832      ;
+; 0.590 ; tx_uart:u_tx_uart|tx_controller:controller|state.STOP                  ; tx_uart:u_tx_uart|tx_stop_cnt:u_stop_cnt|cnt                                                             ; clk          ; clk         ; 0.000        ; 0.072      ; 0.833      ;
+; 0.594 ; tx_uart:u_tx_uart|tx_bit_cnt:u_bit_cnt|cnt[1]                          ; tx_uart:u_tx_uart|tx_bit_cnt:u_bit_cnt|cnt[2]                                                            ; clk          ; clk         ; 0.000        ; 0.072      ; 0.837      ;
+; 0.597 ; sync_fifo:u_rx_fifo|wptr[1]                                            ; sync_fifo:u_rx_fifo|fifo_rtl_0_bypass[3]                                                                 ; clk          ; clk         ; 0.000        ; 0.073      ; 0.841      ;
+; 0.598 ; sync_fifo:u_rx_fifo|wptr[0]                                            ; sync_fifo:u_rx_fifo|fifo_rtl_0_bypass[1]                                                                 ; clk          ; clk         ; 0.000        ; 0.073      ; 0.842      ;
+; 0.599 ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[2]                        ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[2]                                                          ; clk          ; clk         ; 0.000        ; 0.073      ; 0.843      ;
+; 0.599 ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[4]                        ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[4]                                                          ; clk          ; clk         ; 0.000        ; 0.073      ; 0.843      ;
+; 0.599 ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[5]                        ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[5]                                                          ; clk          ; clk         ; 0.000        ; 0.073      ; 0.843      ;
+; 0.599 ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[12]                       ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[12]                                                         ; clk          ; clk         ; 0.000        ; 0.073      ; 0.843      ;
+; 0.600 ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[10]                       ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[10]                                                         ; clk          ; clk         ; 0.000        ; 0.073      ; 0.844      ;
+; 0.600 ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[14]                       ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[14]                                                         ; clk          ; clk         ; 0.000        ; 0.073      ; 0.844      ;
+; 0.600 ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[12]                    ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[12]                                                      ; clk          ; clk         ; 0.000        ; 0.072      ; 0.843      ;
+; 0.600 ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[2]                     ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[2]                                                       ; clk          ; clk         ; 0.000        ; 0.072      ; 0.843      ;
+; 0.600 ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[5]                     ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[5]                                                       ; clk          ; clk         ; 0.000        ; 0.072      ; 0.843      ;
+; 0.601 ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[3]                        ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[3]                                                          ; clk          ; clk         ; 0.000        ; 0.073      ; 0.845      ;
+; 0.601 ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[13]                       ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[13]                                                         ; clk          ; clk         ; 0.000        ; 0.073      ; 0.845      ;
+; 0.601 ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[10]                    ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[10]                                                      ; clk          ; clk         ; 0.000        ; 0.072      ; 0.844      ;
+; 0.601 ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[14]                    ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[14]                                                      ; clk          ; clk         ; 0.000        ; 0.072      ; 0.844      ;
+; 0.602 ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[11]                       ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[11]                                                         ; clk          ; clk         ; 0.000        ; 0.073      ; 0.846      ;
+; 0.602 ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[7]                        ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[7]                                                          ; clk          ; clk         ; 0.000        ; 0.073      ; 0.846      ;
+; 0.602 ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[9]                        ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[9]                                                          ; clk          ; clk         ; 0.000        ; 0.073      ; 0.846      ;
+; 0.602 ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[1]                     ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[1]                                                       ; clk          ; clk         ; 0.000        ; 0.072      ; 0.845      ;
+; 0.602 ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[3]                     ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[3]                                                       ; clk          ; clk         ; 0.000        ; 0.072      ; 0.845      ;
+; 0.602 ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[13]                    ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[13]                                                      ; clk          ; clk         ; 0.000        ; 0.072      ; 0.845      ;
+; 0.603 ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[7]                     ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[7]                                                       ; clk          ; clk         ; 0.000        ; 0.072      ; 0.846      ;
+; 0.603 ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[9]                     ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[9]                                                       ; clk          ; clk         ; 0.000        ; 0.072      ; 0.846      ;
+; 0.603 ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[11]                    ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[11]                                                      ; clk          ; clk         ; 0.000        ; 0.072      ; 0.846      ;
+; 0.604 ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[6]                        ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[6]                                                          ; clk          ; clk         ; 0.000        ; 0.073      ; 0.848      ;
+; 0.604 ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[8]                        ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[8]                                                          ; clk          ; clk         ; 0.000        ; 0.073      ; 0.848      ;
+; 0.605 ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[6]                     ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[6]                                                       ; clk          ; clk         ; 0.000        ; 0.072      ; 0.848      ;
+; 0.605 ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[8]                     ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[8]                                                       ; clk          ; clk         ; 0.000        ; 0.072      ; 0.848      ;
+; 0.610 ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[0]                        ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[0]                                                          ; clk          ; clk         ; 0.000        ; 0.073      ; 0.854      ;
+; 0.611 ; sync_fifo:u_rx_fifo|wptr[2]                                            ; sync_fifo:u_rx_fifo|wptr[2]                                                                              ; clk          ; clk         ; 0.000        ; 0.072      ; 0.854      ;
+; 0.614 ; sync_fifo:u_tx_fifo|wptr[3]                                            ; sync_fifo:u_tx_fifo|wptr[3]                                                                              ; clk          ; clk         ; 0.000        ; 0.072      ; 0.857      ;
+; 0.619 ; rx_uart:u_rx_uart|tick_cnt:tick_cnt_inst|tick_cnt[0]                   ; rx_uart:u_rx_uart|tick_cnt:tick_cnt_inst|tick_cnt[1]                                                     ; clk          ; clk         ; 0.000        ; 0.072      ; 0.862      ;
+; 0.623 ; sync_fifo:u_rx_fifo|rptr[1]                                            ; sync_fifo:u_rx_fifo|fifo_rtl_0_bypass[6]                                                                 ; clk          ; clk         ; 0.000        ; 0.072      ; 0.866      ;
++-------+------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------+--------------+-------------+--------------+------------+------------+
+
+
+----------------------------------------------
+; Slow 1200mV 0C Model Metastability Summary ;
+----------------------------------------------
+The design MTBF is not calculated because there are no specified synchronizers in the design.
+Number of Synchronizer Chains Found: 1
+Shortest Synchronizer Chain: 2 Registers
+Fraction of Chains for which MTBFs Could Not be Calculated: 1.000
+Worst Case Available Settling Time: 34.242 ns
+
+
+
+
++------------------------------------+
+; Fast 1200mV 0C Model Setup Summary ;
++-------+--------+-------------------+
+; Clock ; Slack  ; End Point TNS     ;
++-------+--------+-------------------+
+; clk   ; 11.898 ; 0.000             ;
++-------+--------+-------------------+
+
+
++-----------------------------------+
+; Fast 1200mV 0C Model Hold Summary ;
++-------+-------+-------------------+
+; Clock ; Slack ; End Point TNS     ;
++-------+-------+-------------------+
+; clk   ; 0.139 ; 0.000             ;
++-------+-------+-------------------+
+
+
+-----------------------------------------
+; Fast 1200mV 0C Model Recovery Summary ;
+-----------------------------------------
+No paths to report.
+
+
+----------------------------------------
+; Fast 1200mV 0C Model Removal Summary ;
+----------------------------------------
+No paths to report.
+
+
++--------------------------------------------------+
+; Fast 1200mV 0C Model Minimum Pulse Width Summary ;
++-------+-------+----------------------------------+
+; Clock ; Slack ; End Point TNS                    ;
++-------+-------+----------------------------------+
+; clk   ; 9.200 ; 0.000                            ;
++-------+-------+----------------------------------+
+
+
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Fast 1200mV 0C Model Setup: 'clk'                                                                                                                                                                   ;
++--------+----------------------------------------------------------------------------------------------------------+-----------+--------------+-------------+--------------+------------+------------+
+; Slack  ; From Node                                                                                                ; To Node   ; Launch Clock ; Latch Clock ; Relationship ; Clock Skew ; Data Delay ;
++--------+----------------------------------------------------------------------------------------------------------+-----------+--------------+-------------+--------------+------------+------------+
+; 11.898 ; paddr[0]                                                                                                 ; prdata[0] ; clk          ; clk         ; 20.000       ; 0.000      ; 4.082      ;
+; 11.934 ; paddr[0]                                                                                                 ; prdata[1] ; clk          ; clk         ; 20.000       ; 0.000      ; 4.046      ;
+; 11.946 ; paddr[0]                                                                                                 ; prdata[2] ; clk          ; clk         ; 20.000       ; 0.000      ; 4.034      ;
+; 12.005 ; paddr[0]                                                                                                 ; prdata[5] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.975      ;
+; 12.059 ; paddr[5]                                                                                                 ; prdata[0] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.921      ;
+; 12.074 ; paddr[1]                                                                                                 ; prdata[0] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.906      ;
+; 12.095 ; paddr[5]                                                                                                 ; prdata[1] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.885      ;
+; 12.102 ; paddr[10]                                                                                                ; prdata[0] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.878      ;
+; 12.107 ; paddr[5]                                                                                                 ; prdata[2] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.873      ;
+; 12.110 ; paddr[1]                                                                                                 ; prdata[1] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.870      ;
+; 12.122 ; paddr[1]                                                                                                 ; prdata[2] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.858      ;
+; 12.138 ; paddr[10]                                                                                                ; prdata[1] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.842      ;
+; 12.150 ; paddr[10]                                                                                                ; prdata[2] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.830      ;
+; 12.166 ; paddr[5]                                                                                                 ; prdata[5] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.814      ;
+; 12.179 ; paddr[8]                                                                                                 ; prdata[0] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.801      ;
+; 12.180 ; paddr[3]                                                                                                 ; prdata[0] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.800      ;
+; 12.181 ; paddr[1]                                                                                                 ; prdata[5] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.799      ;
+; 12.209 ; paddr[6]                                                                                                 ; prdata[0] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.771      ;
+; 12.209 ; paddr[10]                                                                                                ; prdata[5] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.771      ;
+; 12.215 ; paddr[8]                                                                                                 ; prdata[1] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.765      ;
+; 12.216 ; paddr[3]                                                                                                 ; prdata[1] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.764      ;
+; 12.227 ; paddr[8]                                                                                                 ; prdata[2] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.753      ;
+; 12.228 ; paddr[3]                                                                                                 ; prdata[2] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.752      ;
+; 12.245 ; paddr[6]                                                                                                 ; prdata[1] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.735      ;
+; 12.248 ; paddr[0]                                                                                                 ; prdata[3] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.732      ;
+; 12.257 ; paddr[6]                                                                                                 ; prdata[2] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.723      ;
+; 12.270 ; paddr[9]                                                                                                 ; prdata[0] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.710      ;
+; 12.286 ; paddr[8]                                                                                                 ; prdata[5] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.694      ;
+; 12.287 ; paddr[3]                                                                                                 ; prdata[5] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.693      ;
+; 12.306 ; paddr[9]                                                                                                 ; prdata[1] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.674      ;
+; 12.316 ; paddr[6]                                                                                                 ; prdata[5] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.664      ;
+; 12.318 ; paddr[9]                                                                                                 ; prdata[2] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.662      ;
+; 12.333 ; paddr[0]                                                                                                 ; prdata[7] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.647      ;
+; 12.341 ; paddr[7]                                                                                                 ; prdata[0] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.639      ;
+; 12.377 ; paddr[7]                                                                                                 ; prdata[1] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.603      ;
+; 12.377 ; paddr[9]                                                                                                 ; prdata[5] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.603      ;
+; 12.378 ; paddr[0]                                                                                                 ; pslverr   ; clk          ; clk         ; 20.000       ; 0.000      ; 3.602      ;
+; 12.381 ; paddr[11]                                                                                                ; prdata[0] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.599      ;
+; 12.389 ; paddr[7]                                                                                                 ; prdata[2] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.591      ;
+; 12.397 ; paddr[0]                                                                                                 ; prdata[6] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.583      ;
+; 12.409 ; paddr[5]                                                                                                 ; prdata[3] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.571      ;
+; 12.417 ; paddr[11]                                                                                                ; prdata[1] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.563      ;
+; 12.418 ; paddr[0]                                                                                                 ; prdata[4] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.562      ;
+; 12.424 ; paddr[1]                                                                                                 ; prdata[3] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.556      ;
+; 12.429 ; paddr[11]                                                                                                ; prdata[2] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.551      ;
+; 12.433 ; paddr[3]                                                                                                 ; prdata[7] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.547      ;
+; 12.442 ; paddr[0]                                                                                                 ; prdata[8] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.538      ;
+; 12.448 ; paddr[7]                                                                                                 ; prdata[5] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.532      ;
+; 12.452 ; paddr[10]                                                                                                ; prdata[3] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.528      ;
+; 12.488 ; paddr[11]                                                                                                ; prdata[5] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.492      ;
+; 12.494 ; paddr[5]                                                                                                 ; prdata[7] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.486      ;
+; 12.509 ; paddr[1]                                                                                                 ; prdata[7] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.471      ;
+; 12.529 ; paddr[8]                                                                                                 ; prdata[3] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.451      ;
+; 12.530 ; paddr[3]                                                                                                 ; prdata[3] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.450      ;
+; 12.537 ; paddr[10]                                                                                                ; prdata[7] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.443      ;
+; 12.539 ; paddr[5]                                                                                                 ; pslverr   ; clk          ; clk         ; 20.000       ; 0.000      ; 3.441      ;
+; 12.554 ; paddr[1]                                                                                                 ; pslverr   ; clk          ; clk         ; 20.000       ; 0.000      ; 3.426      ;
+; 12.558 ; paddr[5]                                                                                                 ; prdata[6] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.422      ;
+; 12.559 ; paddr[6]                                                                                                 ; prdata[3] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.421      ;
+; 12.563 ; paddr[4]                                                                                                 ; prdata[0] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.417      ;
+; 12.573 ; paddr[1]                                                                                                 ; prdata[6] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.407      ;
+; 12.579 ; paddr[5]                                                                                                 ; prdata[4] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.401      ;
+; 12.582 ; paddr[10]                                                                                                ; pslverr   ; clk          ; clk         ; 20.000       ; 0.000      ; 3.398      ;
+; 12.592 ; paddr[2]                                                                                                 ; prdata[0] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.388      ;
+; 12.594 ; paddr[1]                                                                                                 ; prdata[4] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.386      ;
+; 12.599 ; paddr[4]                                                                                                 ; prdata[1] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.381      ;
+; 12.601 ; paddr[10]                                                                                                ; prdata[6] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.379      ;
+; 12.603 ; paddr[5]                                                                                                 ; prdata[8] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.377      ;
+; 12.611 ; paddr[4]                                                                                                 ; prdata[2] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.369      ;
+; 12.614 ; paddr[8]                                                                                                 ; prdata[7] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.366      ;
+; 12.618 ; paddr[1]                                                                                                 ; prdata[8] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.362      ;
+; 12.620 ; paddr[9]                                                                                                 ; prdata[3] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.360      ;
+; 12.622 ; paddr[10]                                                                                                ; prdata[4] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.358      ;
+; 12.628 ; paddr[2]                                                                                                 ; prdata[1] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.352      ;
+; 12.640 ; paddr[2]                                                                                                 ; prdata[2] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.340      ;
+; 12.644 ; paddr[6]                                                                                                 ; prdata[7] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.336      ;
+; 12.646 ; paddr[10]                                                                                                ; prdata[8] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.334      ;
+; 12.659 ; paddr[8]                                                                                                 ; pslverr   ; clk          ; clk         ; 20.000       ; 0.000      ; 3.321      ;
+; 12.664 ; paddr[4]                                                                                                 ; prdata[6] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.316      ;
+; 12.670 ; paddr[4]                                                                                                 ; prdata[5] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.310      ;
+; 12.678 ; paddr[8]                                                                                                 ; prdata[6] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.302      ;
+; 12.679 ; paddr[3]                                                                                                 ; prdata[6] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.301      ;
+; 12.689 ; paddr[6]                                                                                                 ; pslverr   ; clk          ; clk         ; 20.000       ; 0.000      ; 3.291      ;
+; 12.691 ; paddr[7]                                                                                                 ; prdata[3] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.289      ;
+; 12.699 ; paddr[2]                                                                                                 ; prdata[5] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.281      ;
+; 12.699 ; paddr[8]                                                                                                 ; prdata[4] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.281      ;
+; 12.700 ; paddr[3]                                                                                                 ; prdata[4] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.280      ;
+; 12.705 ; paddr[9]                                                                                                 ; prdata[7] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.275      ;
+; 12.708 ; paddr[6]                                                                                                 ; prdata[6] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.272      ;
+; 12.709 ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~portb_address_reg0 ; prdata[6] ; clk          ; clk         ; 20.000       ; -1.742     ; 3.529      ;
+; 12.719 ; paddr[4]                                                                                                 ; prdata[7] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.261      ;
+; 12.723 ; paddr[8]                                                                                                 ; prdata[8] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.257      ;
+; 12.728 ; paddr[3]                                                                                                 ; pslverr   ; clk          ; clk         ; 20.000       ; 0.000      ; 3.252      ;
+; 12.729 ; paddr[6]                                                                                                 ; prdata[4] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.251      ;
+; 12.731 ; paddr[11]                                                                                                ; prdata[3] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.249      ;
+; 12.745 ; paddr[4]                                                                                                 ; prdata[8] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.235      ;
+; 12.748 ; paddr[4]                                                                                                 ; pslverr   ; clk          ; clk         ; 20.000       ; 0.000      ; 3.232      ;
+; 12.750 ; paddr[9]                                                                                                 ; pslverr   ; clk          ; clk         ; 20.000       ; 0.000      ; 3.230      ;
+; 12.753 ; paddr[6]                                                                                                 ; prdata[8] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.227      ;
+; 12.760 ; paddr[3]                                                                                                 ; prdata[8] ; clk          ; clk         ; 20.000       ; 0.000      ; 3.220      ;
++--------+----------------------------------------------------------------------------------------------------------+-----------+--------------+-------------+--------------+------------+------------+
+
+
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Fast 1200mV 0C Model Hold: 'clk'                                                                                                                                                                                                                                ;
++-------+------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------+--------------+-------------+--------------+------------+------------+
+; Slack ; From Node                                                              ; To Node                                                                                                  ; Launch Clock ; Latch Clock ; Relationship ; Clock Skew ; Data Delay ;
++-------+------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------+--------------+-------------+--------------+------------+------------+
+; 0.139 ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[2]                      ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0  ; clk          ; clk         ; 0.000        ; 0.230      ; 0.473      ;
+; 0.139 ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[7]                      ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0  ; clk          ; clk         ; 0.000        ; 0.230      ; 0.473      ;
+; 0.142 ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[5]                      ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0  ; clk          ; clk         ; 0.000        ; 0.232      ; 0.478      ;
+; 0.145 ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[4]                      ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0  ; clk          ; clk         ; 0.000        ; 0.231      ; 0.480      ;
+; 0.146 ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[3]                      ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0  ; clk          ; clk         ; 0.000        ; 0.231      ; 0.481      ;
+; 0.148 ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[1]                      ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0  ; clk          ; clk         ; 0.000        ; 0.231      ; 0.483      ;
+; 0.151 ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[0]                      ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0  ; clk          ; clk         ; 0.000        ; 0.232      ; 0.487      ;
+; 0.153 ; sync_fifo:u_rx_fifo|wptr[0]                                            ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_address_reg0 ; clk          ; clk         ; 0.000        ; 0.225      ; 0.482      ;
+; 0.154 ; sync_fifo:u_rx_fifo|wptr[1]                                            ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_address_reg0 ; clk          ; clk         ; 0.000        ; 0.225      ; 0.483      ;
+; 0.170 ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[6]                      ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_datain_reg0  ; clk          ; clk         ; 0.000        ; 0.231      ; 0.505      ;
+; 0.178 ; sync_fifo:u_tx_fifo|wptr[3]                                            ; sync_fifo:u_tx_fifo|altsyncram:fifo_rtl_0|altsyncram_5pd1:auto_generated|ram_block1a0~porta_address_reg0 ; clk          ; clk         ; 0.000        ; 0.223      ; 0.505      ;
+; 0.181 ; sync_fifo:u_rx_fifo|rptr[3]                                            ; sync_fifo:u_rx_fifo|rptr[3]                                                                              ; clk          ; clk         ; 0.000        ; 0.042      ; 0.307      ;
+; 0.181 ; sync_fifo:u_rx_fifo|rptr[1]                                            ; sync_fifo:u_rx_fifo|rptr[1]                                                                              ; clk          ; clk         ; 0.000        ; 0.042      ; 0.307      ;
+; 0.181 ; sync_fifo:u_rx_fifo|rptr[2]                                            ; sync_fifo:u_rx_fifo|rptr[2]                                                                              ; clk          ; clk         ; 0.000        ; 0.042      ; 0.307      ;
+; 0.181 ; sync_fifo:u_rx_fifo|rptr[4]                                            ; sync_fifo:u_rx_fifo|rptr[4]                                                                              ; clk          ; clk         ; 0.000        ; 0.042      ; 0.307      ;
+; 0.181 ; sync_fifo:u_rx_fifo|wptr[0]                                            ; sync_fifo:u_rx_fifo|wptr[0]                                                                              ; clk          ; clk         ; 0.000        ; 0.042      ; 0.307      ;
+; 0.181 ; rx_uart:u_rx_uart|deframe:deframe_inst|parity_exp                      ; rx_uart:u_rx_uart|deframe:deframe_inst|parity_exp                                                        ; clk          ; clk         ; 0.000        ; 0.042      ; 0.307      ;
+; 0.181 ; rx_uart:u_rx_uart|rx_controller:rx_controller_inst|frame_error_latched ; rx_uart:u_rx_uart|rx_controller:rx_controller_inst|frame_error_latched                                   ; clk          ; clk         ; 0.000        ; 0.042      ; 0.307      ;
+; 0.181 ; sync_fifo:u_tx_fifo|wptr[0]                                            ; sync_fifo:u_tx_fifo|altsyncram:fifo_rtl_0|altsyncram_5pd1:auto_generated|ram_block1a0~porta_address_reg0 ; clk          ; clk         ; 0.000        ; 0.223      ; 0.508      ;
+; 0.181 ; tx_uart:u_tx_uart|tx_controller:controller|state.START                 ; tx_uart:u_tx_uart|tx_controller:controller|state.START                                                   ; clk          ; clk         ; 0.000        ; 0.042      ; 0.307      ;
+; 0.181 ; sync_fifo:u_tx_fifo|rptr[3]                                            ; sync_fifo:u_tx_fifo|rptr[3]                                                                              ; clk          ; clk         ; 0.000        ; 0.042      ; 0.307      ;
+; 0.181 ; tx_uart:u_tx_uart|tx_stop_cnt:u_stop_cnt|cnt                           ; tx_uart:u_tx_uart|tx_stop_cnt:u_stop_cnt|cnt                                                             ; clk          ; clk         ; 0.000        ; 0.042      ; 0.307      ;
+; 0.181 ; tx_uart:u_tx_uart|tx_controller:controller|state.STOP                  ; tx_uart:u_tx_uart|tx_controller:controller|state.STOP                                                    ; clk          ; clk         ; 0.000        ; 0.042      ; 0.307      ;
+; 0.181 ; tx_uart:u_tx_uart|tx_controller:controller|state.PARITY                ; tx_uart:u_tx_uart|tx_controller:controller|state.PARITY                                                  ; clk          ; clk         ; 0.000        ; 0.042      ; 0.307      ;
+; 0.181 ; tx_uart:u_tx_uart|tx_bit_cnt:u_bit_cnt|cnt[2]                          ; tx_uart:u_tx_uart|tx_bit_cnt:u_bit_cnt|cnt[2]                                                            ; clk          ; clk         ; 0.000        ; 0.042      ; 0.307      ;
+; 0.181 ; tx_uart:u_tx_uart|tx_bit_cnt:u_bit_cnt|cnt[1]                          ; tx_uart:u_tx_uart|tx_bit_cnt:u_bit_cnt|cnt[1]                                                            ; clk          ; clk         ; 0.000        ; 0.042      ; 0.307      ;
+; 0.181 ; tx_uart:u_tx_uart|tx_bit_cnt:u_bit_cnt|cnt[0]                          ; tx_uart:u_tx_uart|tx_bit_cnt:u_bit_cnt|cnt[0]                                                            ; clk          ; clk         ; 0.000        ; 0.042      ; 0.307      ;
+; 0.181 ; tx_uart:u_tx_uart|tx_controller:controller|state.DATA                  ; tx_uart:u_tx_uart|tx_controller:controller|state.DATA                                                    ; clk          ; clk         ; 0.000        ; 0.042      ; 0.307      ;
+; 0.181 ; rx_uart:u_rx_uart|rx_controller:rx_controller_inst|first_stop_sampled  ; rx_uart:u_rx_uart|rx_controller:rx_controller_inst|first_stop_sampled                                    ; clk          ; clk         ; 0.000        ; 0.042      ; 0.307      ;
+; 0.182 ; uart_regs:u_uart_regs|overrun_latch                                    ; uart_regs:u_uart_regs|overrun_latch                                                                      ; clk          ; clk         ; 0.000        ; 0.041      ; 0.307      ;
+; 0.182 ; sync_fifo:u_rx_fifo|rptr[0]                                            ; sync_fifo:u_rx_fifo|rptr[0]                                                                              ; clk          ; clk         ; 0.000        ; 0.041      ; 0.307      ;
+; 0.182 ; sync_fifo:u_tx_fifo|rptr[0]                                            ; sync_fifo:u_tx_fifo|rptr[0]                                                                              ; clk          ; clk         ; 0.000        ; 0.041      ; 0.307      ;
+; 0.182 ; sync_fifo:u_tx_fifo|rptr[4]                                            ; sync_fifo:u_tx_fifo|rptr[4]                                                                              ; clk          ; clk         ; 0.000        ; 0.041      ; 0.307      ;
+; 0.182 ; sync_fifo:u_tx_fifo|rptr[1]                                            ; sync_fifo:u_tx_fifo|rptr[1]                                                                              ; clk          ; clk         ; 0.000        ; 0.041      ; 0.307      ;
+; 0.182 ; sync_fifo:u_tx_fifo|rptr[2]                                            ; sync_fifo:u_tx_fifo|rptr[2]                                                                              ; clk          ; clk         ; 0.000        ; 0.041      ; 0.307      ;
+; 0.182 ; sync_fifo:u_tx_fifo|wptr[0]                                            ; sync_fifo:u_tx_fifo|wptr[0]                                                                              ; clk          ; clk         ; 0.000        ; 0.041      ; 0.307      ;
+; 0.182 ; rx_uart:u_rx_uart|tick_cnt:tick_cnt_inst|tick_cnt[3]                   ; rx_uart:u_rx_uart|tick_cnt:tick_cnt_inst|tick_cnt[3]                                                     ; clk          ; clk         ; 0.000        ; 0.041      ; 0.307      ;
+; 0.182 ; rx_uart:u_rx_uart|tick_cnt:tick_cnt_inst|tick_cnt[2]                   ; rx_uart:u_rx_uart|tick_cnt:tick_cnt_inst|tick_cnt[2]                                                     ; clk          ; clk         ; 0.000        ; 0.041      ; 0.307      ;
+; 0.182 ; rx_uart:u_rx_uart|tick_cnt:tick_cnt_inst|tick_cnt[1]                   ; rx_uart:u_rx_uart|tick_cnt:tick_cnt_inst|tick_cnt[1]                                                     ; clk          ; clk         ; 0.000        ; 0.041      ; 0.307      ;
+; 0.182 ; rx_uart:u_rx_uart|bit_cnt:bit_cnt_inst|bit_cnt[1]                      ; rx_uart:u_rx_uart|bit_cnt:bit_cnt_inst|bit_cnt[1]                                                        ; clk          ; clk         ; 0.000        ; 0.041      ; 0.307      ;
+; 0.182 ; rx_uart:u_rx_uart|rx_controller:rx_controller_inst|state.IDLE          ; rx_uart:u_rx_uart|rx_controller:rx_controller_inst|state.IDLE                                            ; clk          ; clk         ; 0.000        ; 0.041      ; 0.307      ;
+; 0.189 ; rx_uart:u_rx_uart|tick_cnt:tick_cnt_inst|tick_cnt[0]                   ; rx_uart:u_rx_uart|tick_cnt:tick_cnt_inst|tick_cnt[0]                                                     ; clk          ; clk         ; 0.000        ; 0.041      ; 0.314      ;
+; 0.189 ; rx_uart:u_rx_uart|bit_cnt:bit_cnt_inst|bit_cnt[0]                      ; rx_uart:u_rx_uart|bit_cnt:bit_cnt_inst|bit_cnt[0]                                                        ; clk          ; clk         ; 0.000        ; 0.041      ; 0.314      ;
+; 0.195 ; rx_uart:u_rx_uart|rx_controller:rx_controller_inst|state.FRAME         ; rx_uart:u_rx_uart|rx_controller:rx_controller_inst|state.HOLD                                            ; clk          ; clk         ; 0.000        ; 0.042      ; 0.321      ;
+; 0.195 ; tx_uart:u_tx_uart|tx_bit_cnt:u_bit_cnt|cnt[0]                          ; tx_uart:u_tx_uart|tx_bit_cnt:u_bit_cnt|cnt[1]                                                            ; clk          ; clk         ; 0.000        ; 0.042      ; 0.321      ;
+; 0.196 ; sync_fifo:u_tx_fifo|wptr[4]                                            ; sync_fifo:u_tx_fifo|wptr[4]                                                                              ; clk          ; clk         ; 0.000        ; 0.041      ; 0.321      ;
+; 0.198 ; tx_uart:u_tx_uart|tx_bit_cnt:u_bit_cnt|cnt[0]                          ; tx_uart:u_tx_uart|tx_bit_cnt:u_bit_cnt|cnt[2]                                                            ; clk          ; clk         ; 0.000        ; 0.042      ; 0.324      ;
+; 0.199 ; sync_fifo:u_rx_fifo|wptr[4]                                            ; sync_fifo:u_rx_fifo|wptr[4]                                                                              ; clk          ; clk         ; 0.000        ; 0.042      ; 0.325      ;
+; 0.213 ; sync_fifo:u_tx_fifo|rptr[0]                                            ; sync_fifo:u_tx_fifo|rptr[2]                                                                              ; clk          ; clk         ; 0.000        ; 0.041      ; 0.338      ;
+; 0.220 ; tx_uart:u_tx_uart|tx_controller:controller|state.IDLE                  ; sync_fifo:u_tx_fifo|rptr[3]                                                                              ; clk          ; clk         ; 0.000        ; 0.042      ; 0.346      ;
+; 0.233 ; sync_fifo:u_tx_fifo|wptr[1]                                            ; sync_fifo:u_tx_fifo|altsyncram:fifo_rtl_0|altsyncram_5pd1:auto_generated|ram_block1a0~porta_address_reg0 ; clk          ; clk         ; 0.000        ; 0.223      ; 0.560      ;
+; 0.236 ; sync_fifo:u_tx_fifo|wptr[2]                                            ; sync_fifo:u_tx_fifo|altsyncram:fifo_rtl_0|altsyncram_5pd1:auto_generated|ram_block1a0~porta_address_reg0 ; clk          ; clk         ; 0.000        ; 0.223      ; 0.563      ;
+; 0.259 ; sync_fifo:u_tx_fifo|fifo_rtl_0_bypass[10]                              ; tx_uart:u_tx_uart|piso:u_piso|data[1]                                                                    ; clk          ; clk         ; 0.000        ; 0.041      ; 0.384      ;
+; 0.259 ; sync_fifo:u_rx_fifo|rptr[2]                                            ; sync_fifo:u_rx_fifo|fifo_rtl_0_bypass[6]                                                                 ; clk          ; clk         ; 0.000        ; 0.042      ; 0.385      ;
+; 0.262 ; tx_uart:u_tx_uart|piso:u_piso|data[5]                                  ; tx_uart:u_tx_uart|piso:u_piso|data[4]                                                                    ; clk          ; clk         ; 0.000        ; 0.041      ; 0.387      ;
+; 0.263 ; sync_fifo:u_rx_fifo|wptr[3]                                            ; sync_fifo:u_rx_fifo|altsyncram:fifo_rtl_0|altsyncram_7pd1:auto_generated|ram_block1a0~porta_address_reg0 ; clk          ; clk         ; 0.000        ; 0.225      ; 0.592      ;
+; 0.265 ; tx_uart:u_tx_uart|piso:u_piso|data[3]                                  ; tx_uart:u_tx_uart|piso:u_piso|data[2]                                                                    ; clk          ; clk         ; 0.000        ; 0.041      ; 0.390      ;
+; 0.271 ; sync_fifo:u_rx_fifo|rptr[1]                                            ; sync_fifo:u_rx_fifo|rptr[2]                                                                              ; clk          ; clk         ; 0.000        ; 0.042      ; 0.397      ;
+; 0.272 ; rx_uart:u_rx_uart|sipo:sipo_inst|data_out[11]                          ; rx_uart:u_rx_uart|deframe:deframe_inst|parity_bit                                                        ; clk          ; clk         ; 0.000        ; 0.043      ; 0.399      ;
+; 0.276 ; rx_uart:u_rx_uart|sipo:sipo_inst|data_out[11]                          ; rx_uart:u_rx_uart|deframe:deframe_inst|rx_data[7]                                                        ; clk          ; clk         ; 0.000        ; 0.043      ; 0.403      ;
+; 0.277 ; rx_uart:u_rx_uart|sipo:sipo_inst|data_out[7]                           ; rx_uart:u_rx_uart|sipo:sipo_inst|data_out[6]                                                             ; clk          ; clk         ; 0.000        ; 0.042      ; 0.403      ;
+; 0.277 ; rx_uart:u_rx_uart|sipo:sipo_inst|data_out[9]                           ; rx_uart:u_rx_uart|sipo:sipo_inst|data_out[8]                                                             ; clk          ; clk         ; 0.000        ; 0.042      ; 0.403      ;
+; 0.278 ; rx_uart:u_rx_uart|sipo:sipo_inst|data_out[8]                           ; rx_uart:u_rx_uart|sipo:sipo_inst|data_out[7]                                                             ; clk          ; clk         ; 0.000        ; 0.042      ; 0.404      ;
+; 0.281 ; sync_fifo:u_rx_fifo|wptr[1]                                            ; sync_fifo:u_rx_fifo|fifo_rtl_0_bypass[3]                                                                 ; clk          ; clk         ; 0.000        ; 0.042      ; 0.407      ;
+; 0.283 ; sync_fifo:u_rx_fifo|wptr[0]                                            ; sync_fifo:u_rx_fifo|fifo_rtl_0_bypass[1]                                                                 ; clk          ; clk         ; 0.000        ; 0.042      ; 0.409      ;
+; 0.293 ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[1]                        ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[1]                                                          ; clk          ; clk         ; 0.000        ; 0.042      ; 0.419      ;
+; 0.294 ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[4]                     ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[4]                                                       ; clk          ; clk         ; 0.000        ; 0.042      ; 0.420      ;
+; 0.296 ; tx_uart:u_tx_uart|tx_controller:controller|state.STOP                  ; tx_uart:u_tx_uart|tx_stop_cnt:u_stop_cnt|cnt                                                             ; clk          ; clk         ; 0.000        ; 0.042      ; 0.422      ;
+; 0.296 ; tx_uart:u_tx_uart|tx_bit_cnt:u_bit_cnt|cnt[1]                          ; tx_uart:u_tx_uart|tx_bit_cnt:u_bit_cnt|cnt[2]                                                            ; clk          ; clk         ; 0.000        ; 0.042      ; 0.422      ;
+; 0.299 ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[5]                        ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[5]                                                          ; clk          ; clk         ; 0.000        ; 0.042      ; 0.425      ;
+; 0.299 ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[14]                       ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[14]                                                         ; clk          ; clk         ; 0.000        ; 0.042      ; 0.425      ;
+; 0.299 ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[5]                     ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[5]                                                       ; clk          ; clk         ; 0.000        ; 0.042      ; 0.425      ;
+; 0.299 ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[14]                    ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[14]                                                      ; clk          ; clk         ; 0.000        ; 0.042      ; 0.425      ;
+; 0.300 ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[2]                        ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[2]                                                          ; clk          ; clk         ; 0.000        ; 0.042      ; 0.426      ;
+; 0.300 ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[3]                        ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[3]                                                          ; clk          ; clk         ; 0.000        ; 0.042      ; 0.426      ;
+; 0.300 ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[4]                        ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[4]                                                          ; clk          ; clk         ; 0.000        ; 0.042      ; 0.426      ;
+; 0.300 ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[7]                        ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[7]                                                          ; clk          ; clk         ; 0.000        ; 0.042      ; 0.426      ;
+; 0.300 ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[10]                       ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[10]                                                         ; clk          ; clk         ; 0.000        ; 0.042      ; 0.426      ;
+; 0.300 ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[12]                       ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[12]                                                         ; clk          ; clk         ; 0.000        ; 0.042      ; 0.426      ;
+; 0.300 ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[13]                       ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[13]                                                         ; clk          ; clk         ; 0.000        ; 0.042      ; 0.426      ;
+; 0.300 ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[12]                    ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[12]                                                      ; clk          ; clk         ; 0.000        ; 0.042      ; 0.426      ;
+; 0.300 ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[10]                    ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[10]                                                      ; clk          ; clk         ; 0.000        ; 0.042      ; 0.426      ;
+; 0.300 ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[1]                     ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[1]                                                       ; clk          ; clk         ; 0.000        ; 0.042      ; 0.426      ;
+; 0.300 ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[2]                     ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[2]                                                       ; clk          ; clk         ; 0.000        ; 0.042      ; 0.426      ;
+; 0.300 ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[3]                     ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[3]                                                       ; clk          ; clk         ; 0.000        ; 0.042      ; 0.426      ;
+; 0.300 ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[7]                     ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[7]                                                       ; clk          ; clk         ; 0.000        ; 0.042      ; 0.426      ;
+; 0.300 ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[13]                    ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[13]                                                      ; clk          ; clk         ; 0.000        ; 0.042      ; 0.426      ;
+; 0.301 ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[11]                       ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[11]                                                         ; clk          ; clk         ; 0.000        ; 0.042      ; 0.427      ;
+; 0.301 ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[6]                        ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[6]                                                          ; clk          ; clk         ; 0.000        ; 0.042      ; 0.427      ;
+; 0.301 ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[8]                        ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[8]                                                          ; clk          ; clk         ; 0.000        ; 0.042      ; 0.427      ;
+; 0.301 ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[9]                        ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[9]                                                          ; clk          ; clk         ; 0.000        ; 0.042      ; 0.427      ;
+; 0.301 ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[6]                     ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[6]                                                       ; clk          ; clk         ; 0.000        ; 0.042      ; 0.427      ;
+; 0.301 ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[8]                     ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[8]                                                       ; clk          ; clk         ; 0.000        ; 0.042      ; 0.427      ;
+; 0.301 ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[9]                     ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[9]                                                       ; clk          ; clk         ; 0.000        ; 0.042      ; 0.427      ;
+; 0.301 ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[11]                    ; rx_uart:u_rx_uart|rx_baud_gen:u_rx_baud_gen|cnt[11]                                                      ; clk          ; clk         ; 0.000        ; 0.042      ; 0.427      ;
+; 0.304 ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[0]                        ; tx_uart:u_tx_uart|tx_baud_gen:u_baud_gen|cnt[0]                                                          ; clk          ; clk         ; 0.000        ; 0.042      ; 0.430      ;
+; 0.305 ; sync_fifo:u_rx_fifo|wptr[2]                                            ; sync_fifo:u_rx_fifo|wptr[2]                                                                              ; clk          ; clk         ; 0.000        ; 0.042      ; 0.431      ;
+; 0.309 ; rx_uart:u_rx_uart|tick_cnt:tick_cnt_inst|tick_cnt[0]                   ; rx_uart:u_rx_uart|tick_cnt:tick_cnt_inst|tick_cnt[1]                                                     ; clk          ; clk         ; 0.000        ; 0.041      ; 0.434      ;
+; 0.310 ; sync_fifo:u_tx_fifo|wptr[3]                                            ; sync_fifo:u_tx_fifo|wptr[3]                                                                              ; clk          ; clk         ; 0.000        ; 0.041      ; 0.435      ;
+; 0.311 ; sync_fifo:u_rx_fifo|wptr[1]                                            ; sync_fifo:u_rx_fifo|wptr[1]                                                                              ; clk          ; clk         ; 0.000        ; 0.042      ; 0.437      ;
++-------+------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------+--------------+-------------+--------------+------------+------------+
+
+
+----------------------------------------------
+; Fast 1200mV 0C Model Metastability Summary ;
+----------------------------------------------
+The design MTBF is not calculated because there are no specified synchronizers in the design.
+Number of Synchronizer Chains Found: 1
+Shortest Synchronizer Chain: 2 Registers
+Fraction of Chains for which MTBFs Could Not be Calculated: 1.000
+Worst Case Available Settling Time: 36.863 ns
+
+
+
+
++-----------------------------------------------------------------------------+
+; Multicorner Timing Analysis Summary                                         ;
++------------------+-------+-------+----------+---------+---------------------+
+; Clock            ; Setup ; Hold  ; Recovery ; Removal ; Minimum Pulse Width ;
++------------------+-------+-------+----------+---------+---------------------+
+; Worst-case Slack ; 7.104 ; 0.139 ; N/A      ; N/A     ; 9.200               ;
+;  clk             ; 7.104 ; 0.139 ; N/A      ; N/A     ; 9.200               ;
+; Design-wide TNS  ; 0.0   ; 0.0   ; 0.0      ; 0.0     ; 0.0                 ;
+;  clk             ; 0.000 ; 0.000 ; N/A      ; N/A     ; 0.000               ;
++------------------+-------+-------+----------+---------+---------------------+
+
+
++------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Board Trace Model Assignments                                                                                                                                                                                                                                                                                                                                                                                    ;
++---------------+--------------+-------------------+-------------------------+-------------------------+---------------+---------------------+----------------+------------------+--------+------------------+------------------------+------------------------+--------------+---------------+-----------------+-------+---------------------+--------------------+---------------+-----------------+-------------+
+; Pin           ; I/O Standard ; Near Tline Length ; Near Tline L per Length ; Near Tline C per Length ; Near Series R ; Near Differential R ; Near Pull-up R ; Near Pull-down R ; Near C ; Far Tline Length ; Far Tline L per Length ; Far Tline C per Length ; Far Series R ; Far Pull-up R ; Far Pull-down R ; Far C ; Termination Voltage ; Far Differential R ; EBD File Name ; EBD Signal Name ; EBD Far-end ;
++---------------+--------------+-------------------+-------------------------+-------------------------+---------------+---------------------+----------------+------------------+--------+------------------+------------------------+------------------------+--------------+---------------+-----------------+-------+---------------------+--------------------+---------------+-----------------+-------------+
+; ~ALTERA_DCLK~ ; 3.3-V LVTTL  ; 0 in              ; 0 H/in                  ; 0 F/in                  ; short         ; -                   ; open           ; open             ; open   ; 0 in             ; 0 H/in                 ; 0 F/in                 ; short        ; open          ; open            ; open  ; 0 V                 ; -                  ; n/a           ; n/a             ; n/a         ;
+; ~ALTERA_nCEO~ ; 3.3-V LVTTL  ; 0 in              ; 0 H/in                  ; 0 F/in                  ; short         ; -                   ; open           ; open             ; open   ; 0 in             ; 0 H/in                 ; 0 F/in                 ; short        ; open          ; open            ; open  ; 0 V                 ; -                  ; n/a           ; n/a             ; n/a         ;
++---------------+--------------+-------------------+-------------------------+-------------------------+---------------+---------------------+----------------+------------------+--------+------------------+------------------------+------------------------+--------------+---------------+-----------------+-------+---------------------+--------------------+---------------+-----------------+-------------+
+
+
++----------------------------------------------------------------------------+
+; Input Transition Times                                                     ;
++-------------------------+--------------+-----------------+-----------------+
+; Pin                     ; I/O Standard ; 10-90 Rise Time ; 90-10 Fall Time ;
++-------------------------+--------------+-----------------+-----------------+
+; clk                     ; 3.3-V LVTTL  ; 2640 ps         ; 2640 ps         ;
+; ~ALTERA_ASDO_DATA1~     ; 3.3-V LVTTL  ; 2640 ps         ; 2640 ps         ;
+; ~ALTERA_FLASH_nCE_nCSO~ ; 3.3-V LVTTL  ; 2640 ps         ; 2640 ps         ;
+; ~ALTERA_DATA0~          ; 3.3-V LVTTL  ; 2640 ps         ; 2640 ps         ;
++-------------------------+--------------+-----------------+-----------------+
+
+
++--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Signal Integrity Metrics (Slow 1200mv 0c Model)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ;
++---------------+--------------+---------------------+---------------------+------------------------------+------------------------------+---------------------+---------------------+--------------------------------------+--------------------------------------+-----------------------------+-----------------------------+----------------------------+----------------------------+-----------------------------+-----------------------------+--------------------+--------------------+-------------------------------------+-------------------------------------+----------------------------+----------------------------+---------------------------+---------------------------+
+; Pin           ; I/O Standard ; Board Delay on Rise ; Board Delay on Fall ; Steady State Voh at FPGA Pin ; Steady State Vol at FPGA Pin ; Voh Max at FPGA Pin ; Vol Min at FPGA Pin ; Ringback Voltage on Rise at FPGA Pin ; Ringback Voltage on Fall at FPGA Pin ; 10-90 Rise Time at FPGA Pin ; 90-10 Fall Time at FPGA Pin ; Monotonic Rise at FPGA Pin ; Monotonic Fall at FPGA Pin ; Steady State Voh at Far-end ; Steady State Vol at Far-end ; Voh Max at Far-end ; Vol Min at Far-end ; Ringback Voltage on Rise at Far-end ; Ringback Voltage on Fall at Far-end ; 10-90 Rise Time at Far-end ; 90-10 Fall Time at Far-end ; Monotonic Rise at Far-end ; Monotonic Fall at Far-end ;
++---------------+--------------+---------------------+---------------------+------------------------------+------------------------------+---------------------+---------------------+--------------------------------------+--------------------------------------+-----------------------------+-----------------------------+----------------------------+----------------------------+-----------------------------+-----------------------------+--------------------+--------------------+-------------------------------------+-------------------------------------+----------------------------+----------------------------+---------------------------+---------------------------+
+; ~ALTERA_DCLK~ ; 3.3-V LVTTL  ; 0 s                 ; 0 s                 ; 3.08 V                       ; 5.73e-09 V                   ; 3.19 V              ; -0.173 V            ; 0.151 V                              ; 0.259 V                              ; 2.79e-10 s                  ; 2.42e-10 s                  ; Yes                        ; Yes                        ; 3.08 V                      ; 5.73e-09 V                  ; 3.19 V             ; -0.173 V           ; 0.151 V                             ; 0.259 V                             ; 2.79e-10 s                 ; 2.42e-10 s                 ; Yes                       ; Yes                       ;
+; ~ALTERA_nCEO~ ; 3.3-V LVTTL  ; 0 s                 ; 0 s                 ; 3.08 V                       ; 1.11e-08 V                   ; 3.13 V              ; -0.0798 V           ; 0.192 V                              ; 0.22 V                               ; 8.68e-10 s                  ; 6.46e-10 s                  ; No                         ; No                         ; 3.08 V                      ; 1.11e-08 V                  ; 3.13 V             ; -0.0798 V          ; 0.192 V                             ; 0.22 V                              ; 8.68e-10 s                 ; 6.46e-10 s                 ; No                        ; No                        ;
++---------------+--------------+---------------------+---------------------+------------------------------+------------------------------+---------------------+---------------------+--------------------------------------+--------------------------------------+-----------------------------+-----------------------------+----------------------------+----------------------------+-----------------------------+-----------------------------+--------------------+--------------------+-------------------------------------+-------------------------------------+----------------------------+----------------------------+---------------------------+---------------------------+
+
+
++--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Signal Integrity Metrics (Slow 1200mv 85c Model)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           ;
++---------------+--------------+---------------------+---------------------+------------------------------+------------------------------+---------------------+---------------------+--------------------------------------+--------------------------------------+-----------------------------+-----------------------------+----------------------------+----------------------------+-----------------------------+-----------------------------+--------------------+--------------------+-------------------------------------+-------------------------------------+----------------------------+----------------------------+---------------------------+---------------------------+
+; Pin           ; I/O Standard ; Board Delay on Rise ; Board Delay on Fall ; Steady State Voh at FPGA Pin ; Steady State Vol at FPGA Pin ; Voh Max at FPGA Pin ; Vol Min at FPGA Pin ; Ringback Voltage on Rise at FPGA Pin ; Ringback Voltage on Fall at FPGA Pin ; 10-90 Rise Time at FPGA Pin ; 90-10 Fall Time at FPGA Pin ; Monotonic Rise at FPGA Pin ; Monotonic Fall at FPGA Pin ; Steady State Voh at Far-end ; Steady State Vol at Far-end ; Voh Max at Far-end ; Vol Min at Far-end ; Ringback Voltage on Rise at Far-end ; Ringback Voltage on Fall at Far-end ; 10-90 Rise Time at Far-end ; 90-10 Fall Time at Far-end ; Monotonic Rise at Far-end ; Monotonic Fall at Far-end ;
++---------------+--------------+---------------------+---------------------+------------------------------+------------------------------+---------------------+---------------------+--------------------------------------+--------------------------------------+-----------------------------+-----------------------------+----------------------------+----------------------------+-----------------------------+-----------------------------+--------------------+--------------------+-------------------------------------+-------------------------------------+----------------------------+----------------------------+---------------------------+---------------------------+
+; ~ALTERA_DCLK~ ; 3.3-V LVTTL  ; 0 s                 ; 0 s                 ; 3.08 V                       ; 6.54e-07 V                   ; 3.14 V              ; -0.115 V            ; 0.146 V                              ; 0.141 V                              ; 3.07e-10 s                  ; 3.96e-10 s                  ; Yes                        ; No                         ; 3.08 V                      ; 6.54e-07 V                  ; 3.14 V             ; -0.115 V           ; 0.146 V                             ; 0.141 V                             ; 3.07e-10 s                 ; 3.96e-10 s                 ; Yes                       ; No                        ;
+; ~ALTERA_nCEO~ ; 3.3-V LVTTL  ; 0 s                 ; 0 s                 ; 3.08 V                       ; 1.28e-06 V                   ; 3.11 V              ; -0.0528 V           ; 0.302 V                              ; 0.199 V                              ; 9.51e-10 s                  ; 8.47e-10 s                  ; Yes                        ; No                         ; 3.08 V                      ; 1.28e-06 V                  ; 3.11 V             ; -0.0528 V          ; 0.302 V                             ; 0.199 V                             ; 9.51e-10 s                 ; 8.47e-10 s                 ; Yes                       ; No                        ;
++---------------+--------------+---------------------+---------------------+------------------------------+------------------------------+---------------------+---------------------+--------------------------------------+--------------------------------------+-----------------------------+-----------------------------+----------------------------+----------------------------+-----------------------------+-----------------------------+--------------------+--------------------+-------------------------------------+-------------------------------------+----------------------------+----------------------------+---------------------------+---------------------------+
+
+
++--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Signal Integrity Metrics (Fast 1200mv 0c Model)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ;
++---------------+--------------+---------------------+---------------------+------------------------------+------------------------------+---------------------+---------------------+--------------------------------------+--------------------------------------+-----------------------------+-----------------------------+----------------------------+----------------------------+-----------------------------+-----------------------------+--------------------+--------------------+-------------------------------------+-------------------------------------+----------------------------+----------------------------+---------------------------+---------------------------+
+; Pin           ; I/O Standard ; Board Delay on Rise ; Board Delay on Fall ; Steady State Voh at FPGA Pin ; Steady State Vol at FPGA Pin ; Voh Max at FPGA Pin ; Vol Min at FPGA Pin ; Ringback Voltage on Rise at FPGA Pin ; Ringback Voltage on Fall at FPGA Pin ; 10-90 Rise Time at FPGA Pin ; 90-10 Fall Time at FPGA Pin ; Monotonic Rise at FPGA Pin ; Monotonic Fall at FPGA Pin ; Steady State Voh at Far-end ; Steady State Vol at Far-end ; Voh Max at Far-end ; Vol Min at Far-end ; Ringback Voltage on Rise at Far-end ; Ringback Voltage on Fall at Far-end ; 10-90 Rise Time at Far-end ; 90-10 Fall Time at Far-end ; Monotonic Rise at Far-end ; Monotonic Fall at Far-end ;
++---------------+--------------+---------------------+---------------------+------------------------------+------------------------------+---------------------+---------------------+--------------------------------------+--------------------------------------+-----------------------------+-----------------------------+----------------------------+----------------------------+-----------------------------+-----------------------------+--------------------+--------------------+-------------------------------------+-------------------------------------+----------------------------+----------------------------+---------------------------+---------------------------+
+; ~ALTERA_DCLK~ ; 3.3-V LVTTL  ; 0 s                 ; 0 s                 ; 3.46 V                       ; 6.54e-08 V                   ; 3.66 V              ; -0.26 V             ; 0.41 V                               ; 0.32 V                               ; 1.57e-10 s                  ; 2.15e-10 s                  ; No                         ; Yes                        ; 3.46 V                      ; 6.54e-08 V                  ; 3.66 V             ; -0.26 V            ; 0.41 V                              ; 0.32 V                              ; 1.57e-10 s                 ; 2.15e-10 s                 ; No                        ; Yes                       ;
+; ~ALTERA_nCEO~ ; 3.3-V LVTTL  ; 0 s                 ; 0 s                 ; 3.46 V                       ; 1.25e-07 V                   ; 3.57 V              ; -0.0855 V           ; 0.315 V                              ; 0.175 V                              ; 6.79e-10 s                  ; 6.15e-10 s                  ; No                         ; No                         ; 3.46 V                      ; 1.25e-07 V                  ; 3.57 V             ; -0.0855 V          ; 0.315 V                             ; 0.175 V                             ; 6.79e-10 s                 ; 6.15e-10 s                 ; No                        ; No                        ;
++---------------+--------------+---------------------+---------------------+------------------------------+------------------------------+---------------------+---------------------+--------------------------------------+--------------------------------------+-----------------------------+-----------------------------+----------------------------+----------------------------+-----------------------------+-----------------------------+--------------------+--------------------+-------------------------------------+-------------------------------------+----------------------------+----------------------------+---------------------------+---------------------------+
+
+
++-------------------------------------------------------------------+
+; Setup Transfers                                                   ;
++------------+----------+----------+----------+----------+----------+
+; From Clock ; To Clock ; RR Paths ; FR Paths ; RF Paths ; FF Paths ;
++------------+----------+----------+----------+----------+----------+
+; clk        ; clk      ; 52878    ; 0        ; 0        ; 0        ;
++------------+----------+----------+----------+----------+----------+
+Entries labeled "false path" only account for clock-to-clock false paths and not path-based false paths. As a result, actual path counts may be lower than reported.
+
+
++-------------------------------------------------------------------+
+; Hold Transfers                                                    ;
++------------+----------+----------+----------+----------+----------+
+; From Clock ; To Clock ; RR Paths ; FR Paths ; RF Paths ; FF Paths ;
++------------+----------+----------+----------+----------+----------+
+; clk        ; clk      ; 52878    ; 0        ; 0        ; 0        ;
++------------+----------+----------+----------+----------+----------+
+Entries labeled "false path" only account for clock-to-clock false paths and not path-based false paths. As a result, actual path counts may be lower than reported.
+
+
+---------------
+; Report TCCS ;
+---------------
+No dedicated SERDES Transmitter circuitry present in device or used in design
+
+
+---------------
+; Report RSKM ;
+---------------
+No non-DPA dedicated SERDES Receiver circuitry present in device or used in design
+
+
++------------------------------------------------+
+; Unconstrained Paths Summary                    ;
++---------------------------------+-------+------+
+; Property                        ; Setup ; Hold ;
++---------------------------------+-------+------+
+; Illegal Clocks                  ; 0     ; 0    ;
+; Unconstrained Clocks            ; 0     ; 0    ;
+; Unconstrained Input Ports       ; 0     ; 0    ;
+; Unconstrained Input Port Paths  ; 0     ; 0    ;
+; Unconstrained Output Ports      ; 0     ; 0    ;
+; Unconstrained Output Port Paths ; 0     ; 0    ;
++---------------------------------+-------+------+
+
+
++-------------------------------------+
+; Clock Status Summary                ;
++--------+-------+------+-------------+
+; Target ; Clock ; Type ; Status      ;
++--------+-------+------+-------------+
+; clk    ; clk   ; Base ; Constrained ;
++--------+-------+------+-------------+
+
+
++--------------------------+
+; Timing Analyzer Messages ;
++--------------------------+
+Info: *******************************************************************
+Info: Running Quartus Prime Timing Analyzer
+    Info: Version 24.1std.0 Build 1077 03/04/2025 SC Lite Edition
+    Info: Processing started: Sat Oct 17 13:51:17 2026
+Info: Command: quartus_sta uart_metrics -c uart_metrics
+Info: qsta_default_script.tcl version: #1
+Warning (18236): Number of processors has not been specified which may cause overloading on shared machines.  Set the global assignment NUM_PARALLEL_PROCESSORS in your QSF to an appropriate value for best performance.
+Info (20030): Parallel compilation is enabled and will use 8 of the 8 processors detected
+Info (21077): Low junction temperature is 0 degrees C
+Info (21077): High junction temperature is 85 degrees C
+Info (332104): Reading SDC File: '../../scripts/uart_metrics/uart_metrics.sdc'
+Info (332151): Clock uncertainty is not calculated until you update the timing netlist.
+Info (332123): Deriving Clock Uncertainty. Please refer to report_sdc in the Timing Analyzer to see clock uncertainties.
+Info: Found TIMING_ANALYZER_REPORT_SCRIPT_INCLUDE_DEFAULT_ANALYSIS = ON
+Info: Analyzing Slow 1200mV 85C Model
+Info (332146): Worst-case setup slack is 7.104
+    Info (332119):     Slack       End Point TNS Clock 
+    Info (332119): ========= =================== =====================
+    Info (332119):     7.104               0.000 clk 
+Info (332146): Worst-case hold slack is 0.342
+    Info (332119):     Slack       End Point TNS Clock 
+    Info (332119): ========= =================== =====================
+    Info (332119):     0.342               0.000 clk 
+Info (332140): No Recovery paths to report
+Info (332140): No Removal paths to report
+Info (332146): Worst-case minimum pulse width slack is 9.553
+    Info (332119):     Slack       End Point TNS Clock 
+    Info (332119): ========= =================== =====================
+    Info (332119):     9.553               0.000 clk 
+Info (332114): Report Metastability: Found 1 synchronizer chains.
+    Info (332114): The design MTBF is not calculated because there are no specified synchronizers in the design.
+    Info (332114): Number of Synchronizer Chains Found: 1
+    Info (332114): Shortest Synchronizer Chain: 2 Registers
+    Info (332114): Fraction of Chains for which MTBFs Could Not be Calculated: 1.000
+    Info (332114): Worst Case Available Settling Time: 33.750 ns
+    Info (332114): 
+Info: Analyzing Slow 1200mV 0C Model
+Info (334003): Started post-fitting delay annotation
+Info (334004): Delay annotation completed successfully
+Info (332123): Deriving Clock Uncertainty. Please refer to report_sdc in the Timing Analyzer to see clock uncertainties.
+Info (332146): Worst-case setup slack is 7.997
+    Info (332119):     Slack       End Point TNS Clock 
+    Info (332119): ========= =================== =====================
+    Info (332119):     7.997               0.000 clk 
+Info (332146): Worst-case hold slack is 0.341
+    Info (332119):     Slack       End Point TNS Clock 
+    Info (332119): ========= =================== =====================
+    Info (332119):     0.341               0.000 clk 
+Info (332140): No Recovery paths to report
+Info (332140): No Removal paths to report
+Info (332146): Worst-case minimum pulse width slack is 9.558
+    Info (332119):     Slack       End Point TNS Clock 
+    Info (332119): ========= =================== =====================
+    Info (332119):     9.558               0.000 clk 
+Info (332114): Report Metastability: Found 1 synchronizer chains.
+    Info (332114): The design MTBF is not calculated because there are no specified synchronizers in the design.
+    Info (332114): Number of Synchronizer Chains Found: 1
+    Info (332114): Shortest Synchronizer Chain: 2 Registers
+    Info (332114): Fraction of Chains for which MTBFs Could Not be Calculated: 1.000
+    Info (332114): Worst Case Available Settling Time: 34.242 ns
+    Info (332114): 
+Info: Analyzing Fast 1200mV 0C Model
+Info (332123): Deriving Clock Uncertainty. Please refer to report_sdc in the Timing Analyzer to see clock uncertainties.
+Info (332146): Worst-case setup slack is 11.898
+    Info (332119):     Slack       End Point TNS Clock 
+    Info (332119): ========= =================== =====================
+    Info (332119):    11.898               0.000 clk 
+Info (332146): Worst-case hold slack is 0.139
+    Info (332119):     Slack       End Point TNS Clock 
+    Info (332119): ========= =================== =====================
+    Info (332119):     0.139               0.000 clk 
+Info (332140): No Recovery paths to report
+Info (332140): No Removal paths to report
+Info (332146): Worst-case minimum pulse width slack is 9.200
+    Info (332119):     Slack       End Point TNS Clock 
+    Info (332119): ========= =================== =====================
+    Info (332119):     9.200               0.000 clk 
+Info (332114): Report Metastability: Found 1 synchronizer chains.
+    Info (332114): The design MTBF is not calculated because there are no specified synchronizers in the design.
+    Info (332114): Number of Synchronizer Chains Found: 1
+    Info (332114): Shortest Synchronizer Chain: 2 Registers
+    Info (332114): Fraction of Chains for which MTBFs Could Not be Calculated: 1.000
+    Info (332114): Worst Case Available Settling Time: 36.863 ns
+    Info (332114): 
+Info (332101): Design is fully constrained for setup requirements
+Info (332101): Design is fully constrained for hold requirements
+Info: Quartus Prime Timing Analyzer was successful. 0 errors, 1 warning
+    Info: Peak virtual memory: 619 megabytes
+    Info: Processing ended: Sat Oct 17 13:51:19 2026
+    Info: Elapsed time: 00:00:02
+    Info: Total CPU time (on all processors): 00:00:02
+
+
