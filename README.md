@@ -1,83 +1,156 @@
-> Tích hợp SoC Nios V/m, kiểm chứng đường IRQ sau fitting và demo HEX3–HEX2: [hướng dẫn mới](doc/HUONG_DAN_NIOSV_IRQ_DEMO.md). Đã cài license, build hai `.sof` và nạp/kiểm tra trên kit; xem [báo cáo chạy kit](doc/BAO_CAO_NAP_LICENSE_VA_CHAY_KIT_2026-10-17.md).
+# APB UART Core & Nios-V SoC Project
 
-# Verilog + ModelSim + Makefile Project Template
-
-A simple, ready-to-use template for writing Verilog code, running simulations in ModelSim (Intel FPGA Edition or standard) using TCL scripts, and managing the workflow with a Makefile.
+> **Điểm nổi bật:** Ngoại vi APB UART hoàn chỉnh với đầy đủ tính năng truyền/nhận song công (Full-Duplex), bộ đệm FIFO 16 byte hai chiều, cơ chế phát hiện lỗi Parity/Framing/Overrun, ngắt phần cứng (Hardware IRQ) và tích hợp hệ thống SoC Nios-V (RISC-V) trên FPGA Intel Cyclone IV E (DE2-115).
+>
+> 📖 Hướng dẫn chạy demo ngắt: [`doc/guides/HUONG_DAN_NIOSV_IRQ_DEMO.md`](doc/guides/HUONG_DAN_NIOSV_IRQ_DEMO.md)  
+> 📊 Báo cáo kết quả đo Fmax & Công suất: [`doc/reports/BAO_CAO_TAI_NGUYEN_FMAX_POWER_APB_UART_2026-10-17.md`](doc/reports/BAO_CAO_TAI_NGUYEN_FMAX_POWER_APB_UART_2026-10-17.md)
 
 ---
 
-## 📁 Directory Structure
+## 📁 Cấu trúc Thư mục Dự án (Project Workspace Structure)
+
+Toàn bộ dự án được phân định thành các vùng làm việc rõ ràng, độc lập và thuận tiện cho việc phát triển:
 
 ```text
-├── rtl/                   # Design source files (Verilog)
-│   └── counter.v          # Example: 4-bit synchronous up-counter
-├── tb/                    # Testbench files
-│   └── tb_counter.v       # Example: Testbench for the counter
-├── sim/                   # ModelSim TCL scripts and wave setups
-│   ├── run.tcl            # ModelSim script to compile and run sim
-│   └── waves.do           # ModelSim wave window signals & config
-├── Makefile               # Shortcuts to compile, run, and clean
-├── .gitignore             # Ignores ModelSim workspace & temp outputs
-└── README.md              # Project documentation (this file)
+UART/
+├── rtl/                   # Mã nguồn Verilog phần cứng (RTL Core)
+│   ├── apb_uart.v         # Top-level IP APB UART
+│   ├── apb_slave.v        # Bộ giải mã bus AMBA APB
+│   ├── uart_regs.v        # Thanh ghi điều khiển, trạng thái & ngắt
+│   ├── sync_fifo.v        # Hàng đợi đồng bộ 16-entry cho TX và RX
+│   ├── rx_*.v             # Các khối của bộ thu RX (baud gen, controller, deframe...)
+│   ├── tx_*.v             # Các khối của bộ phát TX (baud gen, controller, piso...)
+│   └── avalon2apb.v       # Cầu nối độc lập Avalon-MM sang APB
+│
+├── software/              # Phần mềm Firmware C cho vi xử lý Nios-V (RISC-V)
+│   ├── main.c             # Firmware ứng dụng Console Shell tương tác
+│   ├── irq_demo.c         # Firmware kiểm chứng cơ chế ngắt và hiển thị LED 7 đoạn
+│   ├── scope_demo.c       # Firmware phát xung liên tục phục vụ đo Oscilloscope
+│   ├── uart_irq.c / .h    # Driver ngắt UART ISR tối ưu kèm Ring Buffer
+│   ├── uart_config.c / .h # Driver phân tích & thay đổi cấu hình runtime linh hoạt
+│   └── CMakeLists.txt     # Cấu hình build hệ thống cho Nios-V Toolchain
+│
+├── fpga/                  # Dự án Quartus Prime cho chip Cyclone IV E (EP4CE115)
+│   ├── NIOS.qpf / .qsf    # File cấu hình pin và project Quartus
+│   ├── NIOS.sdc           # Ràng buộc thời gian (Timing Constraints 50 MHz)
+│   ├── NIOS.v             # Top-level module kết nối FPGA pins
+│   └── system.qsys        # Thiết kế hệ thống SoC Platform Designer
+│
+├── tb/                    # Bộ Testbench mô phỏng & Test driver
+│   ├── tb_apb_uart.v      # Testbench toàn diện 149 testcase theo APB Spec
+│   ├── tb_full_duplex.v   # Kiểm chứng truyền nhận song công đồng thời 2 dây
+│   ├── tb_firmware_scenario.v # Kịch bản mô phỏng Nios-V CPU tương tác APB
+│   ├── tb_rx_uart.v       # Unit test bộ thu RX
+│   ├── test_*.c           # Test driver C cho ISR driver, parser cấu hình
+│   └── models/            # Mô hình UART ảo độc lập (Virtual RX / Virtual TX)
+│
+├── sim/                   # Kịch bản mô phỏng ModelSim / QuestaSim (.tcl / .do)
+│
+├── scripts/               # Bộ công cụ tự động hóa, build, nạp và chẩn đoán
+│   ├── build_soc.sh       # Tự động sinh Qsys, biên dịch C firmware & Quartus
+│   ├── flash_fpga.sh      # Nạp nhanh file .sof xuống kit FPGA qua USB-Blaster
+│   ├── run_shell_demo.sh  # Nạp shell.sof và tự động mở JTAG terminal
+│   ├── run_irq_demo.sh    # Nạp demo.sof và hướng dẫn mở serial terminal
+│   ├── run_scope_demo.sh  # Nạp scope.sof để đo kiểm trên máy hiện sóng
+│   ├── run_terminal_jtag.sh # Mở terminal kết nối Nios-V JTAG UART
+│   ├── run_terminal_pc.sh # Mở terminal PC giao tiếp UART qua cổng COM/ttyUSB
+│   ├── run_diag.sh        # Tool tự động chẩn đoán thông tuyến 2 chiều PC <-> Kit
+│   ├── test_full_duplex.py# Script stress-test song công bằng Python
+│   └── uart_metrics/      # Bộ script đo Fmax, Power và phân tích tài nguyên
+│
+├── doc/                   # Toàn bộ tài liệu kỹ thuật (Xem chi tiết tại doc/README.md)
+│   ├── guides/            # Các cẩm nang hướng dẫn thực hành & nạp kit
+│   ├── reports/           # Báo cáo kỹ thuật Fmax, Power, sửa lỗi và nghiệm thu
+│   ├── specs/             # Đặc tả thanh ghi, test plan và kiến trúc bus
+│   ├── diagrams/          # Sơ đồ khối kiến trúc (.drawio, .svg) & WaveDrom
+│   ├── references/        # Tài liệu chuẩn ARM AMBA, TRM PDF tham khảo
+│   ├── cpu_apb/           # Phân tích & probe bus Avalon-APB
+│   └── verification/      # Báo cáo và log nghiệm thu thực nghiệm
+│
+├── legacy/                # Lưu trữ các file thiết kế cũ
+├── apb_uart_hw.tcl        # Định nghĩa IP Component cho Platform Designer (Qsys)
+├── Makefile               # Điều khiển toàn bộ quy trình biên dịch, test và chạy
+└── README.md              # Tài liệu tổng quan (file này)
 ```
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Hướng Dẫn Sử Dụng Nhanh (Cheat Sheet)
 
-### 1. Prerequisites
-- **ModelSim / QuestaSim** installed.
-- **GNU Make** installed (or Git Bash, MSYS2, or wmake on Windows).
-
-### 2. Configure ModelSim Path
-Open the `Makefile` and update the `VSIM` variable if your ModelSim path differs from the default:
-```makefile
-VSIM ?= "C:/intelFPGA/20.1/modelsim_ase/win32aloem/vsim.exe"
+### 1. Kiểm thử Mô phỏng (Simulation Testbench)
+Chạy toàn bộ 149 testcase kiểm chứng chuẩn đặc tả bằng Icarus Verilog:
+```bash
+make test          # Chạy toàn bộ test suites (Full-Duplex, Firmware, RX, APB UART)
+make test_apb      # Chạy testbench chính tb_apb_uart (14 nhóm testcase theo spec)
+make test_fd       # Chạy kiểm thử truyền nhận song công đồng thời (Full-Duplex)
+make test_fw       # Chạy kịch bản CPU tương tác thanh ghi APB UART
 ```
-*Note: If `vsim` is already in your system's Environment Variables (`PATH`), you can simply change it to `VSIM ?= vsim`.*
+
+Xem dạng sóng mô phỏng bằng GTKWave:
+```bash
+make wave_apb_uart
+make wave_full_duplex
+```
+
+Mô phỏng qua ModelSim / QuestaSim (GUI hoặc dòng lệnh):
+```bash
+make apb_uart_vsim      # Mở GUI ModelSim
+make apb_uart_vsim_cli  # Chạy CLI không mở GUI
+```
+
+Kiểm tra cú pháp Verilog:
+```bash
+make check              # Kiểm tra toàn bộ file trong rtl/
+make check FILE=rx_uart # Kiểm tra riêng module rx_uart.v
+```
+
+Kiểm thử driver phần mềm C:
+```bash
+make test_irq_driver    # Kiểm thử driver ISR ngắt UART
+make test_uart_config   # Kiểm thử parser cấu hình UART (96 định dạng)
+make test_runtime_config# Kiểm thử đổi cấu hình động runtime
+make test_scope_demo    # Kiểm thử firmware phát xung oscilloscope
+```
 
 ---
 
-## 🛠️ Usage Commands
+### 2. Vận hành Trên Kit FPGA (Hardware & Demo Runners)
 
-Run these commands from the root directory of this folder:
+Tất cả các tác vụ chạy kit đã được tích hợp vào `Makefile` và `scripts/`:
 
-### Run in GUI Mode (Interactive)
-Compiles the design, opens ModelSim interface, adds signals to the Wave window, and runs the simulation:
 ```bash
-make sim
+# Nạp nhanh và chạy ứng dụng Console Shell (mặc định)
+make run_shell
+
+# Nạp và chạy Demo Ngắt (đếm byte nhận trên LED 7 đoạn HEX3:HEX2)
+make run_demo
+
+# Nạp ứng dụng phát xung liên tục phục vụ đo Oscilloscope
+make run_scope
+
+# Mở JTAG terminal đọc thông điệp từ Nios-V:
+make terminal_jtag
+
+# Mở Serial terminal giao tiếp từ PC qua cổng USB-to-UART:
+make terminal_pc PORT=/dev/ttyUSB0 BAUD=9600 FORMAT=8N1
+
+# Chẩn đoán kết nối 2 chiều PC <-> Kit:
+make diag PORT=/dev/ttyUSB0
+
+# Chạy stress test song công 2 chiều bằng Python:
+make full_duplex_stress PORT=/dev/ttyUSB0
 ```
 
-### Run in CLI/Batch Mode (Non-interactive)
-Runs the compilation and testbench outputs in the command terminal without opening the ModelSim GUI. Great for fast verification:
+---
+
+### 3. Build Lại Toàn Bộ Hệ Thống SoC từ Đầu
+Khi có thay đổi về RTL hoặc firmware C, chạy script tự động:
 ```bash
-make sim_cli
+make soc_build    # Tự động chạy Platform Designer, Nios-V CMake và Quartus Prime
+make soc_check    # Kiểm tra tính toàn vẹn của kết nối bus, địa chỉ và chân pin
 ```
 
-### Clean Simulation Files
-Deletes generated directories and files like `work/`, `transcript`, and `vsim.wlf`:
+Dọn dẹp các file rác mô phỏng:
 ```bash
 make clean
 ```
-
-### Help Menu
-Shows available targets:
-```bash
-make help
-```
-
----
-
-## 📦 How to Use This Template for New Projects
-
-1. **Clone/Copy** this template folder to your workspace.
-2. Place your design files (`.v`) in the `rtl/` directory.
-3. Place your testbenches (`.v`) in the `tb/` directory.
-4. Open `sim/run.tcl` and update the compilation commands to point to your new source files:
-   ```tcl
-   vlog rtl/your_module.v
-   vlog tb/tb_your_module.v
-   vsim -voptargs=+acc work.tb_your_module
-   ```
-5. Update `sim/waves.do` to list the signals you want to trace.
-6. Run `make sim`!

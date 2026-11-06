@@ -111,11 +111,11 @@ uart_regs_cli: work
 
 # Avalon-MM to APB Bridge
 avalon2apb: work
-	$(VLOG) avalon2apb.v rtl/apb_slave.v rtl/uart_regs.v tb/tb_avalon2apb.v
+	$(VLOG) rtl/avalon2apb.v rtl/apb_slave.v rtl/uart_regs.v tb/tb_avalon2apb.v
 	$(VSIM) -do "vsim -voptargs=+acc work.tb_avalon2apb; add wave -r /*; run -all"
 
 avalon2apb_cli: work
-	$(VLOG) avalon2apb.v rtl/apb_slave.v rtl/uart_regs.v tb/tb_avalon2apb.v
+	$(VLOG) rtl/avalon2apb.v rtl/apb_slave.v rtl/uart_regs.v tb/tb_avalon2apb.v
 	$(VSIM) -c -do "run -all; quit -f" work.tb_avalon2apb
 
 # ------------------------------------------------------------------------------
@@ -301,7 +301,17 @@ help:
 	@echo "   make uart_regs             : Mo GUI ModelSim mo phong APB Slave & UART Regs"
 	@echo "   make avalon2apb            : Mo GUI ModelSim mo phong Bridge Avalon to APB"
 	@echo ""
-	@echo "4. DON DEP:"
+	@echo "4. RUNNER SCRIPTS & KIT HARDWARE (TIEN ICH CHAY KIT & DEMO):"
+	@echo "   make run_shell             : Nap shell.sof va mo terminal JTAG Nios V"
+	@echo "   make run_demo              : Nap demo.sof (IRQ) va mo terminal"
+	@echo "   make run_scope             : Nap scope.sof (Oscilloscope TX demo)"
+	@echo "   make flash                 : Nap file SOF vao FPGA qua USB-Blaster"
+	@echo "   make terminal_jtag         : Mo JTAG UART terminal (juart-terminal)"
+	@echo "   make terminal_pc           : Mo serial terminal PC ket noi kit DE2"
+	@echo "   make diag                  : Chay script chan doan giao tiep 2 chieu"
+	@echo "   make full_duplex_stress    : Chay stress test song cong bang Python"
+	@echo ""
+	@echo "5. DON DEP:"
 	@echo "   make clean                 : Xoa thu vien work/, *.vvp, *.vcd, transcript"
 	@echo "=========================================================================="
 
@@ -339,3 +349,32 @@ test_scope_demo:
 	mkdir -p build
 	iverilog -g2012 -s tb_scope_demo -o /tmp/uart_scope_waveform tb/tb_scope_demo.v rtl/*.v
 	vvp /tmp/uart_scope_waveform
+
+# ------------------------------------------------------------------------------
+# 8. TIỆN ÍCH CHẠY DEMO VÀ NẠP FPGA (SCRIPTS RUNNERS)
+# ------------------------------------------------------------------------------
+.PHONY: run_shell run_demo run_scope flash terminal_jtag terminal_pc diag full_duplex_stress
+
+run_shell:
+	./scripts/run_shell_demo.sh
+
+run_demo:
+	./scripts/run_irq_demo.sh
+
+run_scope:
+	./scripts/run_scope_demo.sh
+
+flash:
+	./scripts/flash_fpga.sh $(SOF)
+
+terminal_jtag:
+	./scripts/run_terminal_jtag.sh
+
+terminal_pc:
+	./scripts/run_terminal_pc.sh $(PORT) $(BAUD) $(FORMAT)
+
+diag:
+	./scripts/run_diag.sh $(PORT)
+
+full_duplex_stress:
+	python3 scripts/test_full_duplex.py $(PORT)

@@ -3,7 +3,7 @@
 from pathlib import Path
 import hashlib
 root = Path(__file__).resolve().parent.parent
-paths = [root/'main.c', root/'apb_uart_hw.tcl']
+paths = [root/'apb_uart_hw.tcl']
 for folder, patterns in [('rtl', ['*.v']), ('fpga', ['*.v','*.qsys','*.qsf','*.sdc']),
                          ('software', ['*.c','*.h','CMakeLists.txt']),
                          ('scripts', ['build_soc.sh','source_manifest.py','check_soc.py','report_irq_path.tcl'])]:

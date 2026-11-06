@@ -52,7 +52,7 @@ Hai phần này nằm trong `tb_apb_uart.v`:
   rồi thử 8N1 ở cả 2400, 4800, 9600, 19200 baud.
 - Nhóm 8–14 bổ sung APB, khóa CFG, mask IRQ, FIFO, start giả và framing error;
   nhóm 13 hoàn tất ma trận 96 tổ hợp baud × data × parity × stop.
-  Xem [testplan theo spec](../../doc/TESTPLAN_APB_UART.md) và kết quả chạy chi tiết.
+  Xem [testplan theo spec](../../doc/specs/TESTPLAN_APB_UART.md) và kết quả chạy chi tiết.
 
 DUT `STT[0]` chỉ báo TX hoàn toàn rảnh, không phải xung kết thúc từng byte.
 Vì vậy so sánh từng byte được kích bằng `u_virtual_rx.rx_done`; trạng thái DUT
@@ -72,11 +72,11 @@ Bỏ `+NO_VCD` để xuất `wave_apb_uart.vcd`. Các lệnh `make apb_uart`,
 `[REF FAIL]` hoặc `$fatal` nghĩa là DUT khác mô hình. Bộ so sánh từng phát hiện
 lỗi parity TX do tính từ đầu FIFO sau khi pop. RTL hiện đã chốt `parity_latched`
 cùng lúc nạp PISO để giữ parity theo đúng byte đang phát. Xem
-[báo cáo bug](../../doc/BUG_TX_PARITY_SAU_KHI_POP_FIFO.md) để biết nguyên nhân và cách sửa.
+[báo cáo bug](../../doc/reports/BUG_TX_PARITY_SAU_KHI_POP_FIFO.md) để biết nguyên nhân và cách sửa.
 
 RTL RX đã được sửa để phát hiện stop sai ở cả cấu hình 1 và 2 stop bit.
 Kết quả hiện tại: **149 PASS, 0 FAIL**, đối chiếu 122 khung TX và 153 byte RX,
 không lỗi tham chiếu. Chi tiết từng dòng sửa và lệnh chạy nằm trong
-[báo cáo sửa framing error](../../doc/BAO_CAO_FIX_FRAMING_VA_CHAY_TESTBENCH.md).
+[báo cáo sửa framing error](../../doc/reports/BAO_CAO_FIX_FRAMING_VA_CHAY_TESTBENCH.md).
 
 Chạy nhanh từ thư mục `UART`: `make apb_uart VVP_ARGS=+NO_VCD`.

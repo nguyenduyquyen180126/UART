@@ -13,7 +13,7 @@ enable_language(ASM)
 enable_language(C)
 enable_language(CXX)
 
-set(APP_SOURCE "${CMAKE_CURRENT_LIST_DIR}/../main.c" CACHE FILEPATH "Firmware source")
+set(APP_SOURCE "${CMAKE_CURRENT_LIST_DIR}/main.c" CACHE FILEPATH "Firmware source")
 add_executable(app.elf)
 target_compile_options(app.elf PRIVATE -Wall -Wextra)
 

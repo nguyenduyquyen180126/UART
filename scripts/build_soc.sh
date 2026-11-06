@@ -15,7 +15,7 @@ p=Path('software/bsp/toolchain.cmake')
 p.write_text(p.read_text().replace('-march=rv32i ', '-march=rv32i_zicsr '))
 PY
 for app in shell demo scope; do
-    src="$UART_ROOT/main.c"
+    src="$UART_ROOT/software/main.c"
     [[ "$app" == demo ]] && src="$UART_ROOT/software/irq_demo.c"
     [[ "$app" == scope ]] && src="$UART_ROOT/software/scope_demo.c"
     cmake -S software -B "software/build-$app" -DAPP_SOURCE="$src" -DCMAKE_BUILD_TYPE=Release > "build/logs/cmake-$app.log" 2>&1

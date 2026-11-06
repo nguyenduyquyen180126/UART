@@ -22,5 +22,5 @@ accidentally include the similarly named Platform Designer APB slave agent.
 The SoC fit must correspond to current logic before using its resource/timing
 results. The characterization script does not rebuild or validate that SoC fit.
 
-See `doc/BAO_CAO_TAI_NGUYEN_FMAX_POWER_APB_UART_2026-10-17.md` for the measured
+See `doc/reports/BAO_CAO_TAI_NGUYEN_FMAX_POWER_APB_UART_2026-10-17.md` for the measured
 numbers, exact conditions, limitations, and saved evidence.

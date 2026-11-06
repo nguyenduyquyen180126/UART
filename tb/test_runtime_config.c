@@ -5,7 +5,7 @@
 #include <string.h>
 #define UART_WAIT_IRQ() ((void)0)
 #define main firmware_main
-#include "../main.c"
+#include "main.c"
 #undef main
 uint64_t test_mtime;
 volatile uint32_t uart_irq_count, uart_rx_count, uart_tx_count;

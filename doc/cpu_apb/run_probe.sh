@@ -4,7 +4,11 @@ set -euo pipefail
 repo_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd)
 quartus_project=${1:-/home/vietanh/altera_lite/24.1std}
 probe_build=$(mktemp -d /tmp/uart-apb-probe.XXXXXX)
-local_sources=("$repo_dir"/rtl/*.v)
+local_sources=()
+for f in "$repo_dir"/rtl/*.v; do
+    [[ $(basename "$f") == "avalon2apb.v" ]] && continue
+    local_sources+=("$f")
+done
 merlin_sources=("$quartus_project/system/synthesis/submodules/altera_merlin_apb_slave_agent.sv" "$quartus_project/system/synthesis/submodules/altera_merlin_apb_translator.sv")
 bench="$repo_dir/doc/cpu_apb/tb_bus_probe.sv"
 run_case() {
@@ -16,8 +20,8 @@ run_case() {
     }
     vvp "$probe_build/$case_name.vvp" | tee "$probe_build/$case_name.run.log"
 }
-run_case custom-byte "$repo_dir/avalon2apb.v" "${local_sources[@]}" "$bench"
-run_case custom-word -Ptb_bus_probe.ADDR_MODE=1 "$repo_dir/avalon2apb.v" "${local_sources[@]}" "$bench"
+run_case custom-byte "$repo_dir/rtl/avalon2apb.v" "${local_sources[@]}" "$bench"
+run_case custom-word -Ptb_bus_probe.ADDR_MODE=1 "$repo_dir/rtl/avalon2apb.v" "${local_sources[@]}" "$bench"
 if [[ -f ${merlin_sources[0]} && -f ${merlin_sources[1]} ]]; then
     run_case merlin-local -Ptb_bus_probe.MERLIN=1 "${merlin_sources[@]}" "${local_sources[@]}" "$bench"
     deployed_sources=()

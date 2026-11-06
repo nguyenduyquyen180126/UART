@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-source "$(dirname "$0")/scripts/toolchain_env.sh"
+source "$(dirname "$0")/toolchain_env.sh"
 SOF_FILE="${1:-$UART_ROOT/build/images/shell.sof}"
 [[ -f "$SOF_FILE" ]] || { echo "Missing $SOF_FILE; run ./scripts/build_soc.sh" >&2; exit 1; }
 if [[ "$SOF_FILE" == "$UART_ROOT/build/images/"* ]]; then
