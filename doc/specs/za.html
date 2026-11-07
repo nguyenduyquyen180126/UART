@@ -1,0 +1,746 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>APB-UART — Hướng dẫn</title>
+<style>
+:root{
+  --bg:#f6f7f9; --panel:#ffffff; --ink:#1b2430; --muted:#5a6573; --line:#d5dbe3;
+  --accent:#1f4e8c; --accent-soft:#e8f0fb; --ok:#1a7f37; --ok-soft:#e3f4e8;
+  --warn:#9a6700; --warn-soft:#fff4d6; --bad:#c62828; --bad-soft:#fde7e7;
+  --wave:#1a7f37; --mono:"JetBrains Mono","DejaVu Sans Mono",Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans",sans-serif}
+header{background:var(--panel);border-bottom:1px solid var(--line);padding:18px 24px}
+header h1{margin:0;font-size:24px}
+header p{margin:4px 0 0;color:var(--muted);font-size:15px}
+.wrap{display:grid;grid-template-columns:250px 1fr;gap:0;min-height:calc(100vh - 140px)}
+nav{position:sticky;top:0;align-self:start;height:100vh;overflow:auto;background:var(--panel);border-right:1px solid var(--line);padding:12px 0}
+nav a{display:block;padding:8px 20px;color:var(--ink);text-decoration:none;font-size:15px;border-left:3px solid transparent}
+nav a:hover{background:var(--accent-soft)}
+nav a.on{border-left-color:var(--accent);background:var(--accent-soft);font-weight:600}
+main{padding:20px 28px 60px;max-width:1240px}
+section{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:20px 24px;margin:0 0 22px}
+section h2{margin:0 0 4px;font-size:21px;color:var(--accent)}
+section h3{font-size:17px;margin:18px 0 6px}
+.lead{color:var(--muted);margin:0 0 12px;font-size:15px}
+table{border-collapse:collapse;width:100%;font-size:15px;margin:8px 0}
+th,td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
+th{background:#eef2f6;font-weight:600}
+td.c,th.c{text-align:center}
+code,.mono{font-family:var(--mono);font-size:14.5px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.card{border:1px solid var(--line);border-radius:8px;padding:12px 14px;background:#fbfcfd}
+.card h4{margin:0 0 6px;font-size:16px}
+.ctl{display:flex;flex-wrap:wrap;gap:12px 18px;align-items:center;margin:8px 0 12px}
+.ctl label{font-size:15px;display:flex;gap:6px;align-items:center}
+select,input[type=number],input[type=text]{font:inherit;font-size:15px;padding:4px 6px;border:1px solid var(--line);border-radius:6px;background:#fff}
+input[type=range]{width:220px}
+button{font:inherit;font-size:15px;padding:5px 12px;border:1px solid var(--accent);background:var(--accent);color:#fff;border-radius:6px;cursor:pointer}
+button.ghost{background:#fff;color:var(--accent)}
+.pill{display:inline-block;padding:1px 8px;border-radius:12px;font-size:14px;font-weight:600}
+.p-ok{background:var(--ok-soft);color:var(--ok)} .p-bad{background:var(--bad-soft);color:var(--bad)} .p-warn{background:var(--warn-soft);color:var(--warn)} .p-info{background:var(--accent-soft);color:var(--accent)}
+.out{font-family:var(--mono);font-size:15px;background:#f3f5f8;border:1px solid var(--line);border-radius:6px;padding:8px 10px;white-space:pre-wrap}
+.svgbox{overflow-x:auto;border:1px solid var(--line);border-radius:8px;background:#fff;margin:8px 0}
+.svgbox svg{display:block}
+.src{font-size:14px;color:var(--muted);margin-top:10px}
+.bitrow{display:grid;grid-template-columns:repeat(32,1fr);gap:1px;margin:6px 0 2px;font-family:var(--mono);font-size:14px}
+.bitrow div{background:#eef2f6;text-align:center;padding:4px 0;min-width:22px}
+.bitrow div.f{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 10px}
+.tabs button{background:#fff;color:var(--accent)} .tabs button.on{background:var(--accent);color:#fff}
+.chk li{list-style:none;margin:4px 0} .chk{padding-left:4px}
+.chk input{transform:scale(1.15);margin-right:8px}
+footer{position:fixed;left:0;bottom:0;right:0;background:var(--panel);border-top:1px solid var(--line);font-size:14px;color:var(--muted);padding:6px 16px;display:flex;justify-content:space-between}
+.blk{cursor:pointer} .blk:hover rect{fill:#dbe8f8}
+.blk.sel rect{stroke:#c26b00;stroke-width:3}
+@media (max-width:900px){.wrap{grid-template-columns:1fr} nav{position:static;height:auto;display:flex;flex-wrap:wrap;border-right:0;border-bottom:1px solid var(--line)} nav a{border-left:0;padding:6px 10px} .grid2{grid-template-columns:1fr} main{padding:14px 16px 70px}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Đồ án APB-UART — hướng dẫn đặc tả, giản đồ thời gian, sơ đồ khối gợi ý</h1>
+  <p>ET4030 Thiết kế, tổng hợp IC số và hệ thống số · Đặc tả 1.1 (01/11/2026) · Mọi giản đồ trên trang được vẽ từ định nghĩa trong đặc tả, không phải kết quả mô phỏng.</p>
+</header>
+<div class="wrap">
+<nav id="nav">
+  <a href="#tong-quan">1. Tổng quan và lịch</a>
+  <a href="#cong">2. Cổng vào ra</a>
+  <a href="#so-do">3. Sơ đồ khối gợi ý</a>
+  <a href="#thanh-ghi">4. Thanh ghi</a>
+  <a href="#baud">5. Bộ chia phân số BAUD</a>
+  <a href="#khung">6. Khung UART</a>
+  <a href="#rx">7. Bộ thu: lấy mẫu, dung sai</a>
+  <a href="#apb">8. Giao dịch APB, pslverr</a>
+  <a href="#spi">9. Khung SPI của spi2apb</a>
+  <a href="#trao-doi">10. Trao đổi SPI → UART</a>
+  <a href="#trinh-tu">11. Giản đồ phát và nhận</a>
+  <a href="#ngat">12. Ngắt, reset mềm</a>
+  <a href="#kiem-tra">13. Danh mục kiểm tra G1–G9</a>
+</nav>
+<main>
+
+<!-- 1 -->
+<section id="tong-quan">
+<h2>1. Tổng quan và lịch</h2>
+<p class="lead">Khối <code>apb_uart</code> là bộ thu phát UART có giao tiếp APB4, điều khiển luồng <code>rts_n</code>/<code>cts_n</code>, mỗi chiều đệm một ký tự. Thiết kế đi hết luồng tới GDS trên Tiny Tapeout (sky130A, tile 1×1).</p>
+<table>
+<tr><th>Tham số</th><th>Giá trị</th></tr>
+<tr><td>Clock</td><td>một miền <code>pclk</code>, danh định 25 MHz (RP2040 chia 125 MHz cho 5); STA ở chu kỳ 40 ns</td></tr>
+<tr><td>Reset</td><td><code>presetn</code>, tích cực mức thấp, tác động không đồng bộ</td></tr>
+<tr><td>Khung</td><td>1 start bit; 5–8 bit dữ liệu, LSB trước; parity không có, lẻ, chẵn; 1 hoặc 2 stop bit — 24 dạng, bắt buộc cả TX và RX</td></tr>
+<tr><td>Tốc độ</td><td>thanh ghi <code>BAUD</code>: bộ chia phân số bước 1/16, lấy mẫu 16×; 2 400–115 200 baud bắt buộc; 230 400–921 600 baud cộng điểm</td></tr>
+<tr><td>Đệm</td><td>1 ký tự TX (<code>TXDATA</code>), 1 ký tự RX (<code>RXDATA</code>), không FIFO</td></tr>
+<tr><td>Giao tiếp</td><td>APB4, <code>pready</code> = 1 cố định (0 chu kỳ chờ), <code>pslverr</code> 5 trường hợp E1–E5</td></tr>
+</table>
+<h3>Lịch cổng duyệt (kế hoạch tape-out, mục 6)</h3>
+<table>
+<tr><th>Hạn nộp</th><th>Cổng</th><th>Ngưỡng đạt</th></tr>
+<tr><td>T3 10/11/2026</td><td>G1 Đặc tả</td><td>bảng thanh ghi, bảng <code>BAUD</code> và sai số ở 25 MHz, thiết kế bộ tích luỹ phân số, kế hoạch kiểm chứng</td></tr>
+<tr><td>T7 14/11/2026</td><td>G2 RTL + lint</td><td>0 cảnh báo Verilator <code>-Wall</code>; 0 latch; một net clock</td></tr>
+<tr><td>T4 18/11/2026</td><td>G3 DV, G4 netlist</td><td>20 test công khai đạt (RTL và netlist Yosys); độ phủ statement, branch ≥ 90 % (Questa)</td></tr>
+<tr><td>T7 21/11/2026</td><td>G6 STA, LEC (G5 DFT cộng điểm)</td><td>WS setup, hold ≥ 0 ở 40 ns, corner ss; <code>eqy</code> tương đương</td></tr>
+<tr><td>T3 24/11/2026</td><td>G7 Layout</td><td>LibreLane hết flow, tile 1×1, WS sau route ≥ 0</td></tr>
+<tr><td>T5 26/11/2026, 23:59</td><td>G8 GLS, G9 sign-off, khoá mã nguồn</td><td>GLS có SDF ở tt, ss, ff; DRC = 0, LVS khớp, antenna = 0; GitHub Actions TT xanh</td></tr>
+<tr><td>T7 28/11/2026</td><td>Bảo vệ</td><td>ban chấm chạy 108 test ẩn và LibreLane cấu hình chung ngày 27/11</td></tr>
+</table>
+<p class="src">Nguồn: <code>02-SPEC-APB-UART-DDAS.md</code> (1.1), <code>03-tieu-chi-cham.md</code> (1.1), <code>02-Bai-giang/uart-tapeout/KE-HOACH-UART-tapeout-2026-11-01.md</code>.</p>
+</section>
+
+<!-- 2 -->
+<section id="cong">
+<h2>2. Cổng vào ra</h2>
+<p class="lead">Tên module phải là <code>apb_uart</code>, tên và độ rộng cổng đúng bảng dưới; testbench chấm điểm nối theo tên. Sau reset: <code>tx</code> = 1, <code>rts_n</code> = 1, <code>irq</code> = 0, <code>pslverr</code> = 0, <code>pready</code> = 1.</p>
+<div class="grid2">
+<div>
+<table>
+<tr><th>Cổng</th><th class="c">Rộng</th><th class="c">Hướng</th><th>Mô tả</th></tr>
+<tr><td><code>pclk</code></td><td class="c">1</td><td class="c">vào</td><td>clock duy nhất</td></tr>
+<tr><td><code>presetn</code></td><td class="c">1</td><td class="c">vào</td><td>reset, mức thấp</td></tr>
+<tr><td><code>psel</code></td><td class="c">1</td><td class="c">vào</td><td>chọn khối</td></tr>
+<tr><td><code>penable</code></td><td class="c">1</td><td class="c">vào</td><td>pha truy cập</td></tr>
+<tr><td><code>pwrite</code></td><td class="c">1</td><td class="c">vào</td><td>1 ghi, 0 đọc</td></tr>
+<tr><td><code>paddr</code></td><td class="c">12</td><td class="c">vào</td><td>địa chỉ byte</td></tr>
+<tr><td><code>pstrb</code></td><td class="c">4</td><td class="c">vào</td><td>byte lane ghi</td></tr>
+<tr><td><code>pwdata</code></td><td class="c">32</td><td class="c">vào</td><td>dữ liệu ghi</td></tr>
+<tr><td><code>pready</code></td><td class="c">1</td><td class="c">ra</td><td>luôn 1</td></tr>
+<tr><td><code>pslverr</code></td><td class="c">1</td><td class="c">ra</td><td>lỗi, chỉ ở pha truy cập</td></tr>
+<tr><td><code>prdata</code></td><td class="c">32</td><td class="c">ra</td><td>dữ liệu đọc</td></tr>
+<tr><td><code>rx</code></td><td class="c">1</td><td class="c">vào</td><td>nối tiếp vào, không đồng bộ</td></tr>
+<tr><td><code>cts_n</code></td><td class="c">1</td><td class="c">vào</td><td>clear-to-send, không đồng bộ</td></tr>
+<tr><td><code>tx</code></td><td class="c">1</td><td class="c">ra</td><td>nối tiếp ra, nghỉ = 1</td></tr>
+<tr><td><code>rts_n</code></td><td class="c">1</td><td class="c">ra</td><td>request-to-send</td></tr>
+<tr><td><code>irq</code></td><td class="c">1</td><td class="c">ra</td><td>ngắt mức, mức cao</td></tr>
+</table>
+</div>
+<div>
+<h3 style="margin-top:6px">Chân Tiny Tapeout của wrapper <code>tt_um_hust_apb_uart</code></h3>
+<table>
+<tr><th>Chân</th><th>Tín hiệu</th><th>Chân</th><th>Tín hiệu</th></tr>
+<tr><td><code>ui_in[0]</code></td><td><code>rx</code></td><td><code>uo_out[0]</code></td><td><code>tx</code></td></tr>
+<tr><td><code>ui_in[1]</code></td><td><code>cts_n</code></td><td><code>uo_out[1]</code></td><td><code>rts_n</code></td></tr>
+<tr><td><code>ui_in[2]</code></td><td><code>spi_cs_n</code></td><td><code>uo_out[2]</code></td><td><code>spi_miso</code></td></tr>
+<tr><td><code>ui_in[3]</code></td><td><code>spi_sclk</code></td><td><code>uo_out[3]</code></td><td><code>tx_done</code></td></tr>
+<tr><td><code>ui_in[4]</code></td><td><code>spi_mosi</code></td><td><code>uo_out[4]</code></td><td><code>rx_done</code></td></tr>
+<tr><td><code>ui_in[5]</code></td><td><code>scan_en</code> (dự phòng)</td><td><code>uo_out[5]</code></td><td><code>parity_err</code></td></tr>
+<tr><td><code>ui_in[6]</code></td><td><code>scan_in</code> (dự phòng)</td><td><code>uo_out[6]</code></td><td><code>irq</code></td></tr>
+<tr><td><code>ui_in[7]</code></td><td><code>test_mode</code> (dự phòng)</td><td><code>uo_out[7]</code></td><td><code>scan_out</code> (dự phòng)</td></tr>
+</table>
+<div class="card" style="margin:10px 0"><h4>RP2040 trên board Tiny Tapeout</h4><div style="font-size:15px">RP2040 là vi điều khiển của Raspberry Pi Ltd: hai lõi Arm Cortex-M0+, xung nhịp hệ thống mặc định 125 MHz, có khối SPI phần cứng và GPIO. Trên board demo Tiny Tapeout, RP2040 đóng vai máy chủ của chip: cấp xung nhịp <code>clk</code> cho thiết kế (ở đồ án này 125 MHz / 5 = 25 MHz), điều khiển reset, lái các chân <code>ui_in</code> và đọc các chân <code>uo_out</code>. Trong đồ án, chương trình trên RP2040 là SPI master, truy cập thanh ghi của <code>apb_uart</code> qua <code>spi2apb</code>, và nhận ngắt <code>irq</code> trên một chân GPIO.</div></div>
+<p style="font-size:15px"><code>uio</code> không dùng (<code>uio_oe</code> = 0). <code>clk</code> của wrapper nối <code>pclk</code>, <code>rst_n</code> nối <code>presetn</code>. Đội không làm DFT nối chân dự phòng về hằng. Khung SPI của <code>spi2apb</code>: mục 9.</p>
+</div>
+</div>
+</section>
+
+<!-- 3 -->
+<section id="so-do">
+<h2>3. Sơ đồ khối gợi ý</h2>
+<p class="lead">Bấm vào một khối để xem chức năng, tín hiệu và gợi ý hiện thực. Đội được chia khối khác, miễn giữ: một net clock, các khối con dùng xung cho phép <code>tick</code>, không có clock sinh bằng logic.</p>
+<div class="svgbox"><svg id="blkdia" viewBox="0 0 1180 590" width="1180" height="590" font-family="system-ui,sans-serif" font-size="16"></svg></div>
+<div id="blkinfo" class="card"><h4>Chọn một khối</h4><div style="font-size:15px">Thông tin hiện ở đây.</div></div>
+<p class="src">Nguồn: đặc tả 1.1 mục 3, 6, 8, 11; kế hoạch tape-out mục 2 (wrapper <code>spi2apb</code>).</p>
+</section>
+
+<!-- 4 -->
+<section id="thanh-ghi">
+<h2>4. Thanh ghi</h2>
+<p class="lead">Địa chỉ byte, căn 4 byte. Bit rfu đọc trả 0, ghi không tác dụng. Giá trị reset bằng 0, trừ <code>STAT.tx_done</code> = 1 và <code>BAUD</code> = 0x0000_900D. Chọn thanh ghi, đặt giá trị các trường để xem giá trị 32 bit cần ghi.</p>
+<div class="tabs" id="regtabs"></div>
+<div id="regview"></div>
+<p class="src">Nguồn: đặc tả 1.1 mục 4.</p>
+</section>
+
+<!-- 5 -->
+<section id="baud">
+<h2>5. Bộ chia phân số <code>BAUD</code></h2>
+<p class="lead">D = <code>div_int</code> + <code>div_frac</code>/16. Bộ sinh baud phát trung bình một xung <code>tick</code> mỗi D chu kỳ <code>pclk</code>; một bit dài 16 tick. Baud = f<sub>pclk</sub> / (16 · D).</p>
+<div class="ctl">
+  <label>f<sub>pclk</sub> (MHz) <input type="number" id="bf" value="25" step="0.001" min="1" style="width:110px"></label>
+  <label>Baud <select id="bb"></select></label>
+  <label>hoặc nhập <input type="number" id="bbx" placeholder="baud" style="width:120px"></label>
+</div>
+<div class="out" id="bout"></div>
+<h3>Bộ tích luỹ phân số: các bộ đếm và cách đếm</h3>
+<p style="font-size:15px"><code>div_int</code> và <code>div_frac</code> không phải bộ đếm: đó là hai trường hằng của thanh ghi <code>BAUD</code>, phần mềm ghi một lần. Sinh tick và định thời bit dùng bốn bộ đếm:</p>
+<table>
+<tr><th>Bộ đếm</th><th>Khối</th><th>Đếm gì</th><th>Phạm vi</th><th>Độ rộng</th></tr>
+<tr><td><code>cnt</code></td><td>baud_gen</td><td>chu kỳ <code>pclk</code> trong một chu kỳ tick; đếm 0 … L − 1 rồi phát <code>tick</code> và về 0; L = <code>div_int</code> + <code>carry</code></td><td>0 … <code>div_int</code> (tối đa 4 095)</td><td>12 bit</td></tr>
+<tr><td><code>acc</code></td><td>baud_gen</td><td>phần lẻ tích luỹ, đơn vị 1/16 chu kỳ <code>pclk</code>; mỗi tick: <code>acc</code> ← (<code>acc</code> + <code>div_frac</code>) mod 16, <code>carry</code> = 1 khi <code>acc</code> + <code>div_frac</code> ≥ 16</td><td>0 … 15</td><td>4 bit</td></tr>
+<tr><td><code>tick_cnt</code></td><td>uart_tx, uart_rx</td><td>số tick trong một bit; 0 … 15, sang bit sau khi đủ 16 tick; bộ thu lấy mẫu khi <code>tick_cnt</code> = 8</td><td>0 … 15</td><td>4 bit</td></tr>
+<tr><td><code>bit_idx</code></td><td>uart_tx, uart_rx</td><td>vị trí bit trong khung: 0 = start, 1 … N dữ liệu, rồi parity, stop</td><td>0 … 11</td><td>4 bit</td></tr>
+</table>
+<p style="font-size:15px">Trong 16 tick liên tiếp, <code>acc</code> được cộng <code>div_frac</code> 16 lần, tức cộng 16 · <code>div_frac</code>. Vì <code>acc</code> chỉ giữ phần dư mod 16, số lần tràn (<code>carry</code> = 1) đúng bằng <code>div_frac</code>, và <code>acc</code> quay về giá trị đầu bit. Do đó mọi bit dài đúng</p>
+<p class="mono" style="font-size:15px;text-align:center">16 · div_int + div_frac = 16 · (div_int + div_frac/16) = 16 · D chu kỳ pclk.</p>
+<p style="font-size:15px">Ví dụ D = 14,1250 (<code>div_int</code> = 14, <code>div_frac</code> = 2): 16 · 14 + 2 = 226 chu kỳ <code>pclk</code> mỗi bit, gồm 14 chu kỳ tick dài 14 và 2 chu kỳ tick dài 15. Ở 25 MHz, 226 chu kỳ = 9,04 µs, ứng với 110 619 baud. Hình và bảng dưới dùng D của ô tính ở trên.</p>
+<div class="svgbox"><svg id="accsvg" width="1100" height="190" viewBox="0 0 1100 190" font-family="system-ui,sans-serif" font-size="15"></svg></div>
+<div class="ctl"><label>Bảng cho bit_idx <select id="accbit"></select></label><span style="font-size:15px;color:var(--muted)"><code>acc</code> = 0 sau reset; hàng tô vàng là tick có <code>carry</code> = 1</span></div>
+<div id="acctable"></div>
+<h3>Bảng giá trị ở 25 MHz</h3>
+<div id="btable"></div>
+<p class="src">Nguồn: đặc tả 1.1 mục 4.3; công thức D thực = round(16 · f<sub>pclk</sub> / (16 · baud)) / 16, sai số = (f<sub>pclk</sub> / (16 · D thực) − baud) / baud. Bộ chia nguyên lấy mẫu 16× cho −3,12 % ở 115 200 baud (vượt ±1 %).</p>
+</section>
+
+<!-- 6 -->
+<section id="khung">
+<h2>6. Khung UART</h2>
+<p class="lead">Thứ tự trên <code>tx</code>: start (0), dữ liệu LSB trước, parity (nếu có), 1 hoặc 2 stop (1). Parity chẵn: tổng số bit 1 của dữ liệu và parity là số chẵn. Khi số bit dữ liệu N &lt; 8, chỉ <code>tx_data[N−1:0]</code> được phát.</p>
+<div class="ctl">
+  <label>Dữ liệu (hex) <input type="text" id="fd" value="A5" style="width:70px" maxlength="2"></label>
+  <label>Số bit <select id="fn"><option>5</option><option>6</option><option>7</option><option selected>8</option></select></label>
+  <label>Parity <select id="fp"><option value="n">không</option><option value="e" selected>chẵn</option><option value="o">lẻ</option></select></label>
+  <label>Stop <select id="fs"><option>1</option><option>2</option></select></label>
+  <label>Baud <select id="fb"></select></label>
+</div>
+<div class="svgbox"><svg id="framesvg" width="1100" height="230" viewBox="0 0 1100 230" font-family="system-ui,sans-serif" font-size="15"></svg></div>
+<div class="out" id="fout"></div>
+<p class="src">Nguồn: đặc tả 1.1 mục 6.1. Giá trị CFG tương ứng hiện trong ô kết quả.</p>
+</section>
+
+<!-- 7 -->
+<section id="rx">
+<h2>7. Bộ thu: lấy mẫu và dung sai tốc độ</h2>
+<p class="lead">Bộ thu đồng bộ <code>rx</code> qua 2 flip-flop, phát hiện sườn xuống, kiểm tra lại start ở tick 8 (giữa bit), sau đó lấy mẫu mỗi 16 tick, tức ở giữa mỗi bit theo đồng hồ của bộ thu. Khi bên phát lệch tốc độ, điểm lấy mẫu trôi dần khỏi giữa bit. Yêu cầu: nhận đúng ở ±2,0 %.</p>
+<div class="card" style="margin-bottom:10px"><h4>Stop bit: kiểm tra đủ mọi stop bit, về IDLE ở giữa stop bit cuối</h4><div style="font-size:15px">Bộ thu kiểm tra mọi stop bit theo <code>stop_bits</code>: một stop bit, hoặc cả hai khi <code>stop_bits</code> = 1, mỗi stop bit lấy mẫu ở tick 8 (giữa bit). Có stop bit bằng 0 thì đặt <code>frame_err</code> = 1, nên khung thiếu stop bit thứ hai vẫn bị phát hiện. Phần được rút ngắn chỉ là nửa sau của stop bit <b>cuối cùng</b>: lấy mẫu stop bit cuối xong, bộ thu đặt <code>rx_done</code> và chuyển sang IDLE ngay, không đếm tiếp 8 tick còn lại. Stop bit thứ nhất của khung 2 stop bit vẫn đếm đủ 16 tick. Khi bên phát nhanh hơn, start bit của khung kế tiếp có thể đến trước khi stop bit cuối theo đồng hồ bộ thu kết thúc; về IDLE sớm nửa bit giúp bộ thu không bỏ lỡ sườn xuống đó. Độ dài khung n trong công thức dung sai tính tới stop bit cuối cùng.</div></div>
+<table>
+<tr><th>Ký hiệu</th><th>Định nghĩa</th></tr>
+<tr><td>T</td><td>độ rộng bit danh định theo đồng hồ bộ thu, T = 1/baud = 16 · D chu kỳ <code>pclk</code></td></tr>
+<tr><td>tick</td><td>T/16, khoảng trung bình giữa hai xung <code>tick</code></td></tr>
+<tr><td>e</td><td>sai lệch tương đối của tốc độ bên phát so với danh định; e = +2 % là bên phát nhanh hơn 2 %, e = −2 % là chậm hơn 2 %</td></tr>
+<tr><td>T<sub>tx</sub></td><td>độ rộng bit thực của bên phát, T<sub>tx</sub> = T/(1 + e)</td></tr>
+<tr><td>n</td><td>số bit từ start tới stop bit cuối cùng: 1 + N dữ liệu + parity + số stop bit; từ 7 (5N1) tới 12 (8 bit + parity + 2 stop)</td></tr>
+<tr><td>k</td><td>chỉ số bit trong khung, k = 0 (start) … n − 1 (stop bit cuối)</td></tr>
+<tr><td>d</td><td>trễ phát hiện sườn start, đơn vị tick, 0 ≤ d ≤ 1: bộ thu chỉ nhìn <code>rx</code> tại các xung tick, nên sườn xuống của start bit nằm giữa hai tick và được thấy ở tick kế tiếp. d = 1 là trường hợp xấu nhất. Trễ 2 flip-flop đồng bộ (2 chu kỳ <code>pclk</code>) nhỏ hơn 1 tick khi D ≥ 2 và được bỏ qua</td></tr>
+</table>
+<div class="ctl">
+  <label>Lệch tốc độ bên phát (%) <input type="range" id="re" min="-6" max="6" step="0.25" value="2"><span id="rev" class="mono"></span></label>
+  <label>Khung (n bit tới stop cuối) <select id="rn"><option value="7-1">n = 7 (5N1)</option><option value="10-1">n = 10 (8N1)</option><option value="11-1">n = 11 (8E1, 8O1)</option><option value="11-2">n = 11 (8N2)</option><option value="12-2" selected>n = 12 (8E2, 8O2)</option></select></label>
+  <label>d (tick) <select id="rd"><option>0</option><option value="0.5">0,5</option><option selected>1</option></select></label>
+</div>
+<div class="svgbox"><svg id="rxsvg" width="1100" height="250" viewBox="0 0 1100 250" font-family="system-ui,sans-serif" font-size="15"></svg></div>
+<div class="out" id="rout"></div>
+<h3>Cách tính trên hình</h3>
+<ul style="font-size:15px">
+<li>Bên phát: bit k chiếm khoảng thời gian [k · T<sub>tx</sub>, (k + 1) · T<sub>tx</sub>), tính từ sườn xuống của start bit.</li>
+<li>Bộ thu: lấy mẫu bit k tại t<sub>k</sub> = (8 + 16k + d) · T/16 = (k + 0,5) · T + d · T/16.</li>
+<li>Bit k nhận đúng khi t<sub>k</sub> nằm trong khoảng của bit k bên phát. Bit dễ sai nhất là bit cuối, k = n − 1 (stop bit cuối), vì sai lệch tích luỹ qua n − 0,5 bit.</li>
+<li>Điều kiện cho bit cuối, với d = 1: |e| · (n − 0,5) &lt; 0,5 − 1/16, suy ra |e| &lt; (0,5 − 1/16)/(n − 0,5). Với n = 12: 3,80 %; n = 11: 4,17 %; n = 10: 4,61 %; n = 7: 6,73 %.</li>
+</ul>
+<p class="src">Nguồn: đặc tả 1.1 mục 6.2. Phép quét sai lệch baud bằng mô phỏng (bộ thu 16×) có ở ví dụ <code>04-Vi-du/tuan-08A-uart</code>, chạy bằng Questa Sim ngày 31/10/2026.</p>
+</section>
+
+<!-- 8 -->
+<section id="apb">
+<h2>8. Giao dịch APB và <code>pslverr</code></h2>
+<p class="lead">APB4, <code>pready</code> = 1: mỗi truyền gồm pha setup (<code>psel</code> = 1, <code>penable</code> = 0) và một chu kỳ pha truy cập (<code>psel</code> = <code>penable</code> = 1). Thanh ghi đổi ở sườn lên kết thúc pha truy cập; <code>prdata</code>, <code>pslverr</code> chỉ có nghĩa trong pha truy cập.</p>
+<div class="svgbox"><svg id="apbsvg" width="1100" height="440" viewBox="0 0 1100 440" font-family="system-ui,sans-serif" font-size="15"></svg></div>
+<p style="font-size:15px">Ba giao dịch liên tiếp: (1) ghi <code>BAUD</code> = 0x0000_900D, đạt; (2) đọc <code>STAT</code>, trả 0x0000_0001 (<code>tx_done</code> = 1); (3) ghi địa chỉ 0x020, <code>pslverr</code> = 1 (E1), không thanh ghi nào đổi.</p>
+<h3>Bộ kiểm tra lỗi <code>pslverr</code></h3>
+<div class="ctl">
+  <label>Truy cập <select id="ew"><option value="1">ghi</option><option value="0">đọc</option></select></label>
+  <label>paddr (hex) <input type="text" id="ea" value="014" style="width:70px"></label>
+  <label>pstrb (bin) <input type="text" id="es" value="1111" style="width:70px"></label>
+  <label>pwdata (hex) <input type="text" id="ed" value="0000900D" style="width:110px"></label>
+  <label><input type="checkbox" id="etd" checked> tx_done = 1</label>
+  <label><input type="checkbox" id="erb"> rx_busy = 1</label>
+</div>
+<div class="out" id="eout"></div>
+<table>
+<tr><th>Mã</th><th>Điều kiện</th></tr>
+<tr><td>E1</td><td><code>paddr</code> ngoài {0x00, 0x04, 0x08, 0x0C, 0x10, 0x14, 0x18}, kể cả không căn 4 byte; đọc trả 0</td></tr>
+<tr><td>E2</td><td>ghi <code>RXDATA</code> hoặc <code>STAT</code></td></tr>
+<tr><td>E3</td><td>ghi <code>TXDATA</code>, hoặc ghi <code>CTRL</code> có <code>pstrb[0]</code> = 1 và <code>pwdata[0]</code> = 1, khi <code>tx_done</code> = 0</td></tr>
+<tr><td>E4</td><td>ghi <code>CFG</code> có <code>pstrb[0]</code> = 1, hoặc ghi <code>BAUD</code> có <code>pstrb[0]</code> hoặc <code>pstrb[1]</code> = 1, khi <code>tx_done</code> = 0 hoặc <code>rx_busy</code> = 1</td></tr>
+<tr><td>E5</td><td>ghi <code>BAUD</code> mà <code>div_int</code> sau khi ghi bằng 0</td></tr>
+</table>
+<p class="src">Nguồn: đặc tả 1.1 mục 5; Arm IHI 0024C (AMBA APB v2.0), 2010.</p>
+</section>
+
+<!-- 9 SPI -->
+<section id="spi">
+<h2>9. Khung SPI của <code>spi2apb</code></h2>
+<div class="card" style="margin-bottom:10px"><h4>Mục tiêu của <code>spi2apb</code></h4><div style="font-size:15px">Giao tiếp APB của <code>apb_uart</code> cần 51 chân vào (<code>psel</code>, <code>penable</code>, <code>pwrite</code>, <code>paddr</code> 12, <code>pstrb</code> 4, <code>pwdata</code> 32) và 34 chân ra (<code>pready</code>, <code>pslverr</code>, <code>prdata</code> 32), tổng 85 chân. Một tile Tiny Tapeout chỉ có 24 chân người dùng (8 <code>ui_in</code>, 8 <code>uo_out</code>, 8 <code>uio</code>). <code>spi2apb</code> chuyển mỗi giao dịch APB thành một khung nối tiếp trên 4 chân (<code>spi_cs_n</code>, <code>spi_sclk</code>, <code>spi_mosi</code>, <code>spi_miso</code>), mà RP2040 phát được bằng khối SPI phần cứng. Lõi <code>apb_uart</code> giữ nguyên giao tiếp APB theo đặc tả, nên testbench chấm điểm vẫn nối thẳng vào APB; <code>spi2apb</code> chỉ nằm trong wrapper.</div></div>
+<p class="lead">RP2040 là SPI master, <code>spi2apb</code> là slave. Mode 0 (CPOL = 0, CPHA = 0), MSB trước, khung cố định 56 bit (7 byte) cho cả đọc và ghi trong một lần <code>spi_cs_n</code> = 0. f<sub>SCLK</sub> ≤ f<sub>pclk</sub>/10 (2,5 MHz ở 25 MHz); một khung dài 22,4 µs. Chọn thao tác để xem byte trên MOSI, MISO và thời điểm giao dịch APB.</p>
+<table>
+<tr><th>Byte</th><th>Bit</th><th>MOSI</th><th>MISO</th></tr>
+<tr><td>B0 <code>cmd</code></td><td>0–7</td><td><code>[7]</code> rw (1 ghi), <code>[6:4]</code> = 000, <code>[3:0]</code> = <code>paddr[5:2]</code></td><td>0x00</td></tr>
+<tr><td>B1 turnaround</td><td>8–15</td><td>0x00</td><td>0x00</td></tr>
+<tr><td>B2–B5 dữ liệu</td><td>16–47</td><td>ghi: <code>pwdata</code>; đọc: 0x00</td><td>đọc: <code>prdata</code>; ghi: 0x00</td></tr>
+<tr><td>B6 trạng thái</td><td>48–55</td><td>0x00</td><td><code>[1]</code> <code>cmd_err</code>, <code>[0]</code> <code>pslverr</code></td></tr>
+</table>
+<div class="ctl">
+  <label>Thao tác <select id="sr"><option value="1">ghi</option><option value="0">đọc</option></select></label>
+  <label>Thanh ghi <select id="sa"><option value="0">TXDATA (0)</option><option value="1">RXDATA (1)</option><option value="2">CFG (2)</option><option value="3">CTRL (3)</option><option value="4">STAT (4)</option><option value="5" selected>BAUD (5)</option><option value="6">IER (6)</option><option value="7">7 (ngoài bảng)</option></select></label>
+  <label>pwdata (hex) <input type="text" id="sd" value="0000900D" style="width:110px"></label>
+  <label><input type="checkbox" id="stx" checked> tx_done = 1</label>
+  <label><input type="checkbox" id="sbad"> cmd[6:4] ≠ 000</label>
+</div>
+<div class="svgbox"><svg id="spisvg" width="1100" height="300" viewBox="0 0 1100 300" font-family="system-ui,sans-serif" font-size="15"></svg></div>
+<div class="out" id="sout"></div>
+<h3>Phóng to byte B0: lấy mẫu ở sườn lên, đổi dữ liệu ở sườn xuống</h3>
+<div class="svgbox"><svg id="spizoom" width="1100" height="220" viewBox="0 0 1100 220" font-family="system-ui,sans-serif" font-size="15"></svg></div>
+<ul style="font-size:15px">
+<li>Lệnh đọc: giao dịch APB ngay sau sườn lên SCLK thứ 8; <code>prdata</code> được chốt trong 8 chu kỳ SCLK của B1, trước bit 16.</li>
+<li>Lệnh ghi: giao dịch APB sau sườn lên SCLK thứ 48; <code>pslverr</code> ở bit 55 (bit cuối), còn 7 chu kỳ SCLK dự phòng.</li>
+<li><code>cmd[6:4]</code> ≠ 000: không sinh giao dịch APB, B6 trả <code>cmd_err</code> = 1. <code>cmd[3:0]</code> &gt; 6: <code>apb_uart</code> trả <code>pslverr</code> = 1 (E1).</li>
+<li><code>spi_cs_n</code> lên 1 trước bit 56: huỷ khung; lệnh ghi chưa tới bit 48 không có tác dụng; lệnh đọc đã chạy ở bit 8 vẫn có tác dụng phụ (đọc <code>RXDATA</code> xoá cờ).</li>
+<li><code>spi_cs_n</code>, <code>spi_sclk</code>, <code>spi_mosi</code> qua 2 flip-flop trong miền <code>pclk</code>; SCLK không được dùng làm clock. MISO = 0 khi <code>spi_cs_n</code> = 1.</li>
+</ul>
+<p class="src">Nguồn: đặc tả 1.1 mục 11. Giới hạn f<sub>pclk</sub>/10: mỗi nửa chu kỳ SCLK dài 5 chu kỳ <code>pclk</code>, đủ cho 2 flip-flop đồng bộ và 1 chu kỳ phát hiện sườn.</p>
+</section>
+
+<!-- 10 trao đổi -->
+<section id="trao-doi">
+<h2>10. Trao đổi dữ liệu RP2040 → SPI → APB → UART</h2>
+<p class="lead">Sequence diagram cho một ký tự 8N1 ở 115 200 baud (<code>BAUD</code> = 0x900D, <code>CFG</code> = 0x03). Mỗi truy cập thanh ghi là một khung SPI 56 bit (22,4 µs ở 2,5 MHz) và một giao dịch APB 2 chu kỳ <code>pclk</code>; một ký tự trên đường UART dài 10 bit = 86,8 µs. Mũi tên đỏ là tín hiệu ngắt <code>irq</code> (<code>uo_out[6]</code>) tới một chân GPIO của RP2040.</p>
+<div class="tabs" id="sqtabs"><button class="on" data-k="tx">Ghi thanh ghi → phát trên tx</button><button data-k="rx">Nhận trên rx → đọc qua SPI</button></div>
+<div class="svgbox"><svg id="sqsvg" width="1100" height="640" viewBox="0 0 1100 640" font-family="system-ui,sans-serif" font-size="14"></svg></div>
+<div id="sqtable"></div>
+<p class="src">Nguồn: đặc tả 1.1 mục 4, 5, 6.3, 6.4, 7, 11. Giá trị MOSI, MISO tính theo khung mục 11.2; trạng thái thanh ghi giả định khối vừa reset.</p>
+</section>
+
+<!-- 9 -->
+<section id="trinh-tu">
+<h2>11. Giản đồ thời gian phát và nhận</h2>
+<div class="tabs" id="seqtabs"><button class="on" data-k="tx">Phát (TX)</button><button data-k="rx">Nhận (RX)</button></div>
+<div class="svgbox"><svg id="seqsvg" width="1100" height="310" viewBox="0 0 1100 310" font-family="system-ui,sans-serif" font-size="15"></svg></div>
+<ol id="seqsteps" style="font-size:15px"></ol>
+<p class="src">Nguồn: đặc tả 1.1 mục 6.3, 6.4; Hình 4, Hình 5 của bản v2. Giản đồ vẽ khung 8N1, dữ liệu 0x55; trục thời gian không theo tỉ lệ ở phần chờ <code>cts_n</code> và đọc <code>RXDATA</code>.</p>
+</section>
+
+<!-- 10 -->
+<section id="ngat">
+<h2>12. Ngắt và reset mềm</h2>
+<div class="grid2">
+<div class="card"><h4>Ngắt mức <code>irq</code></h4>
+<p class="mono" style="font-size:15px">irq = (tx_done_ie &amp; tx_done)<br>&nbsp;&nbsp;| (rx_done_ie &amp; rx_done)<br>&nbsp;&nbsp;| (err_ie &amp; (parity_err | frame_err | overrun))</p>
+<div class="ctl" id="irqctl"></div>
+<div class="out" id="irqout"></div>
+<p style="font-size:15px">Phản ánh thay đổi trong ≤ 2 chu kỳ <code>pclk</code>. Đọc <code>RXDATA</code> xoá <code>rx_done</code>, <code>parity_err</code>, <code>frame_err</code>, <code>overrun</code>.</p>
+</div>
+<div class="card"><h4>Reset mềm <code>CTRL.soft_rst</code></h4>
+<ul style="font-size:15px;padding-left:18px">
+<li>Ghi 1 vào <code>CTRL[8]</code>: mọi thanh ghi (<code>CFG</code>, <code>BAUD</code>, <code>IER</code>) và máy trạng thái về giá trị reset.</li>
+<li>Huỷ khung đang phát hoặc nhận; <code>tx</code> = 1, <code>rts_n</code> = 1.</li>
+<li>Hoàn tất trong 2 chu kỳ <code>pclk</code>; từ chu kỳ thứ 3 nhận lệnh APB.</li>
+<li>Ghi đồng thời <code>soft_rst</code> = 1 và <code>start_tx</code> = 1: <code>soft_rst</code> ưu tiên, lệnh phát bị bỏ.</li>
+<li>Không bao giờ báo <code>pslverr</code>.</li>
+</ul></div>
+</div>
+<p class="src">Nguồn: đặc tả 1.1 mục 4.5, 6.5, 7.</p>
+</section>
+
+<!-- 11 -->
+<section id="kiem-tra">
+<h2>13. Danh mục kiểm tra trước khi nộp</h2>
+<p class="lead">Đánh dấu được lưu trên trình duyệt này. Danh mục lấy từ ngưỡng của từng cổng và các ràng buộc RTL Q1–Q7.</p>
+<div id="chk"></div>
+<button class="ghost" id="chkreset">Xoá đánh dấu</button>
+<p class="src">Nguồn: kế hoạch tape-out mục 5.1; đặc tả 1.1 mục 8, 10; tiêu chí chấm 1.1.</p>
+</section>
+
+</main>
+</div>
+<footer><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span><span>APB-UART · đặc tả 1.1 · 01/11/2026</span></footer>
+
+<script>
+"use strict";
+const $=s=>document.querySelector(s);
+const NS="http://www.w3.org/2000/svg";
+function el(tag,attrs,txt){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(txt!==undefined)e.textContent=txt;return e;}
+function clear(s){while(s.firstChild)s.removeChild(s.firstChild);}
+const C={ink:"#1b2430",muted:"#5a6573",line:"#d5dbe3",acc:"#1f4e8c",accs:"#e8f0fb",ok:"#1a7f37",bad:"#c62828",warn:"#9a6700",grid:"#e6eaef"};
+function hex(v,n){return "0x"+(v>>>0).toString(16).toUpperCase().padStart(n||8,"0");}
+function fmt(x,d){return x.toFixed(d).replace(".",",");}
+
+/* ---------- nav highlight ---------- */
+const navLinks=[...document.querySelectorAll("nav a")];
+const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){navLinks.forEach(a=>a.classList.toggle("on",a.getAttribute("href")==="#"+e.target.id));}});},{rootMargin:"-40% 0px -55% 0px"});
+document.querySelectorAll("section").forEach(s=>io.observe(s));
+
+/* ---------- 3. block diagram ---------- */
+const BLK={
+ spi2apb:{t:"spi2apb (wrapper TT)",d:"SPI mode 0 slave, khung cố định 56 bit: cmd, turnaround, 32 bit dữ liệu, byte trạng thái (mục 9). Sinh một giao dịch APB mỗi khung: đọc sau bit 8, ghi sau bit 48. Chỉ có trong wrapper tt_um_hust_apb_uart; testbench chấm phần A nối thẳng vào apb_uart.",io:"vào: spi_cs_n, spi_sclk, spi_mosi; ra: spi_miso, psel, penable, pwrite, paddr, pstrb, pwdata",g:"spi_sclk không đồng bộ với pclk: đồng bộ cs_n, sclk, mosi bằng 2 flip-flop rồi phát hiện sườn sclk trong miền pclk, như cách B của SPI slave ở tuần 8A."},
+ dec:{t:"apb_if + giải mã địa chỉ",d:"Nhận giao dịch APB, giải mã paddr thành 7 thanh ghi, sinh xung ghi theo pstrb, chọn prdata, tính pslverr theo E1–E5 trong cùng chu kỳ truy cập.",io:"vào: psel, penable, pwrite, paddr, pstrb, pwdata, tx_done, rx_busy; ra: pready = 1, pslverr, prdata, xung ghi từng thanh ghi",g:"pslverr và prdata là tổ hợp của trạng thái hiện tại trong pha truy cập; lệnh ghi bị lỗi không sinh xung ghi."},
+ rtx:{t:"TXDATA, CTRL",d:"Lưu tx_data; start_tx là xung một chu kỳ (đọc trả 0); soft_rst là xung một chu kỳ, reset mọi khối trong 2 chu kỳ.",io:"ra uart_tx: tx_data, start (xung); vào: tx_done",g:"Che bit cao của tx_data theo data_bits ngay tại uart_tx, giữ nguyên giá trị đã ghi trong thanh ghi."},
+ rcfg:{t:"CFG, BAUD",d:"CFG: data_bits, stop_bits, parity_en, parity_type, tx_dis, rx_dis. BAUD: div_int[11:0], div_frac[15:12], reset 0x900D.",io:"ra: cấu hình khung tới uart_tx, uart_rx; div_int, div_frac tới baud_gen",g:"Chỉ cập nhật khi tx_done = 1 và rx_busy = 0 (E4), nên cấu hình không đổi giữa khung."},
+ rrx:{t:"RXDATA, STAT, IER, irq",d:"RXDATA, cờ rx_done, parity_err, frame_err, overrun; đọc RXDATA xoá cả bốn cờ. IER chọn nguồn ngắt; irq = OR của các cặp cờ & cho phép.",io:"vào từ uart_rx: rx_data, xung rx_valid, parity_err, frame_err, rx_busy; ra: irq",g:"Lấy irq từ flip-flop; overrun đặt khi rx_valid đến lúc rx_done = 1 và giữ nguyên RXDATA cũ."},
+ tx:{t:"uart_tx",d:"Máy trạng thái IDLE → WAIT_CTS → START → DATA → PARITY → STOP. Thanh ghi dịch, đếm 16 tick mỗi bit, đếm bit theo data_bits.",io:"vào: tick, cts_n (đã đồng bộ), tx_data, cấu hình, start; ra: tx, tx_done",g:"cts_n chỉ xét trước start bit; khung đã bắt đầu thì phát hết. tx_done lên 1 ở cuối stop bit cuối cùng."},
+ bg:{t:"baud_gen",d:"Bộ tích luỹ phân số: đếm ⌊D⌋ chu kỳ pclk, cộng thêm 1 chu kỳ khi acc + div_frac tràn 4 bit; phát xung tick rộng 1 chu kỳ pclk.",io:"vào: div_int, div_frac; ra: tick (xung cho phép, không phải clock)",g:"Không dùng tick làm clock của flip-flop. Ở D = 1,6875 (921 600 baud) tick cách nhau 1 hoặc 2 chu kỳ pclk."},
+ rx:{t:"uart_rx",d:"Phát hiện sườn xuống, kiểm tra lại start ở tick 8, lấy mẫu mỗi 16 tick (nên đa số 3 mẫu), tính parity, kiểm tra stop thứ nhất, sinh rx_valid.",io:"vào: rx (đã đồng bộ), tick, cấu hình; ra: rx_data, rx_valid, parity_err, frame_err, rx_busy, rts_n",g:"rts_n = 0 khi rx_dis = 0 và rx_done = 0. Xung thấp ngắn hơn 0,4 bit không tạo khung."},
+ sync:{t:"đồng bộ 2 flip-flop",d:"Hai flip-flop nối tiếp cho mỗi đầu vào không đồng bộ rx, cts_n, để giảm xác suất metastability lan vào logic.",io:"vào: rx, cts_n (chân); ra: rx_s, cts_s",g:"Kiểm tra Q6 của đặc tả: ít nhất 2 flip-flop từ cổng vào tới logic đầu tiên trong netlist."}
+};
+function drawBlocks(){
+ const s=$("#blkdia"); clear(s);
+ const defs=el("defs",{});
+ const mk=(id,d)=>{const m=el("marker",{id,markerWidth:12,markerHeight:10,refX:id==="ar"?11:1,refY:5,orient:"auto",markerUnits:"userSpaceOnUse"});m.appendChild(el("path",{d,fill:C.ink}));defs.appendChild(m);};
+ mk("ar","M0,0 L12,5 L0,10 z"); mk("al","M12,0 L0,5 L12,10 z"); s.appendChild(defs);
+ // khung nhóm
+ s.appendChild(el("rect",{x:10,y:8,width:1160,height:574,fill:"none",stroke:"#c7ced8","stroke-dasharray":"2 4",rx:10}));
+ s.appendChild(el("text",{x:24,y:572,fill:C.muted},"tt_um_hust_apb_uart (wrapper Tiny Tapeout)"));
+ s.appendChild(el("rect",{x:218,y:40,width:390,height:470,fill:"none",stroke:"#9aa7b6","stroke-dasharray":"6 5",rx:8}));
+ s.appendChild(el("text",{x:413,y:30,"text-anchor":"middle",fill:C.muted},"apb_regs"));
+ const L=(pts,o)=>s.appendChild(el("polyline",Object.assign({points:pts.map(q=>q.join(",")).join(" "),fill:"none",stroke:C.ink,"stroke-width":2},o||{})));
+ const T=(x,y,t,o)=>s.appendChild(el("text",Object.assign({x,y,"text-anchor":"middle",fill:C.ink,"font-size":14},o||{}),t));
+ // đường nối (vẽ trước khối)
+ L([[24,260],[58,260]],{"marker-end":"url(#ar)"}); T(40,248,"SPI",{fill:C.muted});
+ L([[160,260],[238,260]],{"stroke-width":4,"marker-end":"url(#ar)"}); T(190,248,"APB");
+ L([[360,260],[390,260]],{"stroke-width":4}); L([[390,110],[390,410]],{"stroke-width":4});
+ [110,260,410].forEach(y=>L([[390,y],[428,y]],{"stroke-width":4,"marker-end":"url(#ar)"}));
+ L([[570,110],[708,110]],{"stroke-width":2.5,"marker-end":"url(#ar)","marker-start":"url(#al)"}); T(639,100,"tx_data, start →"); T(639,130,"← tx_done");
+ L([[570,260],[708,260]],{"stroke-width":2.5,"marker-end":"url(#ar)"}); T(639,250,"div_int, div_frac");
+ L([[570,410],[708,410]],{"stroke-width":2.5,"marker-end":"url(#ar)","marker-start":"url(#al)"}); T(639,400,"cấu hình khung →"); T(639,430,"← rx_data, cờ");
+ L([[800,210],[800,162]],{"marker-end":"url(#ar)"}); T(812,192,"tick",{"text-anchor":"start"});
+ L([[800,310],[800,358]],{"marker-end":"url(#ar)"}); T(812,338,"tick",{"text-anchor":"start"});
+ L([[890,110],[1078,110]],{"marker-end":"url(#ar)"});
+ L([[1080,40],[1032,40]],{"marker-end":"url(#ar)"}); L([[950,40],[800,40],[800,58]],{"marker-end":"url(#ar)"});
+ L([[1080,410],[1032,410]],{"marker-end":"url(#ar)"}); L([[950,410],[892,410]],{"marker-end":"url(#ar)"});
+ L([[800,460],[800,500],[1078,500]],{"marker-end":"url(#ar)"});
+ L([[500,460],[500,545],[1078,545]],{"marker-end":"url(#ar)"});
+ // chân
+ [["tx",110],["cts_n",40],["rx",410],["rts_n",500],["irq",545]].forEach(([n,y])=>{s.appendChild(el("rect",{x:1080,y:y-14,width:76,height:28,rx:14,fill:"#fff",stroke:C.acc,"stroke-width":1.5}));T(1118,y+5,n,{"font-family":"monospace","font-size":15});});
+ // khối
+ const B=(k,x,y,w,h,lines)=>{const g=el("g",{class:"blk","data-k":k});g.appendChild(el("rect",{x,y,width:w,height:h,rx:6,fill:C.accs,stroke:C.acc,"stroke-width":2}));const cy=y+h/2-(lines.length-1)*10;lines.forEach((t,i)=>g.appendChild(el("text",{x:x+w/2,y:cy+i*20+5,"text-anchor":"middle",fill:C.ink,"font-weight":i?400:600,"font-size":i?14:16},t)));g.addEventListener("click",()=>selBlk(k));s.appendChild(g);};
+ B("spi2apb",60,210,100,100,["spi2apb","SPI → APB"]);
+ B("dec",240,210,120,100,["apb_if","giải mã","pslverr"]);
+ B("rtx",430,60,140,100,["TXDATA","CTRL"]);
+ B("rcfg",430,210,140,100,["CFG","BAUD"]);
+ B("rrx",430,360,140,100,["RXDATA, STAT","IER → irq"]);
+ B("tx",710,60,180,100,["uart_tx","FSM, dịch, đếm bit"]);
+ B("bg",710,210,180,100,["baud_gen","tích luỹ phân số"]);
+ B("rx",710,360,180,100,["uart_rx","lấy mẫu 16×, kiểm lỗi"]);
+ B("sync",950,25,80,30,["2FF"]); B("sync",950,395,80,30,["2FF"]);
+}
+function selBlk(k){document.querySelectorAll("#blkdia .blk").forEach(g=>g.classList.toggle("sel",g.dataset.k===k));const b=BLK[k];$("#blkinfo").innerHTML=`<h4>${b.t}</h4><div style="font-size:15px"><p style="margin:4px 0">${b.d}</p><p style="margin:4px 0"><b>Tín hiệu:</b> <span class="mono">${b.io}</span></p><p style="margin:4px 0"><b>Gợi ý hiện thực:</b> ${b.g}</p></div>`;}
+drawBlocks(); selBlk("bg");
+
+/* ---------- 4. registers ---------- */
+const REGS=[
+ {n:"TXDATA",a:0x00,acc:"RW",rst:0,f:[["tx_data",7,0,"Ký tự cần phát; bit cao bị che theo data_bits"]]},
+ {n:"RXDATA",a:0x04,acc:"RO",rst:0,f:[["rx_data",7,0,"Ký tự đã nhận; rx_data[7:N] = 0. Đọc thanh ghi này xoá rx_done, parity_err, frame_err, overrun"]]},
+ {n:"CFG",a:0x08,acc:"RW",rst:0,f:[["data_bits",1,0,"00: 5, 01: 6, 10: 7, 11: 8 bit"],["stop_bits",2,2,"0: 1 stop, 1: 2 stop"],["parity_en",3,3,"1: có parity"],["parity_type",4,4,"1: chẵn, 0: lẻ"],["tx_dis",5,5,"1: tắt bộ phát"],["rx_dis",6,6,"1: tắt bộ thu, rts_n = 1"]]},
+ {n:"CTRL",a:0x0C,acc:"RW",rst:0,f:[["start_tx",0,0,"Ghi 1: phát TXDATA; đọc trả 0"],["soft_rst",8,8,"Ghi 1: reset mềm; đọc trả 0"]]},
+ {n:"STAT",a:0x10,acc:"RO",rst:1,f:[["tx_done",0,0,"1: bộ phát rảnh (reset = 1)"],["rx_done",1,1,"1: RXDATA có ký tự chưa đọc"],["parity_err",2,2,"Ký tự trong RXDATA sai parity"],["rx_busy",3,3,"Đang nhận khung"],["tx_dis",4,4,"Bản sao CFG.tx_dis"],["rx_dis",5,5,"Bản sao CFG.rx_dis"],["frame_err",6,6,"Có stop bit bằng 0 (kiểm tra cả hai khi stop_bits = 1)"],["overrun",7,7,"Khung mới bị bỏ vì rx_done = 1"]]},
+ {n:"BAUD",a:0x14,acc:"RW",rst:0x900D,f:[["div_int",11,0,"Phần nguyên của D (≥ 1)"],["div_frac",15,12,"Phần phân số của D, đơn vị 1/16"]]},
+ {n:"IER",a:0x18,acc:"RW",rst:0,f:[["tx_done_ie",0,0,"Ngắt khi tx_done = 1"],["rx_done_ie",1,1,"Ngắt khi rx_done = 1"],["err_ie",2,2,"Ngắt khi có parity_err, frame_err hoặc overrun"]]}
+];
+const regVal={}; REGS.forEach(r=>regVal[r.n]=r.rst);
+function regTabs(){const t=$("#regtabs");REGS.forEach((r,i)=>{const b=document.createElement("button");b.textContent=`${r.n} (${hex(r.a,2)})`;b.onclick=()=>showReg(i);t.appendChild(b);});showReg(2);}
+function showReg(i){
+ [...$("#regtabs").children].forEach((b,j)=>b.classList.toggle("on",i===j));
+ const r=REGS[i]; let v=regVal[r.n];
+ let h=`<div style="font-size:15px">Địa chỉ <b class="mono">${hex(r.a,3)}</b> · quyền <b>${r.acc}</b> · reset <b class="mono">${hex(r.rst)}</b></div><div class="bitrow">`;
+ for(let b=31;b>=0;b--){const inF=r.f.some(f=>b<=f[1]&&b>=f[2]);h+=`<div class="${inF?"f":""}" title="bit ${b}">${b}</div>`;}
+ h+=`</div><table><tr><th>Bit</th><th>Trường</th><th>Ý nghĩa</th><th>Giá trị</th></tr>`;
+ r.f.forEach((f,k)=>{const w=f[1]-f[2]+1;const cur=(v>>>f[2])&((1<<w)-1);const inp=r.acc==="RO"?`<span class="mono">${cur}</span>`:`<input type="number" min="0" max="${(1<<w)-1}" value="${cur}" data-k="${k}" style="width:90px">`;h+=`<tr><td class="mono">[${f[1]===f[2]?f[1]:f[1]+":"+f[2]}]</td><td class="mono">${f[0]}</td><td>${f[3]}</td><td>${inp}</td></tr>`;});
+ h+=`</table><div class="out" id="regout"></div>`;
+ $("#regview").innerHTML=h;
+ const upd=()=>{let nv=0;r.f.forEach((f,k)=>{const w=f[1]-f[2]+1;const inp=$(`#regview input[data-k="${k}"]`);let x=inp?Math.max(0,Math.min((1<<w)-1,parseInt(inp.value||"0",10))):((regVal[r.n]>>>f[2])&((1<<w)-1));nv|=(x<<f[2]);});nv>>>=0;regVal[r.n]=nv;
+  let note=`Giá trị ${r.n} = ${hex(nv)}`;
+  if(r.n==="BAUD"){const di=nv&0xFFF,fr=(nv>>>12)&0xF,D=di+fr/16;note+=`\nD = ${di} + ${fr}/16 = ${fmt(D,4)}`+(di===0?"\npslverr = 1 (E5): div_int = 0":`\nỞ 25 MHz: baud = ${fmt(25e6/(16*D),1)}`);}
+  if(r.n==="CFG"){const n=5+(nv&3),st=(nv>>2&1)?2:1,pe=nv>>3&1,pt=nv>>4&1;note+=`\nKhung: ${n} bit dữ liệu, ${pe?(pt?"parity chẵn":"parity lẻ"):"không parity"}, ${st} stop → ${1+n+pe+st} bit mỗi khung`;}
+  if(r.acc==="RO")note+="\nThanh ghi chỉ đọc: ghi vào bị pslverr (E2).";
+  $("#regout").textContent=note;};
+ $("#regview").querySelectorAll("input").forEach(x=>x.addEventListener("input",upd)); upd();
+}
+regTabs();
+
+/* ---------- 5. BAUD ---------- */
+const STD=[2400,4800,9600,19200,38400,57600,115200,230400,460800,921600];
+function baudCalc(f,b){const x=f/(16*b);const q=Math.max(16,Math.round(x*16));const di=Math.floor(q/16),fr=q%16,D=q/16;return {x,di,fr,D,reg:(fr<<12)|di,err:100*(f/(16*D)-b)/b,ok:di<=4095};}
+["#bb","#fb"].forEach(id=>{const s=$(id);STD.forEach(b=>{const o=document.createElement("option");o.value=b;o.textContent=b.toLocaleString("vi-VN")+(b>115200?" (cộng điểm)":"");s.appendChild(o);});s.value="115200";});
+function baudUpd(){
+ const f=parseFloat($("#bf").value)*1e6;const b=parseFloat($("#bbx").value)||parseFloat($("#bb").value);
+ if(!(f>0&&b>0)){$("#bout").textContent="Nhập f_pclk và baud dương.";return;}
+ const r=baudCalc(f,b);const ok=Math.abs(r.err)<=1&&r.ok;
+ $("#bout").innerHTML=`D lý thuyết = f/(16·baud) = ${fmt(r.x,4)}\ndiv_int = ${r.di}, div_frac = ${r.fr} → D thực = ${fmt(r.D,4)}\nBAUD = ${hex(r.reg)}\nbaud thực = ${fmt(f/(16*r.D),1)}, sai số = ${(r.err>=0?"+":"")+fmt(r.err,2)} %  <span class="pill ${ok?"p-ok":"p-bad"}">${ok?"trong ±1,0 %":"ngoài ±1,0 %"}</span>\nMột bit = 16·D = ${fmt(16*r.D,2)} chu kỳ pclk = ${fmt(16*r.D/f*1e6,3)} µs`;
+ drawAcc(r.di,r.fr);
+}
+let ACC={di:13,fr:9};
+function drawAcc(di,fr){
+ ACC={di,fr};
+ const s=$("#accsvg");clear(s);let acc=0;const lens=[];for(let i=0;i<16;i++){const sum=acc+fr;const c=sum>=16?1:0;acc=sum%16;lens.push(di+c);}
+ const tot=lens.reduce((a,b)=>a+b,0);const x0=60,w=1000;let x=x0;
+ s.appendChild(el("text",{x:10,y:24,fill:C.muted},`div_int = ${di}, div_frac = ${fr}: 16 chu kỳ tick của một bit; tổng = 16 · ${di} + ${fr} (số lần tràn) = ${tot} = 16 · ${fmt(di+fr/16,4)} chu kỳ pclk`));
+ lens.forEach((L,i)=>{const ww=L/tot*w;s.appendChild(el("rect",{x,y:50,width:ww,height:60,fill:L>di?"#fff4d6":C.accs,stroke:C.acc}));if(ww>18)s.appendChild(el("text",{x:x+ww/2,y:86,"text-anchor":"middle",fill:C.ink},String(L)));s.appendChild(el("line",{x1:x,y1:118,x2:x,y2:134,stroke:C.ok,"stroke-width":2}));x+=ww;});
+ s.appendChild(el("line",{x1:x,y1:118,x2:x,y2:134,stroke:C.ok,"stroke-width":2}));
+ s.appendChild(el("text",{x:x0,y:156,fill:C.ok},"vạch xanh: xung tick"));
+ s.appendChild(el("rect",{x:x0+190,y:144,width:16,height:14,fill:"#fff4d6",stroke:C.acc}));s.appendChild(el("text",{x:x0+212,y:156,fill:C.ink},"ô vàng: chu kỳ tick dài div_int + 1 do acc tràn"));
+ s.appendChild(el("text",{x:x0,y:180,fill:C.muted},"Bộ thu đếm tick (lấy mẫu ở tick 8), không đếm chu kỳ pclk, nên điểm lấy mẫu vẫn ở giữa bit khi các tick dài không đều."));
+ accTable();
+}
+function accTable(){
+ const {di,fr}=ACC;const b=+($("#accbit").value||0);
+ let acc=0,t=0;for(let k=0;k<16*b;k++){const sum=acc+fr;t+=di+(sum>=16?1:0);acc=sum%16;}
+ let h=`<table><tr><th>bit_idx</th><th>tick_cnt</th><th>acc trước</th><th>acc + div_frac</th><th>carry</th><th>L (chu kỳ pclk)</th><th>cnt đếm</th><th>chu kỳ pclk (từ đầu khung)</th><th>acc sau</th></tr>`;
+ for(let j=0;j<16;j++){const sum=acc+fr,c=sum>=16?1:0,L=di+c,a0=acc;acc=sum%16;h+=`<tr${c?' style="background:#fff8e1"':""}><td>${b}</td><td>${j}${j===8?" (lấy mẫu)":""}</td><td>${a0}</td><td>${sum}</td><td>${c}</td><td>${L}</td><td>0 … ${L-1}</td><td>${t} … ${t+L-1}</td><td>${acc}</td></tr>`;t+=L;}
+ h+=`</table><p style="font-size:15px">Bit ${b} kết thúc ở chu kỳ ${t-1}; bit ${b+1} bắt đầu ở chu kỳ ${t} = ${b+1} · ${16*di+fr}. acc sau 16 tick = ${acc}, bằng acc đầu bit.</p>`;
+ $("#acctable").innerHTML=h;
+}
+function baudTable(){let h="<table><tr><th>Baud</th><th>D lý thuyết</th><th>div_int</th><th>div_frac</th><th>BAUD</th><th>Sai số</th><th>Mức</th></tr>";STD.forEach(b=>{const r=baudCalc(25e6,b);h+=`<tr><td>${b.toLocaleString("vi-VN")}</td><td>${fmt(r.x,4)}</td><td>${r.di}</td><td>${r.fr}</td><td class="mono">${hex(r.reg,4)}</td><td>${(r.err>=0?"+":"")+fmt(r.err,2)} %</td><td>${b>115200?"cộng điểm":"bắt buộc"}</td></tr>`;});$("#btable").innerHTML=h+"</table>";}
+(()=>{const sel=$("#accbit");for(let b=0;b<12;b++){const o=document.createElement("option");o.value=b;o.textContent=b+(b===0?" (start)":"");sel.appendChild(o);}sel.addEventListener("input",accTable);})();
+["#bf","#bb","#bbx"].forEach(id=>$(id).addEventListener("input",baudUpd));baudUpd();baudTable();
+
+/* ---------- waveform helper ---------- */
+function wave(s,{x0,y,h,pts,tmax,w,color}){ // pts: [[t, v], ...], v = 0/1, t tăng dần
+ const X=t=>x0+t/tmax*w, Y=v=>v?y:y+h;
+ let d=`M${X(pts[0][0])},${Y(pts[0][1])}`, py=Y(pts[0][1]);
+ for(let i=1;i<pts.length;i++){const [t,v]=pts[i];d+=` L${X(t)},${py} L${X(t)},${Y(v)}`;py=Y(v);}
+ d+=` L${X(tmax)},${py}`;
+ s.appendChild(el("path",{d,fill:"none",stroke:color||C.ok,"stroke-width":2.2}));}
+
+/* ---------- 6. frame ---------- */
+function frameUpd(){
+ let d=parseInt($("#fd").value,16);if(isNaN(d))d=0;d&=0xFF;const n=+$("#fn").value,p=$("#fp").value,st=+$("#fs").value,b=+$("#fb").value;
+ const bits=[["S",0]];let ones=0;for(let i=0;i<n;i++){const v=(d>>i)&1;ones+=v;bits.push(["D"+i,v]);}
+ if(p!=="n"){const par=p==="e"?(ones&1):((ones&1)^1);bits.push(["P",par]);}
+ for(let i=0;i<st;i++)bits.push(["SP",1]);
+ const s=$("#framesvg");clear(s);const x0=150,w=900,nb=bits.length+2;const X=k=>x0+k/nb*w;
+ s.appendChild(el("text",{x:10,y:70,fill:C.ink,"font-family":"monospace"},"tx"));
+ s.appendChild(el("text",{x:10,y:150,fill:C.ink,"font-family":"monospace"},"bit"));
+ s.appendChild(el("text",{x:10,y:200,fill:C.ink,"font-family":"monospace"},"tick (16/bit)"));
+ const pts=[[0,1]];bits.forEach((bb,k)=>pts.push([k+1,bb[1]]));pts.push([bits.length+1,1]);
+ for(let k=0;k<=nb;k++)s.appendChild(el("line",{x1:X(k),y1:40,x2:X(k),y2:170,stroke:C.grid}));
+ wave(s,{x0,y:50,h:40,pts,tmax:nb,w});
+ s.appendChild(el("text",{x:X(0.5),y:150,"text-anchor":"middle",fill:C.muted},"nghỉ"));
+ s.appendChild(el("text",{x:X(nb-0.5),y:150,"text-anchor":"middle",fill:C.muted},"nghỉ"));
+ bits.forEach((bb,k)=>{const col=bb[0]==="S"?C.bad:bb[0]==="P"?C.warn:bb[0]==="SP"?C.acc:C.ink;s.appendChild(el("text",{x:X(k+1.5),y:132,"text-anchor":"middle",fill:col,"font-weight":600},bb[0]==="SP"?"stop":bb[0]==="S"?"start":bb[0]));s.appendChild(el("text",{x:X(k+1.5),y:155,"text-anchor":"middle",fill:C.ink,"font-family":"monospace"},String(bb[1])));
+  for(let t=0;t<16;t++){const xx=X(k+1+t/16);s.appendChild(el("line",{x1:xx,y1:t===8?178:188,x2:xx,y2:205,stroke:t===8?C.bad:"#9aa7b6","stroke-width":t===8?2:1}));}});
+ s.appendChild(el("text",{x:X(nb)-4,y:222,"text-anchor":"end",fill:C.bad,"font-size":14},"vạch đỏ: điểm lấy mẫu giữa bit (tick 8)"));
+ const T=1/b, cfg=(n-5)|((st-1)<<2)|((p!=="n"?1:0)<<3)|((p==="e"?1:0)<<4);
+ const dm=d&((1<<n)-1);
+ $("#fout").textContent=`tx_data = ${hex(d,2)}, phát ${n} bit thấp = ${dm.toString(2).padStart(n,"0")} (LSB trước)`+(p!=="n"?`\nsố bit 1 của dữ liệu = ${ones} → parity ${p==="e"?"chẵn":"lẻ"} = ${bits.find(x=>x[0]==="P")[1]}`:"")+`\nkhung = ${bits.length} bit, thời gian = ${fmt(bits.length*T*1e6,2)} µs ở ${b.toLocaleString("vi-VN")} baud\nCFG = ${hex(cfg)} (data_bits = ${(n-5).toString(2).padStart(2,"0")}, stop_bits = ${st-1}, parity_en = ${p!=="n"?1:0}, parity_type = ${p==="e"?1:0})`;
+}
+["#fd","#fn","#fp","#fs","#fb"].forEach(id=>$(id).addEventListener("input",frameUpd));frameUpd();
+
+/* ---------- 7. RX tolerance ---------- */
+function rxUpd(){
+ const e=parseFloat($("#re").value)/100,[n,ns]=$("#rn").value.split("-").map(Number),dl=parseFloat($("#rd").value);$("#rev").textContent=(e>=0?"+":"")+fmt(e*100,2)+" %";
+ const s=$("#rxsvg");clear(s);const x0=150,w=920,span=n+0.6;const X=t=>x0+t/span*w; // t in receiver bit units
+ const Ttx=1/(1+e);
+ s.appendChild(el("text",{x:10,y:62,fill:C.ink},"bit bên phát"));
+ s.appendChild(el("text",{x:10,y:142,fill:C.ink},"lấy mẫu bộ thu"));
+ let worst=0,fail=-1;
+ for(let k=0;k<n;k++){const a=k*Ttx,bb=(k+1)*Ttx;s.appendChild(el("rect",{x:X(a),y:40,width:X(bb)-X(a),height:36,fill:k===0?"#fde7e7":k>=n-ns?C.accs:"#f3f5f8",stroke:"#9aa7b6"}));
+  if(X(bb)-X(a)>30)s.appendChild(el("text",{x:(X(a)+X(bb))/2,y:63,"text-anchor":"middle",fill:C.muted,"font-size":14},k===0?"start":k>=n-ns?"stop":"b"+k));
+  const ts=(8+16*k+dl)/16; const pos=(ts-a)/Ttx; // relative position inside tx bit
+  const marg=Math.min(pos,1-pos);const inb=pos>0&&pos<1;if(!inb&&fail<0)fail=k;worst=Math.max(worst,Math.abs(pos-0.5));
+  s.appendChild(el("line",{x1:X(ts),y1:36,x2:X(ts),y2:150,stroke:inb?C.ok:C.bad,"stroke-width":2}));
+  s.appendChild(el("circle",{cx:X(ts),cy:150,r:5,fill:inb?C.ok:C.bad}));}
+ for(let k=0;k<=n;k++){s.appendChild(el("line",{x1:X(k),y1:170,x2:X(k),y2:182,stroke:C.muted}));}
+ {const ti=(8+16*(n-1)+dl)/16;s.appendChild(el("line",{x1:X(ti),y1:156,x2:X(ti),y2:186,stroke:"#7b3fb5","stroke-width":2}));s.appendChild(el("text",{x:X(ti)+6,y:170,fill:"#7b3fb5","font-size":14},"về IDLE"));}
+ s.appendChild(el("text",{x:x0,y:202,fill:C.muted},"vạch dưới: biên bit theo đồng hồ bộ thu; vạch xanh: mẫu rơi trong đúng bit; vạch đỏ: mẫu rơi sang bit khác"));
+ const th=100*(0.5-1/16)/(n-0.5);
+ s.appendChild(el("text",{x:x0,y:232,fill:fail<0?C.ok:C.bad,"font-weight":600},fail<0?`Nhận đúng: mẫu xa biên nhất lệch ${fmt(worst*100,1)} % độ rộng bit khỏi giữa bit`:`Nhận sai từ bit ${fail}: mẫu ra ngoài bit của bên phát`));
+ $("#rout").textContent=`n = ${n} bit (tới stop bit cuối, ${ns} stop bit), d = ${fmt(dl,1)} tick, e = ${(e>=0?"+":"")+fmt(e*100,2)} %.\nGiới hạn lý thuyết với d = 1: (0,5 − 1/16)/(n − 0,5) = ${fmt(th,2)} %.\nMọi stop bit đều được lấy mẫu; sau mẫu của stop bit cuối, bộ thu về IDLE (vạch tím), không đếm nửa còn lại của stop bit cuối.\nYêu cầu đặc tả: nhận đúng ở ±2,0 % với mọi 24 dạng khung; F4 cộng điểm khi đo được ≥ ±3,0 %.`;
+}
+["#re","#rn","#rd"].forEach(id=>$(id).addEventListener("input",rxUpd));rxUpd();
+
+/* ---------- 8. APB ---------- */
+function drawApb(){
+ const s=$("#apbsvg");clear(s);const x0=150,cyc=11,w=920,cw=w/cyc;const X=c=>x0+c*cw;
+ const rows=["pclk","psel","penable","pwrite","paddr","pwdata","prdata","pslverr","pready"];
+ rows.forEach((r,i)=>s.appendChild(el("text",{x:10,y:44+i*42,fill:C.ink,"font-family":"monospace"},r)));
+ for(let c=0;c<=cyc;c++)s.appendChild(el("line",{x1:X(c),y1:20,x2:X(c),y2:400,stroke:C.grid}));
+ // clock
+ let d=`M${X(0)},${52}`;for(let c=0;c<cyc;c++){d+=` L${X(c)},28 L${X(c+0.5)},28 L${X(c+0.5)},52 L${X(c+1)},52`;}s.appendChild(el("path",{d,fill:"none",stroke:C.ok,"stroke-width":2}));
+ const yRow=i=>28+i*42;
+ const bit=(i,segs)=>{const y=yRow(i);let dd="";segs.forEach(([a,b,v],k)=>{const yy=v?y:y+24;dd+=(k?` L${X(a)},${yy}`:`M${X(a)},${yy}`)+` L${X(b)},${yy}`;});s.appendChild(el("path",{d:dd,fill:"none",stroke:C.ok,"stroke-width":2.2}));};
+ const bus=(i,segs)=>{const y=yRow(i);segs.forEach(([a,b,t,bad])=>{const xa=X(a),xb=X(b);const col=t==="x"?"#9aa7b6":bad?C.bad:C.acc;const fill=t==="x"?"#f3f5f8":bad?"#fde7e7":C.accs;s.appendChild(el("polygon",{points:`${xa},${y+12} ${xa+5},${y} ${xb-5},${y} ${xb},${y+12} ${xb-5},${y+24} ${xa+5},${y+24}`,fill,stroke:col}));if(t!=="x")s.appendChild(el("text",{x:(xa+xb)/2,y:y+17,"text-anchor":"middle",fill:C.ink,"font-size":14,"font-family":"monospace"},t));});};
+ // transfers: W1 cycles 1-2, R cycles 4-5, W err 7-8 (setup at c, access at c+1)
+ bit(1,[[0,1,0],[1,3,1],[3,4,0],[4,6,1],[6,7,0],[7,9,1],[9,11,0]]);
+ bit(2,[[0,2,0],[2,3,1],[3,5,0],[5,6,1],[6,8,0],[8,9,1],[9,11,0]]);
+ bit(3,[[0,1,0],[1,3,1],[3,4,0],[4,6,0],[6,7,0],[7,9,1],[9,11,0]]);
+ bus(4,[[0,1,"x"],[1,3,"014"],[3,4,"x"],[4,6,"010"],[6,7,"x"],[7,9,"020"],[9,11,"x"]]);
+ bus(5,[[0,1,"x"],[1,3,"0000900D"],[3,7,"x"],[7,9,"00000055"],[9,11,"x"]]);
+ bus(6,[[0,5,"x"],[5,6,"00000001"],[6,11,"x"]]);
+ bit(7,[[0,8,0],[8,9,1],[9,11,0]]);
+ bit(8,[[0,11,1]]);
+ const lab=(c,t,col,row)=>s.appendChild(el("text",{x:X(c),y:row?432:412,"text-anchor":"middle",fill:col||C.muted,"font-size":14},t));
+ lab(2,"ghi BAUD: setup | truy cập",C.ok,0);lab(5,"đọc STAT: setup | truy cập",C.ok,0);lab(8,"ghi 0x020: setup | truy cập, E1",C.bad,0);
+}
+drawApb();
+function errUpd(){
+ const w=$("#ew").value==="1",a=parseInt($("#ea").value,16),st=parseInt($("#es").value,2),d=parseInt($("#ed").value,16)>>>0,td=$("#etd").checked,rb=$("#erb").checked;
+ const valid=[0,4,8,0xC,0x10,0x14,0x18];let r="",code="";
+ if(isNaN(a)||isNaN(st)||isNaN(d)){$("#eout").textContent="Nhập paddr, pwdata dạng hex và pstrb dạng nhị phân 4 bit.";return;}
+ if(!valid.includes(a)){code="E1";r=`paddr ${hex(a,3)} ngoài bảng địa chỉ`+(w?"":"; prdata = 0");}
+ else if(w&&(a===4||a===0x10)){code="E2";r="ghi vào thanh ghi chỉ đọc";}
+ else if(w&&!td&&((a===0&&st)||(a===0xC&&(st&1)&&(d&1)))){code="E3";r="bộ phát đang bận (tx_done = 0)";}
+ else if(w&&(!td||rb)&&((a===8&&(st&1))||(a===0x14&&(st&3)))){code="E4";r="đổi CFG hoặc BAUD khi đang phát hoặc đang nhận";}
+ else if(w&&a===0x14){let cur=0x900D;if(st&1)cur=(cur&~0xFF)|(d&0xFF);if(st&2)cur=(cur&~0xFF00)|(d&0xFF00);if((cur&0xFFF)===0){code="E5";r="div_int sau khi ghi bằng 0 (giả định BAUD đang = 0x900D)";}}
+ const regs={0:"TXDATA",4:"RXDATA",8:"CFG",0xC:"CTRL",0x10:"STAT",0x14:"BAUD",0x18:"IER"};
+ $("#eout").innerHTML=code?`<span class="pill p-bad">pslverr = 1 · ${code}</span>  ${r}\nKhông thanh ghi nào đổi, không có hành động nào được kích hoạt.`:`<span class="pill p-ok">pslverr = 0</span>  ${w?(st?`ghi ${regs[a]}, byte lane ${st.toString(2).padStart(4,"0")}`:"pstrb = 0000: không đổi thanh ghi, không lỗi"):`đọc ${regs[a]}`}`+(w&&a===0xC&&(d&0x100)?"\nsoft_rst = 1: reset mềm, ưu tiên hơn start_tx.":"");
+}
+["#ew","#ea","#es","#ed","#etd","#erb"].forEach(id=>$(id).addEventListener("input",errUpd));errUpd();
+
+
+/* ---------- 9. SPI ---------- */
+function spiBuild(){
+ const rw=+$("#sr").value,a=+$("#sa").value,bad=$("#sbad").checked,td=$("#stx").checked;let d=parseInt($("#sd").value,16);if(isNaN(d))d=0;d>>>=0;
+ const cmd=(rw<<7)|(bad?0x10:0)|a;
+ const regRead={0:0,1:0,2:0,3:0,4:td?1:0,5:0x900D,6:0};
+ let perr=0,cerr=bad?1:0,prd=0;
+ if(!bad){ if(a>6)perr=1; else if(rw){ if(a===1||a===4)perr=1; else if(!td&&(a===0||(a===3&&(d&1))))perr=1; else if(!td&&(a===2||a===5))perr=1; else if(a===5&&(d&0xFFF)===0)perr=1; } else prd=regRead[a]; }
+ const mosi=[cmd,0,...(rw?[d>>>24&255,d>>>16&255,d>>>8&255,d&255]:[0,0,0,0]),0];
+ const miso=[0,0,...(!rw&&!bad&&a<=6?[prd>>>24&255,prd>>>16&255,prd>>>8&255,prd&255]:[0,0,0,0]),(cerr<<1)|perr];
+ return {rw,a,cmd,mosi,miso,perr,cerr,bad};
+}
+const H2=v=>v.toString(16).toUpperCase().padStart(2,"0");
+function spiDraw(){
+ const f=spiBuild();const s=$("#spisvg");clear(s);const x0=150,w=900,nb=58;const X=b=>x0+(b+1)/nb*w;
+ ["spi_cs_n","spi_sclk","spi_mosi","spi_miso","APB"].forEach((n,i)=>s.appendChild(el("text",{x:10,y:48+i*50,fill:C.ink,"font-family":"monospace"},n)));
+ wave(s,{x0,y:30,h:28,pts:[[0,1],[(X(0)-x0)/w*nb,0],[(X(56)-x0)/w*nb,1]],tmax:nb,w});
+ for(let b=0;b<56;b++){const xa=X(b),xm=X(b+0.5),xb=X(b+1);s.appendChild(el("path",{d:`M${xa},108 L${xm},108 L${xm},80 L${xb},80 L${xb},108`,fill:"none",stroke:C.ok,"stroke-width":1}));}
+ const busRow=(y,bytes,cols)=>bytes.forEach((v,k)=>{const xa=X(8*k),xb=X(8*k+8);s.appendChild(el("polygon",{points:`${xa},${y+12} ${xa+5},${y} ${xb-5},${y} ${xb},${y+12} ${xb-5},${y+24} ${xa+5},${y+24}`,fill:cols(k,v),stroke:C.acc}));s.appendChild(el("text",{x:(xa+xb)/2,y:y+17,"text-anchor":"middle",fill:C.ink,"font-family":"monospace","font-size":14},H2(v)));});
+ busRow(128,f.mosi,k=>k===0?"#fff4d6":C.accs);
+ busRow(178,f.miso,(k,v)=>k===6&&v?"#fde7e7":C.accs);
+ ["B0 cmd","B1","B2","B3","B4","B5","B6 trạng thái"].forEach((t,k)=>s.appendChild(el("text",{x:(X(8*k)+X(8*k+8))/2,y:290,"text-anchor":"middle",fill:C.muted,"font-size":14},t)));
+ if(!f.bad){const at=f.rw?48:8;const xa=X(at),xb=X(at)+18;s.appendChild(el("rect",{x:xa,y:228,width:xb-xa,height:24,fill:f.perr?"#fde7e7":C.ok+"33",stroke:f.perr?C.bad:C.ok}));s.appendChild(el("text",{x:f.rw?xa-6:xb+6,y:245,"text-anchor":f.rw?"end":"start",fill:f.perr?C.bad:C.ok,"font-size":14},`giao dịch APB ${f.rw?"ghi":"đọc"} (sau bit ${at})`+(f.perr?", pslverr = 1":"")));}
+ else s.appendChild(el("text",{x:X(0),y:245,fill:C.bad,"font-size":14},"cmd[6:4] ≠ 000: không sinh giao dịch APB"));
+ const names=["TXDATA","RXDATA","CFG","CTRL","STAT","BAUD","IER","(ngoài bảng)"];
+ $("#sout").textContent=`cmd = 0x${H2(f.cmd)} (rw = ${f.rw}, cmd[6:4] = ${f.bad?"001":"000"}, chỉ số = ${f.a} → paddr = ${hex(f.a*4,3)} ${names[f.a]})\nMOSI: ${f.mosi.map(H2).join(" ")}\nMISO: ${f.miso.map(H2).join(" ")}\nB6: cmd_err = ${f.cerr}, pslverr = ${f.perr}`+(!f.rw&&!f.bad&&f.a<=6?`\nprdata = ${hex(f.miso.slice(2,6).reduce((a,b)=>a*256+b,0))} (giá trị minh hoạ: trạng thái sau reset)`:"");
+ // zoom B0
+ const z=$("#spizoom");clear(z);const zx0=150,zw=900,zn=9;const ZX=b=>zx0+(b+0.5)/zn*zw;
+ ["spi_sclk","spi_mosi","spi_miso"].forEach((n,i)=>z.appendChild(el("text",{x:10,y:48+i*60,fill:C.ink,"font-family":"monospace"},n)));
+ for(let b=0;b<8;b++){const xa=ZX(b),xm=ZX(b+0.5),xb=ZX(b+1);z.appendChild(el("path",{d:`M${xa},58 L${xm},58 L${xm},30 L${xb},30 L${xb},58`,fill:"none",stroke:C.ok,"stroke-width":2}));z.appendChild(el("line",{x1:xm,y1:24,x2:xm,y2:188,stroke:C.bad,"stroke-dasharray":"3 4"}));
+  const mb=(f.cmd>>(7-b))&1;z.appendChild(el("rect",{x:xa,y:88,width:xb-xa,height:28,fill:C.accs,stroke:C.acc}));z.appendChild(el("text",{x:(xa+xb)/2,y:108,"text-anchor":"middle",fill:C.ink,"font-family":"monospace"},`${mb}`));
+  z.appendChild(el("rect",{x:xa,y:148,width:xb-xa,height:28,fill:"#f3f5f8",stroke:"#9aa7b6"}));z.appendChild(el("text",{x:(xa+xb)/2,y:168,"text-anchor":"middle",fill:C.muted,"font-family":"monospace"},"0"));
+  z.appendChild(el("text",{x:(xa+xb)/2,y:208,"text-anchor":"middle",fill:C.muted,"font-size":14},`cmd[${7-b}]`));}
+ z.appendChild(el("text",{x:ZX(8)+10,y:48,fill:C.bad,"font-size":14},"đỏ: sườn lên,"));z.appendChild(el("text",{x:ZX(8)+10,y:66,fill:C.bad,"font-size":14},"lấy mẫu"));
+}
+["#sr","#sa","#sd","#stx","#sbad"].forEach(id=>$(id).addEventListener("input",spiDraw));spiDraw();
+
+
+/* ---------- 10. sequence diagram SPI → UART ---------- */
+const LX={rp:110,sp:330,ap:550,ua:770,pe:985};
+const LN={rp:"RP2040",sp:"spi2apb",ap:"apb_uart (thanh ghi)",ua:"UART tx/rx",pe:"thiết bị ngoại vi"};
+const SQ={
+ tx:{rows:[
+  ["spi","ghi CFG = 0x03","ghi 0x008: 8N1"],
+  ["spi","ghi BAUD = 0x900D","ghi 0x014"],
+  ["spi","đọc STAT","đọc 0x010"],
+  ["ret","MISO B5 = 01","prdata = 0x1"],
+  ["spi","ghi TXDATA = 0x41","ghi 0x000"],
+  ["spi","ghi CTRL = 0x01","ghi 0x00C: start_tx"],
+  ["msg","ap","ua","start_tx; tx_done → 0"],
+  ["spi","ghi IER = 0x01","ghi 0x018: tx_done_ie"],
+  ["msg","pe","ua","cts_n = 0"],
+  ["msg","ua","pe","tx: start, 0x41, stop (86,8 µs)"],
+  ["msg","ua","ap","tx_done = 1"],
+  ["irq","ap","rp","irq = 1 (tx_done_ie & tx_done)"],
+  ["spi","đọc STAT","đọc 0x010"],
+  ["ret","MISO B5 = 01","prdata = 0x1"],
+  ["note","Ký tự kế: lặp bước 5, 6 → tx_done = 0 nên irq = 0"]],
+  tab:[["1","ghi CFG = 0x03","82 00 00 00 00 03 00","00 00 00 00 00 00 00","irq = 0 (IER = 0)"],
+       ["2","ghi BAUD = 0x900D","85 00 00 00 90 0D 00","00 00 00 00 00 00 00",""],
+       ["3–4","đọc STAT","04 00 00 00 00 00 00","00 00 00 00 00 01 00","tx_done = 1: được ghi TXDATA"],
+       ["5","ghi TXDATA = 0x41","80 00 00 00 00 41 00","00 00 00 00 00 00 00",""],
+       ["6–7","ghi CTRL.start_tx","83 00 00 00 00 01 00","00 00 00 00 00 00 00","tx_done → 0"],
+       ["8","ghi IER = 0x01","86 00 00 00 00 01 00","00 00 00 00 00 00 00","bật sau start_tx: tx_done = 0 nên irq giữ 0. Bật khi tx_done = 1 thì irq lên 1 ngay (ngắt mức)"],
+       ["9–12","(phần cứng)","—","—","cts_n = 0 → phát khung → tx_done = 1 → irq = 1"],
+       ["13–14","đọc STAT","04 00 00 00 00 00 00","00 00 00 00 00 01 00","xác nhận nguồn ngắt là tx_done"]]},
+ rx:{rows:[
+  ["spi","ghi CFG = 0x03","ghi 0x008: rx_dis = 0"],
+  ["spi","ghi BAUD = 0x900D","ghi 0x014"],
+  ["spi","ghi IER = 0x02","ghi 0x018: rx_done_ie"],
+  ["msg","ua","pe","rts_n = 0 (RXDATA trống)"],
+  ["msg","pe","ua","rx: start, 0x5A, stop"],
+  ["msg","ua","ap","rx_data = 0x5A; rx_done = 1"],
+  ["msg","ua","pe","rts_n = 1 (RXDATA đầy)"],
+  ["irq","ap","rp","irq = 1 (rx_done_ie & rx_done)"],
+  ["spi","đọc STAT","đọc 0x010"],
+  ["ret","MISO B5 = 03","prdata = 0x3"],
+  ["spi","đọc RXDATA","đọc 0x004"],
+  ["ret","MISO B5 = 5A","prdata = 0x5A, xoá rx_done"],
+  ["irq","ap","rp","irq = 0"],
+  ["msg","ua","pe","rts_n = 0 (sẵn sàng ký tự kế)"]],
+  tab:[["1","ghi CFG = 0x03","82 00 00 00 00 03 00","00 00 00 00 00 00 00",""],
+       ["2","ghi BAUD = 0x900D","85 00 00 00 90 0D 00","00 00 00 00 00 00 00",""],
+       ["3","ghi IER = 0x02","86 00 00 00 00 02 00","00 00 00 00 00 00 00","chỉ bật rx_done_ie; tx_done = 1 không gây ngắt"],
+       ["4–8","(phần cứng)","—","—","rts_n = 0 → nhận khung → rx_done = 1, rts_n = 1 → irq = 1"],
+       ["9–10","đọc STAT","04 00 00 00 00 00 00","00 00 00 00 00 03 00","STAT = 0x3: tx_done = 1, rx_done = 1, parity_err = frame_err = overrun = 0"],
+       ["11–12","đọc RXDATA","01 00 00 00 00 00 00","00 00 00 00 00 5A 00","đọc RXDATA xoá rx_done; giao dịch APB chạy sau bit 8"],
+       ["13–14","(phần cứng)","—","—","irq = 0; rts_n = 0"]]}
+};
+function sqShow(k){
+ [...$("#sqtabs").children].forEach(b=>b.classList.toggle("on",b.dataset.k===k));
+ const q=SQ[k],s=$("#sqsvg");clear(s);const top=70,dy=38,H=top+q.rows.length*dy+30;s.setAttribute("height",H);s.setAttribute("viewBox",`0 0 1100 ${H}`);
+ const defs=el("defs",{});[["sqa",C.ink],["sqr",C.bad]].forEach(([id,c])=>{const m=el("marker",{id,markerWidth:10,markerHeight:8,refX:10,refY:4,orient:"auto",markerUnits:"userSpaceOnUse"});m.appendChild(el("path",{d:"M0,0 L10,4 L0,8 z",fill:c}));defs.appendChild(m);});s.appendChild(defs);
+ Object.entries(LX).forEach(([key,x])=>{s.appendChild(el("line",{x1:x,y1:52,x2:x,y2:H-10,stroke:"#9aa7b6","stroke-dasharray":"5 5"}));s.appendChild(el("rect",{x:x-88,y:12,width:176,height:40,rx:6,fill:C.accs,stroke:C.acc}));s.appendChild(el("text",{x,y:37,"text-anchor":"middle",fill:C.ink,"font-weight":600,"font-size":15},LN[key]));});
+ const arrow=(x1,x2,y,lbl,o)=>{o=o||{};s.appendChild(el("line",{x1,y1:y,x2:x2+(x2>x1?-1:1),y2:y,stroke:o.c||C.ink,"stroke-width":o.w||1.8,"stroke-dasharray":o.dash||"",["marker-end"]:`url(#${o.c===C.bad?"sqr":"sqa"})`}));if(lbl)s.appendChild(el("text",{x:(x1+x2)/2,y:y-6,"text-anchor":"middle",fill:o.c||C.ink},lbl));};
+ q.rows.forEach((r,i)=>{const y=top+i*dy+20;s.appendChild(el("text",{x:14,y:y+4,fill:C.muted,"font-size":13},String(i+1)));
+  if(r[0]==="spi"){arrow(LX.rp,LX.sp,y,"SPI "+r[1]);arrow(LX.sp,LX.ap,y,"APB "+r[2]);}
+  else if(r[0]==="ret"){arrow(LX.ap,LX.sp,y,r[2],{dash:"6 4"});arrow(LX.sp,LX.rp,y,r[1],{dash:"6 4"});}
+  else if(r[0]==="msg"){arrow(LX[r[1]],LX[r[2]],y,r[3]);}
+  else if(r[0]==="irq"){arrow(LX[r[1]],LX[r[2]],y,r[3],{c:C.bad,w:2.2,dash:r[3]==="irq = 0"?"6 4":""});}
+  else if(r[0]==="note"){s.appendChild(el("rect",{x:LX.rp-60,y:y-14,width:LX.ap-LX.rp+120,height:24,fill:"#fff8e1",stroke:C.warn}));s.appendChild(el("text",{x:(LX.rp+LX.ap)/2,y:y+3,"text-anchor":"middle",fill:C.ink},r[1]));}
+ });
+ $("#sqtable").innerHTML="<table><tr><th>Bước</th><th>Thao tác</th><th>MOSI (7 byte)</th><th>MISO (7 byte)</th><th>Ghi chú, ngắt</th></tr>"+q.tab.map(t=>`<tr><td>${t[0]}</td><td>${t[1]}</td><td class="mono">${t[2]}</td><td class="mono">${t[3]}</td><td>${t[4]}</td></tr>`).join("")+"</table>";
+}
+$("#sqtabs").addEventListener("click",e=>{if(e.target.dataset.k)sqShow(e.target.dataset.k);});sqShow("tx");
+
+/* ---------- 11. sequences ---------- */
+function frameEdges(t0,bw,data){ // 8N1, LSB trước: trả [[t,v]...] bắt đầu từ mức nghỉ 1
+ const bits=[0];for(let i=0;i<8;i++)bits.push((data>>i)&1);bits.push(1);
+ const pts=[[0,1]];bits.forEach((b,k)=>pts.push([t0+k*bw,b]));return pts;}
+const BW=0.75; // độ rộng một bit trên giản đồ
+const SEQ={
+ tx:{steps:["Đọc STAT: chờ tx_done = 1 (và rx_busy = 0 nếu cần đổi CFG, BAUD).","Ghi CFG (khung) và BAUD (tốc độ) nếu khác lần trước.","Ghi TXDATA.","Ghi CTRL.start_tx = 1: tx_done xuống 0 ở chu kỳ sau.","Bộ phát chờ cts_n = 0 (đã đồng bộ 2 flip-flop) rồi phát start bit; trong lúc chờ tx = 1.","Phát 8 bit dữ liệu (ở đây 0x55, LSB trước) và stop; cts_n lên 1 giữa khung không dừng khung.","tx_done lên 1 ở cuối stop bit (≤ 2 chu kỳ pclk); irq lên 1 nếu tx_done_ie = 1."],
+  rows:[["cts_n",[[0,1],[1.2,0],[7.0,1]]],["tx",frameEdges(1.6,BW,0x55)],["tx_done",[[0,1],[0.6,0],[1.6+10*BW+0.05,1]]],["irq (tx_done_ie=1)",[[0,1],[0.65,0],[1.6+10*BW+0.12,1]]]],
+  marks:[[0.5,"start_tx"],[1.2,"cts_n = 0"],[1.6,"start bit"],[7.0,"cts_n = 1"],[1.6+9*BW,"stop"],[1.6+10*BW+0.05,"tx_done = 1"]]},
+ rx:{steps:["Ghi CFG, BAUD khi rx_busy = 0; rx_dis = 0.","rts_n = 0 khi rx_dis = 0 và rx_done = 0: bên kia được phép gửi.","Sườn xuống trên rx, kiểm tra lại ở tick 8 (giữa start bit): start hợp lệ, rx_busy = 1.","Lấy mẫu 8 bit dữ liệu ở giữa bit; kiểm tra mọi stop bit ở giữa bit (frame_err khi có stop bit bằng 0); về IDLE ngay sau khi lấy mẫu stop bit cuối.","rx_done = 1 trong ≤ 1 bit sau điểm lấy mẫu stop; rx_busy = 0; rts_n = 1; irq nếu rx_done_ie = 1.","CPU đọc RXDATA: xoá rx_done, parity_err, frame_err, overrun; rts_n về 0.","Khung mới đến khi rx_done vẫn = 1: RXDATA giữ ký tự cũ, overrun = 1."],
+  rows:[["rx",frameEdges(1.0,BW,0x55)],["rx_busy",[[0,0],[1.0+BW/2,1],[1.0+9.5*BW+0.1,0]]],["rx_done",[[0,0],[1.0+9.5*BW+0.1,1],[9.6,0]]],["rts_n",[[0,0],[1.0+9.5*BW+0.1,1],[9.6,0]]]],
+  marks:[[1.0,"start"],[1.0+BW/2,"tick 8"],[1.0+9.5*BW,"mẫu stop"],[1.0+9.5*BW+0.1,"rx_done = 1"],[9.6,"đọc RXDATA"]]}
+};
+function seqShow(k){[...$("#seqtabs").children].forEach(b=>b.classList.toggle("on",b.dataset.k===k));const q=SEQ[k];const s=$("#seqsvg");clear(s);const x0=150,w=920,tm=10.5;
+ q.rows.forEach(([n,pts],i)=>{s.appendChild(el("text",{x:10,y:58+i*56,fill:C.ink,"font-family":"monospace"},n));wave(s,{x0,y:40+i*56,h:28,pts,tmax:tm,w});});
+ q.marks.forEach(([t,lbl],i)=>{const x=x0+t/tm*w;s.appendChild(el("line",{x1:x,y1:30,x2:x,y2:258,stroke:"#c7ced8","stroke-dasharray":"4 4"}));s.appendChild(el("text",{x,y:276+(i%2)*18,"text-anchor":"middle",fill:C.muted,"font-size":14},lbl));});
+ $("#seqsteps").innerHTML=q.steps.map(t=>`<li>${t}</li>`).join("");}
+$("#seqtabs").addEventListener("click",e=>{if(e.target.dataset.k)seqShow(e.target.dataset.k);});seqShow("tx");
+
+/* ---------- 10. irq ---------- */
+const IQ=[["tx_done_ie",0],["rx_done_ie",0],["err_ie",0],["tx_done",1],["rx_done",0],["parity_err",0],["frame_err",0],["overrun",0]];
+IQ.forEach(([n,v])=>{const l=document.createElement("label");l.innerHTML=`<input type="checkbox" data-n="${n}" ${v?"checked":""}> <span class="mono">${n}</span>`;$("#irqctl").appendChild(l);});
+function irqUpd(){const g=n=>$(`#irqctl input[data-n="${n}"]`).checked?1:0;const a=g("tx_done_ie")&g("tx_done"),b=g("rx_done_ie")&g("rx_done"),c=g("err_ie")&(g("parity_err")|g("frame_err")|g("overrun"));const v=a|b|c;
+ $("#irqout").innerHTML=`irq = ${a} | ${b} | ${c} = <span class="pill ${v?"p-warn":"p-info"}">${v}</span>`;}
+$("#irqctl").addEventListener("input",irqUpd);irqUpd();
+
+/* ---------- 11. checklist ---------- */
+const CHK={
+ "G1 Đặc tả (T3 10/11)":["Bảng 7 thanh ghi khớp đặc tả 1.1 (địa chỉ, bit, quyền, reset)","Bảng BAUD và sai số ở 25 MHz cho 7 tốc độ bắt buộc","Thiết kế bộ tích luỹ phân số của baud_gen","Sơ đồ khối có tên tín hiệu","Kế hoạch kiểm chứng ánh xạ từng mục đặc tả sang test"],
+ "G2 RTL + lint (T7 14/11)":["Module apb_uart đúng tên và cổng","verilator --lint-only -Wall: 0 dòng %Warning","Yosys proc: không có Latch inferred","Một net clock pclk; không clock sinh bằng logic","rx, cts_n qua 2 flip-flop đồng bộ","Không initial, #delay, $display trong rtl/; không gọi ô sky130_"],
+ "G3, G4 DV và netlist (T4 18/11)":["20 test công khai đạt trên RTL (Questa)","Độ phủ statement, branch ≥ 90 % (vcover)","Testbench chỉ truy cập apb_uart qua cổng","20 test công khai đạt trên netlist Yosys"],
+ "G6 STA, LEC (T7 21/11)":["SDC: create_clock 40 ns trên pclk, input/output delay","Setup WS ≥ 0 ở corner ss, hold WS ≥ 0 mọi corner","eqy: RTL tương đương netlist"],
+ "G7 Layout (T3 24/11)":["LibreLane hết flow trên template TT, tile 1×1","WS setup, hold sau route ≥ 0"],
+ "G8, G9 GLS và sign-off (T5 26/11)":["GLS có SDF ở tt, ss, ff đạt 20 test công khai","DRC Magic = 0, DRC KLayout = 0","LVS khớp, antenna = 0","GitHub Actions của repo TT xanh","Báo cáo đủ 10 mục danh sách phần E của tiêu chí chấm"]
+};
+const KEY="apbuart-chk-v1";let saved={};try{saved=JSON.parse(localStorage.getItem(KEY)||"{}");}catch(e){saved={};}
+function chkDraw(){let h="";Object.entries(CHK).forEach(([g,items],gi)=>{const done=items.filter((_,i)=>saved[gi+"-"+i]).length;h+=`<h3>${g} <span class="pill ${done===items.length?"p-ok":"p-info"}">${done}/${items.length}</span></h3><ul class="chk">`+items.map((t,i)=>`<li><label><input type="checkbox" data-k="${gi}-${i}" ${saved[gi+"-"+i]?"checked":""}>${t}</label></li>`).join("")+"</ul>";});$("#chk").innerHTML=h;}
+$("#chk").addEventListener("change",e=>{const k=e.target.dataset.k;if(!k)return;saved[k]=e.target.checked;try{localStorage.setItem(KEY,JSON.stringify(saved));}catch(err){}chkDraw();});
+$("#chkreset").addEventListener("click",()=>{saved={};try{localStorage.removeItem(KEY);}catch(err){}chkDraw();});
+chkDraw();
+</script>
+</body>
+</html>

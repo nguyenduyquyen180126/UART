@@ -8,8 +8,8 @@ module error_check(
     always @(*) begin
         if(parity_en) begin
             case(parity_type)
-                1'b0: error = (parity_bit != parity_exp) ? 1'b1 : 1'b0; // even parity
-                1'b1: error = (parity_bit != ~parity_exp) ? 1'b1 : 1'b0; // odd parity
+                1'b1: error = (parity_bit != parity_exp) ? 1'b1 : 1'b0; // odd parity
+                1'b0: error = (parity_bit != ~parity_exp) ? 1'b1 : 1'b0; // even parity
                 default: error = 1'b0;
             endcase
         end else begin

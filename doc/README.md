@@ -21,6 +21,8 @@ doc/
 
 ## 📖 1. Hướng dẫn Thực hành (`guides/`)
 
+- [`HUONG_DAN_THIET_KE_RTL_UART_RX.md`](guides/HUONG_DAN_THIET_KE_RTL_UART_RX.md): Cẩm nang thiết kế chi tiết khối thu `uart_rx` (FSM, 2-FF Sync, đếm tick, glitch filter, về IDLE sớm, overrun, RTS).
+- [`HUONG_DAN_THIET_KE_RTL_UART_TX.md`](guides/HUONG_DAN_THIET_KE_RTL_UART_TX.md): Cẩm nang thiết kế chi tiết khối phát `uart_tx` (FSM 6-State, 2-FF CTS sync, WAIT_CTS, tx_done reset=1, tx_dis, PISO MUX).
 - [`HUONG_DAN_NIOSV_IRQ_DEMO.md`](guides/HUONG_DAN_NIOSV_IRQ_DEMO.md): Hướng dẫn nạp kit và chạy demo ngắt (IRQ) Nios-V, hiển thị số byte đếm trên LED 7 đoạn HEX3:HEX2.
 - [`HUONG_DAN_DOI_CONFIG_RUNTIME.md`](guides/HUONG_DAN_DOI_CONFIG_RUNTIME.md): Hướng dẫn thay đổi động Baudrate, Data bits, Parity và Stop bits ngay khi hệ thống đang chạy.
 - [`HUONG_DAN_OSCILLOSCOPE_TX_DEMO.md`](guides/HUONG_DAN_OSCILLOSCOPE_TX_DEMO.md): Hướng dẫn đo kiểm xung truyền TX trên máy hiện sóng (Oscilloscope) qua chân GPIO kit.

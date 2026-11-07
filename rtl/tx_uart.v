@@ -8,10 +8,15 @@ module tx_uart #(
     input stop_bit_num,
     input parity_en,
     input parity_type,
-    input [1:0] baud_sel,
+    input tx_dis,
+    input cts_n,
+    input div_int,
+    input div_frac,
     output reg tx,
     output load_reg,
+    output reg tx_done,
     output tx_busy
+
 );
     wire stop_last;
     wire bit_last;
@@ -28,6 +33,30 @@ module tx_uart #(
     wire [1:0] tx_sel;
     wire shift_reg;
     reg [7:0] tx_data_masked;
+    reg cts_n_sync1, cts_n_sync2;
+
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            cts_n_sync1 <= 1'b1;
+            cts_n_sync2 <= 1'b1;
+        end else begin
+            cts_n_sync1 <= cts_n;
+            cts_n_sync2 <= cts_n_sync1;
+        end
+    end
+
+    wire tx_done_pulse;
+    always @(posedge clk or negedge rst_n) begin
+        if(!rst_n) begin
+            tx_done <= 1'b1;
+        end else begin
+            if(start_tx && !tx_dis ) begin
+                tx_done <= 1'b0;
+            end else if(tx_done_pulse) begin
+                tx_done <= 1'b1;
+            end
+        end
+    end
 
 
     tx_controller controller(
@@ -41,16 +70,20 @@ module tx_uart #(
         .tx_sel(tx_sel),
         .load_reg(load_reg),
         .shift_reg(shift_reg),
+        .cts_n(cts_n_sync2),
+        .tx_dis(tx_dis),
         .clr_bit(clr_bit),
         .clr_stop(clr_stop),
         .clr_baud(clr_baud),
+        .tx_done_pulse(tx_done_pulse),
         .tx_busy(tx_busy)
     );
 
     tx_baud_gen #(
         .CLK_FREQ(CLK_FREQ)
     ) u_baud_gen(
-        .baud_sel(baud_sel),
+        .div_int(div_int),
+        .div_frac(div_frac),
         .clk(clk),
         .rst_n(rst_n),
         .clr_baud(clr_baud),

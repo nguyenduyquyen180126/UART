@@ -4,7 +4,7 @@ module parity (
     output reg   parity_bit
 );
     always @(parity_type, data_in) begin
-        if(!parity_type) begin
+        if(parity_type) begin
             parity_bit = ^data_in; // 0: EVEN
         end   
         else begin
