@@ -1,1036 +1,492 @@
 `timescale 1ns/1ps
 
-// UART tham chieu hanh vi (simulation-only), tach module trong tb/models/.
-// Chay tu thu muc UART:
-//   iverilog -g2012 -s tb_apb_uart -o /tmp/tb_apb_uart tb/tb_apb_uart.v tb/models/*.v rtl/*.v
-//   vvp /tmp/tb_apb_uart +NO_VCD
-// Bo +NO_VCD de tao wave_apb_uart.vcd. [REF FAIL] bao sai khac voi model.
-// Model chi dung bus APB va chan TX/RX, khong phu thuoc vi kien truc DUT.
+// Black-box APB-UART verification derived from doc/specs/za.html.
+// The DUT is observed only through its APB and UART ports.
 module tb_apb_uart;
+    localparam integer CLK_PERIOD = 40;
+    localparam integer CLK_FREQ = 25_000_000;
+    localparam [11:0] A_TXDATA = 12'h000;
+    localparam [11:0] A_RXDATA = 12'h004;
+    localparam [11:0] A_CFG    = 12'h008;
+    localparam [11:0] A_CTRL   = 12'h00c;
+    localparam [11:0] A_STAT   = 12'h010;
+    localparam [11:0] A_BAUD   = 12'h014;
+    localparam [11:0] A_IER    = 12'h018;
 
-    // =========================================================================
-    // 1. KHAI BÁO THAM SỐ VÀ TÍN HIỆU
-    // =========================================================================
-    parameter CLK_PERIOD = 20;         // 50 MHz clock -> chu kỳ 20ns
-    parameter CLK_FREQ   = 50_000_000; // Tần số clock 50 MHz
-
-    reg         clk;
-    reg         rst_n;
-
-    // Tín hiệu giao tiếp bus APB
-    reg         psel;
-    reg         penable;
-    reg         pwrite;
-    reg  [11:0] paddr;
-    reg  [31:0] pwdata;
-    wire        pready;
-    wire        pslverr;
+    reg pclk, presetn, psel, penable, pwrite;
+    reg [11:0] paddr;
+    reg [3:0] pstrb;
+    reg [31:0] pwdata;
+    wire pready, pslverr;
     wire [31:0] prdata;
+    reg rx, cts_n;
+    wire tx, rts_n, irq;
 
-    // Tín hiệu UART nối tiếp
-    wire        tx;
-    wire        rx;
-    reg         loopback_enable;
-    reg         raw_rx_enable, raw_rx_level;
-    reg         virtual_tx_start;
-    reg [7:0]   virtual_tx_data;
-    reg [4:0]   virtual_tx_cfg;
-    reg         virtual_tx_inject;
-    wire        virtual_tx_serial, virtual_tx_busy, virtual_tx_done;
-    wire [7:0]  virtual_rx_data;
-    wire        virtual_rx_done, virtual_rx_busy;
-    wire        virtual_rx_start_error, virtual_rx_parity_error, virtual_rx_stop_error;
-    // Biến quản lý testbench & thống kê
-    integer     test_id;
-    integer     pass_count;
-    integer     fail_count;
-    integer     timeout;
-    integer     bit_time_ns;
-    integer     i;
+    integer checks, failures, testcase;
+    reg [255:0] testcase_name;
+    integer baud_rate, bit_ns;
+    reg [31:0] rdata;
+    reg err;
 
-    reg  [31:0] read_val;
-    reg         err_resp;
-
-    // UART ao chi dung trong mo phong: khong instantiate lai RTL cua DUT.
-    // Queue TX ghi nhan cac lenh APB duoc chap nhan; RX ghi nhan stimulus.
-    reg [6:0] ref_cfg;
-    reg [7:0] ref_tx_queue [0:4095];
-    reg [8:0] ref_rx_queue [0:4095];
-    integer ref_tx_wr, ref_tx_rd, ref_rx_wr, ref_rx_rd;
-    integer ref_tx_checked, ref_rx_checked, ref_errors;
-    integer cfg_bits, cfg_parity, cfg_stop, cfg_baud;
-    reg [31:0] cfg_value;
-    // Ket qua Compare giu lai cho Monitor/waveform, valid = virtual_rx_done.
-    reg [7:0] tx_compare_expected, tx_compare_actual;
-    reg tx_compare_pass;
-
-    function integer reference_baud(input [1:0] selection);
-        begin
-            case (selection)
-                0: reference_baud = 2400;
-                1: reference_baud = 4800;
-                2: reference_baud = 9600;
-                3: reference_baud = 19200;
-            endcase
-        end
-    endfunction
-
-    function [7:0] reference_mask(input [7:0] value, input [1:0] width_cfg);
-        begin
-            reference_mask = value & (8'hFF >> (3 - width_cfg));
-        end
-    endfunction
-
-    wire [31:0] virtual_baud = reference_baud(ref_cfg[6:5]);
-
-    // Hai nhanh doc lap, dung so do stimulus -> DUT -> compare -> monitor.
-    // DUT TX -> RX ao -> compare voi pwdata da duoc APB chap nhan.
-    // TX ao -> DUT RX -> compare prdata voi byte stimulus.
-    assign rx = raw_rx_enable ? raw_rx_level : (loopback_enable ? tx : virtual_tx_serial);
-    uart_rx_virtual u_virtual_rx (
-        .clk(clk), .rst_n(rst_n), .serial_in(tx),
-        .cfg(ref_cfg[4:0]), .baud_rate(virtual_baud),
-        .rx_data(virtual_rx_data), .rx_done(virtual_rx_done), .busy(virtual_rx_busy),
-        .start_error(virtual_rx_start_error),
-        .parity_error(virtual_rx_parity_error), .stop_error(virtual_rx_stop_error)
-    );
-    uart_tx_virtual u_virtual_tx (
-        .clk(clk), .rst_n(rst_n), .start(virtual_tx_start),
-        .tx_data(virtual_tx_data), .cfg(virtual_tx_cfg), .baud_rate(virtual_baud),
-        .inject_parity_error(virtual_tx_inject), .serial_out(virtual_tx_serial),
-        .busy(virtual_tx_busy), .tx_done(virtual_tx_done)
-    );
-    wire        irq;
-
-    // FIFO RX mo hinh: byte den khi day bi bo, dung dung luong 16 byte.
-    task reference_expect_rx(input [7:0] value, input error_bit);
-        begin
-            if (ref_rx_wr - ref_rx_rd < 16) begin
-                if (ref_rx_wr >= 4096) $fatal(1, "Reference RX queue overflow");
-                ref_rx_queue[ref_rx_wr] = {error_bit, value};
-                ref_rx_wr = ref_rx_wr + 1;
-            end
-        end
-    endtask
-
-    // Quan sat bus tai canh chap nhan, truoc khi RX FIFO pop/NBA cap nhat.
-    always @(posedge clk) begin
-        if (rst_n && psel && penable && pready && !pslverr) begin
-            if (pwrite && paddr == 12'h008)
-                ref_cfg = pwdata[6:0];
-            if (pwrite && paddr == 12'h000) begin
-                if (ref_tx_wr >= 4096) $fatal(1, "Reference TX queue overflow");
-                ref_tx_queue[ref_tx_wr] = reference_mask(pwdata[7:0], ref_cfg[1:0]);
-                ref_tx_wr = ref_tx_wr + 1;
-            end
-            if (!pwrite && paddr == 12'h004) begin
-                if (ref_rx_rd == ref_rx_wr) begin
-                    $display("[REF FAIL] RX read without expected byte at %0t", $time);
-                    ref_errors = ref_errors + 1;
-                end else begin
-                    if (prdata[8:0] !== ref_rx_queue[ref_rx_rd]) begin
-                        $display("[REF FAIL] RX #%0d expected=%03h actual=%03h at %0t",
-                                 ref_rx_rd, ref_rx_queue[ref_rx_rd], prdata[8:0], $time);
-                        ref_errors = ref_errors + 1;
-                    end
-                    ref_rx_rd = ref_rx_rd + 1;
-                    ref_rx_checked = ref_rx_checked + 1;
-                end
-            end
-        end
-    end
-
-    // COMPARE + MONITOR: RX ao tra byte khi da lay mau stop cuoi.
-    // Dung rx_done cua RX ao cho tung frame: STT.tx_done cua DUT chi bao
-    // toan bo FIFO va bo phat da rong, khong phai xung hoan tat tung byte.
-    always @(posedge virtual_rx_done) begin : compare_tx_and_monitor
-        if (rst_n) begin
-            tx_compare_actual = virtual_rx_data;
-            tx_compare_expected = (ref_tx_rd < ref_tx_wr) ? ref_tx_queue[ref_tx_rd] : 8'hxx;
-            tx_compare_pass = (ref_tx_rd < ref_tx_wr) &&
-                              (virtual_rx_data === tx_compare_expected) &&
-                              !virtual_rx_start_error && !virtual_rx_parity_error && !virtual_rx_stop_error;
-            $display("[MONITOR TX] expected=%02h actual=%02h pass=%b at %0t",
-                     tx_compare_expected, tx_compare_actual, tx_compare_pass, $time);
-            if (virtual_rx_start_error || virtual_rx_parity_error || virtual_rx_stop_error) begin
-                $display("[REF FAIL] TX frame data=%02h start_error=%b parity_error=%b stop_error=%b at %0t",
-                         virtual_rx_data, virtual_rx_start_error,
-                         virtual_rx_parity_error, virtual_rx_stop_error, $time);
-                ref_errors = ref_errors + 1;
-            end
-            if (ref_tx_rd == ref_tx_wr) begin
-                $display("[REF FAIL] Unexpected TX frame %02h", virtual_rx_data);
-                ref_errors = ref_errors + 1;
-            end else begin
-                if (virtual_rx_data !== ref_tx_queue[ref_tx_rd]) begin
-                    $display("[REF FAIL] TX #%0d expected=%02h actual=%02h",
-                             ref_tx_rd, ref_tx_queue[ref_tx_rd], virtual_rx_data);
-                    ref_errors = ref_errors + 1;
-                end
-                ref_tx_rd = ref_tx_rd + 1;
-                ref_tx_checked = ref_tx_checked + 1;
-            end
-        end
-    end
-
-    // Watchdog doc lap: loi DUT khong duoc lam mo phong treo vo han.
-    initial begin
-        #1_000_000_000;
-        $fatal(1, "Global UART testbench timeout");
-    end
-
-    // =========================================================================
-    // 2. KHỞI TẠO DUT (apb_uart)
-    // =========================================================================
-    apb_uart #(
-        .CLK_FREQ(CLK_FREQ)
-    ) uart_inst (
-        .clk     (clk),
-        .rst_n   (rst_n),
-        .psel    (psel),
-        .penable (penable),
-        .pwrite  (pwrite),
-        .paddr   (paddr),
-        .pwdata  (pwdata),
-        .pready  (pready),
-        .pslverr (pslverr),
-        .prdata  (prdata),
-        .tx      (tx),
-        .rx      (rx),
-        .irq     (irq)
+    apb_uart #(.CLK_FREQ(CLK_FREQ)) dut (
+        .pclk(pclk), .presetn(presetn), .psel(psel), .penable(penable),
+        .pwrite(pwrite), .paddr(paddr), .pstrb(pstrb), .pwdata(pwdata),
+        .pready(pready), .pslverr(pslverr), .prdata(prdata),
+        .cts_n(cts_n), .tx(tx), .rx(rx), .rts_n(rts_n), .irq(irq)
     );
 
-    // =========================================================================
-    // 3. TẠO CLOCK 50 MHz VÀ DUMP SÓNG VCD
-    // =========================================================================
-    initial begin
-        clk = 1'b0;
-        forever #(CLK_PERIOD / 2) clk = ~clk;
-    end
+    always #(CLK_PERIOD / 2) pclk = ~pclk;
 
     initial begin
-        // vvp ... +NO_VCD de chay nhanh khi chi can bao cao so sanh.
         if (!$test$plusargs("NO_VCD")) begin
             $dumpfile("wave_apb_uart.vcd");
             $dumpvars(0, tb_apb_uart);
         end
     end
 
-    // =========================================================================
-    // 4. CÁC TASK IN ẤN VÀ BÁO CÁO KẾT QUẢ
-    // =========================================================================
-    task print_header(input [511:0] test_name);
+    task begin_testcase;
+        input integer number;
+        input [255:0] name;
         begin
-            $display("\n============================================================");
-            $display(">>> TESTCASE %0d: %0s", test_id, test_name);
-            $display("============================================================");
+            testcase = number;
+            testcase_name = name;
+            $display("\n[TESTCASE %0d] %0s", testcase, testcase_name);
         end
     endtask
 
-    task print_summary;
+    task check;
+        input condition;
+        input [255:0] message;
         begin
-            $display("\n============================================================");
-            $display("                TONG KET KET QUA MO PHONG                   ");
-            $display("============================================================");
-            $display("  TONG SO TEST : %0d", pass_count + fail_count);
-            $display("  SO TEST PASS : %0d", pass_count);
-            $display("  SO TEST FAIL : %0d", fail_count);
-            $display("============================================================");
-            if (fail_count == 0)
-                $display("  >>> KET LUAN: TAT CA CAC TESTCASE DEU PASS! XUAT SAC! <<<");
-            else
-                $display("  >>> KET LUAN: CO %0d TESTCASE BI THAT BAI! CAN KIEM TRA LAI! <<<", fail_count);
-            $display("============================================================\n");
-        end
-    endtask
-
-    // =========================================================================
-    // 5. CÁC TASK GIAO TIẾP APB MASTER
-    // =========================================================================
-    task apb_write(
-        input  [11:0] addr,
-        input  [31:0] data,
-        output        err
-    );
-        begin
-            @(posedge clk);
-            paddr   <= addr;
-            pwdata  <= data;
-            pwrite  <= 1'b1;
-            psel    <= 1'b1;
-            penable <= 1'b0;
-
-            @(posedge clk);
-            penable <= 1'b1;
-
-            // Lay response truoc canh ghi: sau canh nay FIFO co the vua day.
-            #1;
-            if (pready !== 1'b1) $fatal(1, "APB ACCESS did not complete");
-            err = pslverr;
-            @(posedge clk);
-            psel    <= 1'b0;
-            penable <= 1'b0;
-            pwrite  <= 1'b0;
-            #1; // Let register/FIFO NBA updates and IRQ combinational logic settle.
-        end
-    endtask
-
-    task apb_read(
-        input  [11:0] addr,
-        output [31:0] data,
-        output        err
-    );
-        begin
-            @(posedge clk);
-            paddr   <= addr;
-            pwrite  <= 1'b0;
-            psel    <= 1'b1;
-            penable <= 1'b0;
-
-            @(posedge clk);
-            penable <= 1'b1;
-
-            #1;
-            if (pready !== 1'b1) $fatal(1, "APB read ACCESS did not complete");
-            data = prdata;
-            err  = pslverr;
-
-            @(posedge clk);
-            psel    <= 1'b0;
-            penable <= 1'b0;
-            #1; // Read-side FIFO pop and IRQ updates must settle before returning.
-        end
-    endtask
-
-    // =========================================================================
-    // 6. TASK TRUYỀN FRAME UART RX TỪ NGOẠI VI VÀO DUT
-    // =========================================================================
-    task send_uart_rx_byte(
-        input [7:0] byte_val,
-        input [1:0] num_data_bits_cfg, // 00: 5b, 01: 6b, 10: 7b, 11: 8b
-        input       parity_en_cfg,
-        input       parity_type_cfg,   // 0: Even, 1: Odd
-        input       inject_error       // 1: Bơm lỗi Parity
-    );
-        begin
-            reference_expect_rx(reference_mask(byte_val, num_data_bits_cfg),
-                                parity_en_cfg && inject_error);
-            // Drive control on negedge so TX ao samples stable inputs on posedge.
-            @(negedge clk);
-            virtual_tx_data = byte_val;
-            virtual_tx_cfg = {parity_type_cfg, parity_en_cfg,
-                              ref_cfg[2], num_data_bits_cfg};
-            virtual_tx_inject = inject_error;
-            virtual_tx_start = 1;
-            @(negedge clk);
-            virtual_tx_start = 0;
-            wait (virtual_tx_done === 1'b1);
-            // Let the module finish its done pulse before another request.
-            wait (virtual_tx_done === 1'b0);
-        end
-    endtask
-
-    // Mot phep trao doi full-duplex; UART ao nhan TX chay song song o tren.
-    task reference_exchange(input [31:0] configuration,
-                            input [7:0] tx_byte, input [7:0] rx_byte);
-        integer polls, tx_before;
-        reg [31:0] status, received;
-        reg bus_error;
-        begin
-            apb_write(12'h008, configuration, bus_error);
-            if (bus_error) $fatal(1, "Cannot configure reference exchange");
-            bit_time_ns = 1_000_000_000 / reference_baud(configuration[6:5]);
-            tx_before = ref_tx_checked;
-            fork
-                send_uart_rx_byte(rx_byte, configuration[1:0],
-                                  configuration[3], configuration[4], 1'b0);
-                apb_write(12'h000, {24'd0, tx_byte}, bus_error);
-            join
-            polls = 0;
-            status = 0;
-            while ((!status[0] || !status[1]) && polls < 40) begin
-                apb_read(12'h00C, status, bus_error);
-                #(CLK_PERIOD);
-                polls = polls + 1;
-            end
-            if (!status[0] || !status[1] || ref_tx_checked != tx_before + 1) begin
-                $display("[REF FAIL] Exchange timeout cfg=%02h STT=%08h", configuration, status);
-                ref_errors = ref_errors + 1;
-            end
-            if (status[1]) apb_read(12'h004, received, bus_error);
-            $display("[UART AO] cfg=%02h baud=%0d TX=%02h RX=%02h",
-                     configuration, reference_baud(configuration[6:5]),
-                     reference_mask(tx_byte, configuration[1:0]),
-                     reference_mask(rx_byte, configuration[1:0]));
-        end
-    endtask
-
-    // =====================================================================
-    // SPEC CHECKS: chi dung APB va UART pins, khong truy cap noi bo DUT.
-    // =====================================================================
-    task spec_check(input condition, input [767:0] description);
-        begin
-            if (condition === 1'b1) begin
-                $display("[SPEC PASS] %0s", description);
-                pass_count = pass_count + 1;
+            checks = checks + 1;
+            if (!condition) begin
+                failures = failures + 1;
+                $display("[FAIL][TC%0d %0s] %0s at %0t", testcase, testcase_name, message, $time);
             end else begin
-                $display("[SPEC FAIL] %0s at %0t", description, $time);
-                fail_count = fail_count + 1;
+                $display("[PASS][TC%0d %0s] %0s", testcase, testcase_name, message);
             end
         end
     endtask
 
-    task wait_tx_idle;
-        integer n;
-        reg [31:0] status;
-        reg error_bus;
+    task apb_transfer;
+        input write;
+        input [11:0] address;
+        input [31:0] write_data;
+        input [3:0] strobe;
+        output [31:0] read_data;
+        output bus_error;
         begin
-            n = 0; status = 0;
-            while (!status[0] && n < 500) begin
-                apb_read(12'h00C, status, error_bus);
-                #(bit_time_ns);
-                n = n + 1;
-            end
-            if (!status[0]) $fatal(1, "SPEC: TX idle timeout");
-        end
-    endtask
-
-    // Check IRQ = OR(enabled sources), with each source state built externally.
-    task check_irq_masks(input [2:0] active_sources);
-        integer mask_value;
-        reg error_bus;
-        begin
-            for (mask_value = 0; mask_value < 8; mask_value = mask_value + 1) begin
-                apb_write(12'h010, mask_value, error_bus);
-                #2;
-                spec_check(!error_bus && (irq === (|(active_sources & mask_value[2:0]))),
-                           "IRQ mask: only enabled active sources may assert IRQ");
-            end
-        end
-    endtask
-
-    // Drive stop faults independently of the DUT; do not suppress scoreboard errors.
-    task check_stop_frame(input [6:0] configuration, input [1:0] bad_stops);
-        integer bit_index, stop_index;
-        reg parity_value, bus_error;
-        reg [31:0] status, value;
-        begin
-            apb_write(8, {25'd0, configuration}, bus_error);
-            spec_check(!bus_error, "Framing test configuration accepted");
-            bit_time_ns = 1_000_000_000 / reference_baud(configuration[6:5]);
-            reference_expect_rx(reference_mask(8'hA5, configuration[1:0]), |bad_stops);
-            raw_rx_enable = 1;
-            raw_rx_level = 0; #(bit_time_ns);
-            parity_value = configuration[4];
-            for (bit_index = 0; bit_index < 5 + configuration[1:0]; bit_index = bit_index + 1) begin
-                raw_rx_level = (8'hA5 >> bit_index) & 1;
-                parity_value = parity_value ^ raw_rx_level;
-                #(bit_time_ns);
-            end
-            if (configuration[3]) begin
-                raw_rx_level = parity_value;
-                #(bit_time_ns);
-            end
-            for (stop_index = 0; stop_index < 1 + configuration[2]; stop_index = stop_index + 1) begin
-                raw_rx_level = !bad_stops[stop_index];
-                // Release after the sample, avoiding an unintended long break.
-                #(3 * bit_time_ns / 4);
-                raw_rx_level = 1;
-                #(bit_time_ns - 3 * bit_time_ns / 4);
-            end
-            #(2 * bit_time_ns);
-            raw_rx_enable = 0;
-            apb_read(12'h00C, status, bus_error);
-            spec_check(!bus_error && status[1] && (status[2] === (|bad_stops)),
-                       "STT reports stop error, including first/second stop independently");
-            if (status[1]) begin
-                apb_read(4, value, bus_error);
-                spec_check(!bus_error && value[8:0] ===
-                           {(|bad_stops), reference_mask(8'hA5, configuration[1:0])},
-                           "RX_DATA preserves data and the framing-error bit");
-            end else $fatal(1, "Framing test: expected frame never arrived");
-            apb_read(12'h00C, status, bus_error);
-            spec_check(!status[1] && !status[2], "Framing error clears after the last queued byte is read");
-            $display("[FRAMING] cfg=%02h bad_stops=%b", configuration, bad_stops);
-        end
-    endtask
-
-    task run_spec_tests;
-        integer n, baud_sel_test, data_sel_test, parity_test, stop_test;
-        integer before_tx, before_rx;
-        reg [11:0] bad_address;
-        reg [31:0] value, status, configuration;
-        reg error_bus, rejected;
-        begin
-            test_id = 8;
-            print_header("SPEC: APB3 ILLEGAL ACCESS, SETUP, BACK-TO-BACK");
-            wait_tx_idle();
-            apb_write(12'h008, 32'h43, error_bus); // 9600 8N1
-            bit_time_ns = 1_000_000_000 / 9600;
-            apb_write(12'h010, 0, error_bus);
-            for (n = 0; n < 6; n = n + 1) begin
-                case (n)
-                    0: bad_address = 12'h014;
-                    1: bad_address = 12'hFFC;
-                    2: bad_address = 12'h001;
-                    3: bad_address = 12'h002;
-                    4: bad_address = 12'h003;
-                    5: bad_address = 12'h006;
-                endcase
-                apb_write(bad_address, 32'hFFFFFFFF, error_bus);
-                spec_check(error_bus, "Illegal/misaligned APB write returns PSLVERR");
-                apb_read(bad_address, value, error_bus);
-                spec_check(error_bus && value === 32'b0,
-                           "Illegal/misaligned APB read returns PSLVERR and zero data");
-            end
-            apb_write(12'h004, 32'hFF, error_bus);
-            spec_check(error_bus, "Write RX_DATA is rejected");
-            apb_write(12'h00C, 32'hFF, error_bus);
-            spec_check(error_bus, "Write read-only STT is rejected");
-            apb_read(12'h008, value, error_bus);
-            spec_check(!error_bus && value === 32'h43, "Illegal accesses do not corrupt CFG");
-
-            // Hold SETUP for several clocks: must not push TX FIFO.
-            before_tx = ref_tx_checked;
-            @(negedge clk);
-            psel = 1; penable = 0; pwrite = 1; paddr = 0; pwdata = 8'h96;
-            repeat (3) begin
-                @(negedge clk);
-                spec_check(tx === 1'b1 && !pslverr,
-                           "APB extended SETUP write has no TX side effect or error");
-            end
-            penable = 1;
+            @(negedge pclk);
+            psel = 1'b1; penable = 1'b0; pwrite = write;
+            paddr = address; pwdata = write_data; pstrb = strobe;
+            @(negedge pclk);
+            penable = 1'b1;
+            @(posedge pclk);
             #1;
-            spec_check(pready && !pslverr, "APB ACCESS completes extended SETUP");
-            @(negedge clk);
-            psel = 0; penable = 0; pwrite = 0;
-            wait_tx_idle();
-            spec_check(ref_tx_checked == before_tx + 1, "Extended SETUP produces exactly one TX frame");
-
-            send_uart_rx_byte(8'h69, 3, 0, 0, 0);
-            before_rx = ref_rx_checked;
-            @(negedge clk);
-            psel = 1; penable = 0; pwrite = 0; paddr = 4;
-            repeat (3) @(negedge clk);
-            // Abort SETUP; subsequent normal read must still return the byte.
-            psel = 0;
-            apb_read(12'h004, value, error_bus);
-            spec_check(!error_bus && value[8:0] === 9'h069 && ref_rx_checked == before_rx + 1,
-                       "Aborted/extended read SETUP does not pop RX FIFO");
-
-            // Consecutive transfers retain PSEL; PENABLE returns low for SETUP.
-            @(negedge clk);
-            psel = 1; penable = 0; pwrite = 1; paddr = 12'h010; pwdata = 2;
-            @(negedge clk); penable = 1;
-            #1; spec_check(pready && !pslverr, "Back-to-back APB write response");
-            @(negedge clk); penable = 0; pwrite = 0;
-            @(negedge clk); penable = 1;
-            #1; spec_check(pready && !pslverr && prdata === 32'h2,
-                           "Back-to-back APB read with PSEL held high");
-            @(negedge clk); psel = 0; penable = 0;
-            apb_write(12'h010, 0, error_bus);
-
-            test_id = 9;
-            print_header("SPEC: CFG LOCK WHILE TX OR RX BUSY");
-            apb_write(0, 8'h5A, error_bus);
-            #(bit_time_ns);
-            apb_write(8, 32'h7F, rejected);
-            apb_read(8, value, error_bus);
-            spec_check(rejected && !error_bus && value === 32'h43,
-                       "CFG write while TX busy: PSLVERR, old config retained");
-            wait_tx_idle();
-            fork
-                send_uart_rx_byte(8'hC3, 3, 0, 0, 0);
-                begin
-                    #(2 * bit_time_ns);
-                    apb_write(8, 32'h7F, rejected);
-                    apb_read(8, value, error_bus);
-                    spec_check(rejected && !error_bus && value === 32'h43,
-                               "CFG write while RX busy: PSLVERR, old config retained");
-                end
-            join
-            apb_read(4, value, error_bus);
-            spec_check(value[8:0] === 9'h0C3, "RX data survives rejected CFG change");
-            apb_write(8, 32'h4B, error_bus);
-            apb_read(8, value, rejected);
-            spec_check(!error_bus && !rejected && value === 32'h4B,
-                       "CFG becomes writable again when TX and RX idle");
-
-            test_id = 10;
-            print_header("SPEC: INDEPENDENT IRQ MASKS AND FIFO DEPTH");
-            check_irq_masks(3'b010); // Only TX ready.
-            apb_write(12'h010, 2, error_bus);
-            spec_check(irq === 1'b1, "TX-ready IRQ asserts when enabled and idle");
-            apb_write(0, 8'h01, error_bus);
-            apb_write(0, 8'h03, error_bus);
-            apb_read(12'h00C, status, error_bus);
-            spec_check(!status[0] && irq === 1'b0, "TX-ready IRQ clears with queued frames");
-            // First frame is complete, second still active: readiness must stay low.
-            #(12 * bit_time_ns);
-            apb_read(12'h00C, status, error_bus);
-            spec_check(!status[0] && irq === 1'b0, "TX-ready stays low until entire queue completes");
-            wait_tx_idle();
-            spec_check(irq === 1'b1, "TX-ready IRQ returns after final stop bit");
-            send_uart_rx_byte(8'h12, 3, 1, 0, 0);
-            check_irq_masks(3'b011); // TX idle and RX nonempty.
-            apb_write(12'h010, 1, error_bus);
-            send_uart_rx_byte(8'h34, 3, 1, 0, 0);
-            apb_read(4, value, error_bus);
-            spec_check(value[7:0] === 8'h12 && irq === 1'b1,
-                       "RX-ready IRQ remains high while another byte is queued");
-            apb_read(4, value, error_bus);
-            spec_check(value[7:0] === 8'h34 && irq === 1'b0,
-                       "RX-ready IRQ clears after final byte");
-            apb_write(12'h010, 4, error_bus); // Isolate overrun IRQ, mask RX/TX.
-            for (n = 0; n < 16; n = n + 1) begin
-                send_uart_rx_byte(8'h80 + n, 3, 1, 0, 0);
-                apb_read(12'h00C, status, error_bus);
-                spec_check(status[5] === (n == 15) && !status[3] && irq === 1'b0,
-                           "RX FIFO full only at entry 16; overrun IRQ stays low");
-            end
-            send_uart_rx_byte(8'hFF, 3, 1, 0, 0);
-            apb_read(12'h00C, status, error_bus);
-            spec_check(status[5] && status[3] && irq === 1'b1,
-                       "Entry 17 raises isolated overrun IRQ and preserves full FIFO");
-            check_irq_masks(3'b111);
-            apb_write(12'h010, 4, error_bus);
-            apb_read(4, value, error_bus);
-            apb_read(12'h00C, status, error_bus);
-            spec_check(!status[3] && status[1] && !status[5] && irq === 1'b0,
-                       "First RX read clears overrun IRQ independently of RX-ready");
-            for (n = 1; n < 16; n = n + 1) apb_read(4, value, error_bus);
-            apb_write(12'h010, 0, error_bus);
-
-            test_id = 11;
-            print_header("SPEC: RX ERROR BIT FOLLOWS EACH FIFO ENTRY");
-            // Bad, good, bad: error flag must follow the head, not last received byte.
-            send_uart_rx_byte(8'h55, 3, 1, 0, 1);
-            send_uart_rx_byte(8'hAA, 3, 1, 0, 0);
-            send_uart_rx_byte(8'h33, 3, 1, 0, 1);
-            for (n = 0; n < 3; n = n + 1) begin
-                apb_read(12'h00C, status, error_bus);
-                spec_check(status[2] === (n != 1), "STT error reflects current RX FIFO head");
-                apb_read(4, value, error_bus);
-                spec_check(value[8] === (n != 1), "RX FIFO ninth bit preserves per-byte parity error");
-            end
-            // Also inject wrong odd parity, independently from existing even test.
-            apb_write(8, 32'h5B, error_bus);
-            send_uart_rx_byte(8'hA6, 3, 1, 1, 1);
-            apb_read(4, value, error_bus);
-            spec_check(value[8:0] === 9'h1A6, "Wrong odd parity is detected");
-
-            test_id = 12;
-            print_header("SPEC: FALSE START REJECTION AND RECOVERY");
-            apb_write(8, 32'h43, error_bus);
-            apb_write(12'h010, 1, error_bus); // Enable RX IRQ so the pulse test is meaningful.
-            raw_rx_enable = 1; raw_rx_level = 1;
-            #(bit_time_ns);
-            for (n = 0; n < 2; n = n + 1) begin
-                raw_rx_level = 0;
-                if (n == 0) #(bit_time_ns / 4);
-                else #(3 * bit_time_ns / 8);
-                raw_rx_level = 1;
-                #(12 * bit_time_ns);
-                apb_read(12'h00C, status, error_bus);
-                spec_check(!status[1] && !status[2] && !status[3] && irq === 1'b0,
-                           "Pulse shorter than half start bit produces no RX data/error/IRQ");
-                apb_write(8, 32'h43, error_bus);
-                spec_check(!error_bus, "Receiver returns idle after rejecting false start");
-            end
-            raw_rx_enable = 0;
-            send_uart_rx_byte(8'hA5, 3, 0, 0, 0);
-            apb_read(4, value, error_bus);
-            spec_check(value[8:0] === 9'h0A5, "Valid frame is received after false starts");
-
-            test_id = 13;
-            print_header("SPEC: ALL BAUD X DATA X PARITY X STOP COMBINATIONS");
-            // Existing TC7 covers all formats at 19200; fill the other 3 baud rates.
-            for (baud_sel_test = 0; baud_sel_test < 3; baud_sel_test = baud_sel_test + 1)
-                for (data_sel_test = 0; data_sel_test < 4; data_sel_test = data_sel_test + 1)
-                    for (parity_test = 0; parity_test < 3; parity_test = parity_test + 1)
-                        for (stop_test = 0; stop_test < 2; stop_test = stop_test + 1) begin
-                            configuration = (baud_sel_test << 5) | (stop_test << 2) | data_sel_test;
-                            if (parity_test != 0) configuration = configuration | 8;
-                            if (parity_test == 2) configuration = configuration | 16;
-                            reference_exchange(configuration, 8'h96, 8'h69);
-                        end
-
-            test_id = 14;
-            print_header("SPEC: INVALID RX STOP BIT (FRAMING ERROR)");
-            apb_write(12'h010, 0, error_bus);
-            check_stop_frame(7'h43, 2'b01); // 8N1, bad stop
-            check_stop_frame(7'h47, 2'b01); // 8N2, first stop bad only
-            check_stop_frame(7'h47, 2'b10); // 8N2, second stop bad only
-            check_stop_frame(7'h47, 2'b11); // 8N2, both stops bad
-            check_stop_frame(7'h47, 2'b00); // good frame after errors: no stale latch
-            check_stop_frame(7'h4F, 2'b10); // 8E2: good parity cannot hide bad stop
-            check_stop_frame(7'h5F, 2'b01); // 8O2: check first stop with odd parity
-            send_uart_rx_byte(8'h3C, 3, 1, 1, 0);
-            apb_read(4, value, error_bus);
-            spec_check(!error_bus && value[8:0] === 9'h03C,
-                       "Valid odd-parity frame recovers after framing errors");
+            read_data = prdata;
+            bus_error = pslverr;
+            check(pready === 1'b1, "APB access completes with pready = 1");
+            @(negedge pclk);
+            psel = 1'b0; penable = 1'b0; pwrite = 1'b0;
+            paddr = 12'b0; pwdata = 32'b0; pstrb = 4'b0;
         end
     endtask
 
-    // =========================================================================
-    // 7. TIẾN TRÌNH KIỂM THỬ CHÍNH (MAIN TEST SEQUENCE)
-    // =========================================================================
-    initial begin
-        ref_cfg = 0;
-        tx_compare_expected = 0; tx_compare_actual = 0; tx_compare_pass = 0;
-        ref_tx_wr = 0; ref_tx_rd = 0;
-        ref_rx_wr = 0; ref_rx_rd = 0;
-        ref_tx_checked = 0; ref_rx_checked = 0; ref_errors = 0;
-        test_id    = 1;
-        pass_count = 0;
-        fail_count = 0;
-        timeout    = 0;
-
-        rst_n   = 1'b0;
-        psel    = 1'b0;
-        penable = 1'b0;
-        pwrite  = 1'b0;
-        paddr   = 12'b0;
-        pwdata  = 32'b0;
-        loopback_enable = 0;
-        raw_rx_enable = 0; raw_rx_level = 1;
-        virtual_tx_start = 0; virtual_tx_data = 0;
-        virtual_tx_cfg = 0; virtual_tx_inject = 0;
-
-        #100;
-        rst_n = 1'b1;
-        #40;
-
-        // ---------------------------------------------------------------------
-        // TESTCASE 1: KHỞI TẠO & CẤU HÌNH THANH GHI CFG
-        // ---------------------------------------------------------------------
-        print_header("KHOI TAO & CAU HINH THANH GHI CFG");
-
-        // Đọc kiểm tra trạng thái ADDR_STT sau reset (Mong đợi: tx_done=1, rx_done=0, err=0)
-        apb_read(12'h00C, read_val, err_resp);
-        if (read_val == 32'h0000_0001 && err_resp == 1'b0) begin
-            $display("  --> [PASS] Trang thai reset ADDR_STT = 0x%08X, ERR = %b", read_val, err_resp);
-            pass_count = pass_count + 1;
-        end else begin
-            $display("  --> [FAIL] Trang thai reset ADDR_STT sai! Nhan: 0x%08X, ERR = %b", read_val, err_resp);
-            fail_count = fail_count + 1;
-        end
-
-        // Thời gian 1 bit UART ở 9600 Baud: 1s / 9600 ~ 104,167 ns
-        bit_time_ns = 1_000_000_000 / 9600;
-
-        // Cấu hình 8-E-1 @ 9600 Baud (CFG = 0x0000_004B)
-        apb_write(12'h008, 32'h0000_004B, err_resp);
-        apb_read(12'h008, read_val, err_resp);
-        if (read_val == 32'h0000_004B && err_resp == 1'b0) begin
-            $display("  --> [PASS] Ghi va doc lai ADDR_CFG = 0x%08X thanh cong!", read_val);
-            pass_count = pass_count + 1;
-        end else begin
-            $display("  --> [FAIL] ADDR_CFG khong dung! Mong doi: 0x4B, Nhan: 0x%08X", read_val);
-            fail_count = fail_count + 1;
-        end
-
-        // ---------------------------------------------------------------------
-        // TESTCASE 2: TRUYỀN DỮ LIỆU UART (TX) & KIỂM TRA BẢO VỆ FIFO FULL
-        // ---------------------------------------------------------------------
-        test_id = 2;
-        print_header("TRUYEN DU LIEU UART (TX) & KIEM TRA CO STATUS");
-
-        // Ghi dữ liệu 0xA5 vào ADDR_TX (TX tu dong kich hoat qua !tx_fifo_empty)
-        apb_write(12'h000, 32'h0000_00A5, err_resp);
-
-        // Kiểm tra cờ tx_done đã tụt xuống 0 (báo TX bận)
-        apb_read(12'h00C, read_val, err_resp);
-        if ((read_val & 32'h1) == 0) begin
-            $display("  --> [PASS] Co tx_done da keo xuong 0 (TX dang ban truyen)!");
-            pass_count = pass_count + 1;
-        end else begin
-            $display("  --> [FAIL] Co tx_done khong chuyen ve 0 sau khi kich start_tx!");
-            fail_count = fail_count + 1;
-        end
-
-        // Byte dau da vao PISO; can them 16 byte de lap day TX FIFO.
-        for (i = 0; i < 16; i = i + 1) begin
-            apb_write(12'h000, 32'h0000_0010 + i, err_resp);
-            apb_read(12'h00C, read_val, err_resp);
-            spec_check(!err_resp && (read_val[4] === (i == 15)),
-                       "TX FIFO full only after 16 queued bytes, excluding active PISO");
-        end
-
-        // Cố tình ghi thêm byte thứ 17 vào ADDR_TX khi TX FIFO đã FULL -> Mong đợi pslverr = 1
-        apb_write(12'h000, 32'h0000_00FF, err_resp);
-        if (err_resp == 1'b1) begin
-            $display("  --> [PASS] apb_slave da chan va bao pslverr=1 khi ghi vao TX FIFO bi FULL!");
-            pass_count = pass_count + 1;
-        end else begin
-            $display("  --> [FAIL] Khong bao loi pslverr khi ghi vao TX FIFO bi FULL!");
-            fail_count = fail_count + 1;
-        end
-
-        // Polling chờ TX phát xong toàn bộ FIFO (tx_done quay lại 1)
-        timeout = 0;
-        while (((read_val & 32'h1) == 0) && (timeout < 500)) begin
-            #(bit_time_ns);
-            apb_read(12'h00C, read_val, err_resp);
-            timeout = timeout + 1;
-        end
-
-        if ((read_val & 32'h1) == 32'h1) begin
-            $display("  --> [PASS] TX da phat xong hoan toan, tx_done da quay ve 1!");
-            pass_count = pass_count + 1;
-        end else begin
-            $display("  --> [FAIL] Timeout! TX khong the ket thuc qua trinh phat!");
-            fail_count = fail_count + 1;
-        end
-
-        // ---------------------------------------------------------------------
-        // TESTCASE 3: NHẬN DỮ LIỆU UART (RX) & AUTO-CLEAR FLAG
-        // ---------------------------------------------------------------------
-        test_id = 3;
-        print_header("NHAN DU LIEU UART (RX) & AUTO-CLEAR FLAG");
-
-        $display("  [INFO] Bat dau gui byte 0x3C vao chan rx...");
-        send_uart_rx_byte(8'h3C, 2'b11, 1'b1, 1'b0, 1'b0); // 8-bit data, Even parity
-
-        // Polling chờ rx_done = 1
-        timeout = 0;
-        apb_read(12'h00C, read_val, err_resp);
-        while (((read_val & 32'h2) == 0) && (timeout < 50)) begin
-            #(bit_time_ns / 2);
-            apb_read(12'h00C, read_val, err_resp);
-            timeout = timeout + 1;
-        end
-
-        if ((read_val & 32'h2) != 0) begin
-            $display("  --> [PASS] Phat hien co rx_done=1 (Da nhan duoc byte moi)!");
-            pass_count = pass_count + 1;
-        end else begin
-            $display("  --> [FAIL] Timeout cho co rx_done!");
-            fail_count = fail_count + 1;
-        end
-
-        // Đọc ADDR_RX lấy dữ liệu nhận
-        apb_read(12'h004, read_val, err_resp);
-        if (read_val[7:0] == 8'h3C) begin
-            $display("  --> [PASS] Du lieu nhan tu ADDR_RX chinh xac: 0x%02X!", read_val[7:0]);
-            pass_count = pass_count + 1;
-        end else begin
-            $display("  --> [FAIL] Du lieu nhan sai! Mong doi 0x3C, Nhan: 0x%02X", read_val[7:0]);
-            fail_count = fail_count + 1;
-        end
-
-        // Kiểm tra Auto-Clear: Đọc lại ADDR_STT xem rx_done đã bị xóa về 0 chưa
-        apb_read(12'h00C, read_val, err_resp);
-        if ((read_val & 32'h2) == 0) begin
-            $display("  --> [PASS] Co rx_done da duoc tu dong xoa ve 0 sau khi doc ADDR_RX!");
-            pass_count = pass_count + 1;
-        end else begin
-            $display("  --> [FAIL] Co rx_done van con giu nguyen 1, tinh nang auto-clear bi loi!");
-            fail_count = fail_count + 1;
-        end
-
-        // ---------------------------------------------------------------------
-        // TESTCASE 4: BƠM LỖI PARITY (PARITY ERROR INJECTION)
-        // ---------------------------------------------------------------------
-        test_id = 4;
-        print_header("BOM LOI BIT PARITY (ERROR INJECTION TEST)");
-
-        $display("  [INFO] Gui byte 0x7B kem bit Parity CO TINH BI SAI...");
-        send_uart_rx_byte(8'h7B, 2'b11, 1'b1, 1'b0, 1'b1); // inject_error = 1
-
-        // Polling chờ nhận xong
-        timeout = 0;
-        apb_read(12'h00C, read_val, err_resp);
-        while (((read_val & 32'h2) == 0) && (timeout < 50)) begin
-            #(bit_time_ns / 2);
-            apb_read(12'h00C, read_val, err_resp);
-            timeout = timeout + 1;
-        end
-
-        // Kiểm tra cờ error = 1 (bit 2 của ADDR_STT)
-        if ((read_val & 32'h4) != 0) begin
-            $display("  --> [PASS] Phan cung da bat co ERROR=1 dung khi phat hien Parity sai!");
-            pass_count = pass_count + 1;
-        end else begin
-            $display("  --> [FAIL] Phan cung khong phat hien ra loi Parity! ADDR_STT = 0x%08X", read_val);
-            fail_count = fail_count + 1;
-        end
-
-        // Đọc ADDR_RX để kích hoạt cơ chế tự xóa lỗi
-        apb_read(12'h004, read_val, err_resp);
-        apb_read(12'h00C, read_val, err_resp);
-        if ((read_val & 32'h4) == 0) begin
-            $display("  --> [PASS] Co ERROR da duoc tu dong xoa ve 0 sau khi doc ADDR_RX!");
-            pass_count = pass_count + 1;
-        end else begin
-            $display("  --> [FAIL] Co ERROR van chua duoc xoa sau khi doc ADDR_RX!");
-            fail_count = fail_count + 1;
-        end
-
-        // ---------------------------------------------------------------------
-        // TESTCASE 5: LOOPBACK TOÀN DIỆN (TX NỐI TRỰC TIẾP RX)
-        // ---------------------------------------------------------------------
-        test_id = 5;
-        print_header("LOOPBACK TOAN DIEN (TX NOI TRUC TIEP RX)");
-
-        loopback_enable = 1;
+    task apb_write;
+        input [11:0] address;
+        input [31:0] write_data;
+        input [3:0] strobe;
+        output bus_error;
+        reg [31:0] unused;
         begin
-                reference_expect_rx(8'hD2, 1'b0);
-                apb_write(12'h000, 32'h0000_00D2, err_resp);
+            apb_transfer(1'b1, address, write_data, strobe, unused, bus_error);
+        end
+    endtask
 
-                // Chờ nhận xong ở RX
-                timeout = 0;
-                read_val = 0;
-                while (((read_val & 32'h2) == 0) && (timeout < 100)) begin
-                    #(bit_time_ns / 2);
-                    apb_read(12'h00C, read_val, err_resp);
-                    timeout = timeout + 1;
-                end
+    task apb_read;
+        input [11:0] address;
+        output [31:0] read_data;
+        output bus_error;
+        begin
+            apb_transfer(1'b0, address, 32'b0, 4'b0, read_data, bus_error);
+        end
+    endtask
 
-                if ((read_val & 32'h2) != 0) begin
-                    apb_read(12'h004, read_val, err_resp);
-                    if (read_val[7:0] == 8'hD2) begin
-                        $display("  --> [PASS] Loopback thanh cong hoan hao! Byte thu duoc: 0x%02X", read_val[7:0]);
-                        pass_count = pass_count + 1;
-                    end else begin
-                        $display("  --> [FAIL] Loopback sai du lieu! Gui 0xD2, Nhan 0x%02X", read_val[7:0]);
-                        fail_count = fail_count + 1;
-                    end
-                end else begin
-                    $display("  --> [FAIL] Loopback bi timeout, khong thay RX hoan thanh!");
-                    fail_count = fail_count + 1;
-                end
+    function [7:0] mask_data;
+        input [7:0] value;
+        input [1:0] width;
+        begin
+            mask_data = value & (8'hff >> (3 - width));
+        end
+    endfunction
+
+    function parity_value;
+        input [7:0] value;
+        input [1:0] width;
+        input parity_type;
+        integer k, ones;
+        begin
+            ones = 0;
+            for (k = 0; k < 5 + width; k = k + 1)
+                ones = ones + ((value >> k) & 1);
+            // CFG.parity_type: 1 = even, 0 = odd.  The parity bit makes
+            // data + parity have the selected overall parity.
+            parity_value = parity_type ? (ones % 2) : !(ones % 2);
+        end
+    endfunction
+
+    // cfg: [1:0] data width (5..8), [2] two stops, [3] parity enable,
+    // [4] even parity. This is the encoding defined by za.html.
+    task send_frame;
+        input [7:0] value;
+        input [6:0] cfg;
+        input parity_bad;
+        input stop1_bad;
+        input stop2_bad;
+        integer k, stops, width;
+        reg parity;
+        begin
+            width = 5 + cfg[1:0];
+            stops = 1 + cfg[2];
+            parity = parity_value(value, cfg[1:0], cfg[4]);
+            rx = 1'b1;
+            #(bit_ns);
+            rx = 1'b0;
+            #(bit_ns);
+            for (k = 0; k < width; k = k + 1) begin
+                rx = value[k];
+                #(bit_ns);
             end
-        // TX can finish after RX has sampled the frame; keep loopback connected.
-        read_val = 0;
-        timeout = 0;
-        while (!read_val[0] && timeout < 100) begin
-            #(bit_time_ns);
-            apb_read(12'h00C, read_val, err_resp);
-            timeout = timeout + 1;
+            if (cfg[3]) begin
+                rx = parity ^ parity_bad;
+                #(bit_ns);
+            end
+            rx = stop1_bad ? 1'b0 : 1'b1;
+            #(bit_ns);
+            if (stops == 2) begin
+                rx = stop2_bad ? 1'b0 : 1'b1;
+                #(bit_ns);
+            end
+            rx = 1'b1;
+            #(bit_ns);
         end
-        if (!read_val[0]) $fatal(1, "Loopback TX timeout");
-        loopback_enable = 0;
+    endtask
 
-        // ---------------------------------------------------------------------
-        // TESTCASE 6: KIỂM CHỨNG CƠ CHẾ NGẮT (INTERRUPT) & LỖI TRÀN OVERRUN
-        // ---------------------------------------------------------------------
-        test_id = 6;
-        print_header("CO CHE NGAT (INTERRUPT) & PHAT HIEN TRAN DU LIEU OVERRUN");
-
-        // 1. Ghi IER = 0x05 (Bật RX Interrupt & Overrun Interrupt)
-        apb_write(12'h010, 32'h0000_0005, err_resp);
-        apb_read(12'h010, read_val, err_resp);
-        if (read_val == 32'h0000_0005) begin
-            $display("  --> [PASS] Ghi va doc lai ADDR_IER = 0x05 thanh cong!");
-            pass_count = pass_count + 1;
-        end else begin
-            $display("  --> [FAIL] Ghi/doc ADDR_IER that bai: 0x%08X", read_val);
-            fail_count = fail_count + 1;
+    task check_rx_frame;
+        input [7:0] value;
+        input [6:0] cfg;
+        input parity_bad;
+        input stop1_bad;
+        input stop2_bad;
+        reg [31:0] status, received;
+        begin
+            send_frame(value, cfg, parity_bad, stop1_bad, stop2_bad);
+            repeat (3) @(posedge pclk);
+            apb_read(A_STAT, status, err);
+            check(!err && status[1], "RX sets rx_done after a complete frame");
+            check(status[2] === ((cfg[3] && parity_bad) ? 1'b1 : 1'b0),
+                  "RX parity_err matches the received parity");
+            check(status[6] === ((stop1_bad || (cfg[2] && stop2_bad)) ? 1'b1 : 1'b0),
+                  "RX frame_err checks every stop bit");
+            apb_read(A_RXDATA, received, err);
+            check(!err && received[7:0] === mask_data(value, cfg[1:0]),
+                  "RXDATA contains the masked received character");
+            repeat (3) @(posedge pclk);
+            apb_read(A_STAT, status, err);
+            check(!err && !status[1] && !status[2] && !status[6] && !status[7],
+                  "Reading RXDATA clears RX status flags");
         end
+    endtask
 
-        // 2. Gửi byte 0xA5 vào RX, kiểm tra ngắt IRQ nhảy lên 1
-        $display("  [INFO] Gui byte 0xA5 vao RX va theo doi chan IRQ...");
-        send_uart_rx_byte(8'hA5, 2'b11, 1'b1, 1'b0, 1'b0);
-        #100;
-        if (irq == 1) begin
-            $display("  --> [PASS] Nhan xong byte 0xA5, chan IRQ da lap tuc nhay len muc 1!");
-            pass_count = pass_count + 1;
-        end else begin
-            $display("  --> [FAIL] IRQ khong nhay len muc 1 sau khi nhan xong byte!");
-            fail_count = fail_count + 1;
+    task check_tx_frame;
+        input [7:0] value;
+        input [6:0] cfg;
+        integer k, width, stops;
+        reg expected, sampled;
+        reg [31:0] status;
+        begin
+            cts_n = 1'b0;
+            apb_write(A_TXDATA, value, 4'b0001, err);
+            check(!err, "TXDATA accepts one character");
+            apb_write(A_CTRL, 32'h0000_0001, 4'b0001, err);
+            check(!err, "CTRL.start_tx accepts a transmit request");
+            width = 5 + cfg[1:0];
+            stops = 1 + cfg[2];
+            @(negedge tx);
+            #(bit_ns / 2);
+            check(tx === 1'b0, "TX start bit is low");
+            #(bit_ns);
+            for (k = 0; k < width; k = k + 1) begin
+                sampled = tx;
+                expected = value[k];
+                check(sampled === expected, "TX data bit is LSB first");
+                #(bit_ns);
+            end
+            if (cfg[3]) begin
+                sampled = tx;
+                expected = parity_value(value, cfg[1:0], cfg[4]);
+                check(sampled === expected, "TX parity bit follows CFG");
+                #(bit_ns);
+            end
+            repeat (stops) begin
+                check(tx === 1'b1, "TX stop bit is high");
+                apb_read(A_STAT, status, err);
+                check(!err && status[0] === 1'b0,
+                      "tx_done remains low while a stop bit is in progress");
+                #(bit_ns);
+            end
+            apb_read(A_STAT, status, err);
+            check(!err && status[0] && tx === 1'b1, "TX returns idle with tx_done set");
         end
+    endtask
 
-        // 3. Đọc dữ liệu RX -> Kiểm tra IRQ tự động hạ về 0
-        apb_read(12'h004, read_val, err_resp);
-        #100;
-        if ((read_val[7:0] == 8'hA5) && (irq == 0)) begin
-            $display("  --> [PASS] Doc dung byte 0xA5 va chan IRQ da tu dong ha ve 0!");
-            pass_count = pass_count + 1;
-        end else begin
-            $display("  --> [FAIL] Doc sai byte hoac IRQ chua ha ve 0: Val=0x%02X, IRQ=%b", read_val[7:0], irq);
-            fail_count = fail_count + 1;
+    task check_error_matrix;
+        reg [31:0] before_value, after_value;
+        begin
+            apb_write(12'h001, 32'hdead_beef, 4'b1111, err);
+            check(err, "E1 rejects an unaligned address");
+            apb_read(12'h002, rdata, err);
+            check(err && rdata === 32'b0, "E1 rejects an invalid read and returns zero");
+            apb_write(A_RXDATA, 32'h1, 4'b1111, err);
+            check(err, "E2 rejects RXDATA writes");
+            apb_write(A_STAT, 32'h1, 4'b1111, err);
+            check(err, "E2 rejects STAT writes");
+            apb_write(A_BAUD, 32'h0000_0000, 4'b1111, err);
+            check(err, "E5 rejects BAUD with div_int equal to zero");
+            apb_read(A_BAUD, before_value, err);
+            apb_write(A_BAUD, 32'h0000_900d, 4'b1111, err);
+            check(!err, "BAUD accepts a valid full-word write");
+            apb_write(A_TXDATA, 32'h55, 4'b0000, err);
+            check(!err, "A zero pstrb write has no error");
+            apb_read(A_TXDATA, after_value, err);
+            check(!err && after_value === 0, "A zero pstrb write has no side effect");
         end
+    endtask
 
-        // 4. Kịch bản Overrun: Gửi 16 byte vào RX mà CPU không đọc để làm đầy FIFO
-        $display("  [INFO] Bat dau kich ban Overrun: Bom 16 byte vao RX FIFO...");
-        for (i = 0; i < 16; i = i + 1) begin
-            send_uart_rx_byte(8'h30 + i, 2'b11, 1'b1, 1'b0, 1'b0);
+    task check_busy_write_errors;
+        reg [31:0] status;
+        begin
+            apb_write(A_CFG, 32'h0000_0003, 4'b0001, err);
+            check(!err, "CFG selects an enabled 8N1 frame before busy-write checks");
+            cts_n = 1'b1;
+            repeat (4) @(posedge pclk);
+            apb_write(A_TXDATA, 32'h0000_005a, 4'b0001, err);
+            apb_write(A_CTRL, 32'h0000_0001, 4'b0001, err);
+            repeat (4) @(posedge pclk);
+            #1;
+            apb_write(A_TXDATA, 32'h0000_00a5, 4'b0001, err);
+            check(err, "E3 rejects TXDATA writes while TX is pending");
+            apb_write(A_CTRL, 32'h0000_0001, 4'b0001, err);
+            check(err, "E3 rejects a second start_tx request while TX is pending");
+            apb_write(A_CFG, 32'h0000_0007, 4'b0001, err);
+            check(err, "E4 rejects CFG writes while TX is pending");
+            apb_write(A_BAUD, 32'h0000_900d, 4'b1111, err);
+            check(err, "E4 rejects BAUD writes while TX is pending");
+            cts_n = 1'b0;
+            #(12 * bit_ns);
+            apb_read(A_STAT, status, err);
+            check(!err && status[0] && tx === 1'b1,
+                  "TX completes after CTS permits the pending frame");
+            #bit_ns;
         end
-        #100;
+    endtask
 
-        // CPU bận không đọc, PC bắn tiếp byte thứ 17 (0xFF) -> Gây Overrun
-        $display("  [INFO] RX FIFO da day (16 byte), PC tiep tuc ban byte thu 17...");
-        send_uart_rx_byte(8'hFF, 2'b11, 1'b1, 1'b0, 1'b0);
-        #100;
+    task check_partial_writes;
+        reg [31:0] value;
+        begin
+            apb_write(A_BAUD, 32'h0000_000d, 4'b1111, err);
+            apb_write(A_BAUD, 32'h0000_0000, 4'b0010, err);
+            apb_read(A_BAUD, value, err);
+            check(!err && value[15:8] === 8'h00 && value[7:0] === 8'h0d,
+                  "BAUD byte lanes follow pstrb");
+            apb_write(A_CFG, 32'h0000_0043, 4'b1111, err);
+            apb_write(A_CFG, 32'h0000_0000, 4'b0010, err);
+            apb_read(A_CFG, value, err);
+            check(!err && value[7:0] === 8'h43, "CFG ignores unselected byte lanes");
+        end
+    endtask
 
-        // Kiểm tra bit 3 (overrun_error) trong ADDR_STT và IRQ = 1
-        apb_read(12'h00C, read_val, err_resp);
-        if (((read_val & 32'h08) != 0) && (irq == 1)) begin
-            $display("  --> [PASS] Phat hien Overrun: Bit 3 cua ADDR_STT = 1 va IRQ = 1!");
-            pass_count = pass_count + 1;
-        end else begin
-            $display("  --> [FAIL] Khong phat hien Overrun khi byte bi ghi de: STT=0x%02X, IRQ=%b", read_val[7:0], irq);
-            fail_count = fail_count + 1;
+    task check_cts_and_rts;
+        reg [31:0] status;
+        begin
+            // Keep the TX format from TC3 (8-bit odd parity), but enable RX
+            // so the RTS checks exercise the documented ready/full behavior.
+            apb_write(A_CFG, 32'h0000_000b, 4'b0001, err);
+            check(!err, "CFG enables RX for RTS flow-control checks");
+            cts_n = 1'b1;
+            // Let the asynchronous CTS level reach the required two-flop
+            // synchronizer before issuing the transmit request.
+            repeat (4) @(posedge pclk);
+            #1;
+            apb_write(A_TXDATA, 8'h96, 4'b0001, err);
+            apb_write(A_CTRL, 32'h0000_0001, 4'b0001, err);
+            repeat (4) @(posedge pclk);
+            #1;
+            apb_read(A_STAT, status, err);
+            check(!err && tx === 1'b1 && status[0] === 1'b0,
+                  "TX remains pending while synchronized cts_n is high");
+            cts_n = 1'b0;
+            // CTS is asynchronous and the spec requires a two-flop
+            // synchronizer; allow it and the TX state machine to respond.
+            repeat (8) @(posedge pclk);
+            #1;
+            check(tx === 1'b0, "TX starts after cts_n is asserted");
+            #(12 * bit_ns);
+            apb_read(A_STAT, status, err);
+            check(!err && status[0], "TX completes after CTS release");
+            repeat (3) @(posedge pclk);
+            check(rts_n === 1'b0, "RTS is asserted while RXDATA is empty");
+            send_frame(8'h5a, 7'h43, 1'b0, 1'b0, 1'b0);
+            repeat (3) @(posedge pclk);
+            #(bit_ns / 2);
+            check(rts_n === 1'b1, "RTS deasserts when RXDATA is occupied");
+            apb_read(A_RXDATA, rdata, err);
+            repeat (3) @(posedge pclk);
+            check(rts_n === 1'b0, "RTS reasserts after RXDATA is read");
         end
+    endtask
 
-        // 5. Đọc cạn RX FIFO để thu thập dữ liệu và tự động xóa cờ Overrun
-        for (i = 0; i < 16; i = i + 1) begin
-            apb_read(12'h004, read_val, err_resp);
+    task check_irq;
+        reg [31:0] status;
+        begin
+            apb_write(A_CFG, 32'h0000_000b, 4'b0001, err);
+            check(!err, "CFG enables RX for interrupt checks");
+            apb_write(A_IER, 32'h7, 4'b0001, err);
+            check(!err, "IER enables all interrupt sources");
+            apb_read(A_STAT, status, err);
+            check(irq === 1'b1, "tx_done interrupt is level high when enabled");
+            apb_write(A_IER, 32'h0, 4'b0001, err);
+            check(irq === 1'b0, "IRQ clears when all sources are masked");
+            apb_write(A_IER, 32'h2, 4'b0001, err);
+            send_frame(8'h33, 7'h0b, 1'b0, 1'b0, 1'b0);
+            #(bit_ns / 2);
+            check(irq === 1'b1, "rx_done_ie asserts IRQ when RXDATA becomes full");
+            apb_read(A_RXDATA, rdata, err);
+            #(CLK_PERIOD);
+            check(irq === 1'b0, "Reading RXDATA clears the rx_done interrupt source");
+            apb_write(A_IER, 32'h4, 4'b0001, err);
+            send_frame(8'h33, 7'h0b, 1'b1, 1'b0, 1'b0);
+            #(bit_ns / 2);
+            check(irq === 1'b1, "err_ie asserts IRQ for a parity error");
+            apb_read(A_RXDATA, rdata, err);
+            #(CLK_PERIOD);
+            check(irq === 1'b0, "Reading RXDATA clears the parity-error interrupt source");
         end
-        apb_read(12'h00C, read_val, err_resp);
-        #100;
-        if (((read_val & 32'h08) == 0) && (irq == 0)) begin
-            $display("  --> [PASS] Co Overrun da duoc xoa ve 0 va IRQ ha ve 0 sau khi doc RX!");
-            pass_count = pass_count + 1;
-        end else begin
-            $display("  --> [FAIL] Co Overrun hoac IRQ chua duoc xoa sau khi doc RX: STT=0x%02X, IRQ=%b", read_val[7:0], irq);
-            fail_count = fail_count + 1;
-        end
+    endtask
 
-        // ---------------------------------------------------------------------
-        // TESTCASE 7: UART AO DOI CHIEU TX/RX, CAC DO RONG/PARITY/STOP/BAUD
-        // ---------------------------------------------------------------------
-        loopback_enable = 0;
-        // Loopback RX hoan tat som hon TX; cho TX idle truoc khi doi CFG.
-        read_val = 0;
-        timeout = 0;
-        while (!read_val[0] && timeout < 100) begin
-            #(bit_time_ns);
-            apb_read(12'h00C, read_val, err_resp);
-            timeout = timeout + 1;
+    task check_overrun;
+        reg [31:0] status, first_value, second_value;
+        begin
+            apb_write(A_IER, 32'h0, 4'b0001, err);
+            apb_write(A_CFG, 32'h0000_0003, 4'b0001, err);
+            check(!err, "CFG enables RX for overrun checks");
+            send_frame(8'h11, 7'h43, 1'b0, 1'b0, 1'b0);
+            repeat (3) @(posedge pclk);
+            send_frame(8'hee, 7'h43, 1'b0, 1'b0, 1'b0);
+            repeat (3) @(posedge pclk);
+            apb_read(A_STAT, status, err);
+            check(status[1] && status[7], "A second unread RX character sets overrun");
+            apb_read(A_RXDATA, first_value, err);
+            repeat (3) @(posedge pclk);
+            check(first_value[7:0] === 8'h11, "Overrun preserves the first RX character");
+            apb_read(A_STAT, status, err);
+            check(!status[7] && status[1] === 1'b0, "Reading RXDATA clears overrun and rx_done");
+            apb_read(A_RXDATA, second_value, err);
+            check(second_value[7:0] === 8'h11, "No hidden FIFO entry exists after overrun");
         end
-        if (!read_val[0]) $fatal(1, "TX did not become idle before reference tests");
-        test_id = 7;
-        print_header("UART AO: DOI CHIEU DOC LAP TX/RX VA FULL DUPLEX");
-        // 24 to hop: 5..8 data bits, none/even/odd parity, 1..2 stop.
-        for (cfg_bits = 0; cfg_bits < 4; cfg_bits = cfg_bits + 1)
-            for (cfg_parity = 0; cfg_parity < 3; cfg_parity = cfg_parity + 1)
-                for (cfg_stop = 0; cfg_stop < 2; cfg_stop = cfg_stop + 1) begin
-                    cfg_value = (3 << 5) | (cfg_stop << 2) | cfg_bits;
-                    if (cfg_parity != 0) cfg_value = cfg_value | 8;
-                    if (cfg_parity == 2) cfg_value = cfg_value | 16;
-                    reference_exchange(cfg_value, 8'hA5, 8'hDA);
+    endtask
+
+    task check_soft_reset;
+        reg [31:0] value;
+        begin
+            apb_write(A_CFG, 32'h7f, 4'b0001, err);
+            apb_write(A_IER, 32'h7, 4'b0001, err);
+            apb_write(A_CTRL, 32'h100, 4'b0011, err);
+            // soft_rst is a one-cycle pulse. Check the pins while that reset
+            // pulse is still active, as specified; once released, CFG=0 means
+            // RX is enabled and the empty receiver may assert RTS.
+            check(tx === 1'b1 && rts_n === 1'b1,
+                  "Soft reset drives UART pins idle during reset pulse");
+            #(2 * CLK_PERIOD);
+            apb_read(A_CFG, value, err);
+            check(!err && value === 0, "Soft reset restores CFG");
+            apb_read(A_BAUD, value, err);
+            check(!err && value === 32'h0000_900d, "Soft reset restores BAUD");
+            apb_read(A_IER, value, err);
+            check(!err && value === 0, "Soft reset restores IER");
+            check(tx === 1'b1 && rts_n === 1'b0,
+                  "After reset release, empty enabled RX asserts RTS");
+        end
+    endtask
+
+    integer width_i, parity_i, stop_i;
+    reg [6:0] cfg_i;
+    initial begin
+        pclk = 1'b0; presetn = 1'b0; psel = 1'b0; penable = 1'b0;
+        pwrite = 1'b0; paddr = 0; pstrb = 0; pwdata = 0;
+        rx = 1'b1; cts_n = 1'b0; checks = 0; failures = 0;
+        testcase = 0; testcase_name = "initialization";
+        baud_rate = 115200;
+        bit_ns = 1_000_000_000 / baud_rate;
+        #200; presetn = 1'b1; #(2 * CLK_PERIOD);
+
+        apb_read(A_STAT, rdata, err);
+        check(!err && rdata === 32'h1, "Reset STAT has tx_done set only");
+        apb_read(A_BAUD, rdata, err);
+        check(!err && rdata === 32'h0000_900d, "Reset BAUD is 0x900D");
+        apb_read(A_CFG, rdata, err);
+        check(!err && rdata === 0, "Reset CFG is zero");
+
+        begin_testcase(1, "reset and register defaults");
+        check_error_matrix();
+        check_busy_write_errors();
+        begin_testcase(2, "partial writes and pstrb");
+        check_partial_writes();
+        apb_write(A_BAUD, 32'h0000_900d, 4'b1111, err);
+        apb_write(A_CFG, 32'h0000_004b, 4'b1111, err);
+        begin_testcase(3, "TX frame format");
+        check_tx_frame(8'ha5, 7'h4b);
+        // Leave the transmitter idle for a complete bit after the observed
+        // stop interval before starting the independent CTS test.
+        #(bit_ns);
+        begin_testcase(4, "CTS and RTS flow control");
+        check_cts_and_rts();
+
+        // All 24 mandatory UART formats: 5..8 data, no/even/odd parity, 1/2 stop.
+        for (width_i = 0; width_i < 4; width_i = width_i + 1)
+            for (parity_i = 0; parity_i < 3; parity_i = parity_i + 1)
+                for (stop_i = 0; stop_i < 2; stop_i = stop_i + 1) begin
+                    testcase = 100 + (width_i * 24) + (parity_i * 2) + stop_i;
+                    testcase_name = "UART format matrix";
+                    cfg_i = width_i | (stop_i << 2);
+                    if (parity_i != 0) cfg_i = cfg_i | 7'h08;
+                    if (parity_i == 1) cfg_i = cfg_i | 7'h10;
+                    apb_write(A_CFG, {25'b0, cfg_i}, 4'b0001, err);
+                    check(!err, "CFG accepts each mandatory UART format");
+                    check_rx_frame(8'ha5, cfg_i, 1'b0, 1'b0, 1'b0);
+                    check_tx_frame(8'ha5, cfg_i);
+                    // Allow the final stop interval to finish before CFG is
+                    // changed for the next format.
+                    #(bit_ns);
                 end
-        // Kiem tra ca 4 baud bang du lieu nhieu canh chuyen muc.
-        for (cfg_baud = 0; cfg_baud < 4; cfg_baud = cfg_baud + 1)
-            reference_exchange((cfg_baud << 5) | 3, 8'h55, 8'hAA);
 
-        run_spec_tests();
+        begin_testcase(5, "parity and framing errors");
+        apb_write(A_CFG, 32'h0000_000b, 4'b0001, err);
+        check(!err, "CFG enables RX for parity and framing error checks");
+        check_rx_frame(8'h7b, 7'h0b, 1'b1, 1'b0, 1'b0);
+        apb_write(A_CFG, 32'h0000_0007, 4'b0001, err);
+        check(!err, "CFG selects 8-bit two-stop format for stop error checks");
+        check_rx_frame(8'h55, 7'h07, 1'b0, 1'b1, 1'b0);
+        check_rx_frame(8'haa, 7'h07, 1'b0, 1'b0, 1'b1);
+        begin_testcase(6, "level IRQ behavior");
+        check_irq();
+        begin_testcase(7, "single-entry RX overrun");
+        check_overrun();
+        begin_testcase(8, "software reset");
+        check_soft_reset();
 
-        #500;
-        if (ref_tx_wr != ref_tx_rd || ref_rx_wr != ref_rx_rd) begin
-            $display("[REF FAIL] Pending bytes: TX=%0d RX=%0d",
-                     ref_tx_wr-ref_tx_rd, ref_rx_wr-ref_rx_rd);
-            ref_errors = ref_errors + 1;
-        end
-        $display("[UART AO] TX checked=%0d RX checked=%0d errors=%0d",
-                 ref_tx_checked, ref_rx_checked, ref_errors);
-        if (ref_errors == 0) pass_count = pass_count + 1;
-        else fail_count = fail_count + ref_errors;
-        print_summary;
-        if (fail_count != 0) $fatal(1, "UART verification failed");
+        $display("\nAPB-UART DV: %0d checks, %0d failures", checks, failures);
+        if (failures != 0) $fatal(1, "APB-UART verification failed");
         $finish;
     end
-
 endmodule

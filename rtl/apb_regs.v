@@ -220,7 +220,7 @@ module apb_regs(
             start_reg    <= 1'b0;
             soft_rst_reg <= 1'b0;
 
-            if(rxdata_read && !rx_done) begin
+            if(rxdata_read) begin
                 rx_done_flag    <= 1'b0;
                 parity_err_flag <= 1'b0;
                 frame_err_flag  <= 1'b0;

@@ -7,9 +7,10 @@ reg [11:0] paddr=0;
 reg [31:0] pwdata=0;
 wire [31:0] prdata;
 wire pready, pslverr, tx, irq;
-apb_uart dut(.clk(clk),.rst_n(rst_n),.psel(psel),.penable(penable),
+apb_uart dut(.pclk(clk),.presetn(rst_n),.psel(psel),.penable(penable),
  .pwrite(pwrite),.paddr(paddr),.pwdata(pwdata),.prdata(prdata),
- .pready(pready),.pslverr(pslverr),.tx(tx),.rx(tx),.irq(irq));
+ .pstrb(4'hf),.pready(pready),.pslverr(pslverr),.cts_n(1'b0),
+ .tx(tx),.rx(tx),.rts_n(),.irq(irq));
 task access;
  input wr; input [11:0] addr; input [31:0] data;
  output [31:0] result;

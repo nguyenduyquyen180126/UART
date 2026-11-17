@@ -10,28 +10,29 @@ module tx_uart #(
     input parity_type,
     input tx_dis,
     input cts_n,
-    input div_int,
-    input div_frac,
+    input [11:0] div_int,
+    input [3:0] div_frac,
     output reg tx,
-    output load_reg,
     output reg tx_done,
     output tx_busy
 
 );
-    wire stop_last;
+    reg stop_last;
     wire bit_last;
     wire baud_tick;
     wire data_mux_in;
     wire parity_bit;
+    wire load_reg;
     reg parity_latched;
     wire clr_bit;
     wire clr_stop;
     wire clr_baud;
     wire [2:0] bit_cnt;
     reg [2:0] bit_cnt_last;
-    wire stop_cnt;
+    wire [1:0] stop_cnt;
     wire [1:0] tx_sel;
     wire shift_reg;
+    wire tick_last;
     reg [7:0] tx_data_masked;
     reg cts_n_sync1, cts_n_sync2;
 
@@ -67,6 +68,7 @@ module tx_uart #(
         .stop_last(stop_last),
         .baud_tick(baud_tick),
         .bit_last(bit_last),
+        .tick_last(tick_last),
         .tx_sel(tx_sel),
         .load_reg(load_reg),
         .shift_reg(shift_reg),
@@ -76,18 +78,23 @@ module tx_uart #(
         .clr_stop(clr_stop),
         .clr_baud(clr_baud),
         .tx_done_pulse(tx_done_pulse),
+        .stop_cnt_en(stop_cnt_en),
         .tx_busy(tx_busy)
     );
 
-    tx_baud_gen #(
-        .CLK_FREQ(CLK_FREQ)
-    ) u_baud_gen(
+    tx_baud_gen u_baud_gen(
         .div_int(div_int),
         .div_frac(div_frac),
-        .clk(clk),
-        .rst_n(rst_n),
+        .pclk(clk),
+        .presetn(rst_n),
         .clr_baud(clr_baud),
         .baud_tick(baud_tick)
+    );
+    tx_tick_cnt tick_cnt_ins(
+        .clk(clk),
+        .rst_n(rst_n),
+        .baud_tick(baud_tick),
+        .tick_last(tick_last)
     );
 
     tx_bit_cnt u_bit_cnt(
@@ -95,6 +102,7 @@ module tx_uart #(
         .rst_n(rst_n),
         .clr_bit(clr_bit),
         .baud_tick(baud_tick),
+        .tick_last(tick_last),
         .cnt(bit_cnt)
     );
 
@@ -110,16 +118,28 @@ module tx_uart #(
 
     assign bit_last = (bit_cnt == bit_cnt_last);
 
+    wire stop_cnt_en;
 
     tx_stop_cnt u_stop_cnt(
         .clk(clk),
         .rst_n(rst_n),
         .clr_stop(clr_stop),
         .baud_tick(baud_tick),
+        .tick_last(tick_last),
+        .stop_cnt_en(stop_cnt_en),
         .cnt(stop_cnt)
     );
-
-    assign stop_last = (stop_cnt == stop_bit_num);
+    always @(*)begin
+        if(stop_bit_num == 1'b0) begin
+            stop_last = (stop_cnt == 2'b01);
+        end
+        else if(stop_bit_num == 1'b1) begin
+            stop_last = (stop_cnt == 2'b10);
+        end
+        else begin
+            stop_last = 1'b0;
+        end
+    end
 
 
     always @(*) begin

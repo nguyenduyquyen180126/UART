@@ -39,18 +39,21 @@ module tb_firmware_scenario;
     apb_uart #(
         .CLK_FREQ(50_000_000)
     ) dut (
-        .clk     (clk),
-        .rst_n   (rst_n),
+        .pclk    (clk),
+        .presetn (rst_n),
         .psel    (psel),
         .penable (penable),
         .pwrite  (pwrite),
         .paddr   (paddr),
+        .pstrb   (4'hf),
         .pwdata  (pwdata),
         .pready  (pready),
         .pslverr (pslverr),
         .prdata  (prdata),
+        .cts_n   (1'b0),
         .tx      (tx),
         .rx      (rx),
+        .rts_n   (),
         .irq     (irq)
     );
 

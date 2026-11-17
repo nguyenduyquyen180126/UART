@@ -1,40 +1,37 @@
-module rx_baud_gen #(
-    parameter CLK_FREQ = 50_000_000
-)(
-    input [1:0] baud_sel,
-    input clk,
-    input rst_n,
+module rx_baud_gen(
+    input pclk,
+    input presetn,
+    input [11:0] div_int,
+    input [3:0] div_frac,
     input clr_baud,
     output baud_tick
-);  
-    localparam CNT_2400  = CLK_FREQ / (2400 * 16);
-    localparam CNT_4800  = CLK_FREQ / (4800 * 16);
-    localparam CNT_9600  = CLK_FREQ / (9600 * 16);
-    localparam CNT_19200 = CLK_FREQ / (19200 * 16);
-    
-    reg [14:0] max_cnt;
-    always @(*) begin
-        case(baud_sel)
-            2'b00:   max_cnt = CNT_2400;
-            2'b01:   max_cnt = CNT_4800;
-            2'b10:   max_cnt = CNT_9600;
-            2'b11:   max_cnt = CNT_19200;
-            default: max_cnt = CNT_9600;
-        endcase
-    end
+);
+    wire carry;
+    wire [4:0] sum;
+    wire [11:0] max_cnt;
+    reg [11:0] cnt;
+    reg [3:0] acc;
 
-    reg [14:0] cnt;
+    assign sum = {1'b0, acc} + {1'b0, div_frac};
+    assign carry = sum[4];
+    assign max_cnt = (carry) ? div_int : (div_int - 1'b1);
 
-    // Ngõ ra tổ hợp: nhảy lên 1 ngay khi cnt đạt max_cnt - 1
-    assign baud_tick = (cnt >= max_cnt - 1'b1);
+    assign baud_tick = (cnt == max_cnt);
 
-    always @(posedge clk or negedge rst_n) begin
-        if (~rst_n) begin
-            cnt <= 15'b0;
-        end else if (clr_baud || baud_tick) begin
-            cnt <= 15'b0;
-        end else begin
-            cnt <= cnt + 1'b1;
+    always @(posedge pclk or negedge presetn) begin
+        if(~presetn) begin
+            cnt <= 12'b0;
+            acc <= 4'b0;
+        end
+        else begin
+            if(baud_tick || clr_baud) begin
+                cnt <= 12'b0;
+                acc <= sum[3:0];
+            end
+            else begin
+                cnt <= cnt + 1'b1;
+            end
         end
     end
+    
 endmodule

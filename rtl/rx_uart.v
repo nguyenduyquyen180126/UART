@@ -4,19 +4,17 @@ module rx_uart #(
     input clk,
     input rst_n,
     input rx,
-    input [1:0]baud_sel,
     input [1:0] data_b_num,
     input stop_b_num,
     input parity_type,
     input parity_en,
     input rx_dis,
-    input div_int,
-    input div_frac,
+    input [11:0] div_int,
+    input [3:0] div_frac,
     input rx_clear,
     output reg [7:0] rx_data,
     output reg rx_done,
     output rx_busy,
-    output error,
     output rts_n,
     output reg parity_err,
     output reg frame_err,
@@ -25,6 +23,7 @@ module rx_uart #(
    wire baud_tick;
    wire clr_baud;
    wire parity_bit;
+   wire error;
    wire shift_en;
    wire tick_en;
    wire tick_clr;
@@ -59,15 +58,14 @@ module rx_uart #(
         end
     end
     wire rx_fsm_in = (rx_dis) ? 1'b1 : rx_sync2; 
-    assign rts_n = rx_done | rx_dis; 
+    // APB-UART spec requires RTS inactive (high) while reset is asserted.
+    assign rts_n = ~rst_n | rx_done | rx_dis;
 
-    rx_baud_gen #(
-        .CLK_FREQ(CLK_FREQ)
-    ) u_rx_baud_gen (
+    rx_baud_gen u_rx_baud_gen (
         .div_frac(div_frac),
         .div_int(div_int),
-        .clk(clk),
-        .rst_n(rst_n),
+        .pclk(clk),
+        .presetn(rst_n),
         .clr_baud(clr_baud),
         .baud_tick(baud_tick)
     );
@@ -153,7 +151,7 @@ module rx_uart #(
                 parity_err <= 1'b0;
                 overrun <= 1'b0;
             end
-            if (ctrl_rx_done) begin
+            else if (ctrl_rx_done) begin
                 if(rx_done && !rx_clear) begin
                     overrun <= 1'b1;
                 end else begin

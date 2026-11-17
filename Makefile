@@ -9,7 +9,7 @@ IVERILOG ?= iverilog
 VVP      ?= vvp
 VVP_ARGS ?=
 
-.PHONY: all help compile check sim sim_cli clean \
+.PHONY: all help compile check sim sim_cli clean t w \
         tx_uart tx_uart_cli tx_baud_gen tx_baud_gen_cli \
         uart_regs uart_regs_cli avalon2apb avalon2apb_cli \
         iv_uart_regs iv_avalon2apb test test_all test_apb test_fw test_fd test_rx \
@@ -121,38 +121,27 @@ avalon2apb_cli: work
 # ------------------------------------------------------------------------------
 # 3.1. CHẠY MÔ PHỎNG APB_UART (HỖ TRỢ CẢ IVERILOG & MODELSIM/QUESTASIM)
 # ------------------------------------------------------------------------------
-APB_UART_SRCS := rtl/apb_uart.v \
-                 rtl/apb_slave.v \
-                 rtl/uart_regs.v \
-                 rtl/rx_baud_gen.v \
-                 rtl/tx_uart.v \
-                 rtl/tx_controller.v \
-                 rtl/tx_baud_gen.v \
-                 rtl/tx_bit_cnt.v \
-                 rtl/tx_stop_cnt.v \
-                 rtl/tx_parity.v \
-                 rtl/tx_piso.v \
-                 rtl/rx_uart.v \
-                 rtl/rx_controller.v \
-                 rtl/data_b_num.v \
-                 rtl/stop_b_num.v \
-                 rtl/bit_cnt.v \
-                 rtl/tick_cnt.v \
-                 rtl/sipo.v \
-                 rtl/deframe.v \
-                 rtl/error_check.v \
-                 rtl/sync_fifo.v
+# Build the current APB-UART hierarchy.  rx_baud_gen_d.v is an alternate
+# implementation with the same module name as rx_baud_gen.v and must not be
+# compiled in the same design.
+APB_UART_SRCS := $(filter-out rtl/rx_baud_gen_d.v rtl/avalon2apb.v,$(wildcard rtl/*.v))
 
 UART_VIRTUAL_SRCS := tb/models/uart_rx_virtual.v tb/models/uart_tx_virtual.v
 
 # 1) tb_apb_uart: Testbench tong hop tinh nang APB UART
 apb_uart tb_apb_uart:
 	@echo "==> Đang biên dịch và chạy mô phỏng tb_apb_uart bằng Icarus Verilog..."
-	iverilog -g2012 -o sim_apb_uart.vvp $(APB_UART_SRCS) $(UART_VIRTUAL_SRCS) tb/tb_apb_uart.v
+	$(IVERILOG) -g2012 -s tb_apb_uart -o sim_apb_uart.vvp $(APB_UART_SRCS) $(UART_VIRTUAL_SRCS) tb/tb_apb_uart.v
 	$(VVP) sim_apb_uart.vvp $(VVP_ARGS)
 
-wave_apb_uart: apb_uart
+wave_apb_uart:
+	-$(MAKE) apb_uart
 	gtkwave wave_apb_uart.vcd &
+
+# Short aliases for the APB-UART DV flow.
+t: apb_uart
+
+w: wave_apb_uart
 
 apb_uart_vsim: work
 	$(VLOG) -sv $(APB_UART_SRCS) $(UART_VIRTUAL_SRCS) tb/tb_apb_uart.v
@@ -211,9 +200,27 @@ RX_UART_SRCS  := rtl/rx_uart.v \
 rx_uart tb_rx_uart test_rx:
 	@echo "==> Đang biên dịch và chạy mô phỏng tb_rx_uart bằng Icarus Verilog..."
 	iverilog -g2012 -o sim_rx_uart.vvp $(RX_UART_SRCS) tb/tb_rx_uart.v
-	vvp sim_rx_uart.vvp
+	vvp sim_rx_uart.vvp $(VVP_ARGS)
 
 wave_rx_uart: rx_uart
+	gtkwave wave.vcd &
+
+# 5) tb_tx_uart: Kịch bản kiểm thử chi tiết bộ phát TX UART
+TX_UART_SRCS  := rtl/tx_uart.v \
+                 rtl/tx_controller.v \
+                 rtl/tx_baud_gen.v \
+                 rtl/tx_tick_cnt.v \
+                 rtl/tx_bit_cnt.v \
+                 rtl/tx_stop_cnt.v \
+                 rtl/tx_parity.v \
+                 rtl/tx_piso.v
+
+tx_uart_iv tb_tx_uart test_tx:
+	@echo "==> Đang biên dịch và chạy mô phỏng tb_tx_uart bằng Icarus Verilog..."
+	iverilog -g2012 -o sim_tx_uart.vvp $(TX_UART_SRCS) tb/tb_tx_uart.v
+	vvp sim_tx_uart.vvp $(VVP_ARGS)
+
+wave_tx_uart: tb_tx_uart
 	gtkwave wave.vcd &
 
 # ------------------------------------------------------------------------------

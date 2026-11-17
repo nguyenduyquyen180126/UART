@@ -7,12 +7,14 @@ module tx_controller(
     input bit_last,
     input cts_n,
     input tx_dis,
+    input tick_last,
     output reg [1:0]tx_sel,
     output reg load_reg,
     output reg shift_reg,
     output reg clr_bit,
     output reg clr_stop,
     output reg clr_baud,
+    output reg stop_cnt_en,
     output reg tx_done_pulse,
     output reg tx_busy
 );
@@ -58,7 +60,7 @@ module tx_controller(
                 end
             end
             START: begin
-                if(baud_tick) begin
+                if(baud_tick && tick_last) begin
                     next_state = DATA;
                 end
             end
@@ -66,15 +68,15 @@ module tx_controller(
                 if(~bit_last && baud_tick) begin
                     next_state = DATA;
                 end
-                else if(bit_last && baud_tick && parity_en) begin
+                else if(bit_last && baud_tick && parity_en && tick_last) begin
                     next_state = PARITY;
                 end
-                else if(bit_last && baud_tick && ~parity_en) begin
+                else if(bit_last && baud_tick && ~parity_en && tick_last) begin
                     next_state = STOP;
                 end
             end
             PARITY: begin
-                if(baud_tick) begin
+                if(baud_tick && tick_last) begin
                     next_state = STOP;
                 end
             end
@@ -82,7 +84,7 @@ module tx_controller(
                 if(~stop_last && baud_tick) begin
                     next_state = STOP;
                 end
-                else if(stop_last && baud_tick) begin
+                else if(stop_last && baud_tick && tick_last) begin
                     next_state = IDLE;
                 end
             end
@@ -101,6 +103,7 @@ module tx_controller(
         shift_reg   = 1'b0;
         tx_busy     = 1'b0;
         tx_done_pulse = 1'b0;
+        stop_cnt_en = 1'b0;
 
         case(state)
             IDLE: begin
@@ -131,7 +134,7 @@ module tx_controller(
                 clr_bit = 1'b0;
                 clr_stop = 1'b1;
                 tx_busy = 1'b1;
-                if(~bit_last && baud_tick) begin
+                if(~bit_last && baud_tick && tick_last) begin
                     shift_reg = 1'b1;
                 end
             end
@@ -146,8 +149,12 @@ module tx_controller(
                 clr_bit = 1'b1;
                 clr_stop = 1'b0;
                 tx_busy = 1'b1;
-                if(stop_last && baud_tick) begin
+                if(stop_last) begin
                     tx_done_pulse = 1'b1;
+                    tx_busy = 1'b0;
+                end
+                if(tick_last) begin
+                    stop_cnt_en = 1'b1;
                 end
             end
         endcase
