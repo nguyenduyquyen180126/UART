@@ -16,7 +16,8 @@ VVP_ARGS ?=
         rx_uart tb_rx_uart wave_rx_uart \
         apb_uart tb_apb_uart wave_apb_uart apb_uart_vsim apb_uart_vsim_cli \
         firmware firmware_scenario tb_firmware_scenario wave_firmware firmware_vsim firmware_vsim_cli \
-        full_duplex tb_full_duplex wave_full_duplex full_duplex_vsim full_duplex_vsim_cli
+        full_duplex tb_full_duplex wave_full_duplex full_duplex_vsim full_duplex_vsim_cli \
+        spi2apb
 
 # Mặc định khi chỉ gõ 'make' sẽ hiển thị menu hướng dẫn
 all: help
@@ -226,6 +227,10 @@ wave_tx_uart: tb_tx_uart
 # ------------------------------------------------------------------------------
 # 4. CÁC LỆNH GÕ TẮT TIỆN LỢI (CONVENIENT ALIASES)
 # ------------------------------------------------------------------------------
+spi2apb:
+	$(IVERILOG) -g2012 -s tb_spi2apb -o sim_spi2apb.vvp rtl/*.v tb/tb_spi2apb.v
+	$(VVP) sim_spi2apb.vvp $(VVP_ARGS)
+
 test_apb: apb_uart
 test_fw:  firmware
 test_fd:  full_duplex
