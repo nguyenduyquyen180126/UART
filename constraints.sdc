@@ -19,3 +19,4 @@ set_load 0.01 [all_outputs]
 
 set_input_delay 0.0 -clock pclk [get_ports presetn]
 set_false_path -from [get_ports presetn]
+set_false_path -from [get_ports {rx cts_n spi_cs_n spi_sclk spi_mosi}]
