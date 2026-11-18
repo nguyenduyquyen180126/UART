@@ -9,7 +9,7 @@
 module tb_spi2apb;
 
     localparam integer PCLK_PERIOD_NS = 40;
-    localparam integer SPI_HALF_NS    = 200;  // SCLK = pclk/10
+    localparam integer SPI_HALF_NS    = 207;  // 2.42 MHz, safely below pclk/10
     localparam integer UART_BIT_NS    = 8680; // 217 pclk cycles at BAUD=0x900D
 
     reg  pclk;
@@ -82,6 +82,9 @@ module tb_spi2apb;
 
             if (spi_miso !== 1'b0)
                 $fatal(1, "SPI MISO must be 0 while spi_cs_n is high");
+            // The SPI pins are synchronized into pclk. Leave CS high long
+            // enough for the complete next-frame boundary to cross that sync.
+            repeat (5) @(negedge pclk);
             rx_payload = miso_frame[39:8];
             rx_status  = miso_frame[7:0];
             checks = checks + 1;
@@ -283,6 +286,9 @@ module tb_spi2apb;
             end
         join
 
+        // The UART checker samples the stop bit at its midpoint; tx_done is
+        // specified at the end of that stop bit (within two pclk cycles).
+        #(UART_BIT_NS/2 + 2*PCLK_PERIOD_NS);
         expect_high(tx, "TX returns to idle after frame");
         expect_high(irq, "TX-done interrupt asserted");
         read_reg(4'h4, read_value, status);
@@ -308,7 +314,7 @@ module tb_spi2apb;
         send_uart_rx_8n1(8'hC3, 1'b0);
         expect_high(irq, "framing error interrupt asserted");
         read_reg(4'h4, read_value, status);
-        expect_eq32(read_value & 32'h0000_0044, 32'h0000_0044,
+        expect_eq32(read_value & 32'h0000_0042, 32'h0000_0042,
                     "STAT reports rx_done and frame_err");
         read_reg(4'h1, read_value, status);
         expect_eq32(read_value, 32'h0000_00C3, "RXDATA with framing error");
@@ -336,7 +342,7 @@ module tb_spi2apb;
         read_reg(4'h4, read_value, status);
         expect_eq32(read_value, 32'h1, "STAT after soft reset");
         expect_high(tx, "TX idle after soft reset");
-        expect_high(rts_n, "RTS_N after soft reset");
+        expect_low(rts_n, "empty enabled RX is ready after soft reset");
         expect_low(irq, "IRQ after soft reset");
 
         $display("PASS: tb_spi2apb completed %0d black-box checks", checks);

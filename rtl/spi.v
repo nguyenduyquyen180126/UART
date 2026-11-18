@@ -115,18 +115,16 @@ module spi2apb_apb_master #(
                 if (clk_falling) begin
                     case (bit_cnt)
                         6'd8:  tx_byte <= 8'h00;
-                        // Update on the falling edge immediately before the
-                        // first bit of each response byte is sampled.
-                        6'd15: tx_byte <= (!rw_reg && !cmd_err_reg) ? rdata_reg[31:24] : 8'h00;
-                        6'd23: tx_byte <= (!rw_reg && !cmd_err_reg) ? rdata_reg[23:16] : 8'h00;
-                        6'd31: tx_byte <= (!rw_reg && !cmd_err_reg) ? rdata_reg[15:8]  : 8'h00;
-                        6'd39: tx_byte <= (!rw_reg && !cmd_err_reg) ? rdata_reg[7:0]   : 8'h00;
-                        6'd47: tx_byte <= 8'h00;
-                        // The write APB transaction starts after SCLK edge 48.
-                        // There are six zero status bits before cmd_err and
-                        // then pslverr, so sample each flag as late as possible.
-                        6'd53: tx_byte <= {cmd_err_reg, 7'b0};
-                        6'd54: tx_byte <= {pslverr_reg, 7'b0};
+                        // bit_cnt is incremented on each sampled rising edge;
+                        // these values load the next byte after the preceding
+                        // byte has completed (B2 starts at protocol bit 16).
+                        6'd16: tx_byte <= (!rw_reg && !cmd_err_reg) ? rdata_reg[31:24] : 8'h00;
+                        6'd24: tx_byte <= (!rw_reg && !cmd_err_reg) ? rdata_reg[23:16] : 8'h00;
+                        6'd32: tx_byte <= (!rw_reg && !cmd_err_reg) ? rdata_reg[15:8]  : 8'h00;
+                        6'd40: tx_byte <= (!rw_reg && !cmd_err_reg) ? rdata_reg[7:0]   : 8'h00;
+                        6'd48: tx_byte <= 8'h00;
+                        6'd54: tx_byte <= {cmd_err_reg, 7'b0};
+                        6'd55: tx_byte <= {pslverr_reg, 7'b0};
                         default: tx_byte <= {tx_byte[6:0], 1'b0};
                     endcase
                 end
