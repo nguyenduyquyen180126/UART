@@ -2,6 +2,9 @@
 # Makefile for Verilog & ModelSim / QuestaSim / Icarus Verilog Simulation
 # ==============================================================================
 
+# Tu dong them miniconda3 vao PATH neu chua co (de nhan iverilog / vvp)
+export PATH := $(HOME)/miniconda3/bin:$(PATH)
+
 VSIM     ?= vsim
 VLOG     ?= vlog
 VLIB     ?= vlib

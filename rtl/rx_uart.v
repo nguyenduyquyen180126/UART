@@ -3,6 +3,7 @@ module rx_uart #(
 )(
     input clk,
     input rst_n,
+    input soft_rst,
     input rx,
     input [1:0] data_b_num,
     input stop_b_num,
@@ -18,12 +19,12 @@ module rx_uart #(
     output rts_n,
     output reg parity_err,
     output reg frame_err,
-    output reg overrun
+    output reg overrun,
+    output wire error
 );
    wire baud_tick;
    wire clr_baud;
    wire parity_bit;
-   wire error;
    wire shift_en;
    wire tick_en;
    wire tick_clr;
@@ -39,6 +40,7 @@ module rx_uart #(
    wire ctrl_frame_err;
    wire ctrl_rx_done;
    wire [7:0]rx_deframe_data;
+   wire soft_rst_i = (soft_rst === 1'b1);
    // Reuse the existing per-byte error bit in the 9-bit RX FIFO.
    assign error = parity_error | frame_err;
    
@@ -50,6 +52,13 @@ module rx_uart #(
         if (!rst_n) begin
             rx_sync1 <= 1'b1;
             rx_sync2 <= 1'b1;
+            rx_sync_prv <= 1'b1;
+            rx_falling <= 1'b0;
+        end else if (soft_rst_i) begin
+            rx_sync1 <= 1'b1;
+            rx_sync2 <= 1'b1;
+            rx_sync_prv <= 1'b1;
+            rx_falling <= 1'b0;
         end else begin
             rx_sync1 <= rx;
             rx_sync2 <= rx_sync1;
@@ -59,7 +68,7 @@ module rx_uart #(
     end
     wire rx_fsm_in = (rx_dis) ? 1'b1 : rx_sync2; 
     // APB-UART spec requires RTS inactive (high) while reset is asserted.
-    assign rts_n = ~rst_n | rx_done | rx_dis;
+    assign rts_n = ~rst_n | soft_rst_i | rx_done | rx_dis;
 
     rx_baud_gen u_rx_baud_gen (
         .div_frac(div_frac),
@@ -73,6 +82,7 @@ module rx_uart #(
     rx_controller rx_controller_inst(
         .clk(clk),
         .rst_n(rst_n),
+        .soft_rst(soft_rst_i),
         .baud_tick(baud_tick),
         .rx(rx_fsm_in),
         .bit_last(bit_last),
@@ -139,6 +149,12 @@ module rx_uart #(
     );
     always @(posedge clk or negedge rst_n) begin
         if(!rst_n) begin
+            frame_err <= 1'b0;
+            parity_err <= 1'b0;
+            overrun <= 1'b0;
+            rx_done <= 1'b0;
+            rx_data <= 8'b0;
+        end else if (soft_rst_i) begin
             frame_err <= 1'b0;
             parity_err <= 1'b0;
             overrun <= 1'b0;

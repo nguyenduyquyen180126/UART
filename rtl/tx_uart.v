@@ -2,6 +2,7 @@ module tx_uart #(
     parameter CLK_FREQ = 50_000_000
 )(
     input clk, rst_n,
+    input soft_rst,
     input start_tx,
     input [7:0] tx_data,
     input [1:0] data_bit_num,
@@ -13,16 +14,16 @@ module tx_uart #(
     input [11:0] div_int,
     input [3:0] div_frac,
     output reg tx,
+    output wire load_reg,
     output reg tx_done,
     output tx_busy
-
 );
     reg stop_last;
     wire bit_last;
     wire baud_tick;
     wire data_mux_in;
     wire parity_bit;
-    wire load_reg;
+    wire stop_cnt_en;
     reg parity_latched;
     wire clr_bit;
     wire clr_stop;
@@ -35,9 +36,13 @@ module tx_uart #(
     wire tick_last;
     reg [7:0] tx_data_masked;
     reg cts_n_sync1, cts_n_sync2;
+    wire soft_rst_i = (soft_rst === 1'b1);
 
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
+            cts_n_sync1 <= 1'b1;
+            cts_n_sync2 <= 1'b1;
+        end else if (soft_rst_i) begin
             cts_n_sync1 <= 1'b1;
             cts_n_sync2 <= 1'b1;
         end else begin
@@ -49,6 +54,8 @@ module tx_uart #(
     wire tx_done_pulse;
     always @(posedge clk or negedge rst_n) begin
         if(!rst_n) begin
+            tx_done <= 1'b1;
+        end else if (soft_rst_i) begin
             tx_done <= 1'b1;
         end else begin
             if(start_tx && !tx_dis ) begin
@@ -63,6 +70,7 @@ module tx_uart #(
     tx_controller controller(
         .clk(clk),
         .rst_n(rst_n),
+        .soft_rst(soft_rst_i),
         .start_tx(start_tx),
         .parity_en(parity_en),
         .stop_last(stop_last),
@@ -118,8 +126,6 @@ module tx_uart #(
 
     assign bit_last = (bit_cnt == bit_cnt_last);
 
-    wire stop_cnt_en;
-
     tx_stop_cnt u_stop_cnt(
         .clk(clk),
         .rst_n(rst_n),
@@ -162,6 +168,8 @@ module tx_uart #(
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n)
             parity_latched <= 1'b0;
+        else if (soft_rst_i)
+            parity_latched <= 1'b0;
         else if (load_reg)
             parity_latched <= parity_bit;
     end
@@ -169,6 +177,7 @@ module tx_uart #(
     piso u_piso(
         .clk(clk),
         .rst_n(rst_n),
+        .soft_rst(soft_rst_i),
         .load_reg(load_reg),
         .shift_reg(shift_reg),
         .data_in(tx_data_masked),

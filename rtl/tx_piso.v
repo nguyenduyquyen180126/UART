@@ -1,5 +1,6 @@
 module piso(
     input clk, rst_n,
+    input soft_rst,
     input load_reg,
     input shift_reg,
     input [7:0] data_in,
@@ -8,6 +9,9 @@ module piso(
     reg [7:0] data;
     always @(posedge clk or negedge rst_n) begin
         if(~rst_n) begin
+            data <= 8'd0;
+        end
+        else if (soft_rst) begin
             data <= 8'd0;
         end
         else begin

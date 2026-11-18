@@ -69,16 +69,16 @@ module apb_uart #(
         .irq         (irq)
     );
 
-    // The register block's soft reset resets the UART engines while leaving
-    // the APB interface available to reconfigure them.
-    wire uart_rst_n = presetn & ~soft_rst;
+    // Tach bach: presetn la reset cung bat dong bo he thong.
+    // soft_rst la reset mem dong bo voi pclk, duoc dua vao cong soft_rst rieng cua engine.
     wire rx_clear = psel & penable & ~pwrite & (paddr == 12'h004);
 
     tx_uart #(
         .CLK_FREQ (CLK_FREQ)
     ) u_tx_uart (
         .clk          (pclk),
-        .rst_n        (uart_rst_n),
+        .rst_n        (presetn),
+        .soft_rst     (soft_rst),
         .start_tx     (start_tx),
         .tx_data      (tx_data),
         .data_bit_num (data_bits),
@@ -90,6 +90,7 @@ module apb_uart #(
         .div_int      (div_int),
         .div_frac     (div_frac),
         .tx           (tx),
+        .load_reg     (),
         .tx_done      (tx_done),
         .tx_busy      ()
     );
@@ -98,7 +99,8 @@ module apb_uart #(
         .CLK_FREQ (CLK_FREQ)
     ) u_rx_uart (
         .clk         (pclk),
-        .rst_n       (uart_rst_n),
+        .rst_n       (presetn),
+        .soft_rst    (soft_rst),
         .rx          (rx),
         .data_b_num  (data_bits),
         .stop_b_num  (stop_bits),
@@ -107,14 +109,15 @@ module apb_uart #(
         .rx_dis      (rx_dis),
         .div_int     (div_int),
         .div_frac    (div_frac),
-        .rx_clear    (rx_clear | soft_rst),
+        .rx_clear    (rx_clear),
         .rx_data     (rx_data),
         .rx_done     (rx_done),
         .rx_busy     (rx_busy),
         .rts_n       (rts_n),
         .parity_err  (parity_err),
         .frame_err   (frame_err),
-        .overrun     ()
+        .overrun     (),
+        .error       ()
     );
 
 endmodule

@@ -1,6 +1,7 @@
 module rx_controller(
     input clk,
     input rst_n,
+    input soft_rst,
     input baud_tick,
     input rx,
     input bit_last,
@@ -26,6 +27,7 @@ module rx_controller(
 
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) state <= IDLE;
+        else if (soft_rst) state <= IDLE;
         else state <= next_state;
     end
 
@@ -44,7 +46,7 @@ module rx_controller(
         if (!rst_n) begin
             first_stop_sampled <= 1'b0;
             frame_error_latched <= 1'b0;
-        end else if (state == IDLE) begin
+        end else if (soft_rst || (state == IDLE)) begin
             first_stop_sampled <= 1'b0;
             frame_error_latched <= 1'b0;
         end else if (stop_sample) begin

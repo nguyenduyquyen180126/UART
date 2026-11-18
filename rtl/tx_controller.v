@@ -1,5 +1,6 @@
 module tx_controller(
     input clk, rst_n,
+    input soft_rst,
     input start_tx,
     input parity_en,
     input stop_last,
@@ -31,6 +32,9 @@ module tx_controller(
 
     always @(posedge clk or negedge rst_n) begin
         if(~rst_n) begin
+            state <= IDLE;
+        end
+        else if (soft_rst) begin
             state <= IDLE;
         end
         else begin
