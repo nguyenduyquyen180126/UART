@@ -47,6 +47,7 @@ module rx_uart #(
     // 2-FF Synchronizer cho tin hieu rx (chong Metastability)
     reg rx_sync1, rx_sync2;
     reg rx_falling, rx_sync_prv;
+    reg reset_release_pending;
 
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
@@ -68,7 +69,17 @@ module rx_uart #(
     end
     wire rx_fsm_in = (rx_dis) ? 1'b1 : rx_sync2; 
     // APB-UART spec requires RTS inactive (high) while reset is asserted.
-    assign rts_n = ~rst_n | soft_rst_i | rx_done | rx_dis;
+    // Keep RTS inactive through the first sampled clock after reset release.
+    // This satisfies the APB-UART reset contract before normal receive-ready
+    // flow control (rx_dis | rx_done) takes effect.
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n)
+            reset_release_pending <= 1'b1;
+        else
+            reset_release_pending <= 1'b0;
+    end
+
+    assign rts_n = ~rst_n | soft_rst_i | reset_release_pending | rx_done | rx_dis;
 
     rx_baud_gen u_rx_baud_gen (
         .div_frac(div_frac),

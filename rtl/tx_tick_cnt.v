@@ -4,6 +4,7 @@ module tx_tick_cnt #(
 )(
     input clk, rst_n,
     input baud_tick,
+    input clr_tick,
     output tick_last
 );
     reg [WIDTH - 1 : 0] cnt;
@@ -13,7 +14,10 @@ module tx_tick_cnt #(
             cnt <= {WIDTH{1'b0}};
         end
         else begin
-            if(baud_tick) begin
+            if(clr_tick) begin
+                cnt <= {WIDTH{1'b0}};
+            end
+            else if(baud_tick) begin
                 if(cnt == OS - 1) begin
                     cnt <= {WIDTH{1'b0}};
                 end

@@ -34,6 +34,7 @@ module apb_uart #(
     wire       rx_busy;
     wire       parity_err;
     wire       frame_err;
+    wire       rx_overrun;
     wire [11:0] div_int;
     wire [3:0]  div_frac;
 
@@ -64,6 +65,7 @@ module apb_uart #(
         .parity_err  (parity_err),
         .rx_busy     (rx_busy),
         .frame_err   (frame_err),
+        .rx_overrun  (rx_overrun),
         .div_int     (div_int),
         .div_frac    (div_frac),
         .irq         (irq)
@@ -116,7 +118,7 @@ module apb_uart #(
         .rts_n       (rts_n),
         .parity_err  (parity_err),
         .frame_err   (frame_err),
-        .overrun     (),
+        .overrun     (rx_overrun),
         .error       ()
     );
 

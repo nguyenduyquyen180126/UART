@@ -1,0 +1,2601 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tuần 11–12 — Phân tích thời gian tĩnh | ET4030 HUST</title>
+<style>
+:root{
+  --bg:#F7F6F3; --surface:#FFFFFF; --surface2:#F1EFEA; --line:#D7D2C8;
+  --ink:#171A20; --ink2:#363D49; --muted:#5F6773;
+  --acc:#1F4E9C; --acc-soft:#E4ECF9;
+  --teal:#0E7C6B; --teal-soft:#DDF0EC;
+  --violet:#5B21B6; --violet-soft:#EDE6FB;
+  --amber:#9A4A05; --amber-soft:#FBEFDC;
+  --red:#A91B14; --red-soft:#FAE3E1;
+  --green:#15803D; --green-soft:#DFF1E5;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --shadow:0 1px 2px rgba(20,25,35,.06),0 8px 24px rgba(20,25,35,.07);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;overflow:hidden;-webkit-font-smoothing:antialiased}
+#stage{position:fixed;inset:0;display:grid;place-items:center;overflow:hidden}
+#deck{position:relative;width:1280px;height:720px;transform-origin:center center}
+.slide{position:absolute;inset:0;width:1280px;height:720px;background:var(--surface);
+  padding:40px 56px 74px;display:none;flex-direction:column;border-radius:14px;box-shadow:var(--shadow);overflow:hidden}
+.slide.active{display:flex}
+.slide::after{content:"";position:absolute;left:0;right:0;top:0;height:5px;
+  background:linear-gradient(90deg,var(--acc),var(--teal) 45%,var(--violet))}
+/* footer của slide */
+.slide .foot{position:absolute;left:56px;right:56px;bottom:22px;display:flex;justify-content:space-between;
+  align-items:center;font-size:14px;color:var(--muted);border-top:1px solid var(--line);padding-top:8px}
+h1.title{font-size:54px;line-height:1.1;font-weight:800;letter-spacing:-.02em}
+h2{font-size:30px;line-height:1.2;font-weight:750;letter-spacing:-.015em;color:var(--ink)}
+h3{font-size:19px;font-weight:700;color:var(--acc);margin-bottom:6px}
+p,li{font-size:17px;line-height:1.5;color:var(--ink2)}
+.lead{font-size:18px;line-height:1.5;color:var(--ink2)}
+.sub{font-size:15px;color:var(--ink2);line-height:1.45}
+.eyebrow{font-size:14px;font-weight:750;letter-spacing:.1em;text-transform:uppercase;color:var(--acc)}
+strong{color:var(--ink);font-weight:700}
+code,.mono{font-family:var(--mono);font-size:15px}
+.k{font-family:var(--mono);background:var(--surface2);border:1px solid var(--line);border-radius:5px;
+   padding:1px 6px;font-size:15px;color:var(--ink);white-space:nowrap}
+.hd{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;
+    padding-bottom:10px;border-bottom:2px solid var(--line);margin-bottom:16px;flex:0 0 auto}
+.hd .tag{flex:0 0 auto;font-size:14px;font-weight:700;color:var(--acc);background:var(--acc-soft);
+   border-radius:999px;padding:5px 14px;white-space:nowrap}
+.body{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;gap:14px}
+.row{display:flex;gap:16px}
+.body.row{flex-direction:row}
+.col{display:flex;flex-direction:column;gap:12px;min-height:0}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.g2a{display:grid;grid-template-columns:1.2fr 1fr;gap:18px}
+.center{align-items:center;justify-content:center}
+.card{background:var(--surface2);border:1px solid var(--line);border-radius:11px;padding:14px 16px}
+.card.plain{background:transparent}
+.card h4{font-size:18px;font-weight:750;color:var(--ink);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.card .n{width:24px;height:24px;border-radius:7px;background:var(--acc);color:#fff;font-size:14px;
+   display:grid;place-items:center;font-weight:750;flex:0 0 auto}
+.card.acc{background:var(--acc-soft);border-color:transparent}
+.card.teal{background:var(--teal-soft);border-color:transparent}
+.card.violet{background:var(--violet-soft);border-color:transparent}
+.card.amber{background:var(--amber-soft);border-color:transparent}
+.card.red{background:var(--red-soft);border-color:transparent}
+.card.green{background:var(--green-soft);border-color:transparent}
+ul.tick{list-style:none;display:flex;flex-direction:column;gap:7px}
+ul.tick li{position:relative;padding-left:22px}
+ul.tick li::before{content:"";position:absolute;left:3px;top:9px;width:8px;height:8px;border-radius:2px;background:var(--acc)}
+ol.num{padding-left:22px;display:flex;flex-direction:column;gap:7px}
+.formula{font-family:var(--mono);background:var(--surface);border:1.5px solid var(--acc);border-radius:10px;
+  padding:12px 16px;font-size:17px;color:var(--ink);text-align:center;line-height:1.6}
+table{border-collapse:collapse;width:100%;font-size:15px}
+th,td{border:1px solid var(--line);padding:7px 10px;text-align:left;color:var(--ink2)}
+th{background:var(--surface2);font-weight:700;color:var(--ink);font-size:15px}
+td.mono,th.mono{font-family:var(--mono);font-size:15px}
+tr.hl td{background:var(--acc-soft);color:var(--ink);font-weight:600}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 13px;
+  display:flex;flex-direction:column;gap:3px}
+.stat .v{font-family:var(--mono);font-size:24px;font-weight:750;color:var(--acc);line-height:1.1}
+.stat .l{font-size:14px;color:var(--muted);font-weight:600}
+.stat.ok .v{color:var(--green)} .stat.bad .v{color:var(--red)} .stat.am .v{color:var(--amber)}
+svg{display:block;max-width:100%}
+svg text{font-family:var(--sans);font-size:15px;fill:var(--ink2)}
+svg text.mono{font-family:var(--mono);font-size:15px}
+svg text.sm{font-size:14px}
+pre.vlog{font-family:var(--mono);font-size:15px;line-height:1.55;color:var(--ink2);background:var(--surface);
+  border:1px solid var(--line);border-radius:8px;padding:10px 13px;overflow:auto;white-space:pre;tab-size:2}
+pre.vlog .kw{color:var(--violet);font-weight:700}
+pre.vlog .ty{color:var(--teal);font-weight:700}
+pre.vlog .nu{color:var(--amber)}
+pre.vlog .cm{color:var(--muted);font-style:italic}
+.assum{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--amber);background:var(--amber-soft);
+  border:1px solid var(--amber);border-radius:5px;padding:0 7px;white-space:nowrap}
+.assum.src{color:var(--green);background:var(--green-soft);border-color:var(--green)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:9px;overflow:hidden;background:var(--surface)}
+.seg button{border:none;background:transparent;padding:8px 14px;font-size:15px;font-weight:650;cursor:pointer;
+  color:var(--ink2);font-family:var(--sans)}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button.on{background:var(--acc);color:#fff}
+button.btn{font-family:var(--sans);font-size:15px;font-weight:650;padding:8px 15px;border-radius:8px;
+  border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+button.btn:hover{border-color:var(--acc)}
+.callout{border-left:4px solid var(--amber);background:var(--amber-soft);border-radius:0 9px 9px 0;padding:11px 15px}
+.callout.key{border-left-color:var(--acc);background:var(--acc-soft)}
+.callout.warn{border-left-color:var(--red);background:var(--red-soft)}
+.callout .lbl{font-size:14px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--amber);margin-bottom:3px}
+.callout.key .lbl{color:var(--acc)} .callout.warn .lbl{color:var(--red)}
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:15px;color:var(--ink2);align-items:center}
+.legend i{display:inline-block;width:14px;height:14px;border-radius:3px;margin-right:6px;vertical-align:-2px}
+.kbd{font-family:var(--mono);font-size:14px;background:var(--surface2);border:1px solid var(--line);
+  border-bottom-width:2px;border-radius:5px;padding:2px 7px;color:var(--ink2)}
+/* điều hướng ở góc trên bên phải, tách khỏi footer */
+#nav{position:fixed;right:16px;top:14px;display:flex;gap:8px;z-index:61}
+#nav button{width:38px;height:38px;border-radius:9px;border:1px solid var(--line);background:var(--surface);
+  color:var(--ink2);cursor:pointer;font-size:17px;display:grid;place-items:center;box-shadow:var(--shadow);font-family:var(--sans)}
+#nav button:hover{color:var(--acc);border-color:var(--acc)}
+#bar{position:fixed;left:0;bottom:0;height:3px;background:var(--acc);z-index:60;transition:width .25s}
+#ov{position:fixed;inset:0;background:var(--bg);z-index:80;display:none;overflow-y:auto;padding:26px}
+#ov.on{display:block}
+#ov h3{font-size:22px;color:var(--ink);margin-bottom:4px}
+#ovg{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px;margin-top:16px}
+.ovc{background:var(--surface);border:1.5px solid var(--line);border-radius:9px;padding:11px 13px;cursor:pointer;
+  min-height:76px;display:flex;flex-direction:column;gap:5px}
+.ovc:hover{border-color:var(--acc)}
+.ovc .num{font-family:var(--mono);font-size:14px;color:var(--acc);font-weight:750}
+.ovc .t{font-size:15px;font-weight:650;color:var(--ink);line-height:1.3}
+.ovsec{grid-column:1/-1;font-size:14px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--acc);
+  margin-top:10px;padding-bottom:5px;border-bottom:1.5px solid var(--line)}
+@media print{
+  body{overflow:visible} #stage{position:static;display:block}
+  #deck{transform:none!important;width:auto;height:auto}
+  .slide{display:flex!important;position:relative;page-break-after:always;box-shadow:none;margin:0 auto 8mm;border:1px solid #ccc}
+  #nav,#bar,#ov{display:none!important}
+}
+sub,sup{font-size:14px;line-height:0}
+/* bổ sung cho deck 11A: log OpenSTA, Tcl/SDC, caption nguồn */
+pre.vlog.log{font-size:13px;line-height:1.38;padding:8px 11px}
+pre.vlog .hl{color:var(--acc);font-weight:700}
+pre.vlog .bad{color:var(--red);font-weight:700}
+pre.vlog .ok{color:var(--green);font-weight:700}
+pre.vlog .op{color:var(--teal);font-weight:600}
+.cap{font-size:12px;line-height:1.35;color:var(--muted);margin-top:4px}
+td.r,th.r{text-align:right}
+tr.bad td{background:var(--red-soft)}
+tr.ok td{background:var(--green-soft)}
+input[type=range]{accent-color:var(--acc)}
+table.tight th,table.tight td{padding:4px 9px;font-size:14px}
+.ovc .s{font-size:14px;color:var(--teal)}
+/* chú thích nguồn cuối slide, ngay trên footer */
+.fn{flex:0 0 auto;margin-top:auto;padding-top:6px;font-size:14px;line-height:1.35;color:var(--muted)}
+/* danh sách bước đánh số khớp với số trên hình */
+ul.steps{list-style:none;display:flex;flex-direction:column;gap:5px}
+ul.steps li{display:flex;align-items:flex-start;gap:8px;font-size:15px;line-height:1.4;color:var(--ink2)}
+.cn{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--ink);color:#fff;
+  font-size:14px;font-weight:800;flex:0 0 auto;margin-top:1px}
+</style>
+</head>
+<body>
+<div id="stage"><div id="deck">
+<!-- 1 BÌA -->
+<section class="slide" data-sec="Mở đầu" data-title="Trang bìa">
+  <div class="body center" style="gap:22px;text-align:center">
+    <div class="eyebrow">Trường Điện – Điện tử · Đại học Bách khoa Hà Nội</div>
+    <h1 class="title" style="max-width:1100px">TUẦN 11–12<br>PHÂN TÍCH THỜI GIAN TĨNH</h1>
+    <div style="width:130px;height:4px;background:linear-gradient(90deg,var(--acc),var(--violet));border-radius:2px"></div>
+    <p class="lead" style="max-width:940px">Đường thời gian, điều kiện setup và hold với clock skew và clock uncertainty, slack, WNS, TNS;
+      ràng buộc SDC cho đồng hồ và cổng vào ra; multicycle path, false path giữa hai miền đồng hồ;
+      báo cáo OpenSTA trên netlist Yosys + Sky130 và hai cách sửa vi phạm setup.</p>
+    <div class="card plain" style="border:1px solid var(--line);border-radius:10px;padding:12px 18px">
+      <div class="sub"><span class="kbd">←</span> <span class="kbd">→</span> chuyển slide ·
+        <span class="kbd">O</span> mục lục · <span class="kbd">F</span> toàn màn hình · <span class="kbd">P</span> in ra PDF</div>
+    </div>
+  </div>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 2 NỘI DUNG -->
+<section class="slide" data-sec="Mở đầu" data-title="Nội dung và mục tiêu">
+  <div class="hd"><div><div class="eyebrow">Định hướng</div><h2>Nội dung và mục tiêu</h2></div>
+    <span class="tag">Tổng quan</span></div>
+  <div class="body g2a">
+    <div class="col">
+      <table><tbody>
+        <tr><td class="mono" style="width:11%">A</td><td>Ràng buộc phi chức năng; STA và mô phỏng; điểm phát, điểm bắt, bốn loại đường (mục 5.1)</td></tr>
+        <tr><td class="mono">B</td><td>Định nghĩa t<sub>pcq</sub>, t<sub>ccq</sub>, t<sub>pd</sub>, t<sub>cd</sub>, t<sub>setup</sub>, t<sub>hold</sub>, t<sub>unc</sub>, δ; điều kiện setup và hold, clock skew; tính tay với thư viện 28 nm; đường đồng hồ phóng và bắt, latency, jitter, uncertainty; Cg, Cl và trễ ô theo tải; slew, tpHL, tpLH; độ dốc sườn; phóng sườn xuống bắt sườn lên; vi phạm hold và cách sửa; slack, WNS, TNS (mục 5.2, 5.4)</td></tr>
+        <tr><td class="mono">C</td><td>SDC: create_clock, set_clock_uncertainty, set_input_delay, set_output_delay, set_driving_cell, set_load (mục 5.4)</td></tr>
+        <tr><td class="mono">D</td><td>Ví dụ sta_dp: báo cáo report_checks setup và hold, phân rã đường găng, nhóm đường (mục 5.5)</td></tr>
+        <tr><td class="mono">E</td><td>Thiếu ràng buộc vào ra, multicycle path, false path giữa hai miền đồng hồ</td></tr>
+        <tr><td class="mono">F</td><td>Sửa vi phạm setup bằng giảm tần số và pipeline; giới hạn của STA trước P&amp;R</td></tr>
+      </tbody></table>
+    </div>
+    <div class="col">
+      <div class="card acc"><h4>Mục tiêu (CLO3)</h4>
+        <ol class="num">
+          <li>Tính slack setup và hold của đường giữa hai flip-flop có clock skew và clock uncertainty; tách latency, skew, jitter trong báo cáo.</li>
+          <li>Giải thích trễ ô theo Cg, Cl và độ dốc sườn vào bằng số liệu thư viện.</li>
+          <li>Tìm nguyên nhân vi phạm hold trong báo cáo và chọn cách sửa không làm hỏng setup.</li>
+          <li>Đọc báo cáo <span class="k">report_checks</span> của OpenSTA và phân rã đường găng thành trễ CLK→Q, trễ tổ hợp, setup, uncertainty.</li>
+          <li>Viết tệp SDC gồm đồng hồ, trễ vào ra, driving cell và tải.</li>
+          <li>Phân biệt false path và multicycle path; tìm nguyên nhân vi phạm trong báo cáo và chọn cách sửa.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 3 RÀNG BUỘC PHI CHỨC NĂNG -->
+<section class="slide" data-sec="A · Khái niệm" data-title="Ràng buộc phi chức năng">
+  <div class="hd"><div><div class="eyebrow">5.1 · Chỉ tiêu phi chức năng</div><h2>Ba nhóm ràng buộc của tổng hợp</h2></div>
+    <span class="tag">Khái niệm</span></div>
+  <div class="body">
+    <div class="g3">
+      <div class="card acc"><h4><span class="n">1</span>Thời gian</h4>
+        <p class="sub">Chu kỳ đồng hồ, độ bất định đồng hồ, thời điểm dữ liệu tới cổng vào và thời điểm mạch ngoài cần dữ liệu ở cổng ra.</p>
+        <p class="sub" style="margin-top:6px"><span class="k">create_clock</span> <span class="k">set_clock_uncertainty</span>
+          <span class="k">set_input_delay</span> <span class="k">set_output_delay</span></p></div>
+      <div class="card teal"><h4><span class="n">2</span>Diện tích</h4>
+        <p class="sub">Giới hạn tổng diện tích ô. Yosys báo diện tích ô bằng lệnh <span class="k">stat -liberty</span>;
+          Design Compiler nhận giới hạn bằng <span class="k">set_max_area</span>.</p>
+        <p class="sub" style="margin-top:6px">sta_dp, biến thể v0: 385 ô, 3 759,856 µm².</p></div>
+      <div class="card violet"><h4><span class="n">3</span>Luật thiết kế</h4>
+        <p class="sub">Độ dốc sườn, điện dung tải và số tải tối đa trên mỗi lưới; giá trị mặc định lấy từ thư viện liberty.</p>
+        <p class="sub" style="margin-top:6px"><span class="k">set_max_transition</span> <span class="k">set_max_capacitance</span>
+          <span class="k">set_max_fanout</span></p></div>
+    </div>
+    <div class="card"><h4>Tệp đầu vào của STA</h4>
+      <table><thead><tr><th style="width:18%">Tệp</th><th style="width:30%">Nội dung</th><th>Trong ví dụ tuan-11A-sta-opensta</th></tr></thead><tbody>
+        <tr><td>Netlist</td><td>Kết nối các ô chuẩn</td><td class="mono">net_v0.v, net_p1.v, net_mc.v (Yosys 0.70+255)</td></tr>
+        <tr><td>Liberty</td><td>Trễ, setup, hold, điện dung chân của từng ô</td><td class="mono">sky130_fd_sc_hd__tt_025C_1v80.lib</td></tr>
+        <tr><td>SDC</td><td>Đồng hồ, ràng buộc vào ra, ngoại lệ</td><td class="mono">clocks.sdc, io.sdc, cdc.sdc, mc.sdc</td></tr>
+      </tbody></table></div>
+  </div>
+  <p class="fn">Đề cương ET4030, mục 5.1. Diện tích: run_20261114_0618/stat_v0.txt (Yosys, Sky130 HD, 14/11/2026).</p>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 4 STA VÀ MÔ PHỎNG -->
+<section class="slide" data-sec="A · Khái niệm" data-title="STA và mô phỏng">
+  <div class="hd"><div><div class="eyebrow">5.1 · Phương pháp</div><h2>Phân tích thời gian tĩnh và mô phỏng</h2></div>
+    <span class="tag">So sánh</span></div>
+  <div class="body g2">
+    <div class="col">
+      <table><thead><tr><th style="width:22%"></th><th>Mô phỏng</th><th>STA</th></tr></thead><tbody>
+        <tr><td><strong>Đầu vào</strong></td><td>RTL hoặc netlist, testbench, bộ vector</td><td>Netlist, liberty, SDC; không cần vector</td></tr>
+        <tr><td><strong>Phạm vi</strong></td><td>Các đường được vector kích hoạt</td><td>Mọi đường từ điểm phát tới điểm bắt có ràng buộc</td></tr>
+        <tr><td><strong>Kết quả</strong></td><td>Giá trị đầu ra so với golden</td><td>Slack của từng điểm cuối</td></tr>
+        <tr><td><strong>Phụ thuộc</strong></td><td>Độ phủ của vector</td><td>Tính đầy đủ và đúng của SDC</td></tr>
+        <tr><td><strong>Không kiểm tra</strong></td><td>Thời gian, khi mô phỏng không trễ</td><td>Chức năng logic</td></tr>
+      </tbody></table>
+    </div>
+    <div class="col">
+      <div class="card"><h4>Cùng netlist sta_dp_v0, hai kết quả</h4>
+        <div class="g2" style="gap:10px">
+          <div class="stat ok"><span class="l">MÔ PHỎNG NETLIST</span><span class="v">0 lỗi</span><span class="l">4 008 mẫu, 2 000 bộ vào ngẫu nhiên</span></div>
+          <div class="stat bad"><span class="l">OPENSTA, T = 4,5 ns</span><span class="v">−0,152 ns</span><span class="l">3 điểm cuối vi phạm setup</span></div>
+        </div>
+        <p class="sub" style="margin-top:10px">Mô phỏng netlist dùng mô hình ô không trễ, nên chỉ xác nhận Yosys giữ đúng chức năng y = a·b + c.
+          OpenSTA tính trễ từ liberty và cho thấy đường nhân–cộng không vừa chu kỳ 4,5 ns.</p></div>
+      <div class="card amber"><h4>Phân công trong luồng thiết kế</h4>
+        <p class="sub">Mô phỏng và kiểm chứng hình thức xác nhận chức năng; STA xác nhận thời gian trên mọi đường đã ràng buộc;
+          mô phỏng mức cổng có trễ (SDF) dùng cho phần STA không bao quát, ví dụ đường không đồng bộ.</p></div>
+    </div>
+  </div>
+  <p class="fn">Questa Sim-64 2025.1_2: run_20261114_0618/sim.log; OpenSTA 2.7.0: sta_viol.log, sta_summary.txt (14/11/2026).</p>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 5 BỐN LOẠI ĐƯỜNG -->
+<section class="slide" data-sec="A · Khái niệm" data-title="Điểm phát, điểm bắt và bốn loại đường">
+  <div class="hd"><div><div class="eyebrow">5.2 · Đường dữ liệu</div><h2>Điểm phát, điểm bắt và bốn loại đường</h2></div>
+    <span class="tag">Sơ đồ</span></div>
+  <div class="body">
+    <svg id="svDp" viewBox="0 0 1180 320" style="width:100%;max-width:1120px;height:auto;margin:0 auto">
+      <rect x="0" y="0" width="1180" height="320" fill="var(--surface)"/>
+      <!-- cổng vào -->
+      <text x="92" y="65" text-anchor="end" class="mono">a[7:0]</text>
+      <text x="92" y="125" text-anchor="end" class="mono">b[7:0]</text>
+      <text x="92" y="185" text-anchor="end" class="mono">c[15:0]</text>
+      <text x="92" y="290" text-anchor="end" class="mono">a[7:0]</text>
+      <path d="M98 60 H150" fill="none" stroke="var(--teal)" stroke-width="2.4"/>
+      <path d="M98 120 H150" fill="none" stroke="var(--teal)" stroke-width="2.4"/>
+      <path d="M98 180 H150" fill="none" stroke="var(--teal)" stroke-width="2.4"/>
+      <polygon points="150,60 141,55.8 141,64.2" fill="var(--teal)"/>
+      <polygon points="150,120 141,115.8 141,124.2" fill="var(--teal)"/>
+      <polygon points="150,180 141,175.8 141,184.2" fill="var(--teal)"/>
+      <!-- đồng hồ clk: bus dưới, nhánh lên chân CLK (tam giác) -->
+      <text x="92" y="245" text-anchor="end" class="mono" style="fill:var(--violet)">clk</text>
+      <path d="M98 240 H786 V82 H800" fill="none" stroke="var(--violet)" stroke-width="1.8"/>
+      <path d="M128 240 V82 H150" fill="none" stroke="var(--violet)" stroke-width="1.8"/>
+      <path d="M128 142 H150" fill="none" stroke="var(--violet)" stroke-width="1.8"/>
+      <path d="M128 202 H150" fill="none" stroke="var(--violet)" stroke-width="1.8"/>
+      <path d="M676 240 V164 H690" fill="none" stroke="var(--violet)" stroke-width="1.8"/>
+      <circle cx="128" cy="240" r="3.5" fill="var(--violet)"/>
+      <circle cx="128" cy="142" r="3.5" fill="var(--violet)"/>
+      <circle cx="128" cy="202" r="3.5" fill="var(--violet)"/>
+      <circle cx="676" cy="240" r="3.5" fill="var(--violet)"/>
+      <text x="140" y="260" class="sm" style="fill:var(--violet)">sườn phóng (ra, rb, rc)</text>
+      <text x="690" y="260" class="sm" style="fill:var(--violet)">sườn bắt (y)</text>
+      <!-- thanh ghi vào -->
+      <rect x="150" y="44" width="62" height="50" rx="4" fill="var(--violet-soft)" stroke="var(--violet)" stroke-width="2"/>
+      <rect x="150" y="104" width="62" height="50" rx="4" fill="var(--violet-soft)" stroke="var(--violet)" stroke-width="2"/>
+      <rect x="150" y="164" width="62" height="50" rx="4" fill="var(--violet-soft)" stroke="var(--violet)" stroke-width="2"/>
+      <polygon points="150,76 161,82 150,88" fill="var(--surface)" stroke="var(--violet)" stroke-width="1.6"/>
+      <polygon points="150,136 161,142 150,148" fill="var(--surface)" stroke="var(--violet)" stroke-width="1.6"/>
+      <polygon points="150,196 161,202 150,208" fill="var(--surface)" stroke="var(--violet)" stroke-width="1.6"/>
+      <text x="186" y="72" text-anchor="middle" font-weight="700">ra</text>
+      <text x="186" y="132" text-anchor="middle" font-weight="700">rb</text>
+      <text x="186" y="192" text-anchor="middle" font-weight="700">rc</text>
+      <!-- nhân -->
+      <path d="M212 60 H290" fill="none" stroke="var(--acc)" stroke-width="2.4"/>
+      <path d="M212 120 H290" fill="none" stroke="var(--acc)" stroke-width="2.4"/>
+      <polygon points="290,60 281,55.8 281,64.2" fill="var(--acc)"/>
+      <polygon points="290,120 281,115.8 281,124.2" fill="var(--acc)"/>
+      <rect x="290" y="40" width="130" height="110" rx="8" fill="var(--acc-soft)" stroke="var(--acc)" stroke-width="2"/>
+      <text x="355" y="90" text-anchor="middle" font-weight="700">Nhân</text>
+      <text x="355" y="111" text-anchor="middle" class="mono">8 × 8</text>
+      <!-- cộng -->
+      <path d="M420 130 H490" fill="none" stroke="var(--acc)" stroke-width="2.4"/>
+      <polygon points="490,130 481,125.8 481,134.2" fill="var(--acc)"/>
+      <path d="M212 180 H490" fill="none" stroke="var(--acc)" stroke-width="2.4"/>
+      <polygon points="490,180 481,175.8 481,184.2" fill="var(--acc)"/>
+      <rect x="490" y="110" width="130" height="100" rx="8" fill="var(--acc-soft)" stroke="var(--acc)" stroke-width="2"/>
+      <text x="555" y="166" text-anchor="middle" font-weight="700">Cộng</text>
+      <text x="555" y="187" text-anchor="middle" class="mono">17 bit</text>
+      <!-- thanh ghi y -->
+      <path d="M620 142 H690" fill="none" stroke="var(--acc)" stroke-width="2.4"/>
+      <polygon points="690,142 681,137.8 681,146.2" fill="var(--acc)"/>
+      <rect x="690" y="126" width="62" height="50" rx="4" fill="var(--violet-soft)" stroke="var(--violet)" stroke-width="2"/>
+      <polygon points="690,158 701,164 690,170" fill="var(--surface)" stroke="var(--violet)" stroke-width="1.6"/>
+      <text x="726" y="154" text-anchor="middle" font-weight="700">y</text>
+      <path d="M752 142 H850" fill="none" stroke="var(--amber)" stroke-width="2.4"/>
+      <polygon points="850,142 841,137.8 841,146.2" fill="var(--amber)"/>
+      <text x="858" y="147" class="mono">y[16:0]</text>
+      <!-- flag_a và bộ đồng bộ -->
+      <path d="M766 142 V60 H800" fill="none" stroke="var(--ink2)" stroke-width="1.8"/>
+      <circle cx="766" cy="142" r="3.5" fill="var(--ink2)"/>
+      <polygon points="800,60 791,55.8 791,64.2" fill="var(--ink2)"/>
+      <text x="758" y="72" text-anchor="end" class="sm mono">y[16]</text>
+      <rect x="800" y="44" width="78" height="50" rx="4" fill="var(--violet-soft)" stroke="var(--violet)" stroke-width="2"/>
+      <polygon points="800,76 811,82 800,88" fill="var(--surface)" stroke="var(--violet)" stroke-width="1.6"/>
+      <text x="844" y="72" text-anchor="middle" class="sm" font-weight="700">flag_a</text>
+      <rect x="900" y="24" width="180" height="104" rx="8" fill="none" stroke="var(--red)" stroke-width="1.5" stroke-dasharray="6 4"/>
+      <path d="M878 60 H920" fill="none" stroke="var(--red)" stroke-width="2.2"/>
+      <polygon points="920,60 911,55.8 911,64.2" fill="var(--red)"/>
+      <rect x="920" y="44" width="50" height="50" rx="4" fill="var(--violet-soft)" stroke="var(--violet)" stroke-width="2"/>
+      <rect x="1005" y="44" width="50" height="50" rx="4" fill="var(--violet-soft)" stroke="var(--violet)" stroke-width="2"/>
+      <polygon points="920,76 931,82 920,88" fill="var(--surface)" stroke="var(--violet)" stroke-width="1.6"/>
+      <polygon points="1005,76 1016,82 1005,88" fill="var(--surface)" stroke="var(--violet)" stroke-width="1.6"/>
+      <path d="M970 60 H1005" fill="none" stroke="var(--ink2)" stroke-width="1.8"/>
+      <polygon points="1005,60 996,55.8 996,64.2" fill="var(--ink2)"/>
+      <text x="950" y="72" text-anchor="middle" class="sm">FF</text>
+      <text x="1035" y="72" text-anchor="middle" class="sm">FF</text>
+      <path d="M1094 116 H906 V82 H920" fill="none" stroke="var(--violet)" stroke-width="1.8"/>
+      <path d="M991 116 V82 H1005" fill="none" stroke="var(--violet)" stroke-width="1.8"/>
+      <circle cx="991" cy="116" r="3.5" fill="var(--violet)"/>
+      <text x="1098" y="121" class="sm mono" style="fill:var(--violet)">clk_b</text>
+      <text x="990" y="150" text-anchor="middle" class="sm" style="fill:var(--red)">miền clk_b</text>
+      <path d="M1055 60 H1100" fill="none" stroke="var(--ink2)" stroke-width="1.8"/>
+      <polygon points="1100,60 1091,55.8 1091,64.2" fill="var(--ink2)"/>
+      <text x="1104" y="65" class="sm mono">flag_b</text>
+      <!-- vào → ra -->
+      <path d="M98 285 H290" fill="none" stroke="var(--green)" stroke-width="2.4"/>
+      <polygon points="290,285 281,280.8 281,289.2" fill="var(--green)"/>
+      <rect x="290" y="264" width="130" height="42" rx="8" fill="var(--green-soft)" stroke="var(--green)" stroke-width="2"/>
+      <text x="355" y="290" text-anchor="middle" class="mono">a == 0</text>
+      <path d="M420 285 H850" fill="none" stroke="var(--green)" stroke-width="2.4"/>
+      <polygon points="850,285 841,280.8 841,289.2" fill="var(--green)"/>
+      <text x="858" y="290" class="mono">a_zero</text>
+      <!-- số hiệu đường -->
+      <text x="114" y="50" text-anchor="middle" font-weight="800" style="fill:var(--teal)">1</text>
+      <text x="455" y="120" text-anchor="middle" font-weight="800" style="fill:var(--acc)">2</text>
+      <text x="815" y="134" text-anchor="middle" font-weight="800" style="fill:var(--amber)">3</text>
+      <text x="630" y="276" text-anchor="middle" font-weight="800" style="fill:var(--green)">4</text>
+    </svg>
+    <table><thead><tr><th style="width:5%">#</th><th style="width:21%">Loại đường</th><th style="width:21%">Điểm phát</th><th style="width:21%">Điểm bắt</th><th>Ràng buộc SDC cần có</th></tr></thead><tbody>
+      <tr><td class="mono" style="color:var(--teal);font-weight:800">1</td><td>Vào → thanh ghi</td><td>cổng a, b, c</td><td>chân D của ra, rb, rc</td><td>create_clock, set_input_delay</td></tr>
+      <tr><td class="mono" style="color:var(--acc);font-weight:800">2</td><td>Thanh ghi → thanh ghi</td><td>chân CLK của ra, rb, rc</td><td>chân D của y</td><td>create_clock</td></tr>
+      <tr><td class="mono" style="color:var(--amber);font-weight:800">3</td><td>Thanh ghi → ra</td><td>chân CLK của y</td><td>cổng y</td><td>create_clock, set_output_delay</td></tr>
+      <tr><td class="mono" style="color:var(--green);font-weight:800">4</td><td>Vào → ra</td><td>cổng a</td><td>cổng a_zero</td><td>set_input_delay, set_output_delay</td></tr>
+    </tbody></table>
+  </div>
+  <p class="fn">Thiết kế 04-Vi-du/tuan-11A-sta-opensta/sta_dp.v. Đường đỏ flag_a → bộ đồng bộ hai flip-flop đi giữa hai miền đồng hồ (slide 36).</p>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 6 ĐỊNH NGHĨA ĐẠI LƯỢNG -->
+<section class="slide" data-sec="B · Setup và hold" data-title="Các đại lượng thời gian">
+  <div class="hd"><div><div class="eyebrow">5.2 · Tham số thời gian</div><h2>Các đại lượng thời gian của đường giữa hai flip-flop</h2></div>
+    <span class="tag">Định nghĩa</span></div>
+  <div class="body row" style="gap:16px">
+    <div class="col" style="flex:0 0 470px">
+      <div class="card plain" style="border:1px solid var(--line);padding:10px 12px"><h4 style="margin-bottom:4px">Đặc tả thời gian của flip-flop</h4>
+        <svg id="svFfSpec" viewBox="0 0 440 300" style="width:100%;height:auto">
+          <rect x="0" y="0" width="440" height="300" fill="var(--surface)"/>
+          <text x="8" y="50" font-weight="700" style="fill:var(--ink)">CLK</text>
+          <text x="8" y="132" font-weight="700" style="fill:var(--ink)">D</text>
+          <text x="8" y="212" font-weight="700" style="fill:var(--ink)">Q</text>
+          <path d="M60 58 H210 V30 H430" fill="none" stroke="var(--acc)" stroke-width="2.2"/>
+          <path class="grid" d="M210 58 V280" fill="none" stroke="var(--muted)" stroke-width="1" stroke-dasharray="4 3"/>
+          <rect x="60" y="114" width="80" height="28" fill="var(--surface2)" stroke="var(--ink2)" stroke-width="1.2"/>
+          <rect x="140" y="114" width="110" height="28" fill="var(--green-soft)" stroke="var(--green)" stroke-width="1.5"/>
+          <rect x="250" y="114" width="180" height="28" fill="var(--surface2)" stroke="var(--ink2)" stroke-width="1.2"/>
+          <text x="195" y="133" text-anchor="middle" class="sm" style="fill:var(--green)">ổn định</text>
+          <path class="grid" d="M140 94 V114" fill="none" stroke="var(--muted)" stroke-width="1" stroke-dasharray="4 3"/>
+          <path class="grid" d="M250 94 V114" fill="none" stroke="var(--muted)" stroke-width="1" stroke-dasharray="4 3"/>
+          <path d="M140 98 H210" fill="none" stroke="var(--amber)" stroke-width="1.5"/>
+          <polygon points="140,98 148,94.5 148,101.5" fill="var(--amber)"/>
+          <polygon points="210,98 202,94.5 202,101.5" fill="var(--amber)"/>
+          <path d="M210 98 H250" fill="none" stroke="var(--red)" stroke-width="1.5"/>
+          <polygon points="250,98 242,94.5 242,101.5" fill="var(--red)"/>
+          <text x="172" y="88" text-anchor="middle" class="sm" style="fill:var(--amber)">t_setup</text>
+          <text x="246" y="88" text-anchor="start" class="sm" style="fill:var(--red)">t_hold</text>
+          <rect x="60" y="194" width="210" height="28" fill="var(--surface2)" stroke="var(--ink2)" stroke-width="1.2"/>
+          <rect x="270" y="194" width="76" height="28" fill="var(--amber-soft)" stroke="var(--amber)" stroke-width="1.5"/>
+          <rect x="346" y="194" width="84" height="28" fill="var(--acc-soft)" stroke="var(--acc)" stroke-width="1.5"/>
+          <text x="130" y="213" text-anchor="middle" class="sm">giá trị cũ</text>
+          <text x="308" y="213" text-anchor="middle" class="sm">đang đổi</text>
+          <text x="388" y="213" text-anchor="middle" class="sm">giá trị mới</text>
+          <path class="grid" d="M270 222 V240" fill="none" stroke="var(--muted)" stroke-width="1" stroke-dasharray="4 3"/>
+          <path class="grid" d="M346 222 V272" fill="none" stroke="var(--muted)" stroke-width="1" stroke-dasharray="4 3"/>
+          <path d="M210 240 H270" fill="none" stroke="var(--ink2)" stroke-width="1.5"/>
+          <polygon points="270,240 262,236.5 262,243.5" fill="var(--ink2)"/>
+          <text x="276" y="245" class="sm">t_ccq</text>
+          <path d="M210 272 H346" fill="none" stroke="var(--ink2)" stroke-width="1.5"/>
+          <polygon points="346,272 338,268.5 338,275.5" fill="var(--ink2)"/>
+          <text x="352" y="277" class="sm">t_pcq</text>
+        </svg></div>
+    </div>
+    <div class="col" style="flex:1 1 auto">
+      <table class="tight"><thead><tr><th style="width:13%">Ký hiệu</th><th>Định nghĩa</th><th class="r" style="width:17%">Bộ 28 nm (ps)</th></tr></thead><tbody>
+        <tr><td>T<sub>c</sub></td><td>Chu kỳ đồng hồ: khoảng cách giữa hai sườn lên liên tiếp của CLK.</td><td class="r">—</td></tr>
+        <tr><td>t<sub>pcq</sub></td><td>Trễ lan truyền CLK→Q: thời gian <strong>lớn nhất</strong> từ sườn lên của CLK tới khi Q ổn định ở giá trị mới.</td><td class="mono r">80</td></tr>
+        <tr><td>t<sub>ccq</sub></td><td>Trễ nhiễm CLK→Q: thời gian <strong>nhỏ nhất</strong> từ sườn lên của CLK tới khi Q có thể bắt đầu đổi; t<sub>ccq</sub> ≤ t<sub>pcq</sub>.</td><td class="mono r">40</td></tr>
+        <tr><td>t<sub>pd</sub></td><td>Trễ lan truyền của logic tổ hợp: thời gian lớn nhất từ khi đầu vào đổi tới khi đầu ra ổn định (đường dài nhất).</td><td class="r">tổng trễ ô</td></tr>
+        <tr><td>t<sub>cd</sub></td><td>Trễ nhiễm của logic tổ hợp: thời gian nhỏ nhất từ khi đầu vào đổi tới khi đầu ra bắt đầu đổi (đường ngắn nhất).</td><td class="r">tổng trễ ô</td></tr>
+        <tr><td>t<sub>setup</sub></td><td>Thời gian thiết lập: D phải ổn định ít nhất t<sub>setup</sub> trước sườn lên của CLK.</td><td class="mono r">50</td></tr>
+        <tr><td>t<sub>hold</sub></td><td>Thời gian giữ: D phải giữ nguyên ít nhất t<sub>hold</sub> sau sườn lên của CLK.</td><td class="mono r">20</td></tr>
+        <tr><td>t<sub>unc</sub></td><td>Độ bất định đồng hồ: trừ khỏi thời điểm bắt khi kiểm tra setup, cộng vào khi kiểm tra hold; gồm skew chưa biết trước CTS, jitter, biên.</td><td class="mono r">70 (setup)</td></tr>
+        <tr><td>δ</td><td>Clock skew: δ = t<sub>CLK</sub>(FF bắt) − t<sub>CLK</sub>(FF phóng), chênh lệch thời điểm một sườn đồng hồ tới chân CLK của hai flip-flop.</td><td class="r">theo cây đồng hồ</td></tr>
+      </tbody></table>
+    </div>
+  </div>
+  <p class="fn">t<sub>pcq</sub>, t<sub>ccq</sub>, t<sub>setup</sub>, t<sub>hold</sub>: [1, Sec. 3.5.1, tr. 134]; t<sub>pd</sub>, t<sub>cd</sub>: [1, Sec. 2.9, tr. 84]; T<sub>c</sub>, skew: [1, Sec. 3.5.2–3.5.3, tr. 135, 140]; t<sub>unc</sub>: [2, tr. 7–8]; bộ tham số 28 nm và quy ước dấu δ của học phần.</p>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 7 SETUP -->
+<section class="slide" data-sec="B · Setup và hold" data-title="Điều kiện setup">
+  <div class="hd"><div><div class="eyebrow">5.2 · Thời gian thiết lập</div><h2>Điều kiện setup với clock skew và uncertainty</h2></div>
+    <span class="tag">Giản đồ</span></div>
+  <div class="body" style="gap:10px">
+    <svg id="svSetup" viewBox="0 0 1000 322" style="width:100%;max-width:860px;height:auto;margin:0 auto;flex:0 0 auto">
+      <rect x="0" y="0" width="1000" height="322" fill="var(--surface)"/>
+      <text x="10" y="52" font-weight="700" style="fill:var(--ink)">CLK phóng</text>
+      <text x="10" y="106" font-weight="700" style="fill:var(--ink)">CLK bắt</text>
+      <text x="10" y="156" font-weight="700" style="fill:var(--ink)">Q (FF phóng)</text>
+      <text x="10" y="208" font-weight="700" style="fill:var(--ink)">D (FF bắt)</text>
+      <text x="10" y="260" font-weight="700" style="fill:var(--ink)">Yêu cầu</text>
+      <path d="M120 58 H150 V30 H500 V58 H850 V30 H980" fill="none" stroke="var(--acc)" stroke-width="2.2"/>
+      <path d="M120 112 H200 V84 H550 V112 H900 V84 H980" fill="none" stroke="var(--violet)" stroke-width="2.2"/>
+      <path class="grid" d="M150 58 V290" fill="none" stroke="var(--muted)" stroke-width="1" stroke-dasharray="4 3"/>
+      <path class="grid" d="M200 112 V136" fill="none" stroke="var(--muted)" stroke-width="1" stroke-dasharray="4 3"/>
+      <path class="grid" d="M850 58 V290" fill="none" stroke="var(--muted)" stroke-width="1" stroke-dasharray="4 3"/>
+      <path class="grid" d="M900 81 V290" fill="none" stroke="var(--violet)" stroke-width="1.2" stroke-dasharray="4 3"/>
+      <path class="grid" d="M240 135 V188" fill="none" stroke="var(--muted)" stroke-width="1" stroke-dasharray="4 3"/>
+      <path class="grid" d="M640 187 V240" fill="none" stroke="var(--muted)" stroke-width="1" stroke-dasharray="4 3"/>
+      <rect x="120" y="136" width="30" height="28" fill="var(--surface2)" stroke="var(--ink2)" stroke-width="1.2"/>
+      <rect x="150" y="136" width="90" height="28" fill="var(--amber-soft)" stroke="var(--amber)" stroke-width="1.5"/>
+      <rect x="240" y="136" width="740" height="28" fill="var(--acc-soft)" stroke="var(--acc)" stroke-width="1.5"/>
+      <text x="195" y="155" text-anchor="middle" class="sm">t_pcq</text>
+      <text x="440" y="155" text-anchor="middle" class="sm">dữ liệu mới ổn định ở Q</text>
+      <rect x="120" y="188" width="120" height="28" fill="var(--surface2)" stroke="var(--ink2)" stroke-width="1.2"/>
+      <rect x="240" y="188" width="400" height="28" fill="var(--amber-soft)" stroke="var(--amber)" stroke-width="1.5"/>
+      <rect x="640" y="188" width="340" height="28" fill="var(--acc-soft)" stroke="var(--acc)" stroke-width="1.5"/>
+      <text x="180" y="207" text-anchor="middle" class="sm">cũ</text>
+      <text x="440" y="207" text-anchor="middle" class="sm">t_pd (logic tổ hợp)</text>
+      <text x="745" y="207" text-anchor="middle" class="sm">dữ liệu mới ổn định ở D</text>
+      <rect x="640" y="240" width="120" height="28" fill="var(--green-soft)" stroke="var(--green)" stroke-width="1.5"/>
+      <rect x="760" y="240" width="70" height="28" fill="var(--amber-soft)" stroke="var(--amber)" stroke-width="1.5"/>
+      <rect x="830" y="240" width="70" height="28" fill="var(--red-soft)" stroke="var(--red)" stroke-width="1.5"/>
+      <text x="700" y="259" text-anchor="middle" class="sm" font-weight="700" style="fill:var(--green)">slack</text>
+      <text x="795" y="259" text-anchor="middle" class="sm">t_setup</text>
+      <text x="865" y="259" text-anchor="middle" class="sm">t_unc</text>
+      <!-- chuỗi phụ thuộc -->
+      <path d="M150 124 H227" fill="none" stroke="var(--ink)" stroke-width="1.6"/>
+      <polygon points="228,124 219,119.8 219,128.2" fill="var(--ink)"/>
+      <path d="M240 176 H627" fill="none" stroke="var(--ink)" stroke-width="1.6"/>
+      <polygon points="628,176 619,171.8 619,180.2" fill="var(--ink)"/>
+      <path d="M900 228 H773" fill="none" stroke="var(--ink)" stroke-width="1.6"/>
+      <polygon points="772,228 781,223.8 781,232.2" fill="var(--ink)"/>
+      <circle cx="150" cy="16" r="12" fill="var(--acc)"/>
+      <text x="150" y="21" text-anchor="middle" font-weight="800" style="fill:#fff">1</text>
+      <text x="168" y="21" class="sm" style="fill:var(--acc)">sườn phóng</text>
+      <circle cx="240" cy="124" r="12" fill="var(--ink)"/>
+      <text x="240" y="129" text-anchor="middle" font-weight="800" style="fill:#fff">2</text>
+      <circle cx="640" cy="176" r="12" fill="var(--ink)"/>
+      <text x="640" y="181" text-anchor="middle" font-weight="800" style="fill:#fff">3</text>
+      <text x="657" y="181" class="sm" font-weight="700">arrival</text>
+      <circle cx="900" cy="70" r="12" fill="var(--violet)"/>
+      <text x="900" y="75" text-anchor="middle" font-weight="800" style="fill:#fff">4</text>
+      <text x="884" y="75" text-anchor="end" class="sm" style="fill:var(--violet)">sườn bắt: sườn lên thứ hai của CLK bắt</text>
+      <circle cx="760" cy="228" r="12" fill="var(--red)"/>
+      <text x="760" y="233" text-anchor="middle" font-weight="800" style="fill:#fff">5</text>
+      <text x="743" y="233" text-anchor="end" class="sm" font-weight="700">required</text>
+      <path d="M150 290 H850" fill="none" stroke="var(--ink2)" stroke-width="1.5"/>
+      <polygon points="150,290 159,285.8 159,294.2" fill="var(--ink2)"/>
+      <polygon points="850,290 841,285.8 841,294.2" fill="var(--ink2)"/>
+      <path d="M850 290 H900" fill="none" stroke="var(--violet)" stroke-width="1.5"/>
+      <polygon points="900,290 891,285.8 891,294.2" fill="var(--violet)"/>
+      <text x="500" y="314" text-anchor="middle" font-weight="700">T_c</text>
+      <text x="875" y="314" text-anchor="middle" font-weight="700" style="fill:var(--violet)">δ</text>
+    </svg>
+    <div class="g2a" style="gap:16px;grid-template-columns:1.35fr 1fr">
+      <div class="card" style="padding:10px 14px"><h4 style="margin-bottom:4px">Chuỗi sự kiện</h4>
+        <ul class="steps">
+          <li><span class="cn" style="background:var(--acc)">1</span><span>Sườn phóng: sườn lên của CLK tại FF phóng, t = 0.</span></li>
+          <li><span class="cn">2</span><span>Sau t<sub>pcq</sub>: Q của FF phóng ổn định ở giá trị mới (muộn nhất).</span></li>
+          <li><span class="cn">3</span><span>Sau thêm t<sub>pd</sub>: dữ liệu mới ổn định ở D của FF bắt; arrival = t<sub>pcq</sub> + t<sub>pd</sub>.</span></li>
+          <li><span class="cn" style="background:var(--violet)">4</span><span>Sườn bắt: sườn lên thứ hai của CLK tại FF bắt, t = T<sub>c</sub> + δ.</span></li>
+          <li><span class="cn" style="background:var(--red)">5</span><span>Từ ④ lùi t<sub>unc</sub> rồi t<sub>setup</sub>: D phải ổn định trước required = T<sub>c</sub> + δ − t<sub>unc</sub> − t<sub>setup</sub>.</span></li>
+        </ul></div>
+      <div class="card acc" style="padding:10px 14px"><h4 style="margin-bottom:4px">Điều kiện và slack</h4>
+        <div class="formula" style="font-size:15.5px;text-align:left;padding:8px 12px">T<sub>c</sub> + δ ≥ t<sub>pcq</sub> + t<sub>pd</sub> + t<sub>setup</sub> + t<sub>unc</sub><br>
+          slack<sub>setup</sub> = required − arrival</div>
+        <p class="sub" style="margin-top:6px">δ &gt; 0 dời sườn bắt ④ về sau, nới điều kiện setup.</p></div>
+    </div>
+  </div>
+  <p class="fn">[1, Sec. 3.5.2–3.5.3, tr. 135–142]; uncertainty: [2, tr. 7–8].</p>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 8 HOLD -->
+<section class="slide" data-sec="B · Setup và hold" data-title="Điều kiện hold">
+  <div class="hd"><div><div class="eyebrow">5.2 · Thời gian giữ</div><h2>Điều kiện hold</h2></div>
+    <span class="tag">Giản đồ</span></div>
+  <div class="body" style="gap:10px">
+    <svg id="svHold" viewBox="0 0 1000 322" style="width:100%;max-width:860px;height:auto;margin:0 auto;flex:0 0 auto">
+      <rect x="0" y="0" width="1000" height="322" fill="var(--surface)"/>
+      <text x="10" y="52" font-weight="700" style="fill:var(--ink)">CLK phóng</text>
+      <text x="10" y="106" font-weight="700" style="fill:var(--ink)">CLK bắt</text>
+      <text x="10" y="156" font-weight="700" style="fill:var(--ink)">Q (FF phóng)</text>
+      <text x="10" y="208" font-weight="700" style="fill:var(--ink)">D (FF bắt)</text>
+      <text x="10" y="260" font-weight="700" style="fill:var(--ink)">Yêu cầu</text>
+      <path d="M120 58 H150 V30 H620 V58 H980" fill="none" stroke="var(--acc)" stroke-width="2.2"/>
+      <path d="M120 112 H200 V84 H670 V112 H980" fill="none" stroke="var(--violet)" stroke-width="2.2"/>
+      <path class="grid" d="M150 58 V290" fill="none" stroke="var(--muted)" stroke-width="1" stroke-dasharray="4 3"/>
+      <path class="grid" d="M200 81 V290" fill="none" stroke="var(--violet)" stroke-width="1.2" stroke-dasharray="4 3"/>
+      <path class="grid" d="M260 135 V188" fill="none" stroke="var(--muted)" stroke-width="1" stroke-dasharray="4 3"/>
+      <path class="grid" d="M420 187 V240" fill="none" stroke="var(--muted)" stroke-width="1" stroke-dasharray="4 3"/>
+      <rect x="120" y="136" width="30" height="28" fill="var(--surface2)" stroke="var(--ink2)" stroke-width="1.2"/>
+      <rect x="150" y="136" width="110" height="28" fill="var(--surface2)" stroke="var(--acc)" stroke-width="1.5"/>
+      <rect x="260" y="136" width="90" height="28" fill="var(--amber-soft)" stroke="var(--amber)" stroke-width="1.5"/>
+      <rect x="350" y="136" width="630" height="28" fill="var(--acc-soft)" stroke="var(--acc)" stroke-width="1.5"/>
+      <text x="205" y="155" text-anchor="middle" class="sm">t_ccq</text>
+      <text x="305" y="155" text-anchor="middle" class="sm">đang đổi</text>
+      <text x="665" y="155" text-anchor="middle" class="sm">dữ liệu mới ổn định ở Q (sau t_pcq)</text>
+      <rect x="120" y="188" width="140" height="28" fill="var(--surface2)" stroke="var(--ink2)" stroke-width="1.2"/>
+      <rect x="260" y="188" width="160" height="28" fill="var(--surface2)" stroke="var(--acc)" stroke-width="1.5"/>
+      <rect x="420" y="188" width="560" height="28" fill="var(--amber-soft)" stroke="var(--amber)" stroke-width="1.5"/>
+      <text x="190" y="207" text-anchor="middle" class="sm">dữ liệu cũ</text>
+      <text x="340" y="207" text-anchor="middle" class="sm">t_cd (đường ngắn)</text>
+      <text x="700" y="207" text-anchor="middle" class="sm">dữ liệu mới bắt đầu tới D</text>
+      <rect x="200" y="240" width="110" height="28" fill="var(--amber-soft)" stroke="var(--amber)" stroke-width="1.5"/>
+      <rect x="310" y="240" width="110" height="28" fill="var(--green-soft)" stroke="var(--green)" stroke-width="1.5"/>
+      <text x="255" y="259" text-anchor="middle" class="sm">t_hold</text>
+      <text x="365" y="259" text-anchor="middle" class="sm" font-weight="700" style="fill:var(--green)">slack</text>
+      <text x="436" y="259" class="sm" style="fill:var(--muted)">D phải giữ dữ liệu cũ tới hết t_hold sau sườn bắt</text>
+      <!-- chuỗi phụ thuộc -->
+      <path d="M150 124 H247" fill="none" stroke="var(--ink)" stroke-width="1.6"/>
+      <polygon points="248,124 239,119.8 239,128.2" fill="var(--ink)"/>
+      <path d="M260 176 H407" fill="none" stroke="var(--ink)" stroke-width="1.6"/>
+      <polygon points="408,176 399,171.8 399,180.2" fill="var(--ink)"/>
+      <path d="M200 228 H297" fill="none" stroke="var(--ink)" stroke-width="1.6"/>
+      <polygon points="298,228 289,223.8 289,232.2" fill="var(--ink)"/>
+      <circle cx="150" cy="16" r="12" fill="var(--acc)"/>
+      <text x="150" y="21" text-anchor="middle" font-weight="800" style="fill:#fff">1</text>
+      <text x="168" y="21" class="sm" style="fill:var(--acc)">sườn phóng (sườn lên tại FF phóng)</text>
+      <circle cx="260" cy="124" r="12" fill="var(--ink)"/>
+      <text x="260" y="129" text-anchor="middle" font-weight="800" style="fill:#fff">2</text>
+      <circle cx="420" cy="176" r="12" fill="var(--ink)"/>
+      <text x="420" y="181" text-anchor="middle" font-weight="800" style="fill:#fff">3</text>
+      <text x="437" y="181" class="sm" font-weight="700">arrival (min) = t_ccq + t_cd</text>
+      <circle cx="200" cy="70" r="12" fill="var(--violet)"/>
+      <text x="200" y="75" text-anchor="middle" font-weight="800" style="fill:#fff">4</text>
+      <text x="217" y="75" class="sm" style="fill:var(--violet)">sườn bắt: cùng sườn đồng hồ, tới FF bắt sau δ</text>
+      <circle cx="310" cy="228" r="12" fill="var(--red)"/>
+      <text x="310" y="233" text-anchor="middle" font-weight="800" style="fill:#fff">5</text>
+      <text x="327" y="233" class="sm" font-weight="700">required</text>
+      <path d="M150 290 H200" fill="none" stroke="var(--violet)" stroke-width="1.5"/>
+      <polygon points="200,290 191,285.8 191,294.2" fill="var(--violet)"/>
+      <text x="175" y="314" text-anchor="middle" font-weight="700" style="fill:var(--violet)">δ</text>
+    </svg>
+    <div class="g2a" style="gap:16px;grid-template-columns:1.35fr 1fr">
+      <div class="card" style="padding:10px 14px"><h4 style="margin-bottom:4px">Chuỗi sự kiện</h4>
+        <ul class="steps">
+          <li><span class="cn" style="background:var(--acc)">1</span><span>Sườn phóng: sườn lên của CLK tại FF phóng, t = 0.</span></li>
+          <li><span class="cn">2</span><span>Sau t<sub>ccq</sub>: Q của FF phóng có thể bắt đầu đổi (sớm nhất); Q ổn định sau t<sub>pcq</sub>.</span></li>
+          <li><span class="cn">3</span><span>Sau thêm t<sub>cd</sub>: dữ liệu mới bắt đầu tới D của FF bắt; arrival = t<sub>ccq</sub> + t<sub>cd</sub>.</span></li>
+          <li><span class="cn" style="background:var(--violet)">4</span><span>Sườn bắt: chính sườn đồng hồ ① tới FF bắt tại t = δ.</span></li>
+          <li><span class="cn" style="background:var(--red)">5</span><span>Từ ④ cộng t<sub>hold</sub>: D giữ dữ liệu cũ tới required = δ + t<sub>hold</sub> (+ t<sub>unc,h</sub>).</span></li>
+        </ul></div>
+      <div class="card acc" style="padding:10px 14px"><h4 style="margin-bottom:4px">Điều kiện và slack</h4>
+        <div class="formula" style="font-size:15.5px;text-align:left;padding:8px 12px">t<sub>ccq</sub> + t<sub>cd</sub> ≥ t<sub>hold</sub> + δ<br>
+          slack<sub>hold</sub> = arrival − required</div>
+        <ul class="tick" style="margin-top:6px;gap:4px">
+          <li class="sub">Không có T<sub>c</sub>: giảm tần số không sửa được vi phạm hold.</li>
+          <li class="sub">FF nối thẳng (t<sub>cd</sub> = 0): vi phạm khi δ &gt; t<sub>ccq</sub> − t<sub>hold</sub>.</li>
+        </ul></div>
+    </div>
+  </div>
+  <p class="fn">[1, Sec. 3.5.1, tr. 134; (3.14)–(3.16), tr. 137; (3.21), tr. 142].</p>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 8 TÍNH TAY 28 nm -->
+<section class="slide" data-sec="B · Setup và hold" data-title="Ví dụ tính tay với thư viện 28 nm">
+  <div class="hd"><div><div class="eyebrow">5.2 · Bài tập tại lớp</div><h2>Ví dụ tính tay với thư viện 28 nm</h2></div>
+    <span class="tag">Mô hình</span></div>
+  <div class="body g2a">
+    <div class="col">
+      <div class="card"><h4>Đề bài <span class="assum">mô hình</span></h4>
+        <p class="sub">FF1 → NAND2 → XOR2 → AND2 → FF2 là đường dài nhất; FF1 → INV → FF2 là đường ngắn nhất.
+          Mỗi ô dùng một giá trị trễ cho cả t<sub>pd</sub> và t<sub>cd</sub>.</p>
+        <table style="margin-top:8px"><tbody>
+          <tr><td>t<sub>pd</sub> = NAND2 + XOR2 + AND2</td><td class="mono r">80 + 220 + 120 = 420 ps</td></tr>
+          <tr><td>t<sub>cd</sub> = INV</td><td class="mono r">50 ps</td></tr>
+          <tr><td>DFF: t<sub>pcq</sub> / t<sub>ccq</sub> / t<sub>setup</sub> / t<sub>hold</sub></td><td class="mono r">80 / 40 / 50 / 20 ps</td></tr>
+          <tr><td>Clock uncertainty (setup)</td><td class="mono r">70 ps</td></tr>
+        </tbody></table></div>
+      <div class="card acc"><h4>Công thức</h4>
+        <div class="formula" style="font-size:16px;text-align:left">T<sub>min</sub> = 80 + 420 + 50 + 70 − δ = 620 − δ (ps)<br>
+          slack<sub>hold</sub> = 40 + 50 − 20 − δ = 70 − δ (ps)</div></div>
+    </div>
+    <div class="col">
+      <div class="card"><h4>Kết quả theo δ</h4>
+        <table><thead><tr><th>δ (ps)</th><th class="r">T<sub>min</sub> (ps)</th><th class="r">f<sub>max</sub> (GHz)</th><th class="r">slack hold (ps)</th></tr></thead><tbody>
+          <tr><td class="mono">−40</td><td class="mono r">660</td><td class="mono r">1,515</td><td class="mono r">+110</td></tr>
+          <tr class="hl"><td class="mono">0</td><td class="mono r">620</td><td class="mono r">1,613</td><td class="mono r">+70</td></tr>
+          <tr><td class="mono">+60</td><td class="mono r">560</td><td class="mono r">1,786</td><td class="mono r">+10</td></tr>
+          <tr class="bad"><td class="mono">+100</td><td class="mono r">520</td><td class="mono r">1,923</td><td class="mono r">−30</td></tr>
+        </tbody></table></div>
+      <div class="card amber"><h4>Skew và hai điều kiện</h4>
+        <p class="sub">Mỗi 10 ps skew dương giảm T<sub>min</sub> 10 ps và giảm slack hold 10 ps. Ở δ = +100 ps đường ngắn vi phạm hold;
+          chèn bộ đệm hai INV (+100 ps) đưa slack hold về +70 ps mà không đổi T<sub>min</sub>, vì đường ngắn không phải đường găng setup.</p></div>
+    </div>
+  </div>
+  <p class="fn">Bộ tham số 28 nm cố định của học phần (CLAUDE.md); công thức [1, (3.18)–(3.21), tr. 141–142].</p>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 9 TƯƠNG TÁC SKEW -->
+<section class="slide" data-sec="B · Setup và hold" data-title="Ảnh hưởng của clock skew" data-int="1">
+  <div class="hd"><div><div class="eyebrow">5.2 · Độ xê dịch sườn</div><h2>Ảnh hưởng của clock skew lên setup và hold</h2></div>
+    <span class="tag">Tương tác</span></div>
+  <div class="body row" style="gap:18px">
+    <div class="col" style="flex:0 0 470px">
+      <div class="card"><h4>Đường của slide 9 <span class="assum">mô hình</span></h4>
+        <div class="row" style="gap:10px;align-items:center">
+          <span class="sub" style="min-width:120px">Skew δ (ps)</span>
+          <input type="range" id="skD" min="-150" max="150" step="10" value="0" style="flex:1 1 auto">
+          <output id="skDv" class="mono" style="font-size:16px;font-weight:700;min-width:48px">0</output>
+        </div>
+        <div class="row" style="gap:10px;align-items:center;margin-top:8px">
+          <span class="sub" style="min-width:120px">Số INV chèn</span>
+          <input type="range" id="skB" min="0" max="4" step="2" value="0" style="flex:1 1 auto">
+          <output id="skBv" class="mono" style="font-size:16px;font-weight:700;min-width:48px">0</output>
+        </div>
+      </div>
+      <div class="g2" style="gap:10px">
+        <div class="stat"><span class="l">T<sub>min</sub> SETUP</span><span class="v" id="skT">—</span></div>
+        <div class="stat"><span class="l">f<sub>max</sub></span><span class="v" id="skF">—</span></div>
+        <div class="stat" id="skHs"><span class="l">SLACK HOLD</span><span class="v" id="skH">—</span></div>
+        <div class="stat"><span class="l">T<sub>c</sub> = 650 ps: SLACK SETUP</span><span class="v" id="skS">—</span></div>
+      </div>
+    </div>
+    <div class="col" style="flex:1 1 auto">
+      <div class="card acc"><h4>Phép tính</h4>
+        <div class="formula" style="font-size:16px;text-align:left" id="skEq">—</div></div>
+      <div class="card"><h4>Quan sát</h4>
+        <ul class="tick">
+          <li>Skew dương: tăng tần số tối đa, giảm slack hold cùng một lượng.</li>
+          <li>Skew âm: ngược lại; đường hồi tiếp từ FF2 về FF1 chịu skew −δ.</li>
+          <li>INV chèn trên đường ngắn tăng t<sub>cd</sub> 50 ps mỗi ô; đường dài không đổi khi đường ngắn tách riêng.</li>
+          <li>Trước CTS, skew chưa biết: STA dùng clock uncertainty thay cho δ.</li>
+        </ul></div>
+    </div>
+  </div>
+  <p class="fn">Bộ tham số 28 nm cố định (CLAUDE.md); [1, Sec. 3.5.3, tr. 140–142]; [2, tr. 7].</p>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 10 ĐƯỜNG ĐỒNG HỒ PHÓNG VÀ BẮT -->
+<section class="slide" data-sec="B · Đồng hồ và tải" data-title="Đường đồng hồ phóng và đường đồng hồ bắt">
+  <div class="hd"><div><div class="eyebrow">5.2 · Sườn phóng, sườn bắt</div><h2>Đường đồng hồ phóng và đường đồng hồ bắt</h2></div>
+    <span class="tag">Sơ đồ</span></div>
+  <div class="body" style="gap:8px">
+    <svg id="svClkTree" viewBox="0 0 1160 215" style="width:100%;max-width:1060px;height:auto;margin:0 auto">
+      <rect x="0" y="0" width="1160" height="215" fill="var(--surface)"/>
+      <text x="10" y="125" font-weight="700" fill="var(--ink)">clk</text>
+      <path d="M40 120 H90" fill="none" stroke="var(--violet)" stroke-width="2.2"/>
+      <path d="M90 40 V180" fill="none" stroke="var(--violet)" stroke-width="2.2"/>
+      <circle cx="90" cy="120" r="4" fill="var(--violet)"/>
+      <path d="M90 40 H140" fill="none" stroke="var(--acc)" stroke-width="2.2"/>
+      <polygon points="140,40 131,35.8 131,44.2" fill="var(--acc)"/>
+      <rect x="140" y="22" width="80" height="36" rx="5" fill="var(--acc-soft)" stroke="var(--acc)" stroke-width="1.8"/>
+      <text x="180" y="45" text-anchor="middle" class="sm mono">cb_l</text>
+      <path d="M220 40 H340 V70" fill="none" stroke="var(--acc)" stroke-width="2.2"/>
+      <polygon points="340,70 335.8,61 344.2,61" fill="var(--acc)"/>
+      <text x="232" y="30" class="sm" fill="var(--acc)">đường đồng hồ phóng</text>
+      <path d="M90 180 H140" fill="none" stroke="var(--violet)" stroke-width="2.2"/>
+      <rect x="140" y="162" width="80" height="36" rx="5" fill="var(--violet-soft)" stroke="var(--violet)" stroke-width="1.8"/>
+      <rect x="240" y="162" width="80" height="36" rx="5" fill="var(--violet-soft)" stroke="var(--violet)" stroke-width="1.8"/>
+      <rect x="340" y="162" width="80" height="36" rx="5" fill="var(--violet-soft)" stroke="var(--violet)" stroke-width="1.8"/>
+      <text x="180" y="185" text-anchor="middle" class="sm mono">cb_c0</text>
+      <text x="280" y="185" text-anchor="middle" class="sm mono">cb_c1</text>
+      <text x="380" y="185" text-anchor="middle" class="sm mono">cb_c2</text>
+      <path d="M220 180 H240" fill="none" stroke="var(--violet)" stroke-width="2.2"/>
+      <path d="M320 180 H340" fill="none" stroke="var(--violet)" stroke-width="2.2"/>
+      <path d="M420 180 H850 V130" fill="none" stroke="var(--violet)" stroke-width="2.2"/>
+      <polygon points="850,130 845.8,139 854.2,139" fill="var(--violet)"/>
+      <text x="560" y="204" class="sm" fill="var(--violet)">đường đồng hồ bắt</text>
+      <text x="262" y="95" class="sm mono">d</text>
+      <path d="M274 90 H300" fill="none" stroke="var(--ink2)" stroke-width="1.8"/>
+      <rect x="300" y="70" width="80" height="60" rx="5" fill="var(--surface2)" stroke="var(--ink2)" stroke-width="1.8"/>
+      <polygon points="334,70 340,81 346,70" fill="var(--surface)" stroke="var(--ink2)" stroke-width="1.6"/>
+      <text x="340" y="105" text-anchor="middle" font-weight="700">ff1</text>
+      <path d="M380 90 H430" fill="none" stroke="var(--teal)" stroke-width="2.2"/>
+      <rect x="430" y="72" width="60" height="36" rx="5" fill="var(--teal-soft)" stroke="var(--teal)" stroke-width="1.6"/>
+      <rect x="520" y="72" width="60" height="36" rx="5" fill="var(--teal-soft)" stroke="var(--teal)" stroke-width="1.6"/>
+      <rect x="610" y="72" width="60" height="36" rx="5" fill="var(--teal-soft)" stroke="var(--teal)" stroke-width="1.6"/>
+      <rect x="700" y="72" width="60" height="36" rx="5" fill="var(--teal-soft)" stroke="var(--teal)" stroke-width="1.6"/>
+      <text x="460" y="95" text-anchor="middle" class="sm mono">i1</text>
+      <text x="550" y="95" text-anchor="middle" class="sm mono">i2</text>
+      <text x="640" y="95" text-anchor="middle" class="sm mono">i3</text>
+      <text x="730" y="95" text-anchor="middle" class="sm mono">i4</text>
+      <path d="M490 90 H520" fill="none" stroke="var(--teal)" stroke-width="2.2"/>
+      <path d="M580 90 H610" fill="none" stroke="var(--teal)" stroke-width="2.2"/>
+      <path d="M670 90 H700" fill="none" stroke="var(--teal)" stroke-width="2.2"/>
+      <path d="M760 90 H810" fill="none" stroke="var(--teal)" stroke-width="2.2"/>
+      <polygon points="810,90 801,85.8 801,94.2" fill="var(--teal)"/>
+      <text x="595" y="62" text-anchor="middle" class="sm" fill="var(--teal)">đường dữ liệu: 4 × inv_1</text>
+      <rect x="810" y="70" width="80" height="60" rx="5" fill="var(--surface2)" stroke="var(--ink2)" stroke-width="1.8"/>
+      <polygon points="844,130 850,119 856,130" fill="var(--surface)" stroke="var(--ink2)" stroke-width="1.6"/>
+      <text x="850" y="105" text-anchor="middle" font-weight="700">ff2</text>
+      <path d="M890 90 H930" fill="none" stroke="var(--ink2)" stroke-width="1.8"/>
+      <text x="938" y="95" class="sm mono">q</text>
+      <text x="970" y="45" class="sm">ff1, ff2: dfxtp_1</text>
+      <text x="970" y="68" class="sm">cb_*: clkbuf_1</text>
+    </svg>
+    <svg id="svClkTime" viewBox="0 0 1160 172" style="width:100%;max-width:1060px;height:auto;margin:0 auto">
+      <rect x="0" y="0" width="1160" height="172" fill="var(--surface)"/>
+      <text x="8" y="40" font-weight="700" fill="var(--ink)">clk gốc</text>
+      <text x="8" y="85" font-weight="700" fill="var(--acc)">CLK ff1</text>
+      <text x="8" y="130" font-weight="700" fill="var(--violet)">CLK ff2</text>
+      <path d="M100 45 H120 V20 H497 V45 H874 V20 H1110" fill="none" stroke="var(--ink2)" stroke-width="2.2"/>
+      <path d="M100 90 H176.5 V65 H553.5 V90 H930.5 V65 H1110" fill="none" stroke="var(--acc)" stroke-width="2.2"/>
+      <path d="M100 135 H286.6 V110 H663.6 V135 H1040.6 V110 H1110" fill="none" stroke="var(--violet)" stroke-width="2.2"/>
+      <path class="grid" d="M120 45 V145" fill="none" stroke="var(--muted)" stroke-width="1" stroke-dasharray="4 3"/>
+      <path class="grid" d="M176.5 90 V145" fill="none" stroke="var(--muted)" stroke-width="1" stroke-dasharray="4 3"/>
+      <path class="grid" d="M286.6 135 V145" fill="none" stroke="var(--muted)" stroke-width="1" stroke-dasharray="4 3"/>
+      <path class="grid" d="M874 45 V145" fill="none" stroke="var(--muted)" stroke-width="1" stroke-dasharray="4 3"/>
+      <path class="grid" d="M930.5 90 V145" fill="none" stroke="var(--muted)" stroke-width="1" stroke-dasharray="4 3"/>
+      <path class="grid" d="M1040.6 135 V145" fill="none" stroke="var(--muted)" stroke-width="1" stroke-dasharray="4 3"/>
+      <text x="120" y="164" text-anchor="middle" class="sm">0</text>
+      <text x="176" y="164" text-anchor="middle" class="sm" fill="var(--acc)">0,075</text>
+      <text x="287" y="164" text-anchor="middle" class="sm" fill="var(--violet)">0,221</text>
+      <text x="868" y="164" text-anchor="middle" class="sm">1,000</text>
+      <text x="930" y="164" text-anchor="middle" class="sm" fill="var(--acc)">1,075</text>
+      <text x="1041" y="164" text-anchor="middle" class="sm" fill="var(--violet)">1,221 ns</text>
+      <path d="M198 78 H182" fill="none" stroke="var(--acc)" stroke-width="1.6"/>
+      <polygon points="180,78 189,73.8 189,82.2" fill="var(--acc)"/>
+      <text x="202" y="83" class="sm" font-weight="700" style="fill:var(--acc)">sườn phóng</text>
+      <path d="M1062 123 H1046" fill="none" stroke="var(--violet)" stroke-width="1.6"/>
+      <polygon points="1044,123 1053,118.8 1053,127.2" fill="var(--violet)"/>
+      <text x="1066" y="128" class="sm" font-weight="700" style="fill:var(--violet)">sườn bắt</text>
+    </svg>
+    <div class="g2" style="gap:14px">
+      <div class="card" style="padding:10px 14px"><h4 style="margin-bottom:4px">Định nghĩa</h4>
+        <p class="sub"><strong>Sườn phóng</strong> (launch edge): sườn ở t = 0 làm ff1 đưa dữ liệu ra. <strong>Sườn bắt</strong> (capture edge): sườn kế tiếp, t = T = 1 ns, ff2 lấy mẫu.
+          <strong>Đường đồng hồ phóng</strong>: clk → cb_l → ff1/CLK. <strong>Đường đồng hồ bắt</strong>: clk → cb_c0 → cb_c1 → cb_c2 → ff2/CLK.
+          <strong>Đường dữ liệu</strong>: ff1/CLK → Q → i1…i4 → ff2/D.</p></div>
+      <div class="card acc" style="padding:10px 14px"><h4 style="margin-bottom:4px">Số đo, kịch bản prop</h4>
+        <p class="sub">Đồng hồ tới ff1 sau 0,075 ns (1 clkbuf_1), tới ff2 sau 0,221 ns (3 clkbuf_1: 0,077 + 0,073 + 0,071).
+          δ = 0,221 − 0,075 = 0,146 ns &gt; 0. Dữ liệu tới ff2/D tại 0,484 ns; required 1,122 ns; slack setup 0,638 ns.</p></div>
+    </div>
+  </div>
+  <p class="fn">04-Vi-du/tuan-11A-clock-va-tai/clk_demo.v; run_20261114_0859/clk.log, kịch bản prop (OpenSTA 2.7.0, Sky130 HD tt, 14/11/2026); [7, p. 4-10, 4-17].</p>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 11 LATENCY SKEW JITTER UNCERTAINTY -->
+<section class="slide" data-sec="B · Đồng hồ và tải" data-title="Latency, skew, jitter và uncertainty">
+  <div class="hd"><div><div class="eyebrow">5.2 · Trễ lan truyền và độ xê dịch sườn</div><h2>Latency, skew, jitter và uncertainty</h2></div>
+    <span class="tag">Khái niệm</span></div>
+  <div class="body">
+    <table class="tight"><thead><tr><th style="width:15%">Đại lượng</th><th style="width:29%">Nguồn gốc</th><th style="width:20%">SDC</th><th>Ảnh hưởng lên setup và hold</th></tr></thead><tbody>
+      <tr><td><strong>Source latency</strong></td><td>Từ gốc đồng hồ (PLL, chân chip) tới điểm định nghĩa đồng hồ</td><td class="mono">set_clock_latency -source</td><td>Cộng vào cả đường phóng và đường bắt; cùng nguồn thì triệt tiêu</td></tr>
+      <tr><td><strong>Network latency</strong></td><td>Buffer và dây của cây đồng hồ, từ điểm định nghĩa tới chân CLK</td><td class="mono">set_clock_latency; sau CTS: set_propagated_clock</td><td>Phần chung của hai nhánh triệt tiêu; phần khác nhau tạo skew</td></tr>
+      <tr><td><strong>Skew δ</strong></td><td>Hai nhánh khác số tầng buffer, tải, độ dài dây; biến thiên PVT và OCV giữa các nhánh</td><td>tính từ cây đồng hồ (propagated)</td><td>δ = t<sub>CLK</sub>(bắt) − t<sub>CLK</sub>(phóng); δ &gt; 0 nới setup, siết hold; δ &lt; 0 ngược lại</td></tr>
+      <tr><td><strong>Jitter</strong></td><td>Dao động của chu kỳ hoặc thời điểm sườn do PLL, nhiễu nguồn</td><td>gộp vào set_clock_uncertainty</td><td>Chu kỳ ngắn nhất làm giảm required setup; hold kiểm trên cùng sườn</td></tr>
+      <tr><td><strong>Uncertainty</strong></td><td>Trước CTS: skew ước lượng + jitter + biên. Sau CTS: jitter + biên, vì skew đã được tính</td><td class="mono">set_clock_uncertainty -setup / -hold</td><td>-setup trừ vào required setup; -hold cộng vào required hold</td></tr>
+    </tbody></table>
+    <div class="g2" style="gap:14px">
+      <div class="card acc"><h4>Hai bất đẳng thức đầy đủ</h4>
+        <div class="formula" style="font-size:15.5px;text-align:left">Setup: T<sub>c</sub> + δ − t<sub>unc,s</sub> ≥ t<sub>pcq</sub> + t<sub>pd</sub> + t<sub>setup</sub><br>
+          Hold : t<sub>ccq</sub> + t<sub>cd</sub> ≥ t<sub>hold</sub> + δ + t<sub>unc,h</sub><br>
+          δ = (L<sub>src</sub> + L<sub>net,bắt</sub>) − (L<sub>src</sub> + L<sub>net,phóng</sub>)</div></div>
+      <div class="card"><h4>Khai báo theo giai đoạn</h4>
+        <p class="sub">Trước CTS: đồng hồ lý tưởng, latency và độ dốc sườn ước lượng, uncertainty gồm skew. Sau CTS: <span class="k">set_propagated_clock</span>
+          tính latency, skew và độ dốc sườn từ cây đồng hồ; uncertainty chỉ còn jitter và biên; source latency vẫn giữ.</p></div>
+    </div>
+  </div>
+  <p class="fn">[7, pp. 4-12–4-16]; [2, tr. 7–8]; quy ước dấu δ của học phần (CLAUDE.md).</p>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 12 BỐN KỊCH BẢN ĐỒNG HỒ -->
+<section class="slide" data-sec="B · Đồng hồ và tải" data-title="Bốn kịch bản khai báo đồng hồ">
+  <div class="hd"><div><div class="eyebrow">5.2 · Thông tin đồng hồ trong báo cáo</div><h2>Bốn kịch bản khai báo đồng hồ, T = 1 ns</h2></div>
+    <span class="tag">Báo cáo</span></div>
+  <div class="body row" style="gap:16px">
+    <div class="col" style="flex:1 1 50%">
+      <table class="tight"><thead><tr><th>Kịch bản</th><th class="r">CLK ff1</th><th class="r">CLK ff2</th><th class="r">δ</th><th class="r">t<sub>setup</sub></th><th class="r">slack setup</th><th class="r">t<sub>hold</sub></th><th class="r">slack hold</th></tr></thead><tbody>
+        <tr><td class="mono">ideal</td><td class="mono r">0,000</td><td class="mono r">0,000</td><td class="mono r">0,000</td><td class="mono r">0,108</td><td class="mono r">0,496</td><td class="mono r">−0,033</td><td class="mono r">0,436</td></tr>
+        <tr><td class="mono">prop</td><td class="mono r">0,075</td><td class="mono r">0,221</td><td class="mono r">0,146</td><td class="mono r">0,100</td><td class="mono r">0,638</td><td class="mono r">−0,028</td><td class="mono r">0,297</td></tr>
+        <tr><td class="mono">prop_src</td><td class="mono r">0,575</td><td class="mono r">0,721</td><td class="mono r">0,146</td><td class="mono r">0,100</td><td class="mono r">0,638</td><td class="mono r">−0,028</td><td class="mono r">0,297</td></tr>
+        <tr><td class="mono">prop_src_unc</td><td class="mono r">0,575</td><td class="mono r">0,721</td><td class="mono r">0,146</td><td class="mono r">0,100</td><td class="mono r">0,538</td><td class="mono r">−0,028</td><td class="mono r">0,247</td></tr>
+      </tbody></table>
+      <p class="sub" style="font-size:14px">ns; CLK ff2 tính trong chu kỳ (trừ T). prop: <span class="k">set_propagated_clock</span>; prop_src: + <span class="k">set_clock_latency -source 0.5</span>;
+        prop_src_unc: + <span class="k">set_clock_uncertainty -setup 0.10 -hold 0.05</span>.</p>
+      <div class="card" style="padding:10px 14px"><h4 style="margin-bottom:4px">Chênh lệch giữa các kịch bản</h4>
+        <ul class="tick">
+          <li>ideal → prop: slack setup +0,142 = δ 0,146 + (0,108 − 0,100) − (0,284 − 0,272); CLK→Q và t<sub>setup</sub> đổi theo độ dốc sườn đồng hồ (0 → 0,035 ns). Slack hold giảm 0,139 ns.</li>
+          <li>prop → prop_src: 0,5 ns có ở cả hai đường, slack không đổi.</li>
+          <li>prop_src → prop_src_unc: setup −0,100; hold −0,050.</li>
+        </ul></div>
+    </div>
+    <div class="col" style="flex:1 1 50%">
+      <div class="card plain" style="border:1px solid var(--line);padding:10px 12px"><h4 style="margin-bottom:4px">prop_src_unc, setup (trích)</h4>
+        <pre class="vlog log lang-text" data-lang="text" id="cClkRep" style="font-size:11px;line-height:1.28"></pre></div>
+    </div>
+  </div>
+  <p class="fn">run_20261114_0859/summary.txt, clk.log (OpenSTA 2.7.0, 14/11/2026).</p>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 13 CG CL -->
+<section class="slide" data-sec="B · Đồng hồ và tải" data-title="Nguồn gốc Cg và Cl">
+  <div class="hd"><div><div class="eyebrow">5.4 · Tải đầu vào và đầu ra</div><h2>Điện dung cổng Cg và điện dung tải Cl</h2></div>
+    <span class="tag">Sơ đồ</span></div>
+  <div class="body row" style="gap:16px">
+    <div class="col" style="flex:1 1 60%">
+      <svg id="svCmos" viewBox="0 0 720 305" style="width:100%;height:auto">
+        <rect x="0" y="0" width="720" height="305" fill="var(--surface)"/>
+        <text x="150" y="18" text-anchor="middle" font-weight="700" fill="var(--ink)">INV</text>
+        <path d="M75 30 H200" fill="none" stroke="var(--red)" stroke-width="2"/>
+        <text x="206" y="35" class="sm" fill="var(--red)">VDD</text>
+        <path d="M150 60 V100" fill="none" stroke="var(--ink)" stroke-width="3"/>
+        <path d="M140 64 V96" fill="none" stroke="var(--ink)" stroke-width="2"/>
+        <path d="M150 64 H170 V30" fill="none" stroke="var(--ink2)" stroke-width="1.8"/>
+        <path d="M150 96 H170 V184" fill="none" stroke="var(--ink2)" stroke-width="1.8"/>
+        <text x="178" y="85" class="sm">pMOS</text>
+        <path d="M150 180 V220" fill="none" stroke="var(--ink)" stroke-width="3"/>
+        <path d="M140 184 V216" fill="none" stroke="var(--ink)" stroke-width="2"/>
+        <path d="M150 184 H170" fill="none" stroke="var(--ink2)" stroke-width="1.8"/>
+        <path d="M150 216 H170 V270" fill="none" stroke="var(--ink2)" stroke-width="1.8"/>
+        <text x="178" y="205" class="sm">nMOS</text>
+        <path d="M100 80 H130" fill="none" stroke="var(--acc)" stroke-width="1.8"/>
+        <circle cx="135" cy="80" r="5" fill="var(--surface)" stroke="var(--ink)" stroke-width="1.8"/>
+        <path d="M100 200 H140" fill="none" stroke="var(--acc)" stroke-width="1.8"/>
+        <text x="113" y="72" text-anchor="middle" class="sm" fill="var(--muted)">G</text>
+        <text x="113" y="192" text-anchor="middle" class="sm" fill="var(--muted)">G</text>
+        <text x="176" y="54" class="sm" fill="var(--muted)">S</text>
+        <text x="176" y="118" class="sm" fill="var(--muted)">D</text>
+        <text x="176" y="176" class="sm" fill="var(--muted)">D</text>
+        <text x="176" y="244" class="sm" fill="var(--muted)">S</text>
+        <path d="M100 80 V200" fill="none" stroke="var(--acc)" stroke-width="1.8"/>
+        <path d="M40 140 H100" fill="none" stroke="var(--acc)" stroke-width="1.8"/>
+        <text x="22" y="145" font-weight="700" fill="var(--acc)">A</text>
+        <path d="M70 140 V160" fill="none" stroke="var(--acc)" stroke-width="1.6"/>
+        <path d="M58 160 H82" fill="none" stroke="var(--acc)" stroke-width="2.4"/>
+        <path d="M58 168 H82" fill="none" stroke="var(--acc)" stroke-width="2.4"/>
+        <path d="M70 168 V270" fill="none" stroke="var(--acc)" stroke-width="1.6"/>
+        <text x="54" y="172" text-anchor="end" font-weight="700" fill="var(--acc)">Cg</text>
+        <path d="M170 140 H240" fill="none" stroke="var(--amber)" stroke-width="2"/>
+        <text x="205" y="132" text-anchor="middle" font-weight="700" fill="var(--amber)">Y</text>
+        <path d="M240 140 V160" fill="none" stroke="var(--amber)" stroke-width="1.6"/>
+        <path d="M228 160 H252" fill="none" stroke="var(--amber)" stroke-width="2.4"/>
+        <path d="M228 168 H252" fill="none" stroke="var(--amber)" stroke-width="2.4"/>
+        <path d="M240 168 V270" fill="none" stroke="var(--amber)" stroke-width="1.6"/>
+        <text x="258" y="172" font-weight="700" fill="var(--amber)">Cl</text>
+        <path d="M60 270 H260" fill="none" stroke="var(--ink2)" stroke-width="2"/>
+        <text x="150" y="292" text-anchor="middle" class="sm">GND</text>
+        <text x="560" y="18" text-anchor="middle" font-weight="700" fill="var(--ink)">NAND2</text>
+        <path d="M440 30 H660" fill="none" stroke="var(--red)" stroke-width="2"/>
+        <text x="666" y="35" class="sm" fill="var(--red)">VDD</text>
+        <text x="565" y="52" text-anchor="middle" class="sm">song song</text>
+        <path d="M510 60 V100" fill="none" stroke="var(--ink)" stroke-width="3"/>
+        <path d="M500 64 V96" fill="none" stroke="var(--ink)" stroke-width="2"/>
+        <path d="M510 64 H520 V30" fill="none" stroke="var(--ink2)" stroke-width="1.8"/>
+        <path d="M510 96 H520 V164" fill="none" stroke="var(--ink2)" stroke-width="1.8"/>
+        <path d="M600 60 V100" fill="none" stroke="var(--ink)" stroke-width="3"/>
+        <path d="M590 64 V96" fill="none" stroke="var(--ink)" stroke-width="2"/>
+        <path d="M600 64 H610 V30" fill="none" stroke="var(--ink2)" stroke-width="1.8"/>
+        <path d="M600 96 H610 V130" fill="none" stroke="var(--ink2)" stroke-width="1.8"/>
+        <path d="M520 130 H680" fill="none" stroke="var(--amber)" stroke-width="2"/>
+        <text x="645" y="122" text-anchor="middle" font-weight="700" fill="var(--amber)">Y</text>
+        <path d="M680 130 V150" fill="none" stroke="var(--amber)" stroke-width="1.6"/>
+        <path d="M668 150 H692" fill="none" stroke="var(--amber)" stroke-width="2.4"/>
+        <path d="M668 158 H692" fill="none" stroke="var(--amber)" stroke-width="2.4"/>
+        <path d="M680 158 V290" fill="none" stroke="var(--amber)" stroke-width="1.6"/>
+        <text x="698" y="162" font-weight="700" fill="var(--amber)">Cl</text>
+        <path d="M510 160 V200" fill="none" stroke="var(--ink)" stroke-width="3"/>
+        <path d="M500 164 V196" fill="none" stroke="var(--ink)" stroke-width="2"/>
+        <path d="M510 164 H520" fill="none" stroke="var(--ink2)" stroke-width="1.8"/>
+        <path d="M510 196 H520 V224" fill="none" stroke="var(--ink2)" stroke-width="1.8"/>
+        <path d="M510 220 V260" fill="none" stroke="var(--ink)" stroke-width="3"/>
+        <path d="M500 224 V256" fill="none" stroke="var(--ink)" stroke-width="2"/>
+        <path d="M510 224 H520" fill="none" stroke="var(--ink2)" stroke-width="1.8"/>
+        <path d="M510 256 H520 V290" fill="none" stroke="var(--ink2)" stroke-width="1.8"/>
+        <text x="565" y="215" text-anchor="middle" class="sm">nối tiếp</text>
+        <path d="M480 80 H490" fill="none" stroke="var(--acc)" stroke-width="1.8"/>
+        <circle cx="495" cy="80" r="5" fill="var(--surface)" stroke="var(--ink)" stroke-width="1.8"/>
+        <path d="M480 180 H500" fill="none" stroke="var(--acc)" stroke-width="1.8"/>
+        <path d="M570 80 H580" fill="none" stroke="var(--teal)" stroke-width="1.8"/>
+        <circle cx="585" cy="80" r="5" fill="var(--surface)" stroke="var(--ink)" stroke-width="1.8"/>
+        <path d="M480 240 H500" fill="none" stroke="var(--teal)" stroke-width="1.8"/>
+        <text x="474" y="85" text-anchor="end" font-weight="700" fill="var(--acc)">A</text>
+        <text x="474" y="185" text-anchor="end" font-weight="700" fill="var(--acc)">A</text>
+        <text x="564" y="85" text-anchor="end" font-weight="700" fill="var(--teal)">B</text>
+        <text x="474" y="245" text-anchor="end" font-weight="700" fill="var(--teal)">B</text>
+        <path d="M440 290 H690" fill="none" stroke="var(--ink2)" stroke-width="2"/>
+        <text x="434" y="295" text-anchor="end" class="sm">GND</text>
+      </svg>
+      <div class="card" style="padding:10px 14px"><h4 style="margin-bottom:4px">Hai loại điện dung</h4>
+        <p class="sub"><strong>Cg</strong>: điện dung cổng của các transistor nối vào một chân vào, tỉ lệ với diện tích cổng W·L; chân A của NAND2 nối một pMOS và một nMOS.
+          <strong>Cl</strong> tại nút ra = C<sub>dây</sub> + ΣCg của các ô fanout; cùng với điện dung ký sinh drain C<sub>par</sub> của chính ô, trễ tỉ lệ với R<sub>on</sub>·(C<sub>par</sub> + Cl).
+          Ký hiệu: pMOS có vòng tròn ở cực cổng G, nMOS không có; S nguồn, D máng.</p></div>
+    </div>
+    <div class="col" style="flex:1 1 40%">
+      <div class="card"><h4>Cg trong thư viện Sky130 HD <span class="assum src">đo</span></h4>
+        <table class="tight"><thead><tr><th>Ô / chân</th><th class="r">Cg (fF)</th></tr></thead><tbody>
+          <tr><td class="mono">inv_1 / A</td><td class="mono r">2,390</td></tr>
+          <tr><td class="mono">inv_2 / A</td><td class="mono r">4,640</td></tr>
+          <tr><td class="mono">inv_4 / A</td><td class="mono r">9,410</td></tr>
+          <tr><td class="mono">nand2_1 / A, B</td><td class="mono r">2,370; 2,430</td></tr>
+          <tr><td class="mono">nand2_2 / A</td><td class="mono r">4,560</td></tr>
+          <tr><td class="mono">nand2_4 / A</td><td class="mono r">8,800</td></tr>
+          <tr><td class="mono">dfxtp_1 / D, CLK</td><td class="mono r">1,670; 1,880</td></tr>
+          <tr><td class="mono">clkbuf_1 / A</td><td class="mono r">2,190</td></tr>
+        </tbody></table>
+        <p class="sub" style="margin-top:6px">Cg tăng gần tỉ lệ với cỡ ô: inv_4 / inv_1 = 3,94; nand2_4 / nand2_1 = 3,71 (chân A).</p></div>
+    </div>
+  </div>
+  <p class="fn">run_20261114_0859/summary.txt, cap.log (thuộc tính capacitance của chân trong liberty tt_025C_1v80; OpenSTA 2.7.0, 14/11/2026); [7, pp. 5-5–5-6].</p>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 14 TRỄ THEO TẢI -->
+<section class="slide" data-sec="B · Đồng hồ và tải" data-title="Trễ INV và NAND2 theo tải" data-int="1">
+  <div class="hd"><div><div class="eyebrow">5.4 · Tải đầu ra</div><h2>Trễ INV và NAND2 theo tải Cl</h2></div>
+    <span class="tag">Tương tác</span></div>
+  <div class="body row" style="gap:16px">
+    <div class="col" style="flex:0 0 460px">
+      <div class="row" style="gap:10px;align-items:center">
+        <span class="sub" style="min-width:170px">Cl = n × Cg(inv_1), n</span>
+        <input type="range" id="ldN" min="0" max="4" step="1" value="2" style="flex:1 1 auto">
+        <output id="ldNv" class="mono" style="font-size:16px;font-weight:700;min-width:90px">4</output>
+      </div>
+      <table class="tight"><thead><tr><th>Ô</th><th class="r">tpHL</th><th class="r">tpLH</th><th class="r">t<sub>p</sub> TB</th><th class="r">slew ra (R)</th></tr></thead>
+        <tbody id="ldTb"></tbody></table>
+      <div class="card" style="padding:10px 14px"><h4 style="margin-bottom:4px">Quan sát</h4>
+        <ul class="tick">
+          <li>Độ dốc t<sub>p</sub> theo Cl (n = 1 → 16): inv_1 4,53; inv_4 1,45; nand2_1 5,63 ps/fF.</li>
+          <li>NAND2 chậm hơn INV cùng cỡ, rõ nhất ở sườn xuống (n = 16: tpHL 225,6 so với 155,9 ps): hai nMOS nối tiếp trên đường xả.</li>
+          <li>tpLH &gt; tpHL ở mọi ô: pMOS dẫn yếu hơn nMOS.</li>
+          <li>inv_4 nhanh hơn ở tải lớn nhưng Cg gấp 3,94 lần inv_1, làm tầng đứng trước chậm đi.</li>
+        </ul></div>
+    </div>
+    <div class="col" style="flex:1 1 auto">
+      <div class="card plain" style="border:1px solid var(--line)"><h4>Trễ trung bình (ps) theo Cl (fF), slew vào 50 ps</h4>
+        <svg id="svLd" viewBox="0 0 640 320" style="width:100%;height:auto"></svg>
+        <div class="legend"><span><i style="background:var(--acc)"></i>inv_1</span><span><i style="background:var(--teal)"></i>inv_4</span><span><i style="background:var(--red)"></i>nand2_1 (chân A, B = 1)</span></div></div>
+    </div>
+  </div>
+  <p class="fn">report_dcalc (bảng NLDM của liberty); run_20261114_0859/summary.txt, cap.log (OpenSTA 2.7.0, Sky130 HD tt, 14/11/2026); [7, p. 5-6].</p>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 16 ĐỘ DỐC SƯỜN VÀ TRỄ LAN TRUYỀN: ĐỊNH NGHĨA -->
+<section class="slide" data-sec="B · Đồng hồ và tải" data-title="Slew, tpHL và tpLH trên dạng sóng">
+  <div class="hd"><div><div class="eyebrow">5.4 · Đo trễ ô</div><h2>Độ dốc sườn, tpHL và tpLH trên dạng sóng INV</h2></div>
+    <span class="tag">Định nghĩa</span></div>
+  <div class="body" style="gap:10px">
+    <div class="card plain" style="border:1px solid var(--line);padding:8px 12px;flex:0 0 auto"><h4 style="margin-bottom:2px">inv_1, Cl = 4 × Cg(inv_1) = 9,56 fF, slew vào 50 ps <span class="assum src">đo</span></h4>
+      <svg id="svSlew" viewBox="0 0 1160 292" style="width:100%;max-width:990px;height:auto;margin:0 auto">
+        <rect x="0" y="0" width="1160" height="292" fill="var(--surface)"/>
+        <text x="10" y="80" font-weight="700" style="fill:var(--acc)">A (vào)</text>
+        <text x="10" y="210" font-weight="700" style="fill:var(--amber)">Y (ra)</text>
+        <path class="grid" d="M120 54 H1140" fill="none" stroke="var(--line)" stroke-width="1" stroke-dasharray="3 4"/>
+        <path class="grid" d="M120 75 H1140" fill="none" stroke="var(--muted)" stroke-width="1" stroke-dasharray="6 4"/>
+        <path class="grid" d="M120 96 H1140" fill="none" stroke="var(--line)" stroke-width="1" stroke-dasharray="3 4"/>
+        <path class="grid" d="M120 184 H1140" fill="none" stroke="var(--line)" stroke-width="1" stroke-dasharray="3 4"/>
+        <path class="grid" d="M120 205 H1140" fill="none" stroke="var(--muted)" stroke-width="1" stroke-dasharray="6 4"/>
+        <path class="grid" d="M120 226 H1140" fill="none" stroke="var(--line)" stroke-width="1" stroke-dasharray="3 4"/>
+        <text x="114" y="59" text-anchor="end" class="sm" style="fill:var(--muted)">80 %</text>
+        <text x="114" y="80" text-anchor="end" class="sm" style="fill:var(--muted)">50 %</text>
+        <text x="114" y="101" text-anchor="end" class="sm" style="fill:var(--muted)">20 %</text>
+        <text x="114" y="189" text-anchor="end" class="sm" style="fill:var(--muted)">80 %</text>
+        <text x="114" y="210" text-anchor="end" class="sm" style="fill:var(--muted)">50 %</text>
+        <text x="114" y="231" text-anchor="end" class="sm" style="fill:var(--muted)">20 %</text>
+        <path d="M120 110 H200 L366.7 40 H640 L806.7 110 H1140" fill="none" stroke="var(--acc)" stroke-width="2.4"/>
+        <path d="M120 170 H323.3 L485.3 240 H754.9 L1048.9 170 H1140" fill="none" stroke="var(--amber)" stroke-width="2.4"/>
+        <!-- slew vào, sườn lên -->
+        <path class="grid" d="M233.3 96 V24" fill="none" stroke="var(--acc)" stroke-width="1" stroke-dasharray="4 3"/>
+        <path class="grid" d="M333.3 54 V24" fill="none" stroke="var(--acc)" stroke-width="1" stroke-dasharray="4 3"/>
+        <path d="M233.3 28 H333.3" fill="none" stroke="var(--acc)" stroke-width="1.5"/>
+        <polygon points="233.3,28 241.3,24.5 241.3,31.5" fill="var(--acc)"/>
+        <polygon points="333.3,28 325.3,24.5 325.3,31.5" fill="var(--acc)"/>
+        <text x="283.3" y="18" text-anchor="middle" class="sm" style="fill:var(--acc)">slew vào 50 ps</text>
+        <!-- slew vào, sườn xuống -->
+        <path class="grid" d="M673.3 54 V24" fill="none" stroke="var(--acc)" stroke-width="1" stroke-dasharray="4 3"/>
+        <path class="grid" d="M773.3 96 V24" fill="none" stroke="var(--acc)" stroke-width="1" stroke-dasharray="4 3"/>
+        <path d="M673.3 28 H773.3" fill="none" stroke="var(--acc)" stroke-width="1.5"/>
+        <polygon points="673.3,28 681.3,24.5 681.3,31.5" fill="var(--acc)"/>
+        <polygon points="773.3,28 765.3,24.5 765.3,31.5" fill="var(--acc)"/>
+        <text x="723.3" y="18" text-anchor="middle" class="sm" style="fill:var(--acc)">slew vào 50 ps</text>
+        <!-- tpHL -->
+        <path class="grid" d="M283.3 75 V150" fill="none" stroke="var(--ink2)" stroke-width="1" stroke-dasharray="4 3"/>
+        <path class="grid" d="M404.3 150 V205" fill="none" stroke="var(--ink2)" stroke-width="1" stroke-dasharray="4 3"/>
+        <path d="M283.3 150 H404.3" fill="none" stroke="var(--ink)" stroke-width="1.6"/>
+        <polygon points="283.3,150 291.3,146.5 291.3,153.5" fill="var(--ink)"/>
+        <polygon points="404.3,150 396.3,146.5 396.3,153.5" fill="var(--ink)"/>
+        <text x="343.8" y="142" text-anchor="middle" class="sm" font-weight="700">tpHL 60,5 ps</text>
+        <!-- tpLH -->
+        <path class="grid" d="M723.3 75 V150" fill="none" stroke="var(--ink2)" stroke-width="1" stroke-dasharray="4 3"/>
+        <path class="grid" d="M901.9 150 V205" fill="none" stroke="var(--ink2)" stroke-width="1" stroke-dasharray="4 3"/>
+        <path d="M723.3 150 H901.9" fill="none" stroke="var(--ink)" stroke-width="1.6"/>
+        <polygon points="723.3,150 731.3,146.5 731.3,153.5" fill="var(--ink)"/>
+        <polygon points="901.9,150 893.9,146.5 893.9,153.5" fill="var(--ink)"/>
+        <text x="812.6" y="142" text-anchor="middle" class="sm" font-weight="700">tpLH 89,3 ps</text>
+        <!-- slew ra -->
+        <path class="grid" d="M355.7 184 V262" fill="none" stroke="var(--amber)" stroke-width="1" stroke-dasharray="4 3"/>
+        <path class="grid" d="M452.9 226 V262" fill="none" stroke="var(--amber)" stroke-width="1" stroke-dasharray="4 3"/>
+        <path d="M355.7 262 H452.9" fill="none" stroke="var(--amber)" stroke-width="1.5"/>
+        <polygon points="355.7,262 363.7,258.5 363.7,265.5" fill="var(--amber)"/>
+        <polygon points="452.9,262 444.9,258.5 444.9,265.5" fill="var(--amber)"/>
+        <text x="404.3" y="282" text-anchor="middle" class="sm" style="fill:var(--amber)">slew ra (sườn xuống) 48,6 ps</text>
+        <path class="grid" d="M813.7 226 V262" fill="none" stroke="var(--amber)" stroke-width="1" stroke-dasharray="4 3"/>
+        <path class="grid" d="M990.1 184 V262" fill="none" stroke="var(--amber)" stroke-width="1" stroke-dasharray="4 3"/>
+        <path d="M813.7 262 H990.1" fill="none" stroke="var(--amber)" stroke-width="1.5"/>
+        <polygon points="813.7,262 821.7,258.5 821.7,265.5" fill="var(--amber)"/>
+        <polygon points="990.1,262 982.1,258.5 982.1,265.5" fill="var(--amber)"/>
+        <text x="901.9" y="282" text-anchor="middle" class="sm" style="fill:var(--amber)">slew ra (sườn lên) 88,2 ps</text>
+      </svg></div>
+    <div class="g2" style="gap:14px;grid-template-columns:1.25fr 1fr">
+      <div class="card acc" style="padding:10px 14px"><h4 style="margin-bottom:4px">Định nghĩa</h4>
+        <ul class="tick" style="gap:4px">
+          <li class="sub"><strong>Slew</strong> (transition): thời gian sườn đi giữa 20 % và 80 % V<sub>DD</sub>; vào: chân A, ra: chân Y.</li>
+          <li class="sub"><strong>tpHL</strong>: từ lúc A qua 50 % (sườn lên) tới lúc Y qua 50 % (sườn xuống, H → L).</li>
+          <li class="sub"><strong>tpLH</strong>: từ lúc A qua 50 % (sườn xuống) tới lúc Y qua 50 % (sườn lên, L → H).</li>
+          <li class="sub"><strong>t<sub>p</sub></strong> = (tpHL + tpLH)/2 = (60,5 + 89,3)/2 = 74,9 ps.</li>
+        </ul></div>
+      <div class="card" style="padding:10px 14px"><h4 style="margin-bottom:4px">Ngưỡng đo trong liberty tt_025C_1v80</h4>
+        <table class="tight"><thead><tr><th>Thuộc tính (rise, fall)</th><th class="r">%</th></tr></thead><tbody>
+          <tr><td class="mono">slew_lower_threshold_pct</td><td class="mono r">20</td></tr>
+          <tr><td class="mono">slew_upper_threshold_pct</td><td class="mono r">80</td></tr>
+          <tr><td class="mono">input_threshold_pct</td><td class="mono r">50</td></tr>
+          <tr><td class="mono">output_threshold_pct</td><td class="mono r">50</td></tr>
+        </tbody></table></div>
+    </div>
+  </div>
+  <p class="fn">Ngưỡng: run_20261114_1148/lib_thresh.txt (dòng 149–162 của sky130_fd_sc_hd__tt_025C_1v80.lib, slew_derate_from_library 1,0); trễ và slew: run_20261114_0859/summary.txt, cap.log (report_dcalc, OpenSTA 2.7.0, 14/11/2026); trễ đo ở 50 %: [1, Sec. 2.9, tr. 84]; NLDM: [7, pp. 5-4–5-5].</p>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 15 TRỄ THEO SLEW VÀO -->
+<section class="slide" data-sec="B · Đồng hồ và tải" data-title="Trễ theo độ dốc sườn vào">
+  <div class="hd"><div><div class="eyebrow">5.2 · Độ dốc sườn</div><h2>Trễ ô theo độ dốc sườn vào</h2></div>
+    <span class="tag">Số đo</span></div>
+  <div class="body g2">
+    <div class="col">
+      <div class="card"><h4>Tải 4 × Cg(inv_1) = 9,56 fF, trễ (ps) <span class="assum src">đo</span></h4>
+        <table class="tight"><thead><tr><th class="r">slew vào (ps)</th><th class="r">inv_1 tpHL</th><th class="r">inv_1 tpLH</th><th class="r">nand2_1 tpHL</th><th class="r">nand2_1 tpLH</th></tr></thead><tbody>
+          <tr><td class="mono r">20</td><td class="mono r">49,2</td><td class="mono r">77,3</td><td class="mono r">70,8</td><td class="mono r">86,0</td></tr>
+          <tr><td class="mono r">50</td><td class="mono r">60,5</td><td class="mono r">89,3</td><td class="mono r">80,9</td><td class="mono r">98,4</td></tr>
+          <tr><td class="mono r">100</td><td class="mono r">79,1</td><td class="mono r">111,4</td><td class="mono r">98,2</td><td class="mono r">120,6</td></tr>
+          <tr><td class="mono r">200</td><td class="mono r">105,8</td><td class="mono r">153,0</td><td class="mono r">126,8</td><td class="mono r">164,0</td></tr>
+          <tr><td class="mono r">400</td><td class="mono r">141,1</td><td class="mono r">217,7</td><td class="mono r">165,7</td><td class="mono r">234,9</td></tr>
+        </tbody></table>
+        <p class="sub" style="margin-top:6px">Slew ra sườn lên của inv_1 tăng từ 88,1 lên 151,3 ps khi slew vào tăng từ 20 lên 400 ps: sườn chậm truyền sang tầng sau.</p></div>
+    </div>
+    <div class="col">
+      <div class="card acc"><h4>Trễ ô phụ thuộc ba yếu tố</h4>
+        <p class="sub">Thư viện NLDM tra trễ và slew ra theo hai chỉ số: độ dốc sườn vào và điện dung tải ra; mỗi góc PVT có một bảng riêng.
+          Từ 20 lên 400 ps slew vào, tpHL của inv_1 tăng 2,9 lần (49,2 → 141,1 ps).</p></div>
+      <div class="card"><h4>Liên hệ với đồng hồ</h4>
+        <p class="sub">Độ dốc sườn tại chân CLK cũng là một chỉ số tra bảng của flip-flop. Ở clk_demo, khi đồng hồ đi qua clkbuf_1 (slew tại ff1/CLK 0 → 0,035 ns):
+          CLK→Q của ff1 0,272 → 0,284 ns; t<sub>setup</sub> của ff2 0,108 → 0,100 ns; t<sub>hold</sub> −0,033 → −0,028 ns.</p></div>
+    </div>
+  </div>
+  <p class="fn">run_20261114_0859/summary.txt, cap.log (report_dcalc, OpenSTA 2.7.0, 14/11/2026) · [7, pp. 5-4, 5-5, 5-9] · run_20261114_0859/clk.log, kịch bản ideal và prop; [7, p. 4-15].</p>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 16 PHÓNG SƯỜN XUỐNG, BẮT SƯỜN LÊN: SƠ ĐỒ -->
+<section class="slide" data-sec="B · Đồng hồ và tải" data-title="Phóng sườn xuống, bắt sườn lên">
+  <div class="hd"><div><div class="eyebrow">5.2 · Sườn phóng, sườn bắt</div><h2>Phóng sườn xuống, bắt sườn lên: đường nửa chu kỳ</h2></div>
+    <span class="tag">Sơ đồ</span></div>
+  <div class="body" style="gap:8px">
+    <svg id="svHalfCkt" viewBox="0 0 1160 150" style="width:100%;max-width:1060px;height:auto;margin:0 auto">
+      <rect x="0" y="0" width="1160" height="150" fill="var(--surface)"/>
+      <text x="10" y="125" font-weight="700" fill="var(--ink)">clk</text>
+      <path d="M40 120 H850 V100" fill="none" stroke="var(--violet)" stroke-width="2.2"/>
+      <path d="M330 120 V108" fill="none" stroke="var(--violet)" stroke-width="2.2"/>
+      <circle cx="330" cy="120" r="4" fill="var(--violet)"/>
+      <circle cx="330" cy="104" r="4" fill="var(--surface)" stroke="var(--violet)" stroke-width="2"/>
+      <polygon points="850,100 845.8,109 854.2,109" fill="var(--violet)"/>
+      <text x="340" y="141" class="sm mono" fill="var(--violet)">CLK_N</text>
+      <text x="860" y="141" class="sm mono" fill="var(--violet)">CLK</text>
+      <text x="262" y="75" class="sm mono">d</text>
+      <path d="M274 70 H290" fill="none" stroke="var(--ink2)" stroke-width="1.8"/>
+      <rect x="290" y="40" width="80" height="60" rx="5" fill="var(--surface2)" stroke="var(--ink2)" stroke-width="1.8"/>
+      <text x="330" y="66" text-anchor="middle" font-weight="700">ff_n</text>
+      <polygon points="324,100 330,89 336,100" fill="var(--surface)" stroke="var(--ink2)" stroke-width="1.6"/>
+      <text x="330" y="84" text-anchor="middle" class="sm mono">dfrtn_1</text>
+      <path d="M370 70 H430" fill="none" stroke="var(--teal)" stroke-width="2.2"/>
+      <rect x="430" y="52" width="60" height="36" rx="5" fill="var(--teal-soft)" stroke="var(--teal)" stroke-width="1.6"/>
+      <rect x="520" y="52" width="60" height="36" rx="5" fill="var(--teal-soft)" stroke="var(--teal)" stroke-width="1.6"/>
+      <rect x="610" y="52" width="60" height="36" rx="5" fill="var(--teal-soft)" stroke="var(--teal)" stroke-width="1.6"/>
+      <rect x="700" y="52" width="60" height="36" rx="5" fill="var(--teal-soft)" stroke="var(--teal)" stroke-width="1.6"/>
+      <text x="460" y="75" text-anchor="middle" class="sm mono">i1</text>
+      <text x="550" y="75" text-anchor="middle" class="sm mono">i2</text>
+      <text x="640" y="75" text-anchor="middle" class="sm mono">i3</text>
+      <text x="730" y="75" text-anchor="middle" class="sm mono">i4</text>
+      <path d="M490 70 H520" fill="none" stroke="var(--teal)" stroke-width="2.2"/>
+      <path d="M580 70 H610" fill="none" stroke="var(--teal)" stroke-width="2.2"/>
+      <path d="M670 70 H700" fill="none" stroke="var(--teal)" stroke-width="2.2"/>
+      <path d="M760 70 H810" fill="none" stroke="var(--teal)" stroke-width="2.2"/>
+      <polygon points="810,70 801,65.8 801,74.2" fill="var(--teal)"/>
+      <text x="595" y="40" text-anchor="middle" class="sm" fill="var(--teal)">4 × inv_1</text>
+      <rect x="810" y="40" width="80" height="60" rx="5" fill="var(--surface2)" stroke="var(--ink2)" stroke-width="1.8"/>
+      <text x="850" y="66" text-anchor="middle" font-weight="700">ff_p</text>
+      <polygon points="844,100 850,89 856,100" fill="var(--surface)" stroke="var(--ink2)" stroke-width="1.6"/>
+      <text x="850" y="84" text-anchor="middle" class="sm mono">dfxtp_1</text>
+      <path d="M890 70 H930" fill="none" stroke="var(--ink2)" stroke-width="1.8"/>
+      <text x="938" y="75" class="sm mono">q</text>
+    </svg>
+    <svg id="svHalfTime" viewBox="0 0 1160 235" style="width:100%;max-width:1060px;height:auto;margin:0 auto">
+      <rect x="0" y="0" width="1160" height="235" fill="var(--surface)"/>
+      <text x="10" y="50" font-weight="700" fill="var(--ink)">clk</text>
+      <text x="10" y="110" font-weight="700" fill="var(--ink)">Dữ liệu</text>
+      <text x="10" y="150" font-weight="700" fill="var(--ink)">Yêu cầu</text>
+      <text x="10" y="190" font-weight="700" fill="var(--ink)">Slack</text>
+      <path d="M100 60 H140 V30 H540 V60 H940 V30 H1100" fill="none" stroke="var(--violet)" stroke-width="2.2"/>
+      <path class="grid" d="M540 60 V205" fill="none" stroke="var(--muted)" stroke-width="1" stroke-dasharray="4 3"/>
+      <path class="grid" d="M940 30 V205" fill="none" stroke="var(--muted)" stroke-width="1" stroke-dasharray="4 3"/>
+      <path class="grid" d="M140 60 V205" fill="none" stroke="var(--muted)" stroke-width="1" stroke-dasharray="4 3"/>
+      <rect x="540" y="90" width="288" height="30" fill="var(--acc-soft)" stroke="var(--acc)" stroke-width="1.5"/>
+      <rect x="828" y="90" width="99.2" height="30" fill="var(--teal-soft)" stroke="var(--teal)" stroke-width="1.5"/>
+      <text x="684" y="110" text-anchor="middle" class="sm">CLK_N→Q 0,360</text>
+      <text x="877.6" y="110" text-anchor="middle" class="sm">4 INV 0,124</text>
+      <rect x="895.2" y="130" width="44.8" height="30" fill="var(--amber-soft)" stroke="var(--amber)" stroke-width="1.5"/>
+      <text x="888" y="150" text-anchor="end" class="sm" fill="var(--amber)">t_setup 0,056 → required 0,944</text>
+      <rect x="895.2" y="170" width="32" height="30" fill="var(--red-soft)" stroke="var(--red)" stroke-width="1.5"/>
+      <text x="888" y="190" text-anchor="end" class="sm" fill="var(--red)">arrival 0,984 − required 0,944 → slack −0,040</text>
+      <text x="140" y="226" text-anchor="middle" class="sm">0</text>
+      <text x="540" y="226" text-anchor="middle" class="sm">0,5: sườn xuống (phóng)</text>
+      <text x="940" y="226" text-anchor="middle" class="sm">1,0 ns: sườn lên (bắt)</text>
+    </svg>
+    <div class="g2" style="gap:14px">
+      <div class="card" style="padding:10px 14px"><h4 style="margin-bottom:4px">Cửa sổ của dữ liệu</h4>
+        <p class="sub">ff_n (dfrtn_1, chân CLK_N) phóng ở sườn xuống 0,5 ns; ff_p bắt ở sườn lên kế tiếp 1,0 ns. Đường dữ liệu chỉ có T/2 = 0,5 ns thay cho T.
+          Arrival = 0,5 + 0,360 + 0,124 = 0,984 ns; required = 1,0 − 0,056 = 0,944 ns.</p></div>
+      <div class="card acc" style="padding:10px 14px"><h4 style="margin-bottom:4px">Điều kiện</h4>
+        <p class="sub">Đồng hồ lý tưởng, độ rộng xung 50 % (dạng sóng mặc định của create_clock), RESET_B = 1; T = 1,0 ns.</p></div>
+    </div>
+  </div>
+  <p class="fn">04-Vi-du/tuan-11A-clock-va-tai/half_demo.v, half.tcl; run_20261114_0859/half.log, summary.txt (OpenSTA 2.7.0, Sky130 HD tt, 14/11/2026); [7, p. 4-10].</p>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 17 PHÓNG SƯỜN XUỐNG: BÁO CÁO -->
+<section class="slide" data-sec="B · Đồng hồ và tải" data-title="Báo cáo đường nửa chu kỳ">
+  <div class="hd"><div><div class="eyebrow">5.5 · Phân tích báo cáo</div><h2>Báo cáo đường nửa chu kỳ: setup và hold</h2></div>
+    <span class="tag">report_checks</span></div>
+  <div class="body g2">
+    <div class="col">
+      <div class="card plain" style="border:1px solid var(--line);padding:10px 12px"><h4 style="margin-bottom:4px">half_T1.0, setup</h4>
+        <pre class="vlog log lang-text" data-lang="text" id="cHalf" style="font-size:11.5px;line-height:1.28"></pre></div>
+    </div>
+    <div class="col">
+      <div class="card"><h4>Hai chu kỳ <span class="assum src">đo</span></h4>
+        <table class="tight"><thead><tr><th>T (ns)</th><th>Sườn phóng / bắt</th><th class="r">arrival</th><th class="r">required</th><th class="r">setup</th><th class="r">hold</th></tr></thead><tbody>
+          <tr class="bad"><td class="mono">1,0</td><td>xuống 0,500 / lên 1,000</td><td class="mono r">0,984</td><td class="mono r">0,944</td><td class="mono r">−0,040</td><td class="mono r">0,981</td></tr>
+          <tr class="ok"><td class="mono">1,2</td><td>xuống 0,600 / lên 1,200</td><td class="mono r">1,084</td><td class="mono r">1,144</td><td class="mono r">0,060</td><td class="mono r">1,081</td></tr>
+        </tbody></table>
+        <p class="sub" style="margin-top:6px">T tăng 0,2 ns thì nửa chu kỳ tăng 0,1 ns: slack setup −0,040 → 0,060 ns.</p></div>
+      <div class="card acc"><h4>Kiểm tra hold</h4>
+        <p class="sub">Hold so dữ liệu phóng ở sườn xuống 0,5 ns với sườn lên trước đó của ff_p ở 0 ns: arrival min 0,930 ns,
+          required −0,051 ns (hold thư viện), slack 0,981 ns. Hai sườn cách nhau T/2, nên đường nửa chu kỳ có biên hold lớn và biên setup nhỏ.</p></div>
+      <div class="card amber"><h4>Nhận biết trong báo cáo</h4>
+        <p class="sub">Trong báo cáo, dòng <span class="k">clock clk (fall edge)</span> ở đầu đường cho biết đường được phóng bằng sườn xuống;
+          muốn dùng đủ một chu kỳ thì hai flip-flop phải cùng loại sườn.</p></div>
+    </div>
+  </div>
+  <p class="fn">run_20261114_0859/half.log, CASE half_T1.0, report_checks -path_delay max (OpenSTA 2.7.0, 14/11/2026) · run_20261114_0859/summary.txt (mục half.log).</p>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 18 VI PHẠM HOLD -->
+<section class="slide" data-sec="B · Đồng hồ và tải" data-title="Vi phạm hold: đường ngắn và skew dương">
+  <div class="hd"><div><div class="eyebrow">5.2 · Thời gian giữ</div><h2>Vi phạm hold: đường ngắn và skew dương</h2></div>
+    <span class="tag">Báo cáo</span></div>
+  <div class="body" style="gap:8px">
+    <svg id="svHoldCkt" viewBox="0 0 1160 152" style="width:100%;max-width:960px;height:auto;margin:0 auto;flex:0 0 auto">
+      <rect x="0" y="0" width="1160" height="152" fill="var(--surface)"/>
+      <text x="10" y="105" font-weight="700" fill="var(--ink)">clk</text>
+      <path d="M40 100 H90" fill="none" stroke="var(--violet)" stroke-width="2.2"/>
+      <path d="M90 30 V130" fill="none" stroke="var(--violet)" stroke-width="2.2"/>
+      <circle cx="90" cy="100" r="4" fill="var(--violet)"/>
+      <path d="M90 30 H130" fill="none" stroke="var(--acc)" stroke-width="2.2"/>
+      <rect x="130" y="14" width="70" height="32" rx="5" fill="var(--acc-soft)" stroke="var(--acc)" stroke-width="1.8"/>
+      <text x="165" y="35" text-anchor="middle" class="sm mono">cb_l</text>
+      <path d="M200 30 H760 V60" fill="none" stroke="var(--acc)" stroke-width="2.2"/>
+      <polygon points="760,60 755.8,51 764.2,51" fill="var(--acc)"/>
+      <path d="M90 130 H130" fill="none" stroke="var(--violet)" stroke-width="2.2"/>
+      <rect x="130" y="114" width="70" height="32" rx="5" fill="var(--violet-soft)" stroke="var(--violet)" stroke-width="1.8"/>
+      <rect x="220" y="114" width="70" height="32" rx="5" fill="var(--violet-soft)" stroke="var(--violet)" stroke-width="1.8"/>
+      <rect x="310" y="114" width="70" height="32" rx="5" fill="var(--violet-soft)" stroke="var(--violet)" stroke-width="1.8"/>
+      <rect x="400" y="114" width="70" height="32" rx="5" fill="var(--violet-soft)" stroke="var(--violet)" stroke-width="1.8"/>
+      <rect x="490" y="114" width="70" height="32" rx="5" fill="var(--violet-soft)" stroke="var(--violet)" stroke-width="1.8"/>
+      <rect x="580" y="114" width="70" height="32" rx="5" fill="var(--violet-soft)" stroke="var(--violet)" stroke-width="1.8"/>
+      <text x="165" y="135" text-anchor="middle" class="sm mono">cb_1</text>
+      <text x="255" y="135" text-anchor="middle" class="sm mono">cb_2</text>
+      <text x="345" y="135" text-anchor="middle" class="sm mono">cb_3</text>
+      <text x="435" y="135" text-anchor="middle" class="sm mono">cb_4</text>
+      <text x="525" y="135" text-anchor="middle" class="sm mono">cb_5</text>
+      <text x="615" y="135" text-anchor="middle" class="sm mono">cb_6</text>
+      <path d="M200 130 H220" fill="none" stroke="var(--violet)" stroke-width="2.2"/>
+      <path d="M290 130 H310" fill="none" stroke="var(--violet)" stroke-width="2.2"/>
+      <path d="M380 130 H400" fill="none" stroke="var(--violet)" stroke-width="2.2"/>
+      <path d="M470 130 H490" fill="none" stroke="var(--violet)" stroke-width="2.2"/>
+      <path d="M560 130 H580" fill="none" stroke="var(--violet)" stroke-width="2.2"/>
+      <path d="M650 130 H960 V120" fill="none" stroke="var(--violet)" stroke-width="2.2"/>
+      <polygon points="960,120 955.8,129 964.2,129" fill="var(--violet)"/>
+      <text x="672" y="95" class="sm mono">d</text>
+      <path d="M684 90 H720" fill="none" stroke="var(--ink2)" stroke-width="1.8"/>
+      <rect x="720" y="60" width="80" height="60" rx="5" fill="var(--surface2)" stroke="var(--ink2)" stroke-width="1.8"/>
+      <polygon points="754,60 760,71 766,60" fill="var(--surface)" stroke="var(--ink2)" stroke-width="1.6"/>
+      <text x="760" y="95" text-anchor="middle" font-weight="700">ff1</text>
+      <path d="M800 90 H920" fill="none" stroke="var(--red)" stroke-width="2.4"/>
+      <polygon points="920,90 911,85.8 911,94.2" fill="var(--red)"/>
+      <text x="860" y="80" text-anchor="middle" class="sm" fill="var(--red)">Q → D trực tiếp</text>
+      <rect x="920" y="60" width="80" height="60" rx="5" fill="var(--surface2)" stroke="var(--ink2)" stroke-width="1.8"/>
+      <polygon points="954,120 960,109 966,120" fill="var(--surface)" stroke="var(--ink2)" stroke-width="1.6"/>
+      <text x="960" y="95" text-anchor="middle" font-weight="700">ff2</text>
+      <path d="M1000 90 H1040" fill="none" stroke="var(--ink2)" stroke-width="1.8"/>
+      <text x="1048" y="95" class="sm mono">q</text>
+      <text x="230" y="22" class="sm" fill="var(--acc)">1 clkbuf_1: 0,075 ns</text>
+      <text x="700" y="148" class="sm" fill="var(--violet)">6 clkbuf_1: 0,442 ns</text>
+    </svg>
+    <div class="row" style="gap:14px">
+      <div class="card plain" style="border:1px solid var(--line);padding:8px 12px;flex:1 1 50%"><h4 style="margin-bottom:2px">hold_prop_T1.0, hold (trích)</h4>
+        <pre class="vlog log lang-text" data-lang="text" id="cHoldV" style="font-size:10.5px;line-height:1.17"></pre></div>
+      <div class="col" style="flex:1 1 50%">
+        <svg id="svHoldTime" viewBox="0 0 560 250" style="width:100%;height:auto">
+          <rect x="0" y="0" width="560" height="250" fill="var(--surface)"/>
+          <text x="5" y="40" font-weight="700" class="sm" fill="var(--acc)">CLK ff1</text>
+          <text x="5" y="88" font-weight="700" class="sm" fill="var(--violet)">CLK ff2</text>
+          <text x="5" y="133" font-weight="700" class="sm" fill="var(--ink)">ff2/D</text>
+          <text x="5" y="178" font-weight="700" class="sm" fill="var(--ink)">Slack</text>
+          <path d="M90 45 H162.5 V20 H530" fill="none" stroke="var(--acc)" stroke-width="2.2"/>
+          <path d="M90 95 H419.4 V70 H530" fill="none" stroke="var(--violet)" stroke-width="2.2"/>
+          <path d="M184 33 H168" fill="none" stroke="var(--acc)" stroke-width="1.6"/>
+          <polygon points="166,33 175,28.8 175,37.2" fill="var(--acc)"/>
+          <text x="188" y="38" class="sm" font-weight="700" style="fill:var(--acc)">sườn phóng</text>
+          <path d="M400 83 H414" fill="none" stroke="var(--violet)" stroke-width="1.6"/>
+          <polygon points="416,83 407,78.8 407,87.2" fill="var(--violet)"/>
+          <text x="396" y="88" text-anchor="end" class="sm" font-weight="700" style="fill:var(--violet)">sườn bắt (cùng sườn)</text>
+          <path class="grid" d="M162.5 45 V200" fill="none" stroke="var(--muted)" stroke-width="1" stroke-dasharray="4 3"/>
+          <path class="grid" d="M419.4 95 V200" fill="none" stroke="var(--muted)" stroke-width="1" stroke-dasharray="4 3"/>
+          <path class="grid" d="M433.4 95 V225" fill="none" stroke="var(--red)" stroke-width="1" stroke-dasharray="4 3"/>
+          <rect x="162.5" y="115" width="201.6" height="28" fill="var(--acc-soft)" stroke="var(--acc)" stroke-width="1.5"/>
+          <text x="263" y="134" text-anchor="middle" class="sm">CLK→Q 0,288</text>
+          <rect x="364.1" y="160" width="69.3" height="28" fill="var(--red-soft)" stroke="var(--red)" stroke-width="1.5"/>
+          <text x="356" y="179" text-anchor="end" class="sm" fill="var(--red)">slack −0,099</text>
+          <text x="162" y="218" text-anchor="middle" class="sm" fill="var(--acc)">0,075</text>
+          <text x="364" y="218" text-anchor="middle" class="sm">0,363</text>
+          <text x="410" y="218" text-anchor="middle" class="sm" fill="var(--violet)">0,442</text>
+          <text x="433" y="242" text-anchor="middle" class="sm" fill="var(--red)">required 0,462</text>
+        </svg>
+        <div class="card acc" style="padding:8px 12px"><p class="sub">Cùng một sườn đồng hồ tới ff1 lúc 0,075 ns và tới ff2 lúc 0,442 ns. Dữ liệu mới tới ff2/D lúc 0,363 ns,
+          trước thời điểm 0,462 = 0,442 + 0,050 (uncertainty hold) − 0,030 (hold thư viện): slack = 0,363 − 0,462 = −0,099 ns.</p></div>
+      </div>
+    </div>
+  </div>
+  <p class="fn">run_20261114_0859/hold.log, report_checks -path_delay min (OpenSTA 2.7.0, 14/11/2026).</p>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 19 NGUYÊN NHÂN VÀ CÁCH SỬA HOLD -->
+<section class="slide" data-sec="B · Đồng hồ và tải" data-title="Nguyên nhân và cách sửa vi phạm hold">
+  <div class="hd"><div><div class="eyebrow">5.5 · Sửa vi phạm hold</div><h2>Nguyên nhân và cách sửa vi phạm hold</h2></div>
+    <span class="tag">So sánh</span></div>
+  <div class="body">
+    <table class="tight"><thead><tr><th>Kịch bản (ns)</th><th class="r">CLK ff1</th><th class="r">CLK ff2</th><th class="r">arrival min</th><th class="r">required hold</th><th class="r">slack hold</th><th class="r">slack setup</th></tr></thead><tbody>
+      <tr><td>Đồng hồ lý tưởng, T = 1</td><td class="mono r">0</td><td class="mono r">0</td><td class="mono r">0,275</td><td class="mono r">0,015</td><td class="mono r">0,260</td><td class="mono r">0,620</td></tr>
+      <tr class="bad"><td>Propagated, T = 1</td><td class="mono r">0,075</td><td class="mono r">0,442</td><td class="mono r">0,363</td><td class="mono r">0,462</td><td class="mono r">−0,099</td><td class="mono r">0,982</td></tr>
+      <tr class="bad"><td>Propagated, T = 2</td><td class="mono r">0,075</td><td class="mono r">0,442</td><td class="mono r">0,363</td><td class="mono r">0,462</td><td class="mono r">−0,099</td><td class="mono r">1,982</td></tr>
+      <tr class="ok"><td>+ 1 dlygate4sd1_1</td><td class="mono r">0,075</td><td class="mono r">0,442</td><td class="mono r">0,539</td><td class="mono r">0,462</td><td class="mono r">0,077</td><td class="mono r">0,771</td></tr>
+      <tr class="bad"><td>+ 2 dlygate4sd3_1</td><td class="mono r">0,075</td><td class="mono r">0,442</td><td class="mono r">1,408</td><td class="mono r">0,459</td><td class="mono r">0,949</td><td class="mono r">−0,095</td></tr>
+    </tbody></table>
+    <div class="g2" style="gap:14px">
+      <div class="card acc" style="padding:10px 14px"><h4 style="margin-bottom:4px">Theo bất đẳng thức hold</h4>
+        <div class="formula" style="font-size:15px;text-align:left">t<sub>ccq</sub> + t<sub>cd</sub> ≥ t<sub>hold</sub> + δ + t<sub>unc,h</sub><br>
+          0,288 + 0 ≥ −0,030 + 0,367 + 0,050 = 0,387<br>slack = 0,288 − 0,387 = −0,099</div>
+        <ul class="tick" style="margin-top:8px">
+          <li>δ = 0,442 − 0,075 = 0,367 ns; với đồng hồ lý tưởng cùng đường đạt +0,260 ns: nguyên nhân là skew của cây đồng hồ.</li>
+          <li>T = 2 ns giữ nguyên −0,099; setup tăng đúng 1 ns: hold không phụ thuộc chu kỳ.</li>
+        </ul></div>
+      <div class="card" style="padding:10px 14px"><h4 style="margin-bottom:4px">Cách sửa</h4>
+        <ul class="tick">
+          <li><strong>Chèn ô trễ</strong> trên đường ngắn: 1 dlygate4sd1_1 (+0,176 ns) cho hold +0,077, setup còn 0,771.</li>
+          <li><strong>Sửa quá tay</strong>: 2 dlygate4sd3_1 (+1,045 ns) cho hold +0,949 nhưng setup −0,095, vì ô trễ nằm cả trong đường setup.</li>
+          <li><strong>Giảm skew</strong>: cân bằng hai nhánh cây đồng hồ (CTS).</li>
+          <li><strong>Đổi flip-flop</strong> có t<sub>hold</sub> nhỏ hơn ở FF bắt.</li>
+        </ul></div>
+    </div>
+  </div>
+  <p class="fn">run_20261114_0859/hold.log, summary.txt; hold_demo.v, hold_fix.v, hold_overfix.v, hold.tcl (OpenSTA 2.7.0, Sky130 HD tt, 14/11/2026) · Hai dòng cuối: nhận định chung, không có log riêng; [1, Ex. 3.10, tr. 139; (3.21), tr. 142].</p>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 20 SLACK WNS TNS -->
+<section class="slide" data-sec="B · Setup và hold" data-title="Slack, WNS và TNS">
+  <div class="hd"><div><div class="eyebrow">5.5 · Báo cáo thời gian</div><h2>Slack, WNS và TNS</h2></div>
+    <span class="tag">Định nghĩa</span></div>
+  <div class="body g2">
+    <div class="col">
+      <div class="card acc"><h4>Định nghĩa</h4>
+        <table><tbody>
+          <tr><td style="width:24%"><strong>Slack setup</strong></td><td>required − arrival; âm là vi phạm</td></tr>
+          <tr><td><strong>Slack hold</strong></td><td>arrival − required; âm là vi phạm</td></tr>
+          <tr><td><strong>WNS</strong></td><td>slack âm nhỏ nhất trên mọi điểm cuối</td></tr>
+          <tr><td><strong>TNS</strong></td><td>tổng các slack âm, mỗi điểm cuối tính một lần</td></tr>
+        </tbody></table></div>
+      <div class="card"><h4>Kịch bản viol: v0, T = 4,5 ns</h4>
+        <div class="formula" style="font-size:16px;text-align:left">WNS = −0,152 ns<br>TNS = −0,152 − 0,110 − 0,074 = −0,336 ns</div>
+        <p class="sub" style="margin-top:8px">Ba bit cao của y vi phạm, bit thứ tư còn +0,059 ns. WNS chỉ ra mức thiếu của đường xấu nhất; TNS cho biết vi phạm tập trung ở vài điểm cuối hay trải rộng.</p></div>
+    </div>
+    <div class="col">
+      <div class="card plain" style="border:1px solid var(--line)"><h4>report_checks -group_path_count 5 -format end</h4>
+        <pre class="vlog log lang-text" data-lang="text" id="cEnd"></pre></div>
+      <div class="card amber"><h4>Hai lệnh tóm tắt của OpenSTA 2.7.0</h4>
+        <p class="sub"><span class="k">report_wns</span> in <span class="k">wns max 0.000</span> khi mọi slack dương (base, T = 10 ns),
+          còn <span class="k">report_worst_slack -max</span> in biên dương 5,074 ns.</p></div>
+    </div>
+  </div>
+  <p class="fn">run_20261114_0618/sta_viol.log, sta_base.log (OpenSTA 2.7.0, 14/11/2026).</p>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 11 LUỒNG OPENSTA -->
+<section class="slide" data-sec="C · Ràng buộc SDC" data-title="Luồng chạy OpenSTA">
+  <div class="hd"><div><div class="eyebrow">5.5 · Công cụ</div><h2>Luồng chạy OpenSTA</h2></div>
+    <span class="tag">Tcl</span></div>
+  <div class="body g2">
+    <div class="col">
+      <div class="card plain" style="border:1px solid var(--line)"><h4>sta.tcl (rút gọn)</h4>
+        <pre class="vlog lang-tcl" data-lang="tcl" id="cStaTcl"></pre></div>
+    </div>
+    <div class="col">
+      <div class="card"><h4>Tám kịch bản trên cùng thiết kế</h4>
+        <table class="tight"><thead><tr><th>Tag</th><th>Biến thể</th><th class="r">T (ns)</th><th>SDC</th><th class="r">WS setup</th></tr></thead><tbody>
+          <tr><td class="mono">base</td><td>v0</td><td class="mono r">10,0</td><td class="mono">clocks io cdc</td><td class="mono r">5,074</td></tr>
+          <tr><td class="mono">noin</td><td>v0</td><td class="mono r">10,0</td><td class="mono">clocks cdc</td><td class="mono r">5,348</td></tr>
+          <tr><td class="mono">cdc0</td><td>v0</td><td class="mono r">10,0</td><td class="mono">clocks io</td><td class="mono r">0,480</td></tr>
+          <tr class="bad"><td class="mono">viol</td><td>v0</td><td class="mono r">4,5</td><td class="mono">clocks io cdc</td><td class="mono r">−0,152</td></tr>
+          <tr><td class="mono">slow</td><td>v0</td><td class="mono r">4,7</td><td class="mono">clocks io cdc</td><td class="mono r">0,048</td></tr>
+          <tr><td class="mono">pipe</td><td>p1</td><td class="mono r">4,5</td><td class="mono">clocks io cdc</td><td class="mono r">0,949</td></tr>
+          <tr class="bad"><td class="mono">mc0</td><td>mc</td><td class="mono r">4,5</td><td class="mono">clocks io cdc</td><td class="mono r">−0,129</td></tr>
+          <tr><td class="mono">mc</td><td>mc</td><td class="mono r">4,5</td><td class="mono">clocks io cdc mc</td><td class="mono r">1,569</td></tr>
+        </tbody></table></div>
+      <div class="card teal"><h4>Ba biến thể của sta_dp</h4>
+        <p class="sub"><strong>v0</strong>: nhân 8×8 và cộng 17 bit trong một chu kỳ. <strong>p1</strong>: thêm tầng thanh ghi tích riêng.
+          <strong>mc</strong>: thanh ghi vào và y chỉ nạp khi <span class="k">ld = 1</span>, dữ liệu có hai chu kỳ.</p></div>
+    </div>
+  </div>
+  <p class="fn">run_20261114_0618/sta_summary.txt; check_sta.py: 8 kịch bản, 0 lệch kỳ vọng (OpenSTA 2.7.0, 14/11/2026).</p>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 12 ĐỒNG HỒ -->
+<section class="slide" data-sec="C · Ràng buộc SDC" data-title="Khai báo đồng hồ">
+  <div class="hd"><div><div class="eyebrow">5.2 · Thông tin đồng hồ</div><h2>create_clock và set_clock_uncertainty</h2></div>
+    <span class="tag">SDC</span></div>
+  <div class="body g2">
+    <div class="col">
+      <div class="card plain" style="border:1px solid var(--line)"><h4>clocks.sdc</h4>
+        <pre class="vlog lang-tcl" data-lang="tcl" id="cClk"></pre></div>
+      <div class="card"><h4>Phần đồng hồ bắt trong báo cáo (T = 10 ns)</h4>
+        <pre class="vlog log lang-text" data-lang="text" id="cReq"></pre>
+        <p class="sub" style="margin-top:6px">Ví dụ không có cây đồng hồ: dòng <span class="k">clock network delay (ideal)</span> bằng 0, skew bằng 0;
+          uncertainty −0,070 trừ vào required time của setup.</p></div>
+    </div>
+    <div class="col">
+      <div class="card acc"><h4>Tham số đồng hồ trong SDC</h4>
+        <table class="tight"><tbody>
+          <tr><td style="width:46%"><span class="k">create_clock -period</span></td><td>Chu kỳ; mặc định sườn lên ở 0, sườn xuống ở T/2</td></tr>
+          <tr><td><span class="k">set_clock_uncertainty</span></td><td>Biên cho skew và jitter, khai báo riêng cho setup và hold</td></tr>
+          <tr><td><span class="k">set_clock_latency</span></td><td>Trễ lan truyền đồng hồ khi chưa có cây đồng hồ</td></tr>
+          <tr><td><span class="k">set_clock_transition</span></td><td>Độ dốc sườn đồng hồ tại chân CLK</td></tr>
+          <tr><td><span class="k">set_propagated_clock</span></td><td>Sau CTS: tính trễ của cây đồng hồ</td></tr>
+        </tbody></table></div>
+      <div class="card amber"><h4>Chọn giá trị uncertainty</h4>
+        <p class="sub">Trước CTS, uncertainty gộp skew chưa biết và jitter. [2] đề xuất jitter + 20 % T khi tổng hợp, jitter + 10 % T sau CTS,
+          jitter + 3 % T sau định tuyến. Ví dụ dùng 0,07 ns, bằng giá trị 70 ps của bộ tham số 28 nm.</p></div>
+    </div>
+  </div>
+  <p class="fn">run_20261114_0618/sta_base.log, mục thanh ghi → thanh ghi (setup), 14/11/2026 · [2, tr. 7–8].</p>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 13 TRỄ VÀO RA -->
+<section class="slide" data-sec="C · Ràng buộc SDC" data-title="Trễ vào và trễ ra">
+  <div class="hd"><div><div class="eyebrow">5.4 · Trễ đầu vào, trễ đầu ra</div><h2>set_input_delay và set_output_delay</h2></div>
+    <span class="tag">SDC</span></div>
+  <div class="body">
+    <svg id="svIo" viewBox="0 0 1160 230" style="width:100%;max-width:1120px;height:auto;margin:0 auto">
+      <rect x="0" y="0" width="1160" height="230" fill="var(--surface)"/>
+      <rect x="265" y="20" width="630" height="130" rx="10" fill="none" stroke="var(--acc)" stroke-width="1.6" stroke-dasharray="7 4"/>
+      <text x="580" y="42" text-anchor="middle" font-weight="700" fill="var(--acc)">sta_dp</text>
+      <rect x="10" y="65" width="95" height="50" rx="6" fill="var(--violet-soft)" stroke="var(--violet)" stroke-width="2"/>
+      <text x="57" y="95" text-anchor="middle" class="sm">FF ngoài</text>
+      <rect x="135" y="65" width="105" height="50" rx="6" fill="var(--surface2)" stroke="var(--ink2)" stroke-width="1.6"/>
+      <text x="187" y="95" text-anchor="middle" class="sm">logic ngoài</text>
+      <rect x="290" y="65" width="105" height="50" rx="6" fill="var(--acc-soft)" stroke="var(--acc)" stroke-width="1.6"/>
+      <text x="342" y="95" text-anchor="middle" class="sm">logic vào</text>
+      <rect x="425" y="65" width="95" height="50" rx="6" fill="var(--violet-soft)" stroke="var(--violet)" stroke-width="2"/>
+      <text x="472" y="95" text-anchor="middle" class="sm">ra, rb, rc</text>
+      <rect x="640" y="65" width="95" height="50" rx="6" fill="var(--violet-soft)" stroke="var(--violet)" stroke-width="2"/>
+      <text x="687" y="95" text-anchor="middle" class="sm">y</text>
+      <rect x="765" y="65" width="105" height="50" rx="6" fill="var(--acc-soft)" stroke="var(--acc)" stroke-width="1.6"/>
+      <text x="817" y="95" text-anchor="middle" class="sm">logic ra</text>
+      <rect x="920" y="65" width="105" height="50" rx="6" fill="var(--surface2)" stroke="var(--ink2)" stroke-width="1.6"/>
+      <text x="972" y="95" text-anchor="middle" class="sm">logic ngoài</text>
+      <rect x="1055" y="65" width="95" height="50" rx="6" fill="var(--violet-soft)" stroke="var(--violet)" stroke-width="2"/>
+      <text x="1102" y="95" text-anchor="middle" class="sm">FF ngoài</text>
+      <path d="M105 90 H135" fill="none" stroke="var(--ink2)" stroke-width="1.8"/>
+      <path d="M240 90 H290" fill="none" stroke="var(--ink2)" stroke-width="1.8"/>
+      <path d="M395 90 H425" fill="none" stroke="var(--ink2)" stroke-width="1.8"/>
+      <path d="M520 90 H640" fill="none" stroke="var(--ink2)" stroke-width="1.8" stroke-dasharray="3 4"/>
+      <path d="M735 90 H765" fill="none" stroke="var(--ink2)" stroke-width="1.8"/>
+      <path d="M870 90 H920" fill="none" stroke="var(--ink2)" stroke-width="1.8"/>
+      <path d="M1025 90 H1055" fill="none" stroke="var(--ink2)" stroke-width="1.8"/>
+      <polygon points="135,90 126,85.8 126,94.2" fill="var(--ink2)"/>
+      <polygon points="290,90 281,85.8 281,94.2" fill="var(--ink2)"/>
+      <polygon points="425,90 416,85.8 416,94.2" fill="var(--ink2)"/>
+      <polygon points="765,90 756,85.8 756,94.2" fill="var(--ink2)"/>
+      <polygon points="920,90 911,85.8 911,94.2" fill="var(--ink2)"/>
+      <polygon points="1055,90 1046,85.8 1046,94.2" fill="var(--ink2)"/>
+      <path d="M10 170 V180 H262 V170" fill="none" stroke="var(--red)" stroke-width="1.8"/>
+      <path d="M268 170 V180 H520 V170" fill="none" stroke="var(--green)" stroke-width="1.8"/>
+      <path d="M640 170 V180 H892 V170" fill="none" stroke="var(--green)" stroke-width="1.8"/>
+      <path d="M898 170 V180 H1150 V170" fill="none" stroke="var(--red)" stroke-width="1.8"/>
+      <text x="136" y="204" text-anchor="middle" class="sm" fill="var(--red)">input delay = 0,2·T</text>
+      <text x="394" y="204" text-anchor="middle" class="sm" fill="var(--green)">trong chip: T − 0,2·T − t_unc</text>
+      <text x="766" y="204" text-anchor="middle" class="sm" fill="var(--green)">trong chip: T − 0,2·T − t_unc</text>
+      <text x="1024" y="204" text-anchor="middle" class="sm" fill="var(--red)">output delay = 0,2·T</text>
+    </svg>
+    <div class="g2" style="gap:16px">
+      <div class="card plain" style="border:1px solid var(--line)"><h4>io.sdc</h4>
+        <pre class="vlog lang-tcl" data-lang="tcl" id="cIo" style="font-size:13px;line-height:1.4"></pre></div>
+      <div class="col">
+        <div class="card"><h4>Ngân sách theo chu kỳ</h4>
+          <table><thead><tr><th>T (ns)</th><th class="r">input delay</th><th class="r">output delay</th></tr></thead><tbody>
+            <tr><td class="mono">10,0</td><td class="mono r">2,0 ns</td><td class="mono r">2,0 ns</td></tr>
+            <tr><td class="mono">4,5</td><td class="mono r">0,9 ns</td><td class="mono r">0,9 ns</td></tr>
+          </tbody></table>
+          <p class="sub" style="margin-top:6px"><span class="k">-max</span> dùng cho setup, <span class="k">-min 0</span> dùng cho hold.
+            Ngân sách 20 % là lựa chọn của ví dụ; [2] nêu mức 50 % chu kỳ thường dùng.</p></div>
+      </div>
+    </div>
+  </div>
+  <p class="fn">io.sdc; 2,000 ns ở dòng “input external delay” của run_20261114_0618/sta_base.log; [2, tr. 14].</p>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 14 DRIVING CELL, LOAD, VÀO→RA -->
+<section class="slide" data-sec="C · Ràng buộc SDC" data-title="Driving cell, tải và đường vào → ra">
+  <div class="hd"><div><div class="eyebrow">5.4 · Tải đầu vào và đầu ra</div><h2>Driving cell, tải và đường vào → ra</h2></div>
+    <span class="tag">Báo cáo</span></div>
+  <div class="body g2a">
+    <div class="col">
+      <div class="card plain" style="border:1px solid var(--line)"><h4>Đường a[4] → a_zero, T = 10 ns (setup)</h4>
+        <pre class="vlog log lang-text" data-lang="text" id="cAz" style="font-size:12px;line-height:1.36"></pre></div>
+    </div>
+    <div class="col">
+      <div class="card acc"><h4>Tác dụng của hai lệnh</h4>
+        <ul class="tick">
+          <li><span class="k">set_driving_cell buf_2</span>: cổng vào có độ dốc sườn 0,025 ns thay cho sườn lý tưởng; trễ tại cổng 0,014 ns.</li>
+          <li><span class="k">set_load 0.01</span>: cổng ra mang 0,010 pF (cột Cap); ô nor2_1 kéo tải này mất 0,198 ns, sườn ra 0,199 ns.</li>
+        </ul></div>
+      <div class="card"><h4>Phân rã đường vào → ra</h4>
+        <table><tbody>
+          <tr><td>input external delay</td><td class="mono r">2,000</td></tr>
+          <tr><td>cổng a[4] + or4_1 + nor2_1</td><td class="mono r">0,712</td></tr>
+          <tr><td>arrival</td><td class="mono r">2,712</td></tr>
+          <tr><td>required = 10 − 0,070 − 2,000</td><td class="mono r">7,930</td></tr>
+          <tr class="hl"><td>slack</td><td class="mono r">5,218</td></tr>
+        </tbody></table>
+        <p class="sub" style="margin-top:6px">Hai ngân sách 0,2·T cùng tỉ lệ theo chu kỳ: slack = 0,6·T − 0,782 ns (tính từ log); ở T = 4,5 ns còn 1,918 ns.</p></div>
+    </div>
+  </div>
+  <p class="fn">run_20261114_0618/sta_base.log, report_checks -path_delay max, nhóm clk (OpenSTA 2.7.0, 14/11/2026).</p>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 15 VÍ DỤ STA_DP -->
+<section class="slide" data-sec="D · Ví dụ sta_dp" data-title="Thiết kế sta_dp">
+  <div class="hd"><div><div class="eyebrow">5.5 · Ví dụ minh hoạ</div><h2>Thiết kế sta_dp: y = a·b + c</h2></div>
+    <span class="tag">Mã nguồn</span></div>
+  <div class="body g2">
+    <div class="col">
+      <div class="card plain" style="border:1px solid var(--line)"><h4>sta_dp.v (trích)</h4>
+        <pre class="vlog lang-verilog" data-lang="verilog" id="cDp" style="font-size:13px;line-height:1.42"></pre></div>
+    </div>
+    <div class="col">
+      <div class="card"><h4>Tổng hợp Yosys + Sky130 HD <span class="assum src">đo</span></h4>
+        <table class="tight"><thead><tr><th>Biến thể</th><th class="r">Số ô</th><th class="r">FF</th><th class="r">Diện tích (µm²)</th></tr></thead><tbody>
+          <tr><td>v0</td><td class="mono r">385</td><td class="mono r">52</td><td class="mono r">3 759,856</td></tr>
+          <tr><td>p1 (pipeline)</td><td class="mono r">451</td><td class="mono r">92</td><td class="mono r">4 714,522</td></tr>
+          <tr><td>mc (multicycle)</td><td class="mono r">455</td><td class="mono r">53</td><td class="mono r">4 295,370</td></tr>
+        </tbody></table>
+        <p class="sub" style="margin-top:6px">52 FF của v0: ra 8, rb 8, rc 16, y 17, flag_a 1, bộ đồng bộ 2; flip-flop chiếm 1 301,248 µm² (34,61 %).
+          p1 thêm pl 12, ph 12, rc_d 16; mc thêm ld (ô dfstp_1, reset về 1).</p></div>
+      <div class="card"><h4>Mô phỏng chức năng <span class="assum src">đo</span></h4>
+        <table class="tight"><thead><tr><th>Biến thể</th><th>RTL</th><th>Netlist Sky130</th></tr></thead><tbody>
+          <tr><td>v0</td><td class="mono">4 008 mẫu, 0 lỗi</td><td class="mono">4 008 mẫu, 0 lỗi</td></tr>
+          <tr><td>p1</td><td class="mono">4 007 mẫu, 0 lỗi</td><td class="mono">4 007 mẫu, 0 lỗi</td></tr>
+          <tr><td>mc</td><td class="mono">4 008 mẫu, 0 lỗi</td><td class="mono">4 008 mẫu, 0 lỗi</td></tr>
+        </tbody></table></div>
+    </div>
+  </div>
+  <p class="fn">run_20261114_0618/stat_v0.txt, stat_p1.txt, stat_mc.txt (Yosys 0.70+255, 14/11/2026) · Questa Sim-64 2025.1_2, 2 000 bộ vào ngẫu nhiên (seed 11), golden y = a·b + c; run_20261114_0618/sim.log, 14/11/2026.</p>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 16 BÁO CÁO SETUP -->
+<section class="slide" data-sec="D · Ví dụ sta_dp" data-title="Báo cáo setup thanh ghi → thanh ghi">
+  <div class="hd"><div><div class="eyebrow">5.5 · Phân tích báo cáo</div><h2>Báo cáo setup thanh ghi → thanh ghi, T = 10 ns</h2></div>
+    <span class="tag">report_checks</span></div>
+  <div class="body g2a">
+    <div class="col">
+      <pre class="vlog log lang-text" data-lang="text" id="cSetup" style="font-size:11.5px;line-height:1.22;overflow:visible"></pre>
+    </div>
+    <div class="col">
+      <div class="card acc"><h4>Đọc từ trên xuống</h4>
+        <ol class="num">
+          <li><strong>Startpoint / Endpoint</strong>: chân CLK của _668_ phóng, chân D của _658_ bắt; cùng nhóm đường clk.</li>
+          <li><strong>Data arrival</strong>: cộng dồn cột Delay từ sườn phóng; ký hiệu ^ / v là sườn lên / xuống tại chân.</li>
+          <li><strong>Data required</strong>: sườn bắt 10,000 trừ uncertainty 0,070 và setup thư viện 0,125.</li>
+          <li><strong>Slack</strong> = 9,805 − 4,457 = 5,348 ns (MET).</li>
+        </ol></div>
+      <div class="card"><h4>Tên ô trong netlist</h4>
+        <p class="sub">Yosys đặt tên ẩn danh (_668_); tra ngược bằng lưới nối chân Q. Trong mc.sdc, tập flip-flop được chọn qua
+          <span class="k">get_nets {ra[*] rb[*] rc[*]}</span> rồi lấy ô có chân ra nối vào lưới đó.</p></div>
+    </div>
+  </div>
+  <p class="fn">run_20261114_0618/sta_base.log, mục “report_checks thanh ghi -&gt; thanh ghi (setup)”; 12 ô giữa _500_ và _542_ lược bỏ (OpenSTA 2.7.0, 14/11/2026).</p>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 17 PHÂN RÃ ĐƯỜNG GĂNG -->
+<section class="slide" data-sec="D · Ví dụ sta_dp" data-title="Phân rã đường găng">
+  <div class="hd"><div><div class="eyebrow">5.5 · Đường găng</div><h2>Phân rã đường găng và chu kỳ nhỏ nhất</h2></div>
+    <span class="tag">Phân tích</span></div>
+  <div class="body">
+    <svg id="svCrit" viewBox="0 0 1160 175" style="width:100%;max-width:1120px;height:auto;margin:0 auto">
+      <rect x="0" y="0" width="1160" height="175" fill="var(--surface)"/>
+      <rect x="40" y="60" width="103" height="36" fill="var(--violet-soft)" stroke="var(--violet)" stroke-width="1.5"/>
+      <rect x="143" y="60" width="877.6" height="36" fill="var(--acc-soft)" stroke="var(--acc)" stroke-width="1.5"/>
+      <rect x="1020.6" y="60" width="27.5" height="36" fill="var(--amber-soft)" stroke="var(--amber)" stroke-width="1.5"/>
+      <rect x="1048.1" y="60" width="15.4" height="36" fill="var(--red-soft)" stroke="var(--red)" stroke-width="1.5"/>
+      <text x="91" y="48" text-anchor="middle" class="sm">CLK→Q 0,468</text>
+      <text x="582" y="48" text-anchor="middle" class="sm">16 ô tổ hợp (nhân + cộng) 3,989</text>
+      <path d="M1034 96 V122" fill="none" stroke="var(--amber)" stroke-width="1.4"/>
+      <text x="1028" y="134" text-anchor="end" class="sm" fill="var(--amber)">t_setup 0,125</text>
+      <path d="M1056 96 V150" fill="none" stroke="var(--red)" stroke-width="1.4"/>
+      <text x="1050" y="162" text-anchor="end" class="sm" fill="var(--red)">uncertainty 0,070</text>
+      <path d="M1030 26 V104" fill="none" stroke="var(--red)" stroke-width="1.6" stroke-dasharray="5 3"/>
+      <path d="M1074 26 V104" fill="none" stroke="var(--green)" stroke-width="1.6" stroke-dasharray="5 3"/>
+      <text x="1024" y="20" text-anchor="end" class="sm" fill="var(--red)">T = 4,5 ns</text>
+      <text x="1080" y="20" class="sm" fill="var(--green)">T = 4,7 ns</text>
+      <text x="40" y="128" class="sm" font-weight="700">Tổng: 0,468 + 3,989 + 0,125 + 0,070 = 4,652 ns</text>
+    </svg>
+    <div class="g3">
+      <div class="stat"><span class="l">T<sub>min</sub> ĐƯỜNG GĂNG v0</span><span class="v">4,652 ns</span><span class="l">f<sub>max</sub> ≈ 215,0 MHz</span></div>
+      <div class="stat bad"><span class="l">T = 4,5 ns (viol)</span><span class="v">−0,152 ns</span><span class="l">4,5 − 4,652</span></div>
+      <div class="stat ok"><span class="l">T = 4,7 ns (slow)</span><span class="v">+0,048 ns</span><span class="l">4,7 − 4,652</span></div>
+    </div>
+    <div class="g2" style="gap:16px">
+      <div class="card"><h4>Thành phần</h4>
+        <p class="sub">CLK→Q của dfrtp_1 lớn (0,468 ns) vì _668_ kéo 14 tải. Logic tổ hợp 3,989 ns gồm 16 ô; ba ô maj3_1 của chuỗi số nhớ chiếm 1,139 ns.
+          Đường kết thúc ở bit cao của bộ cộng (_658_).</p></div>
+      <div class="card amber"><h4>Đối chiếu</h4>
+        <p class="sub">T<sub>min</sub> tính từ báo cáo T = 10 ns khớp slack đo ở 4,5 và 4,7 ns, vì đồng hồ lý tưởng làm arrival và setup thư viện không đổi theo T.
+          Đây là số của một nhóm đường; đường vào ra có ngân sách tỉ lệ theo T.</p></div>
+    </div>
+  </div>
+  <p class="fn">run_20261114_0618/sta_base.log, sta_viol.log, sta_slow.log (cột Fanout: 14); 14/11/2026.</p>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 18 TƯƠNG TÁC SLACK THEO T -->
+<section class="slide" data-sec="D · Ví dụ sta_dp" data-title="Slack theo chu kỳ đồng hồ" data-int="1">
+  <div class="hd"><div><div class="eyebrow">5.5 · Đường găng</div><h2>Slack setup theo chu kỳ đồng hồ</h2></div>
+    <span class="tag">Tương tác</span></div>
+  <div class="body row" style="gap:18px">
+    <div class="col" style="flex:0 0 430px">
+      <div class="row" style="gap:10px;align-items:center">
+        <span class="sub" style="min-width:110px">Chu kỳ T (ns)</span>
+        <input type="range" id="tsT" min="3.5" max="10" step="0.05" value="4.5" style="flex:1 1 auto">
+        <output id="tsTv" class="mono" style="font-size:16px;font-weight:700;min-width:52px">4,50</output>
+      </div>
+      <div class="g2" style="gap:10px">
+        <div class="stat" id="tsS0"><span class="l">SLACK v0</span><span class="v" id="tsV0">—</span></div>
+        <div class="stat" id="tsS1"><span class="l">SLACK p1</span><span class="v" id="tsV1">—</span></div>
+      </div>
+      <div class="card"><h4>Mô hình từ báo cáo <span class="assum">tính</span></h4>
+        <p class="sub mono" style="font-size:14px">v0: T − 0,070 − 0,125 − 4,457<br>p1: T − 0,070 − 0,122 − 3,358</p>
+        <p class="sub" style="margin-top:6px">Số trong log có 3 chữ số thập phân, nên giá trị tính lệch tối đa 0,001 ns so với OpenSTA (p1 ở 4,5 ns: tính 0,950, log 0,949).</p></div>
+      <div class="legend"><span><i style="background:var(--acc)"></i>v0, đường _668_ → _658_</span><span><i style="background:var(--teal)"></i>p1, đường _738_ → _689_</span><span><i style="background:var(--amber);border-radius:50%"></i>điểm đo OpenSTA</span></div>
+    </div>
+    <div class="col" style="flex:1 1 auto">
+      <div class="card plain" style="border:1px solid var(--line)"><h4>Slack (ns) theo T (ns)</h4>
+        <svg id="svTs" viewBox="0 0 640 320" style="width:100%;height:auto"></svg></div>
+    </div>
+  </div>
+  <p class="fn">Điểm đo: base 5,348 (mục thanh ghi → thanh ghi), viol −0,152, slow 0,048, pipe 0,949; run_20261114_0618/sta_*.log, 14/11/2026.</p>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 19 BÁO CÁO HOLD -->
+<section class="slide" data-sec="D · Ví dụ sta_dp" data-title="Báo cáo hold">
+  <div class="hd"><div><div class="eyebrow">5.5 · Phân tích báo cáo</div><h2>Báo cáo hold</h2></div>
+    <span class="tag">report_checks</span></div>
+  <div class="body g2a">
+    <div class="col">
+      <pre class="vlog log lang-text" data-lang="text" id="cHold" style="font-size:11.5px;line-height:1.3"></pre>
+    </div>
+    <div class="col">
+      <div class="card acc"><h4>Đường hold xấu nhất: cổng b[0] → D của _668_</h4>
+        <ul class="tick">
+          <li>Arrival 0,010 ns: <span class="k">set_input_delay -min 0</span> cộng trễ tại cổng.</li>
+          <li>Required −0,037 ns: hold thư viện của dfrtp_1 âm.</li>
+          <li>Slack = 0,010 − (−0,037) = 0,046 ns (số in đã làm tròn).</li>
+        </ul></div>
+      <div class="card"><h4>Đường hold thanh ghi → thanh ghi</h4>
+        <p class="sub">_659_ → _692_ (y[16] → flag_a, nối thẳng): CLK→Q nhỏ nhất 0,359 ns, hold −0,057 ns, slack 0,416 ns.</p></div>
+      <div class="card amber"><h4>Không phụ thuộc chu kỳ</h4>
+        <p class="sub">WS hold của v0 bằng 0,046 ns ở cả T = 10; 4,7; 4,5 ns (base, slow, viol). Trễ vào nhỏ nhất của mạch ngoài
+          quyết định biên hold của đường vào.</p></div>
+    </div>
+  </div>
+  <p class="fn">run_20261114_0618/sta_base.log, report_checks -path_delay min, nhóm clk (OpenSTA 2.7.0, 14/11/2026) · sta_base.log (mục thanh ghi → thanh ghi, hold); sta_summary.txt.</p>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 20 NHÓM ĐƯỜNG -->
+<section class="slide" data-sec="D · Ví dụ sta_dp" data-title="Nhóm đường và điểm cuối">
+  <div class="hd"><div><div class="eyebrow">5.5 · Phân tích báo cáo</div><h2>Nhóm đường theo đồng hồ bắt</h2></div>
+    <span class="tag">Báo cáo</span></div>
+  <div class="body g2">
+    <div class="col">
+      <div class="card plain" style="border:1px solid var(--line)"><h4>Năm điểm cuối xấu nhất, base (T = 10 ns)</h4>
+        <pre class="vlog log lang-text" data-lang="text" id="cGrp" style="font-size:12.5px"></pre></div>
+    </div>
+    <div class="col">
+      <div class="card acc"><h4>Hai nhóm đường</h4>
+        <ul class="tick">
+          <li>Nhóm <span class="k">clk</span>: xấu nhất là đường vào → ra a_zero (5,218 ns), xếp trước đường nhân–cộng (5,348 ns).</li>
+          <li>Nhóm <span class="k">clk_b</span>: flag_b với <span class="k">set_output_delay 1.4</span> theo clk_b 7 ns, slack 5,074 ns.</li>
+          <li><span class="k">report_worst_slack -max</span> = 5,074 ns lấy từ nhóm clk_b, không phải từ đường nhân–cộng.</li>
+        </ul></div>
+      <div class="card"><h4>Lọc theo loại đường</h4>
+        <pre class="vlog lang-tcl" data-lang="tcl" id="cFrom"></pre>
+        <p class="sub" style="margin-top:6px">Lệnh trên chỉ giữ đường thanh ghi → thanh ghi; báo cáo mặc định in đường xấu nhất của mỗi nhóm.</p></div>
+    </div>
+  </div>
+  <p class="fn">run_20261114_0618/sta_base.log, mục 5 điểm cuối xấu nhất (OpenSTA 2.7.0, 14/11/2026) · sta.tcl; sta_base.log.</p>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 21 THIẾU SET_INPUT_DELAY -->
+<section class="slide" data-sec="E · Lỗi ràng buộc và ngoại lệ" data-title="Thiếu ràng buộc vào ra">
+  <div class="hd"><div><div class="eyebrow">5.4 · Lỗi ràng buộc</div><h2>Thiếu set_input_delay và set_output_delay</h2></div>
+    <span class="tag">check_setup</span></div>
+  <div class="body g2">
+    <div class="col">
+      <div class="card plain" style="border:1px solid var(--line)"><h4>check_setup -verbose, kịch bản noin (không có io.sdc)</h4>
+        <pre class="vlog log lang-text" data-lang="text" id="cNoin" style="font-size:12.5px"></pre></div>
+    </div>
+    <div class="col">
+      <div class="card"><h4>So với base</h4>
+        <table><thead><tr><th></th><th class="r">base</th><th class="r">noin</th></tr></thead><tbody>
+          <tr><td>WS setup (ns)</td><td class="mono r">5,074</td><td class="mono r">5,348</td></tr>
+          <tr><td>WS hold (ns)</td><td class="mono r">0,046</td><td class="mono r">0,331</td></tr>
+          <tr><td>Điểm cuối không ràng buộc</td><td class="mono r">0</td><td class="mono r">51</td></tr>
+        </tbody></table></div>
+      <div class="card red"><h4>Kết quả lạc quan</h4>
+        <p class="sub">51 điểm cuối = 32 chân D của ra, rb, rc (chỉ có đường từ cổng vào) + 19 cổng ra. OpenSTA 2.7.0 không phân tích các đường này và không in vi phạm;
+          WS tăng từ 5,074 lên 5,348 ns và WS hold từ 0,046 lên 0,331 ns do nhóm đường vào ra biến mất khỏi báo cáo.</p></div>
+      <div class="card acc"><h4>Kiểm tra trước khi đọc slack</h4>
+        <p class="sub">Đọc <span class="k">check_setup -verbose</span> và đưa số điểm cuối không ràng buộc về 0.
+          Cổng rst_n được khai báo trễ vào rồi loại bằng <span class="k">set_false_path -from</span>.</p></div>
+    </div>
+  </div>
+  <p class="fn">run_20261114_0618/sta_noin.log, dòng 3–109; danh sách cổng lược bỏ (OpenSTA 2.7.0, 14/11/2026) · sta_summary.txt; io.sdc.</p>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 22 MULTICYCLE KHÁI NIỆM -->
+<section class="slide" data-sec="E · Lỗi ràng buộc và ngoại lệ" data-title="Multicycle path">
+  <div class="hd"><div><div class="eyebrow">Ngoại lệ thời gian</div><h2>Multicycle path</h2></div>
+    <span class="tag">SDC</span></div>
+  <div class="body">
+    <svg id="svMc" viewBox="0 0 1000 215" style="width:100%;max-width:980px;height:auto;margin:0 auto">
+      <rect x="0" y="0" width="1000" height="215" fill="var(--surface)"/>
+      <text x="10" y="58" font-weight="700" fill="var(--ink)">clk</text>
+      <text x="10" y="116" font-weight="700" fill="var(--ink)">ld</text>
+      <path d="M60 70 H100 V40 H200 V70 H300 V40 H400 V70 H500 V40 H600 V70 H700 V40 H800 V70 H900 V40 H960" fill="none" stroke="var(--acc)" stroke-width="2.2"/>
+      <path d="M60 95 H100 V125 H300 V95 H500 V125 H700 V95 H900 V125 H960" fill="none" stroke="var(--violet)" stroke-width="2.2"/>
+      <text x="100" y="150" text-anchor="middle" class="sm">0</text>
+      <text x="300" y="150" text-anchor="middle" class="sm">1</text>
+      <text x="500" y="150" text-anchor="middle" class="sm">2</text>
+      <text x="700" y="150" text-anchor="middle" class="sm">3</text>
+      <text x="900" y="150" text-anchor="middle" class="sm">4</text>
+      <path d="M100 160 V178 H300 V160" fill="none" stroke="var(--red)" stroke-width="2"/>
+      <path d="M100 160 V200 H500 V160" fill="none" stroke="var(--green)" stroke-width="2"/>
+      <polygon points="300,160 295.8,169 304.2,169" fill="var(--red)"/>
+      <polygon points="500,160 495.8,169 504.2,169" fill="var(--green)"/>
+      <text x="560" y="182" class="sm" fill="var(--red)">mặc định: setup tại sườn 1</text>
+      <text x="560" y="205" class="sm" fill="var(--green)">-setup 2: setup tại sườn 2</text>
+    </svg>
+    <div class="g2" style="gap:16px">
+      <div class="card"><h4>Biến thể mc của sta_dp</h4>
+        <p class="sub">ld đảo mỗi chu kỳ; ra, rb, rc và y chỉ nạp khi ld = 1. Dữ liệu phóng tại sườn 0 được bắt tại sườn 2,
+          nên đường ra/rb/rc → y có hai chu kỳ. Hold mặc định đi theo sườn setup (sườn 1 sau -setup 2);
+          <span class="k">-hold 1</span> đưa kiểm tra hold về sườn 0.</p></div>
+      <div class="card plain" style="border:1px solid var(--line)"><h4>mc.sdc</h4>
+        <pre class="vlog lang-tcl" data-lang="tcl" id="cMc" style="font-size:12.5px;white-space:pre-wrap"></pre></div>
+    </div>
+  </div>
+  <p class="fn">sta_dp.v (tham số MC); [2, tr. 23].</p>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 23 MULTICYCLE KẾT QUẢ -->
+<section class="slide" data-sec="E · Lỗi ràng buộc và ngoại lệ" data-title="Kết quả multicycle">
+  <div class="hd"><div><div class="eyebrow">Ngoại lệ thời gian</div><h2>Kết quả multicycle: mc0 và mc, T = 4,5 ns</h2></div>
+    <span class="tag">Báo cáo</span></div>
+  <div class="body g2">
+    <div class="col">
+      <div class="card"><h4>Hai kịch bản</h4>
+        <table><thead><tr><th>Kịch bản</th><th>SDC</th><th class="r">WS setup</th><th class="r">TNS</th><th class="r">WS hold</th></tr></thead><tbody>
+          <tr class="bad"><td class="mono">mc0</td><td>không có mc.sdc</td><td class="mono r">−0,129</td><td class="mono r">−0,129</td><td class="mono r">0,081</td></tr>
+          <tr class="ok"><td class="mono">mc</td><td>có mc.sdc</td><td class="mono r">1,569</td><td class="mono r">0</td><td class="mono r">0,081</td></tr>
+        </tbody></table>
+        <p class="sub" style="margin-top:8px">mc0: đường _847_ → _845_ (ra/rb/rc → y) bị kiểm trong một chu kỳ: arrival 4,437 ns, required 4,308 ns.</p></div>
+      <div class="card plain" style="border:1px solid var(--line)"><h4>Đường xấu nhất còn lại của mc</h4>
+        <pre class="vlog log lang-text" data-lang="text" id="cLd" style="font-size:12px;line-height:1.24"></pre></div>
+    </div>
+    <div class="col">
+      <div class="card acc"><h4>Đường ld không thuộc ngoại lệ</h4>
+        <p class="sub">_828_ là flip-flop ld (dfstp_1) kéo 64 tải: CLK→Q 1,560 ns, sườn 1,580 ns. ld đổi mỗi chu kỳ và điều khiển bộ chọn nạp của mọi thanh ghi,
+          nên đường từ ld giữ ràng buộc một chu kỳ; slack 1,569 ns.</p></div>
+      <div class="card red"><h4>Rủi ro khi khai báo sai</h4>
+        <ul class="tick">
+          <li>Ngoại lệ phủ cả đường từ ld sẽ che vi phạm nếu ld chậm hơn một chu kỳ.</li>
+          <li>Thiếu <span class="k">-hold 1</span>: kiểm tra hold dời sang sườn 1, đòi đường ngắn dài hơn một chu kỳ.</li>
+          <li>Multicycle chỉ đúng khi RTL bảo đảm dữ liệu giữ nguyên hai chu kỳ; mô phỏng RTL và netlist của mc đạt 4 008 mẫu, 0 lỗi.</li>
+        </ul></div>
+    </div>
+  </div>
+  <p class="fn">run_20261114_0618/sta_mc0.log, sta_mc.log, sim.log; [2, tr. 23] (OpenSTA 2.7.0, 14/11/2026).</p>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 24 HAI MIỀN ĐỒNG HỒ -->
+<section class="slide" data-sec="E · Lỗi ràng buộc và ngoại lệ" data-title="False path giữa hai miền đồng hồ">
+  <div class="hd"><div><div class="eyebrow">Nhiều đồng hồ</div><h2>Đường giữa hai miền đồng hồ và false path</h2></div>
+    <span class="tag">CDC</span></div>
+  <div class="body">
+    <svg id="svCdc" viewBox="0 0 1000 205" style="width:100%;max-width:980px;height:auto;margin:0 auto">
+      <rect x="0" y="0" width="1000" height="205" fill="var(--surface)"/>
+      <text x="10" y="50" font-weight="700" fill="var(--ink)">clk</text>
+      <text x="10" y="115" font-weight="700" fill="var(--ink)">clk_b</text>
+      <path d="M70 60 H100 V30 H240 V60 H380 V30 H520 V60 H660 V30 H800 V60 H940 V30 H980" fill="none" stroke="var(--acc)" stroke-width="2.2"/>
+      <path d="M70 125 H100 V95 H198 V125 H296 V95 H394 V125 H492 V95 H590 V125 H688 V95 H786 V125 H884 V95 H980" fill="none" stroke="var(--violet)" stroke-width="2.2"/>
+      <path class="grid" d="M660 30 V150" fill="none" stroke="var(--red)" stroke-width="1.2" stroke-dasharray="4 3"/>
+      <path class="grid" d="M688 95 V150" fill="none" stroke="var(--red)" stroke-width="1.2" stroke-dasharray="4 3"/>
+      <path d="M660 158 H688" fill="none" stroke="var(--red)" stroke-width="2"/>
+      <polygon points="688,158 679,153.8 679,162.2" fill="var(--red)"/>
+      <text x="698" y="164" class="sm" font-weight="700" fill="var(--red)">1 ns</text>
+      <text x="100" y="192" text-anchor="middle" class="sm">0</text>
+      <text x="296" y="192" text-anchor="middle" class="sm">7</text>
+      <text x="380" y="192" text-anchor="middle" class="sm">10</text>
+      <text x="492" y="192" text-anchor="middle" class="sm">14</text>
+      <text x="652" y="192" text-anchor="middle" class="sm">20</text>
+      <text x="694" y="192" text-anchor="middle" class="sm">21</text>
+      <text x="884" y="192" text-anchor="middle" class="sm">28</text>
+      <text x="940" y="192" text-anchor="middle" class="sm">30 ns</text>
+    </svg>
+    <div class="g3" style="grid-template-columns:1fr 1.5fr 1fr">
+      <div class="card"><h4>cdc0: không có cdc.sdc</h4>
+        <p class="sub">OpenSTA coi clk (10 ns) và clk_b (7 ns) cùng gốc, xét chu kỳ chung 70 ns và chọn cặp sườn gần nhất: phóng tại 20 ns, bắt tại 21 ns.
+          Required 20,809 ns, arrival 20,330 ns, slack 0,480 ns.</p></div>
+      <div class="card plain" style="border:1px solid var(--line)"><h4>cdc.sdc</h4>
+        <pre class="vlog lang-tcl" data-lang="tcl" id="cCdc" style="font-size:11.5px"></pre></div>
+      <div class="card acc"><h4>base: có cdc.sdc</h4>
+        <p class="sub"><span class="k">report_checks -from clk -to clk_b</span> in <span class="k">No paths found.</span>
+          Hai đồng hồ độc lập không có quan hệ pha cố định; tính đúng của đường do bộ đồng bộ hai flip-flop (flag_a → sync_b) bảo đảm, không do STA.</p></div>
+    </div>
+  </div>
+  <p class="fn">run_20261114_0618/sta_cdc0.log (mục CROSS: _692_ → _641_), sta_base.log (OpenSTA 2.7.0, 14/11/2026); [2, tr. 21].</p>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 25 SỬA VI PHẠM -->
+<section class="slide" data-sec="F · Sửa vi phạm" data-title="Giảm tần số và pipeline">
+  <div class="hd"><div><div class="eyebrow">5.5 · Sửa vi phạm setup</div><h2>Giảm tần số và pipeline</h2></div>
+    <span class="tag">So sánh</span></div>
+  <div class="body g2">
+    <div class="col">
+      <div class="card"><h4>Ba kịch bản <span class="assum src">đo</span></h4>
+        <table><thead><tr><th></th><th class="r">viol</th><th class="r">slow</th><th class="r">pipe</th></tr></thead><tbody>
+          <tr><td>Biến thể</td><td class="mono r">v0</td><td class="mono r">v0</td><td class="mono r">p1</td></tr>
+          <tr><td>T (ns) / f (MHz)</td><td class="mono r">4,5 / 222,2</td><td class="mono r">4,7 / 212,8</td><td class="mono r">4,5 / 222,2</td></tr>
+          <tr><td>WS setup (ns)</td><td class="mono r" style="color:var(--red);font-weight:700">−0,152</td><td class="mono r">0,048</td><td class="mono r">0,949</td></tr>
+          <tr><td>TNS (ns)</td><td class="mono r">−0,336</td><td class="mono r">0</td><td class="mono r">0</td></tr>
+          <tr><td>WS hold (ns)</td><td class="mono r">0,046</td><td class="mono r">0,046</td><td class="mono r">0,046</td></tr>
+          <tr><td>Flip-flop</td><td class="mono r">52</td><td class="mono r">52</td><td class="mono r">92</td></tr>
+          <tr><td>Diện tích (µm²)</td><td class="mono r">3 759,856</td><td class="mono r">3 759,856</td><td class="mono r">4 714,522</td></tr>
+          <tr><td>Trễ y so với ra, rb, rc (chu kỳ)</td><td class="mono r">1</td><td class="mono r">1</td><td class="mono r">2</td></tr>
+        </tbody></table></div>
+    </div>
+    <div class="col">
+      <div class="card plain" style="border:1px solid var(--line)"><h4>Tầng pipeline của p1</h4>
+        <pre class="vlog lang-verilog" data-lang="verilog" id="cPipe" style="font-size:13px"></pre></div>
+      <div class="card acc"><h4>Cơ chế</h4>
+        <p class="sub">Giảm tần số 4,4 % (4,5 → 4,7 ns) đủ cho biên +0,048 ns, không tốn diện tích. Pipeline giữ 4,5 ns:
+          đường găng mới _738_ → _689_ (tầng cộng sau thanh ghi tích riêng) dài 3,358 ns, slack 0,949 ns; đổi lại 40 FF thêm,
+          diện tích +25,4 % và y trễ thêm một chu kỳ.</p></div>
+    </div>
+  </div>
+  <p class="fn">run_20261114_0618/sta_summary.txt, sta_pipe.log, stat_v0.txt, stat_p1.txt (14/11/2026); trễ y theo tham số lat của tb_sta_dp.v.</p>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 26 GIỚI HẠN -->
+<section class="slide" data-sec="F · Sửa vi phạm" data-title="Giới hạn của STA trước P&amp;R">
+  <div class="hd"><div><div class="eyebrow">Giới hạn của phép đo</div><h2>Giới hạn của STA trước P&amp;R</h2></div>
+    <span class="tag">Phạm vi</span></div>
+  <div class="body g2">
+    <div class="col">
+      <table><thead><tr><th style="width:30%">Yếu tố</th><th>Trong ví dụ</th><th>Sau P&amp;R</th></tr></thead><tbody>
+        <tr><td>Đồng hồ</td><td>Lý tưởng, trễ mạng 0, skew 0; uncertainty 0,07 ns chỉ cho setup</td><td>Cây đồng hồ có trễ và skew; <span class="k">set_propagated_clock</span></td></tr>
+        <tr><td>Dây nối</td><td>Không có điện dung dây, chỉ điện dung chân ô</td><td>RC trích từ layout (SPEF)</td></tr>
+        <tr><td>Góc công nghệ</td><td>Một góc tt, 25 °C, 1,80 V</td><td>Nhiều góc: ss cho setup, ff cho hold</td></tr>
+        <tr><td>Ràng buộc vào ra</td><td>20 % chu kỳ, buf_2, 10 fF: giả định của ví dụ</td><td>Theo bảng thời gian của mạch ngoài</td></tr>
+        <tr><td>Mô phỏng netlist</td><td>Mô hình ô từ liberty, không trễ</td><td>Mô phỏng có SDF</td></tr>
+      </tbody></table>
+    </div>
+    <div class="col">
+      <div class="card amber"><h4>Hệ quả cho số liệu</h4>
+        <ul class="tick">
+          <li>T<sub>min</sub> = 4,652 ns là cận dưới: điện dung dây làm trễ ô tăng ở mọi tầng.</li>
+          <li>WS hold 0,046 ns ở đường vào chưa tính skew; sau CTS, δ &gt; 0 có thể làm đường này vi phạm.</li>
+          <li>Số liệu Sky130 HD (130 nm) không ghép với bộ tham số 28 nm dùng cho tính tay.</li>
+        </ul></div>
+      <div class="card"><h4>Uncertainty theo giai đoạn</h4>
+        <p class="sub">Tổng hợp: jitter + 20 % T; sau CTS: jitter + 10 % T; sau định tuyến: jitter + 3 % T. Phần skew trong uncertainty được thay bằng trễ cây đồng hồ tính được.</p></div>
+    </div>
+  </div>
+  <p class="fn">[2, tr. 8]; điều kiện chạy: 04-Vi-du/tuan-11A-sta-opensta/guide.md mục 2–3.</p>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 27 DANH MỤC RÀNG BUỘC -->
+<section class="slide" data-sec="Tổng kết" data-title="Danh mục ràng buộc tối thiểu">
+  <div class="hd"><div><div class="eyebrow">Tổng kết</div><h2>Danh mục ràng buộc tối thiểu</h2></div>
+    <span class="tag">SDC</span></div>
+  <div class="body">
+    <table><thead><tr><th style="width:27%">Lệnh</th><th style="width:30%">Tác dụng</th><th>Hệ quả khi thiếu, trên sta_dp</th></tr></thead><tbody>
+      <tr><td class="mono">create_clock</td><td>Chu kỳ và sườn của đồng hồ</td><td>Không có đường nào được ràng buộc</td></tr>
+      <tr><td class="mono">set_clock_uncertainty</td><td>Biên cho skew, jitter</td><td>Slack setup của mọi đường lớn thêm 0,070 ns, mất biên cho skew và jitter</td></tr>
+      <tr><td class="mono">set_input_delay -max/-min</td><td>Thời điểm dữ liệu tới cổng vào</td><td>33 cổng vào thiếu ràng buộc; 32 chân D không được kiểm (noin)</td></tr>
+      <tr><td class="mono">set_output_delay -max/-min</td><td>Thời điểm mạch ngoài cần dữ liệu</td><td>19 cổng ra không được kiểm (noin)</td></tr>
+      <tr><td class="mono">set_driving_cell, set_load</td><td>Độ dốc sườn vào, tải cổng ra</td><td>Sườn vào lý tưởng, tải cổng ra bằng 0</td></tr>
+      <tr><td class="mono">set_false_path giữa clk, clk_b</td><td>Bỏ đường qua bộ đồng bộ</td><td>Ràng buộc giả 1 ns giữa hai miền (cdc0)</td></tr>
+      <tr><td class="mono">set_multicycle_path -setup 2 / -hold 1</td><td>Đường có dữ liệu hai chu kỳ</td><td>Vi phạm giả −0,129 ns (mc0)</td></tr>
+    </tbody></table>
+    <div class="card acc"><h4>Trình tự đọc kết quả</h4>
+      <p class="sub"><span class="k">check_setup -verbose</span> không cảnh báo → <span class="k">report_worst_slack -max/-min</span> theo từng nhóm đường
+        → <span class="k">report_checks</span> của đường xấu nhất → phân rã CLK→Q, logic, setup, uncertainty → chọn cách sửa → chạy lại.</p></div>
+  </div>
+  <p class="fn">run_20261114_0618/sta_noin.log, sta_cdc0.log, sta_mc0.log, sta_base.log (14/11/2026).</p>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 28 PHƯƠNG PHÁP ĐO -->
+<section class="slide" data-sec="Tổng kết" data-title="Phương pháp đo">
+  <div class="hd"><div><div class="eyebrow">Phụ lục</div><h2>Phương pháp đo</h2></div>
+    <span class="tag">Phương pháp</span></div>
+  <div class="body g2">
+    <div class="col">
+      <div class="card"><h4>Môi trường</h4>
+        <table><tbody>
+          <tr><td style="width:36%">Tổng hợp</td><td class="mono">Yosys 0.70+255 (git sha1 72b0054f0)</td></tr>
+          <tr><td>STA</td><td class="mono">OpenSTA 2.7.0</td></tr>
+          <tr><td>Mô phỏng</td><td class="mono">Questa Sim-64 2025.1_2</td></tr>
+          <tr><td>Thư viện</td><td class="mono">sky130_fd_sc_hd__tt_025C_1v80 (ORFS 0fcc418)</td></tr>
+          <tr><td>Điều kiện</td><td>tt, 25 °C, 1,80 V; đồng hồ lý tưởng; không có tải dây</td></tr>
+          <tr><td>Máy, ngày</td><td>Ubuntu 26.04.1 LTS, 14/11/2026, job 20261114_061834</td></tr>
+          <tr><td>Commit</td><td class="mono">770da04 + 10 tệp chưa commit</td></tr>
+        </tbody></table>
+      </div>
+      <div class="card teal"><h4>Tệp</h4>
+        <p class="sub">04-Vi-du/tuan-11A-sta-opensta: sta_dp.v, tb_sta_dp.v, clocks.sdc, io.sdc, cdc.sdc, mc.sdc, sta.tcl, check_sta.py, Makefile, guide.md;
+          log trong run_20261114_0618/.</p></div>
+    </div>
+    <div class="col">
+      <div class="card"><h4>Lệnh</h4>
+        <pre class="vlog lang-tcl" data-lang="bash" id="cMeth" style="font-size:12.5px;white-space:pre-wrap"></pre></div>
+      <div class="card amber"><h4>Kiểm chứng</h4>
+        <ul class="tick">
+          <li>check_sta.py so 8 kịch bản với kết quả kỳ vọng (MET, SETUP_VIOL, UNCONSTR, CROSS): 0 lệch.</li>
+          <li>Mô phỏng RTL và netlist của 3 biến thể: 6/6 PASS, 0 mismatch.</li>
+        </ul></div>
+    </div>
+  </div>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 29 BÀI TẬP -->
+<section class="slide" data-sec="Tổng kết" data-title="Bài tập">
+  <div class="hd"><div><div class="eyebrow">Tổng kết</div><h2>Bài tập</h2></div>
+    <span class="tag">Bài tập</span></div>
+  <div class="body g2">
+    <div class="col">
+      <div class="card"><h4><span class="n">1</span>Tính tay với thư viện 28 nm</h4>
+        <p class="sub">Đường dài FF → XOR2 → XOR2 → AND2 → OR2 → FF với δ = −50 ps: tính T<sub>min</sub> và f<sub>max</sub>.
+          Đường ngắn FF → INV → FF với δ = +80 ps: tính slack hold và số INV tối thiểu cần chèn (theo cặp) để slack hold không âm.</p></div>
+      <div class="card"><h4><span class="n">2</span>Dự đoán rồi đo</h4>
+        <p class="sub">Từ T<sub>min</sub> = 4,652 ns, dự đoán slack của _658_ ở T = 4,6 ns và TNS của nhóm clk; chạy OpenSTA với PERIOD = 4.6 và đối chiếu.</p></div>
+      <div class="card"><h4><span class="n">3</span>Ngân sách vào ra 50 %</h4>
+        <p class="sub">Đổi hệ số 0,2 trong io.sdc thành 0,5. Tính slack đường a → a_zero ở T = 4,5 ns từ các trễ ở slide 26, rồi chạy kiểm tra.</p></div>
+    </div>
+    <div class="col">
+      <div class="card"><h4><span class="n">4</span>SDC cho UART</h4>
+        <p class="sub">Viết SDC cho khối UART của tuần 8 với đồng hồ 50 MHz: create_clock, uncertainty, trễ vào cho rx, trễ ra cho tx,
+          false path cho reset. Chạy check_setup đến khi không còn cảnh báo.</p></div>
+      <div class="card"><h4><span class="n">5</span>Thiếu -hold 1</h4>
+        <p class="sub">Xoá dòng <span class="k">set_multicycle_path -hold 1</span> trong mc.sdc, chạy lại kịch bản mc và giải thích sườn bắt của kiểm tra hold trong báo cáo mới.</p></div>
+      <div class="card"><h4><span class="n">6</span>Vị trí cắt pipeline</h4>
+        <p class="sub">Đặt thanh ghi pipeline sau bộ nhân 8×8 (trước bộ cộng). So sánh đường găng, slack ở 4,5 ns, số FF và diện tích với p1.</p></div>
+    </div>
+  </div>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 30 THAM KHẢO -->
+<section class="slide" data-sec="Tổng kết" data-title="Nguồn tham khảo">
+  <div class="hd"><div><div class="eyebrow">Tài liệu</div><h2>Nguồn tham khảo</h2></div>
+    <span class="tag">IEEE</span></div>
+  <div class="body g2">
+    <div class="col">
+      <div class="card"><h4>Tài liệu tham khảo</h4>
+        <p class="sub ref" style="line-height:1.7">
+          [1] D. M. Harris and S. L. Harris, <em>Digital Design and Computer Architecture</em>. San Francisco, CA, USA: Morgan Kaufmann, 2007.<br>
+          [2] A. A. Mohammady, “Static timing analysis, Part 4 – Timing constraints,” lecture slides, 2024.<br>
+          [3] Parallax Software and The OpenROAD Project, “OpenSTA,” ver. 2.7.0. [Online]. Available: https://github.com/The-OpenROAD-Project/OpenSTA<br>
+          [4] C. Wolf and YosysHQ, “Yosys Open SYnthesis Suite,” ver. 0.70+255. [Online]. Available: https://github.com/YosysHQ/yosys<br>
+          [5] SkyWater Technology and Google, “SkyWater SKY130 PDK,” thư viện sky130_fd_sc_hd, bản trong OpenROAD-flow-scripts commit 0fcc418. [Online]. Available: https://github.com/google/skywater-pdk<br>
+          [6] J. Bhasker and R. Chadha, <em>Static Timing Analysis for Nanometer Designs: A Practical Approach</em>. New York, NY, USA: Springer, 2009.<br>
+          [7] Synopsys, Inc., <em>Design Compiler 1 Workshop: Student Guide</em>, 10-I-011-SSG-016, ver. 2010.12. Mountain View, CA, USA: Synopsys, 2011, Unit 4–5.
+        </p></div>
+    </div>
+    <div class="col">
+      <div class="card"><h4>Sử dụng tài liệu</h4>
+        <table><tbody>
+          <tr><td style="width:34%">Sec. 2.9, 3.5.1–3.5.3 của [1]</td><td>Định nghĩa t<sub>pcq</sub>, t<sub>ccq</sub>, t<sub>pd</sub>, t<sub>cd</sub>, t<sub>setup</sub>, t<sub>hold</sub>; điều kiện setup, hold, clock skew, sửa hold; slide 6–10, 16, 21.</td></tr>
+          <tr><td>[2, tr. 7–8]</td><td>Clock uncertainty theo giai đoạn; slide 6, 7, 12, 24, 38.</td></tr>
+          <tr><td>[2, tr. 14, 21, 23]</td><td>Ngân sách vào ra, false path, multicycle; slide 25, 34–36.</td></tr>
+          <tr><td>[7, pp. 4-10–4-17]</td><td>Sườn phóng, sườn bắt, latency, skew, uncertainty, độ dốc sườn đồng hồ; slide 11–13, 17, 18.</td></tr>
+          <tr><td>[7, pp. 5-4–5-9]</td><td>Trễ ô theo tải ra, độ dốc sườn vào, PVT; slide 14–17.</td></tr>
+          <tr><td>[3], [4], [5]</td><td>Công cụ và thư viện của ví dụ tuan-11A-sta-opensta, tuan-11A-clock-va-tai.</td></tr>
+          <tr><td>[6]</td><td>Đọc thêm (khung bài giảng 15 tuần, tuần 11–12).</td></tr>
+        </tbody></table>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+</div></div>
+
+<div id="bar" style="width:0%"></div>
+<div id="nav">
+  <button id="btnPrev" title="Slide trước">‹</button>
+  <button id="btnNext" title="Slide sau">›</button>
+  <button id="btnOv" title="Mục lục">▦</button>
+  <button id="btnFs" title="Toàn màn hình">⤢</button>
+</div>
+<div id="ov">
+  <h3>Mục lục — Tuần 11–12: Phân tích thời gian tĩnh</h3>
+  <p class="sub">Bấm vào một slide để chuyển tới. Nhấn <span class="kbd">Esc</span> hoặc <span class="kbd">O</span> để đóng.</p>
+  <div id="ovg"></div>
+</div>
+
+<script>
+"use strict";
+/* ════════════════════ TIỆN ÍCH CHUNG ════════════════════ */
+const $  = (s,r=document)=>r.querySelector(s);
+const $$ = (s,r=document)=>[...r.querySelectorAll(s)];
+const cv = n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
+const fmt=(v,d=0)=>v.toLocaleString('vi-VN',{minimumFractionDigits:d,maximumFractionDigits:d});
+function el(tag,attrs={},kids=[]){
+  const n=document.createElementNS('http://www.w3.org/2000/svg',tag);
+  for(const k in attrs) n.setAttribute(k,attrs[k]);
+  kids.forEach(k=>n.appendChild(k)); return n;
+}
+function svgClear(s){ while(s.firstChild) s.removeChild(s.firstChild); }
+function S(tag,a={},text){ // returns markup string
+  let s='<'+tag; for(const k in a) s+=` ${k}="${a[k]}"`;
+  if(text===undefined) return s+'/>';
+  return s+'>'+text+'</'+tag+'>';
+}
+/* dạng sóng số: evts = [{t,v}] , trả về path d */
+function wavePath(evts,t2x,hi,lo,tEnd,sl=3){
+  if(!evts.length) return '';
+  let y=evts[0].v?hi:lo, d=`M${t2x(evts[0].t)} ${y}`;
+  for(let i=1;i<evts.length;i++){
+    const x=t2x(evts[i].t), ny=evts[i].v?hi:lo;
+    if(ny!==y){ d+=` L${(x-sl).toFixed(1)} ${y} L${(x+sl).toFixed(1)} ${ny}`; y=ny; }
+  }
+  d+=` L${t2x(tEnd)} ${y}`; return d;
+}
+function clkEvts(t0,per,n,duty=0.5){
+  const e=[{t:0,v:0}];
+  for(let i=0;i<n;i++){ e.push({t:t0+i*per,v:1}); e.push({t:t0+i*per+per*duty,v:0}); }
+  return e;
+}
+/* bus nhiều bit: vẽ hai đường bao chéo nhau */
+function busSeg(x1,x2,yT,yB,sl=4){
+  return `M${x1+sl} ${yT} L${x2-sl} ${yT} L${x2} ${(yT+yB)/2} L${x2-sl} ${yB} L${x1+sl} ${yB} L${x1} ${(yT+yB)/2} Z`;
+}
+
+/* ════════════════════ ENGINE TRÌNH CHIẾU ════════════════════ */
+const slides=$$('.slide'); let cur=0;
+const deck=$('#deck'), stage=$('#stage');
+function fit(){
+  const pad=26, w=stage.clientWidth-pad, h=stage.clientHeight-pad;
+  const s=Math.min(w/1280,h/720);
+  deck.style.transform=`scale(${s})`;
+  deck.style.width='1280px'; deck.style.height='720px';
+}
+/* tự co nội dung nếu slide bị tràn — giữ nguyên bố cục, chỉ thu nhỏ tỉ lệ */
+function autofit(s){
+  if(!s) return;
+  const b=s.querySelector('.body'); if(!b) return;
+  b.style.transformOrigin='top left'; b.style.transform=''; b.style.width='';
+  if(s.scrollHeight<=s.clientHeight+1) return;
+  for(let k=.98;k>=.52;k-=.02){
+    b.style.transform=`scale(${k.toFixed(2)})`; b.style.width=(100/k).toFixed(3)+'%';
+    if(s.scrollHeight<=s.clientHeight+1) return;
+  }
+}
+function go(i,push=true){
+  i=clamp(i,0,slides.length-1);
+  slides[cur].classList.remove('active');
+  cur=i; slides[cur].classList.add('active');
+  const pg=slides[cur].querySelector('.pg'); if(pg) pg.textContent=`${i+1} / ${slides.length}`;
+  $('#bar').style.width=((i+1)/slides.length*100)+'%';
+  
+  if(push) history.replaceState(null,'','#'+(i+1));
+  window.dispatchEvent(new CustomEvent('slide',{detail:i}));
+  autofit(slides[cur]);
+}
+let afT=null;
+function afSoon(){ clearTimeout(afT); afT=setTimeout(()=>autofit(slides[cur]),90); }
+document.addEventListener('input',afSoon);
+document.addEventListener('click',afSoon);
+window.addEventListener('theme',afSoon);
+$('#btnPrev').onclick=()=>go(cur-1); $('#btnNext').onclick=()=>go(cur+1);
+$('#btnFs').onclick=()=>{ document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen(); };
+$('#btnOv').onclick=()=>toggleOv();
+function toggleOv(){ $('#ov').classList.toggle('on'); }
+/* mục lục */
+(function buildOv(){
+  const g=$('#ovg'); let last='';
+  slides.forEach((s,i)=>{
+    if(s.dataset.sec!==last){ last=s.dataset.sec;
+      const h=document.createElement('div'); h.className='ovsec'; h.textContent=last; g.appendChild(h); }
+    const c=document.createElement('div'); c.className='ovc';
+    c.innerHTML=`<span class="num">SLIDE ${i+1}</span><span class="t">${s.dataset.title}</span>`+
+      (s.dataset.int?`<span class="s">◆ có công cụ tương tác</span>`:'');
+    c.onclick=()=>{ go(i); toggleOv(); }; g.appendChild(c);
+  });
+})();
+document.addEventListener('keydown',e=>{
+  if(['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName)) return;
+  const k=e.key.toLowerCase();
+  if(k==='arrowright'||k==='pagedown'||k===' '){e.preventDefault();go(cur+1);}
+  else if(k==='arrowleft'||k==='pageup'){e.preventDefault();go(cur-1);}
+  else if(k==='home'){go(0);} else if(k==='end'){go(slides.length-1);}
+  else if(k==='o'){toggleOv();} else if(k==='escape'){$('#ov').classList.remove('on');}
+  else if(k==='f'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();}
+  else if(k==='p'){window.print();}
+});
+window.addEventListener('resize',()=>{fit();afSoon();});
+window.addEventListener('load',()=>{fit();autofit(slides[cur]);});
+fit();
+
+/* ═══════════ TÔ MÀU CÚ PHÁP VERILOG ═══════════ */
+const M0=String.fromCharCode(1), M1=String.fromCharCode(2);
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function vl(src){
+  let s=esc(src), cm=[];
+  s=s.replace(/\/\/[^\n]*/g,m=>{cm.push(m);return M0+String.fromCharCode(0x2460+cm.length-1)+M1;});
+  s=s.replace(/\b(module|endmodule|input|output|inout|always|initial|begin|end|if|else|case|casex|casez|endcase|default|assign|posedge|negedge|localparam|parameter|genvar|generate|endgenerate|integer|for|while|repeat|forever|fork|join|disable|force|release|and|or|xor|not|nand|nor|xnor|buf|function|endfunction|task|endtask|timescale)\b/g,
+    '<span class="kw">$1</span>');
+  s=s.replace(/\b(wire|reg|logic|real|time)\b/g,'<span class="ty">$1</span>');
+  s=s.replace(/(\d+'[bhdoBHDO][0-9a-fA-FxzXZ_?]+)/g,'<span class="nu">$1</span>');
+  s=s.replace(/(?<![\w#])(\d+)(?![\w'])/g,'<span class="nu">$1</span>');
+  /* chú thích đã được esc() ở bước đầu — không escape lần hai */
+  s=s.replace(new RegExp(M0+'(.)'+M1,'g'),(m,c)=>'<span class="cm">'+cm[c.charCodeAt(0)-0x2460]+'</span>');
+  return s;
+}
+function mark(html,cls){return '<span class="'+cls+'">'+html+'</span>';}
+const CO=['--acc','--teal','--violet','--amber','--green','--red','--pink'];
+/* mũi tên có đỉnh đặt đúng tại điểm nhận */
+function arw(px,py,dir,col,len,wid){
+  len=len||9; wid=wid||4.2;
+  const d={r:`M${px} ${py} l${-len} ${-wid} v${2*wid} z`,
+           l:`M${px} ${py} l${len} ${-wid} v${2*wid} z`,
+           d:`M${px} ${py} l${-wid} ${-len} h${2*wid} z`,
+           u:`M${px} ${py} l${-wid} ${len} h${2*wid} z`}[dir];
+  return S('path',{d:d,fill:`var(${col})`});
+}
+
+
+
+
+/* ═══════════ TÔ MÀU TCL / SDC VÀ LOG OPENSTA ═══════════ */
+function tl(src){
+  let s=esc(src), cm=[];
+  s=s.replace(/(^|\s)(#[^\n]*)/g,(m,a,c)=>{cm.push(c);return a+M0+String.fromCharCode(0x2460+cm.length-1)+M1;});
+  s=s.replace(/^(\s*)(create_clock|set_[a-z_]+|read_[a-z_]+|report_[a-z_]+|link_design|check_setup|foreach|if|set|puts|rjob|make)\b/gm,
+    '$1<span class="kw">$2</span>');
+  s=s.replace(/\[(get_[a-z_]+|all_[a-z_]+|expr)\b/g,'[<span class="op">$1</span>');
+  s=s.replace(/(\s)(-[a-z_]+)/g,'$1<span class="ty">$2</span>');
+  s=s.replace(/(?<![\w.])(\d+(?:\.\d+)?)(?![\w.])/g,'<span class="nu">$1</span>');
+  s=s.replace(new RegExp(M0+'(.)'+M1,'g'),(m,c)=>'<span class="cm">'+cm[c.charCodeAt(0)-0x2460]+'</span>');
+  return s;
+}
+function lg(src){
+  let s=esc(src);
+  s=s.replace(/^(.*slack \(VIOLATED\).*)$/gm,'<span class="bad">$1</span>');
+  s=s.replace(/^(.*\(VIOLATED\).*)$/gm,m=>m.indexOf('class="bad"')>=0?m:'<span class="bad">'+m+'</span>');
+  s=s.replace(/^(.*slack \(MET\).*)$/gm,'<span class="ok">$1</span>');
+  s=s.replace(/^(.*data (arrival|required) time.*)$/gm,'<span class="hl">$1</span>');
+  s=s.replace(/^(Warning:.*)$/gm,'<span class="bad">$1</span>');
+  s=s.replace(/^(\s*\.\.\..*)$/gm,'<span class="cm">$1</span>');
+  return s;
+}
+
+/* ───────── mã nguồn, SDC, log (trích nguyên văn; dòng "..." đánh dấu phần lược bỏ) ───────── */
+const VCODE={
+cDp:`wire        en = (MC != 0) ? ld : 1'b1;
+wire [15:0] p  = ra * rb;
+assign a_zero = (a == 8'd0);        // vào → ra
+assign flag_b = sync_b[1];
+always @(posedge clk or negedge rst_n) begin
+  if (!rst_n) begin
+    // ... xoá ra, rb, rc, rc_d, pl, ph, y, flag_a; ld <= 1
+  end else begin
+    ld <= ~ld;
+    if (en) begin
+      ra <= a; rb <= b; rc <= c;   // vào → thanh ghi
+      y  <= s;                     // thanh ghi → thanh ghi
+    end
+    // ... tầng pipeline khi PIPE != 0
+    flag_a <= y[16];
+  end
+end
+always @(posedge clk_b or negedge rst_n) begin
+  if (!rst_n) sync_b <= 2'b00;
+  else        sync_b <= {sync_b[0], flag_a};
+end`,
+cPipe:`wire [16:0] s  = (PIPE != 0)
+    ? ({5'b0, pl} + {1'b0, ph, 4'b0} + {1'b0, rc_d})
+    : ({1'b0, p} + {1'b0, rc});
+// trong khối always @(posedge clk ...)
+if (PIPE != 0) begin
+    pl   <= ra * rb[3:0];
+    ph   <= ra * rb[7:4];
+    rc_d <= rc;
+end`
+};
+const TCODE={
+cStaTcl:`read_liberty $lib
+read_verilog $netlist
+link_design $top
+foreach f $::env(SDCS) { read_sdc $f }
+check_setup -verbose
+report_checks -path_delay max -format full_clock_expanded \\
+    -fields {slew cap fanout} -digits 3
+report_checks -path_delay min -format full_clock_expanded \\
+    -fields {slew cap fanout} -digits 3
+report_wns -digits 3
+report_tns -digits 3
+report_worst_slack -max -digits 3
+report_worst_slack -min -digits 3
+report_checks -path_delay max -group_path_count 5 \\
+    -endpoint_path_count 1 -format end -digits 3`,
+cClk:`if {![info exists ::clk_period]} { set ::clk_period 10.0 }
+create_clock -name clk   -period $::clk_period [get_ports clk]
+create_clock -name clk_b -period 7.0           [get_ports clk_b]
+set_clock_uncertainty -setup 0.07 [all_clocks]`,
+cIo:`set t_ext    [expr {0.2 * $::clk_period}]
+set in_ports [get_ports {a[*] b[*] c[*]}]
+set_input_delay  -max $t_ext -clock clk $in_ports
+set_input_delay  -min 0.0    -clock clk $in_ports
+set_output_delay -max $t_ext -clock clk [get_ports {y[*] in_rdy a_zero}]
+set_output_delay -min 0.0    -clock clk [get_ports {y[*] in_rdy a_zero}]
+set_output_delay 1.4 -clock clk_b [get_ports flag_b]
+set_driving_cell -lib_cell sky130_fd_sc_hd__buf_2 -pin X $in_ports
+set_load 0.01 [all_outputs]
+set_input_delay 0.0 -clock clk [get_ports rst_n]
+set_false_path -from [get_ports rst_n]`,
+cFrom:`report_checks -path_delay max \\
+    -from [all_registers -clock_pins] \\
+    -to   [all_registers -data_pins] -digits 3`,
+cMc:`set mc_from [get_cells -of_objects [get_pins -of_objects [get_nets {ra[*] rb[*] rc[*]}] -filter "direction == output"]]
+set mc_to   [get_cells -of_objects [get_pins -of_objects [get_nets {y[*]}] -filter "direction == output"]]
+set_multicycle_path -setup 2 -from $mc_from -to $mc_to
+set_multicycle_path -hold  1 -from $mc_from -to $mc_to`,
+cCdc:`set_false_path -from [get_clocks clk]   -to [get_clocks clk_b]
+set_false_path -from [get_clocks clk_b] -to [get_clocks clk]`,
+cMeth:`rjob -H seee-tailscale run -- make all
+# make synth: Yosys synth -flatten; dfflibmap, abc -liberty (-dont_use *lpflow*); hilomap; insbuf
+# make sta  : sta -no_init -no_splash -exit sta.tcl, 8 kịch bản; check_sta.py -> sta_summary.txt
+# make sim  : Questa, RTL + netlist của v0, p1, mc; 2000 bộ vào, seed 11`
+};
+const LCODE={
+cReq:`  10.000   10.000   clock clk (rise edge)
+   0.000   10.000   clock network delay (ideal)
+  -0.070    9.930   clock uncertainty
+   0.000    9.930   clock reconvergence pessimism
+            9.930 ^ _658_/CLK (sky130_fd_sc_hd__dfrtp_1)
+  -0.125    9.805   library setup time
+            9.805   data required time`,
+cEnd:`max_delay/setup group clk
+
+                                     Required   Actual
+Endpoint                                Delay    Delay    Slack
+---------------------------------------------------------------
+_658_/D (sky130_fd_sc_hd__dfrtp_1)      4.305    4.457   -0.152 (VIOLATED)
+_657_/D (sky130_fd_sc_hd__dfrtp_1)      4.300    4.410   -0.110 (VIOLATED)
+_659_/D (sky130_fd_sc_hd__dfrtp_1)      4.347    4.421   -0.074 (VIOLATED)
+_656_/D (sky130_fd_sc_hd__dfrtp_1)      4.303    4.245    0.059 (MET)
+_655_/D (sky130_fd_sc_hd__dfrtp_1)      4.296    4.113    0.183 (MET)`,
+cAz:`Startpoint: a[4] (input port clocked by clk)
+Endpoint: a_zero (output port clocked by clk)
+
+Fanout      Cap     Slew    Delay     Time   Description
+---------------------------------------------------------------------------------
+                   0.000    0.000    0.000   clock clk (rise edge)
+                            0.000    0.000   clock network delay (ideal)
+                            2.000    2.000 v input external delay
+     2    0.003    0.025    0.014    2.014 v a[4] (in)
+     1    0.002    0.080    0.500    2.514 v _586_/X (sky130_fd_sc_hd__or4_1)
+     1    0.010    0.199    0.198    2.712 ^ _608_/Y (sky130_fd_sc_hd__nor2_1)
+                   0.199    0.000    2.712 ^ a_zero (out)
+                                     2.712   data arrival time
+
+                   0.000   10.000   10.000   clock clk (rise edge)
+                            0.000   10.000   clock network delay (ideal)
+                           -0.070    9.930   clock uncertainty
+                            0.000    9.930   clock reconvergence pessimism
+                           -2.000    7.930   output external delay
+                                     7.930   data required time
+---------------------------------------------------------------------------------
+                                     7.930   data required time
+                                    -2.712   data arrival time
+---------------------------------------------------------------------------------
+                                     5.218   slack (MET)`,
+cSetup:`Startpoint: _668_ (rising edge-triggered flip-flop clocked by clk)
+Endpoint: _658_ (rising edge-triggered flip-flop clocked by clk)
+Path Group: clk
+Path Type: max
+
+   Delay     Time   Description
+-----------------------------------------------------------
+   0.000    0.000   clock clk (rise edge)
+   0.000    0.000   clock network delay (ideal)
+   0.000    0.000 ^ _668_/CLK (sky130_fd_sc_hd__dfrtp_1)
+   0.468    0.468 ^ _668_/Q (sky130_fd_sc_hd__dfrtp_1)
+   0.128    0.596 v _477_/Y (sky130_fd_sc_hd__nand2_1)
+   0.372    0.968 v _500_/X (sky130_fd_sc_hd__xnor3_1)
+   ...      (12 ô: maj3, xnor2, or3b, or2, maj3, o21a, maj3, ...)
+   0.129    4.322 v _542_/Y (sky130_fd_sc_hd__a31oi_1)
+   0.135    4.457 v _543_/Y (sky130_fd_sc_hd__xnor2_1)
+   0.000    4.457 v _658_/D (sky130_fd_sc_hd__dfrtp_1)
+            4.457   data arrival time
+
+  10.000   10.000   clock clk (rise edge)
+   0.000   10.000   clock network delay (ideal)
+  -0.070    9.930   clock uncertainty
+   0.000    9.930   clock reconvergence pessimism
+            9.930 ^ _658_/CLK (sky130_fd_sc_hd__dfrtp_1)
+  -0.125    9.805   library setup time
+            9.805   data required time
+-----------------------------------------------------------
+            9.805   data required time
+           -4.457   data arrival time
+-----------------------------------------------------------
+            5.348   slack (MET)`,
+cHold:`Startpoint: b[0] (input port clocked by clk)
+Endpoint: _668_ (rising edge-triggered flip-flop clocked by clk)
+Path Group: clk
+Path Type: min
+
+Fanout      Cap     Slew    Delay     Time   Description
+---------------------------------------------------------------------------------
+                   0.000    0.000    0.000   clock clk (rise edge)
+                            0.000    0.000   clock network delay (ideal)
+                            0.000    0.000 ^ input external delay
+     1    0.002    0.024    0.010    0.010 ^ b[0] (in)
+                   0.024    0.000    0.010 ^ _668_/D (sky130_fd_sc_hd__dfrtp_1)
+                                     0.010   data arrival time
+
+                   0.000    0.000    0.000   clock clk (rise edge)
+                            0.000    0.000   clock network delay (ideal)
+                            0.000    0.000   clock reconvergence pessimism
+                                     0.000 ^ _668_/CLK (sky130_fd_sc_hd__dfrtp_1)
+                           -0.037   -0.037   library hold time
+                                    -0.037   data required time
+---------------------------------------------------------------------------------
+                                    -0.037   data required time
+                                    -0.010   data arrival time
+---------------------------------------------------------------------------------
+                                     0.046   slack (MET)`,
+cGrp:`max_delay/setup group clk
+
+                                     Required   Actual
+Endpoint                                Delay    Delay    Slack
+---------------------------------------------------------------
+a_zero (output)                         7.930    2.712    5.218 (MET)
+_658_/D (sky130_fd_sc_hd__dfrtp_1)      9.805    4.457    5.348 (MET)
+_657_/D (sky130_fd_sc_hd__dfrtp_1)      9.800    4.410    5.390 (MET)
+_659_/D (sky130_fd_sc_hd__dfrtp_1)      9.847    4.421    5.426 (MET)
+_656_/D (sky130_fd_sc_hd__dfrtp_1)      9.803    4.245    5.559 (MET)
+
+max_delay/setup group clk_b
+
+                                     Required   Actual
+Endpoint                                Delay    Delay    Slack
+---------------------------------------------------------------
+flag_b (output)                         5.530    0.456    5.074 (MET)
+_642_/D (sky130_fd_sc_hd__dfrtp_1)      6.809    0.330    6.480 (MET)`,
+cNoin:`== check_setup -verbose
+Warning: There are 33 input ports missing set_input_delay.
+  a[0]
+  ...     (a[1]–a[7], b[*], c[*])
+  rst_n
+Warning: There are 19 output ports missing set_output_delay.
+  a_zero
+  flag_b
+  ...     (y[0]–y[16])
+Warning: There are 51 unconstrained endpoints.
+  a_zero
+  flag_b
+  ...     (y[*], 32 chân D: _660_/D … _691_/D)`,
+cLd:`   0.000    0.000 ^ _828_/CLK (sky130_fd_sc_hd__dfstp_1)
+   1.560    1.560 ^ _828_/Q (sky130_fd_sc_hd__dfstp_1)
+   0.639    2.198 v _398_/Y (sky130_fd_sc_hd__clkinv_1)
+   0.253    2.451 ^ _625_/Y (sky130_fd_sc_hd__a21oi_1)
+   0.127    2.579 v _626_/Y (sky130_fd_sc_hd__o221ai_1)
+   0.160    2.739 v _627_/X (sky130_fd_sc_hd__o22a_1)
+   0.000    2.739 v _846_/D (sky130_fd_sc_hd__dfrtp_1)
+            2.739   data arrival time
+   ...
+            4.307   data required time
+           -2.739   data arrival time
+-----------------------------------------------------------
+            1.569   slack (MET)`
+};
+(function(){
+  for(const k in VCODE){ const p=document.getElementById(k); if(p) p.innerHTML=vl(VCODE[k]); }
+  for(const k in TCODE){ const p=document.getElementById(k); if(p) p.innerHTML=tl(TCODE[k]); }
+  for(const k in LCODE){ const p=document.getElementById(k); if(p) p.innerHTML=lg(LCODE[k]); }
+})();
+
+/* ───────── slide 10 · skew → T_min, slack hold (bộ tham số 28 nm cố định) ───────── */
+(function skew(){
+  const L={t_pcq:80,t_ccq:40,t_setup:50,t_hold:20,NAND2:80,XOR2:220,AND2:120,INV:50,unc:70};
+  const tpd=L.NAND2+L.XOR2+L.AND2, Tc=650;
+  const d=$('#skD'), b=$('#skB'); if(!d) return;
+  function upd(){
+    const dl=+d.value, n=+b.value, tcd=L.INV+n*L.INV;
+    const Tmin=L.t_pcq+tpd+L.t_setup+L.unc-dl, hs=L.t_ccq+tcd-L.t_hold-dl, ss=Tc-Tmin;
+    $('#skDv').textContent=(dl>0?'+':'')+dl; $('#skBv').textContent=n;
+    $('#skT').textContent=Tmin+' ps'; $('#skF').textContent=fmt(1000/Tmin,3)+' GHz';
+    $('#skH').textContent=(hs>0?'+':'')+hs+' ps'; $('#skS').textContent=(ss>0?'+':'')+ss+' ps';
+    $('#skHs').className='stat '+(hs<0?'bad':'ok');
+    $('#skS').parentNode.className='stat '+(ss<0?'bad':'ok');
+    const ds=dl<0?`(${dl})`:dl;
+    $('#skEq').innerHTML=`T<sub>min</sub> = 80 + ${tpd} + 50 + 70 − ${ds} = <strong>${Tmin} ps</strong><br>`+
+      `t<sub>cd</sub> = 50 + ${n} × 50 = ${tcd} ps<br>`+
+      `slack<sub>hold</sub> = 40 + ${tcd} − 20 − ${ds} = <strong>${hs} ps</strong>`;
+  }
+  d.addEventListener('input',upd); b.addEventListener('input',upd); upd();
+})();
+
+/* ───────── slide 30 · slack setup theo T (số từ báo cáo OpenSTA) ───────── */
+(function tslack(){
+  const sv=$('#svTs'), inp=$('#tsT'); if(!sv) return;
+  const V0={arr:4.457,su:0.125}, P1={arr:3.358,su:0.122}, UNC=0.070;
+  const sl=(m,T)=>T-UNC-m.su-m.arr;
+  const X0=70,X1=610,Y0=280,Y1=20, Tlo=3.5,Thi=10, Slo=-1.5,Shi=6.5;
+  const x=T=>X0+(T-Tlo)/(Thi-Tlo)*(X1-X0), y=s=>Y0-(s-Slo)/(Shi-Slo)*(Y0-Y1);
+  const pts=[[4.5,-0.152,'--acc'],[4.7,0.048,'--acc'],[10,5.348,'--acc'],[4.5,0.949,'--teal']];
+  function draw(T){
+    let s=S('rect',{x:0,y:0,width:640,height:320,fill:'var(--surface)'});
+    for(let v=-1;v<=6;v++){
+      s+=S('path',{class:'grid',d:`M${X0} ${y(v).toFixed(1)} H${X1}`,stroke:v===0?'var(--ink2)':'var(--line)','stroke-width':v===0?1.4:1,fill:'none'});
+      s+=S('text',{x:X0-8,y:(y(v)+5).toFixed(1),'text-anchor':'end',class:'sm'},String(v).replace('-','−'));
+    }
+    for(let t=4;t<=10;t++){
+      s+=S('path',{class:'grid',d:`M${x(t).toFixed(1)} ${Y1} V${Y0}`,stroke:'var(--line)','stroke-width':1,fill:'none'});
+      s+=S('text',{x:x(t).toFixed(1),y:Y0+22,'text-anchor':'middle',class:'sm'},String(t));
+    }
+    s+=S('path',{d:`M${X0} ${Y1} V${Y0} H${X1}`,stroke:'var(--ink2)','stroke-width':1.4,fill:'none'});
+    [[V0,'--acc'],[P1,'--teal']].forEach(([m,c])=>{
+      s+=S('path',{d:`M${x(Tlo).toFixed(1)} ${y(sl(m,Tlo)).toFixed(1)} L${x(Thi).toFixed(1)} ${y(sl(m,Thi)).toFixed(1)}`,stroke:`var(${c})`,'stroke-width':2.6,fill:'none'});
+    });
+    s+=S('path',{class:'grid',d:`M${x(T).toFixed(1)} ${Y1} V${Y0}`,stroke:'var(--red)','stroke-width':1.6,'stroke-dasharray':'5 3',fill:'none'});
+    pts.forEach(([t,v,c])=>{ s+=S('circle',{cx:x(t).toFixed(1),cy:y(v).toFixed(1),r:5.5,fill:'var(--amber)',stroke:`var(${c})`,'stroke-width':2}); });
+    sv.innerHTML=s;
+  }
+  function upd(){
+    const T=+inp.value, a=sl(V0,T), b=sl(P1,T);
+    $('#tsTv').textContent=fmt(T,2);
+    $('#tsV0').textContent=fmt(a,3)+' ns'; $('#tsV1').textContent=fmt(b,3)+' ns';
+    $('#tsS0').className='stat '+(a<0?'bad':'ok'); $('#tsS1').className='stat '+(b<0?'bad':'ok');
+    draw(T);
+  }
+  inp.addEventListener('input',upd); upd();
+})();
+
+
+/* ───────── slide 13 · log đường đồng hồ (clk.log, prop_src_unc) ───────── */
+(function(){ const p=document.getElementById('cClkRep'); if(p) p.innerHTML=lg(`     Cap     Slew    Delay     Time   Description
+---------------------------------------------------------------------------
+                     0.000    0.000   clock clk (rise edge)
+                     0.500    0.500   clock source latency
+   0.004    0.050    0.000    0.500 ^ clk (in)
+   0.002    0.035    0.075    0.575 ^ cb_l/X (sky130_fd_sc_hd__clkbuf_1)
+            0.035    0.000    0.575 ^ ff1/CLK (sky130_fd_sc_hd__dfxtp_1)
+   0.002    0.025    0.284    0.859 v ff1/Q (sky130_fd_sc_hd__dfxtp_1)
+   ...      (i1/Y … i4/Y, ff2/D)
+                              0.984   data arrival time
+
+                     1.000    1.000   clock clk (rise edge)
+                     0.500    1.500   clock source latency
+   0.004    0.050    0.000    1.500 ^ clk (in)
+   0.002    0.039    0.077    1.577 ^ cb_c0/X (sky130_fd_sc_hd__clkbuf_1)
+   0.002    0.039    0.073    1.651 ^ cb_c1/X (sky130_fd_sc_hd__clkbuf_1)
+   0.002    0.035    0.071    1.721 ^ cb_c2/X (sky130_fd_sc_hd__clkbuf_1)
+            0.035    0.000    1.721 ^ ff2/CLK (sky130_fd_sc_hd__dfxtp_1)
+                    -0.100    1.621   clock uncertainty
+                     0.000    1.621   clock reconvergence pessimism
+                    -0.100    1.522   library setup time
+                              1.522   data required time
+---------------------------------------------------------------------------
+                              1.522   data required time
+                             -0.984   data arrival time
+---------------------------------------------------------------------------
+                              0.538   slack (MET)`); })();
+
+/* ───────── slide 15 · trễ theo tải (summary.txt, run_20261114_0859) ───────── */
+(function load(){
+  const sv=$('#svLd'), inp=$('#ldN'); if(!sv) return;
+  const N=[1,2,4,8,16], CL=[2.39,4.78,9.56,19.12,38.24];
+  /* [tpHL, tpLH, tp_tb, slewR] theo n */
+  const D={
+    inv_1:  {c:'--acc',  v:[[34.6,48.4,41.5,32.3],[44.1,62.2,53.1,50.0],[60.5,89.3,74.9,88.2],[92.2,143.6,117.9,165.4],[155.9,251.6,203.8,319.4]]},
+    inv_4:  {c:'--teal', v:[[22.9,39.9,31.4,20.8],[26.9,45.2,36.0,25.4],[32.7,54.2,43.5,36.7],[43.2,72.0,57.6,60.2],[59.7,107.4,83.5,110.1]]},
+    nand2_1:{c:'--red',  v:[[43.4,53.1,48.2,35.7],[56.2,68.2,62.2,55.6],[80.9,98.4,89.7,97.4],[129.2,157.2,143.2,181.8],[225.6,274.4,250.0,348.7]]}
+  };
+  const X0=70,X1=610,Y0=280,Y1=20, x=c=>X0+c/40*(X1-X0), y=t=>Y0-t/260*(Y0-Y1);
+  function draw(k){
+    let s=S('rect',{x:0,y:0,width:640,height:320,fill:'var(--surface)'});
+    for(let t=0;t<=250;t+=50){
+      s+=S('path',{class:'grid',d:`M${X0} ${y(t).toFixed(1)} H${X1}`,stroke:'var(--line)','stroke-width':1,fill:'none'});
+      s+=S('text',{x:X0-8,y:(y(t)+5).toFixed(1),'text-anchor':'end',class:'sm'},String(t));
+    }
+    for(let c=0;c<=40;c+=10){
+      s+=S('path',{class:'grid',d:`M${x(c).toFixed(1)} ${Y1} V${Y0}`,stroke:'var(--line)','stroke-width':1,fill:'none'});
+      s+=S('text',{x:x(c).toFixed(1),y:Y0+22,'text-anchor':'middle',class:'sm'},String(c));
+    }
+    s+=S('path',{d:`M${X0} ${Y1} V${Y0} H${X1}`,stroke:'var(--ink2)','stroke-width':1.4,fill:'none'});
+    for(const nm in D){
+      const d=D[nm]; s+=S('path',{d:'M'+CL.map((c,i)=>x(c).toFixed(1)+' '+y(d.v[i][2]).toFixed(1)).join(' L'),stroke:`var(${d.c})`,'stroke-width':2.4,fill:'none'});
+      CL.forEach((c,i)=>{ s+=S('circle',{cx:x(c).toFixed(1),cy:y(d.v[i][2]).toFixed(1),r:i===k?6.5:3.5,fill:`var(${d.c})`}); });
+    }
+    s+=S('path',{class:'grid',d:`M${x(CL[k]).toFixed(1)} ${Y1} V${Y0}`,stroke:'var(--amber)','stroke-width':1.6,'stroke-dasharray':'5 3',fill:'none'});
+    sv.innerHTML=s;
+  }
+  function upd(){
+    const k=+inp.value;
+    $('#ldNv').textContent=N[k]+' ('+fmt(CL[k],2)+' fF)';
+    let h=''; for(const nm in D){ const r=D[nm].v[k];
+      h+=`<tr><td class="mono">${nm}</td>`+r.map(v=>`<td class="mono r">${fmt(v,1)}</td>`).join('')+'</tr>'; }
+    $('#ldTb').innerHTML=h; draw(k);
+  }
+  inp.addEventListener('input',upd); upd();
+})();
+
+
+/* ───────── slide 19, 20 · log half.log, hold.log (run_20261114_0859) ───────── */
+(function(){
+  const H={cHalf:`Startpoint: ff_n (falling edge-triggered flip-flop clocked by clk)
+Endpoint: ff_p (rising edge-triggered flip-flop clocked by clk)
+Path Group: clk
+Path Type: max
+
+   Delay     Time   Description
+-----------------------------------------------------------
+   0.500    0.500   clock clk (fall edge)
+   0.000    0.500   clock network delay (ideal)
+   0.000    0.500 v ff_n/CLK_N (sky130_fd_sc_hd__dfrtn_1)
+   0.360    0.860 ^ ff_n/Q (sky130_fd_sc_hd__dfrtn_1)
+   0.032    0.891 v i1/Y (sky130_fd_sc_hd__inv_1)
+   0.036    0.927 ^ i2/Y (sky130_fd_sc_hd__inv_1)
+   0.027    0.954 v i3/Y (sky130_fd_sc_hd__inv_1)
+   0.030    0.984 ^ i4/Y (sky130_fd_sc_hd__inv_1)
+   0.000    0.984 ^ ff_p/D (sky130_fd_sc_hd__dfxtp_1)
+            0.984   data arrival time
+
+   1.000    1.000   clock clk (rise edge)
+   0.000    1.000   clock network delay (ideal)
+   0.000    1.000   clock reconvergence pessimism
+            1.000 ^ ff_p/CLK (sky130_fd_sc_hd__dfxtp_1)
+  -0.056    0.944   library setup time
+            0.944   data required time
+-----------------------------------------------------------
+            0.944   data required time
+           -0.984   data arrival time
+-----------------------------------------------------------
+           -0.040   slack (VIOLATED)`,
+  cHoldV:`   0.000    0.000   clock clk (rise edge)
+   0.000    0.000   clock source latency
+   0.000    0.000 ^ clk (in)
+   0.075    0.075 ^ cb_l/X (sky130_fd_sc_hd__clkbuf_1)
+   0.000    0.075 ^ ff1/CLK (sky130_fd_sc_hd__dfxtp_1)
+   0.288    0.363 ^ ff1/Q (sky130_fd_sc_hd__dfxtp_1)
+   0.000    0.363 ^ ff2/D (sky130_fd_sc_hd__dfxtp_1)
+            0.363   data arrival time
+
+   0.000    0.000   clock clk (rise edge)
+   0.000    0.000   clock source latency
+   0.000    0.000 ^ clk (in)
+   0.077    0.077 ^ cb_1/X (sky130_fd_sc_hd__clkbuf_1)
+   ...      (cb_2 … cb_5)
+   0.071    0.442 ^ cb_6/X (sky130_fd_sc_hd__clkbuf_1)
+   0.000    0.442 ^ ff2/CLK (sky130_fd_sc_hd__dfxtp_1)
+   0.050    0.492   clock uncertainty
+   0.000    0.492   clock reconvergence pessimism
+  -0.030    0.462   library hold time
+            0.462   data required time
+-----------------------------------------------------------
+            0.462   data required time
+           -0.363   data arrival time
+-----------------------------------------------------------
+           -0.099   slack (VIOLATED)`};
+  for(const k in H){ const p=document.getElementById(k); if(p) p.innerHTML=lg(H[k]); }
+})();
+
+/* mở slide theo #số trên URL, mặc định slide 1 */
+go(Math.max(0,(parseInt(location.hash.slice(1))||1)-1),false);
+</script>
+</body>
+</html>

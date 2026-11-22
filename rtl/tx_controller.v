@@ -85,10 +85,7 @@ module tx_controller(
                 end
             end
             STOP: begin
-                if(~stop_last && baud_tick) begin
-                    next_state = STOP;
-                end
-                else if(stop_last && baud_tick && tick_last) begin
+                if(stop_last && tick_last) begin
                     next_state = IDLE;
                 end
             end
@@ -153,7 +150,7 @@ module tx_controller(
                 clr_bit = 1'b1;
                 clr_stop = 1'b0;
                 tx_busy = 1'b1;
-                if(stop_last) begin
+                if(stop_last && tick_last) begin
                     tx_done_pulse = 1'b1;
                     tx_busy = 1'b0;
                 end

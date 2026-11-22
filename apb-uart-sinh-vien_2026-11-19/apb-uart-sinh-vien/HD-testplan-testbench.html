@@ -1,0 +1,437 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Testplan và testbench APB-UART</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Bố cục: mục lục bước cố định bên trái (màn rộng), nội dung từng bước bên phải; màn hẹp: mục lục thành dải cuộn ngang trên cùng. */
+:root{
+  --bg:#f4f6f5; --panel:#ffffff; --ink:#16211f; --muted:#56635f; --line:#cdd6d3;
+  --accent:#0d6b5a; --accent-soft:#d9ede7; --hot:#b86e0c; --hot-soft:#fbecd3;
+  --ok:#1f7a3f; --ok-soft:#dcf1e2; --bad:#b3261e; --bad-soft:#f9e0de;
+  --code-bg:#eef3f1;
+  --f-display:"IBM Plex Sans Condensed","Arial Narrow",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f1514; --panel:#161e1c; --ink:#e3ebe8; --muted:#9aa9a4; --line:#2e3b38;
+  --accent:#4fc3a6; --accent-soft:#163a33; --hot:#f0a63a; --hot-soft:#3d2c12;
+  --ok:#5fcf86; --ok-soft:#173523; --bad:#f2847c; --bad-soft:#3e1b19; --code-bg:#1b2522; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1514; --panel:#161e1c; --ink:#e3ebe8; --muted:#9aa9a4; --line:#2e3b38;
+  --accent:#4fc3a6; --accent-soft:#163a33; --hot:#f0a63a; --hot-soft:#3d2c12;
+  --ok:#5fcf86; --ok-soft:#173523; --bad:#f2847c; --bad-soft:#3e1b19; --code-bg:#1b2522; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--panel)}
+.wrap{max-width:1240px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 56px}
+header.top{background:var(--panel);border-bottom:1px solid var(--line)}
+header.top .wrap{padding-block:18px 16px}
+h1{font-family:var(--f-display);font-weight:600;font-size:28px;margin:0 0 4px;text-wrap:balance}
+.meta{font-family:var(--f-mono);font-size:13px;color:var(--muted)}
+.layout{display:grid;grid-template-columns:250px minmax(0,1fr);gap:28px;align-items:start;margin-top:22px}
+@media (max-width:900px){.layout{grid-template-columns:minmax(0,1fr)}}
+nav.toc{position:sticky;top:calc(env(safe-area-inset-top,0px) + 16px);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:10px 0}
+nav.toc ol{list-style:none;margin:0;padding:0}
+nav.toc li{display:flex;align-items:center;gap:8px;padding:5px 14px}
+nav.toc a{color:var(--ink);text-decoration:none;font-size:14.5px;flex:1;min-width:0}
+nav.toc a:hover{color:var(--accent)}
+nav.toc .num{font-family:var(--f-mono);font-size:12.5px;color:var(--muted);width:1.4em}
+nav.toc input{accent-color:var(--accent);width:16px;height:16px;margin:0}
+nav.toc .prog{font-size:13px;color:var(--muted);padding:8px 14px 2px;border-top:1px solid var(--line);margin-top:6px}
+@media (max-width:900px){nav.toc{position:static}}
+section.step{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:22px 24px;margin-bottom:22px;scroll-margin-top:16px;min-width:0}
+@media (max-width:520px){section.step{padding:16px 14px}}
+section.step > header{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+.sn{font-family:var(--f-mono);font-size:13px;color:var(--accent);border:1px solid var(--accent);border-radius:4px;padding:0 6px}
+h2{font-family:var(--f-display);font-weight:600;font-size:23px;margin:0;text-wrap:balance}
+h3{font-family:var(--f-display);font-weight:600;font-size:18px;margin:20px 0 6px}
+p,li{max-width:78ch}
+.deliver{background:var(--accent-soft);border-radius:6px;padding:10px 14px;margin:14px 0 4px;font-size:15px}
+.deliver b{font-family:var(--f-display);font-weight:600;color:var(--accent)}
+.warn{background:var(--hot-soft);border-radius:6px;padding:10px 14px;margin:14px 0 4px;font-size:15px}
+code,.mono{font-family:var(--f-mono);font-size:.9em}
+pre{background:var(--code-bg);border:1px solid var(--line);border-radius:6px;padding:12px 14px;overflow-x:auto;font-family:var(--f-mono);font-size:13.5px;line-height:1.5;margin:10px 0;min-width:0}
+pre .c{color:var(--muted)}
+.tblwrap{overflow-x:auto;min-width:0;margin:10px 0}
+table{border-collapse:collapse;font-size:14.5px;width:100%}
+th,td{text-align:left;padding:6px 9px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--f-display);font-weight:600;color:var(--muted);font-size:14px;letter-spacing:.02em}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;font-family:var(--f-mono)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.chips button{font-family:var(--f-display);font-size:14.5px;padding:4px 11px;border-radius:14px;border:1px solid var(--line);background:var(--panel);color:var(--ink);cursor:pointer}
+.chips button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--panel)}
+button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--hot);outline-offset:2px}
+.copy{float:right;font-family:var(--f-display);font-size:13px;border:1px solid var(--line);background:var(--panel);color:var(--muted);border-radius:4px;padding:1px 8px;cursor:pointer;margin:-4px -6px 0 8px}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
+@media (max-width:760px){.two{grid-template-columns:minmax(0,1fr)}}
+.fig{border:1px solid var(--line);border-radius:8px;overflow-x:auto;background:var(--bg)}
+.fig svg{display:block;width:100%;min-width:640px;height:auto}
+svg text{font-family:var(--f-body);fill:var(--ink)}
+svg .m{font-family:var(--f-mono)}
+svg .mu{fill:var(--muted)}
+svg .bx{fill:var(--panel);stroke:var(--muted);stroke-width:1.4}
+svg .dut{fill:var(--accent-soft);stroke:var(--accent);stroke-width:2}
+svg .w{stroke:var(--muted);stroke-width:1.5;fill:none}
+textarea{width:100%;min-height:130px;font-family:var(--f-mono);font-size:13px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);padding:8px}
+.calc-out{margin-top:10px}
+.bar{height:10px;background:var(--line);border-radius:5px;overflow:hidden;min-width:60px}
+.bar i{display:block;height:100%;background:var(--accent)}
+.score{font-family:var(--f-display);font-size:30px;font-weight:600;font-variant-numeric:tabular-nums}
+.pill{display:inline-block;font-family:var(--f-mono);font-size:12.5px;padding:1px 7px;border-radius:10px}
+.pill.ok{background:var(--ok-soft);color:var(--ok)}.pill.bad{background:var(--bad-soft);color:var(--bad)}
+.note{font-size:14px;color:var(--muted)}
+footer.ft{color:var(--muted);font-size:13.5px;margin-top:10px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<header class="top"><div class="wrap">
+  <h1>Testplan và testbench APB-UART</h1>
+  <div class="meta">ET4030 · đồ án apb_uart · đặc tả 1.2 · tiêu chí chấm phần A, D, E4–E5 · Questa Sim-64 2025.1_2</div>
+</div></header>
+
+<div class="wrap layout">
+<nav class="toc" aria-label="Các bước">
+  <ol id="tocList"></ol>
+  <div class="prog" id="prog"></div>
+</nav>
+
+<main>
+
+<!-- ======================================================== 1 -->
+<section class="step" id="b1" data-title="Tách yêu cầu từ đặc tả">
+  <header><span class="sn">Bước 1</span><h2>Tách yêu cầu kiểm được từ đặc tả</h2></header>
+  <p>Mỗi câu chứa từ "phải" trong đặc tả 1.2 là một yêu cầu bắt buộc mà testbench chấm điểm kiểm tra. Ghi mỗi yêu cầu thành một dòng gồm: mục đặc tả, điều kiện ban đầu, kích thích, tín hiệu quan sát ở cổng, giá trị kỳ vọng và thời điểm kiểm. Yêu cầu chưa ghi được giá trị kỳ vọng hoặc thời điểm cụ thể là chỗ đặc tả còn mơ hồ; nêu câu hỏi đó với giảng viên trước khi viết test.</p>
+  <p>Testbench chỉ được nhìn thấy 16 cổng của bảng mục 2. Trạng thái bên trong DUT chỉ quan sát được qua thanh ghi đọc bằng APB (<code>STAT</code>, <code>RXDATA</code>, <code>CFG</code>…) hoặc qua chân <code>tx</code>, <code>rts_n</code>, <code>irq</code>. Testbench dùng tên phân cấp (<code>dut.u_tx.state</code>) không chạy được với mutant của ban tổ chức, nên phần D2 bằng 0.</p>
+  <div class="tblwrap"><table>
+    <thead><tr><th>Mục</th><th>Câu đặc tả</th><th>Kích thích</th><th>Quan sát</th><th>Kỳ vọng</th></tr></thead>
+    <tbody>
+      <tr><td>4.5</td><td>Giá trị reset của <code>STAT</code></td><td>presetn = 0 trong 3 chu kỳ</td><td>đọc APB 0x010</td><td class="mono">0x0000_0001, pslverr = 0</td></tr>
+      <tr><td>5.2 E3</td><td>Ghi <code>TXDATA</code> có pstrb[0] = 1 khi tx_done = 0</td><td>start_tx rồi ghi TXDATA ngay</td><td>pslverr ở chu kỳ truy cập; đọc lại TXDATA</td><td class="mono">pslverr = 1; TXDATA không đổi</td></tr>
+      <tr><td>6.2</td><td>Xung thấp &lt; 0,4 bit trên đường nghỉ không tạo khung</td><td>rx = 0 trong 0,39 bit</td><td>STAT.rx_done, rx_busy</td><td class="mono">0 sau 1 khung thời gian</td></tr>
+      <tr><td>6.4</td><td>rts_n theo rx_done và rx_dis</td><td>nhận 1 khung, không đọc RXDATA</td><td>chân rts_n</td><td class="mono">1 từ chu kỳ rx_done lên 1</td></tr>
+    </tbody>
+  </table></div>
+  <div class="deliver"><b>Sản phẩm:</b> bảng yêu cầu cho các mục 2, 4, 5, 6, 7 của đặc tả, khoảng 60–90 dòng.</div>
+</section>
+
+<!-- ======================================================== 2 -->
+<section class="step" id="b2" data-title="Lập testplan">
+  <header><span class="sn">Bước 2</span><h2>Lập testplan</h2></header>
+  <p>Testplan gom các yêu cầu thành test. Mỗi test có một mã, một nhóm G theo tiêu chí chấm, danh sách mục đặc tả, cấu hình (dạng khung, tốc độ, độ lệch baud δ), kích thích, điểm kiểm và tiêu chí đạt. Báo cáo cần bảng này ở mục E4 của tiêu chí chấm.</p>
+  <h3>Không gian cấu hình</h3>
+  <p>Một khung UART có 4 độ dài dữ liệu (5–8 bit) × 3 kiểu parity (không, chẵn, lẻ) × 2 số stop bit = 24 dạng khung. Đặc tả có 7 tốc độ bắt buộc từ 2 400 tới 115 200 baud, và bộ thu phải nhận đúng khi bên phát lệch δ = ±2,0 %. Một khung dài nhất (8 bit, parity, 2 stop) có 12 bit, tức 5,0 ms thời gian mô phỏng ở 2 400 baud và 104,2 µs ở 115 200 baud. Quét đủ 24 × 7 × 3 = 504 tổ hợp cho bộ thu, mỗi tổ hợp vài khung, là khả thi nếu chia thành nhiều test theo tốc độ và δ.</p>
+  <h3>Testplan mẫu: 20 test công khai</h3>
+  <p>Bảng dưới là phần testplan của 20 test P phát kèm khung. Bộ ẩn 108 test H phủ cùng các nhóm với nhiều cấu hình hơn.</p>
+  <div class="chips" id="gChips" role="group" aria-label="Lọc theo nhóm"></div>
+  <div class="tblwrap"><table id="pTable">
+    <thead><tr><th>Mã</th><th>Nhóm</th><th>Mục và nội dung kiểm</th></tr></thead><tbody></tbody>
+  </table></div>
+  <div class="tblwrap"><table>
+    <thead><tr><th>Nhóm</th><th>Nội dung</th><th class="n">Test ẩn</th><th class="n">Trọng số phần A</th></tr></thead>
+    <tbody>
+      <tr><td>G1</td><td>reset, đọc ghi thanh ghi, bit rfu, pstrb (4, 5.1)</td><td class="n">12</td><td class="n">6</td></tr>
+      <tr><td>G2</td><td>pslverr E1–E5, thanh ghi không đổi khi lỗi (5.2)</td><td class="n">10</td><td class="n">5</td></tr>
+      <tr><td>G3</td><td>TX: 24 khung × 7 tốc độ, ±1,0 %, cts_n, tx_dis (4.3, 6.1, 6.3)</td><td class="n">30</td><td class="n">9</td></tr>
+      <tr><td>G4</td><td>RX: 24 khung × 7 tốc độ × δ ±2,0 %, nhiễu, cờ lỗi, rx_dis (6.2)</td><td class="n">36</td><td class="n">10</td></tr>
+      <tr><td>G5</td><td>overrun, rts_n (6.2, 6.4)</td><td class="n">8</td><td class="n">4</td></tr>
+      <tr><td>G6</td><td>irq, IER, soft_rst giữa khung (6.5, 7)</td><td class="n">8</td><td class="n">3</td></tr>
+      <tr><td>G7</td><td>song công 1 000 ký tự (1, 6)</td><td class="n">4</td><td class="n">3</td></tr>
+    </tbody>
+  </table></div>
+  <div class="deliver"><b>Sản phẩm:</b> testplan có mỗi dòng của bảng yêu cầu ở bước 1 trỏ tới ít nhất một mã test; nhóm G nào chưa có test thì bổ sung.</div>
+</section>
+
+<!-- ======================================================== 3 -->
+<section class="step" id="b3" data-title="Kiến trúc testbench">
+  <header><span class="sn">Bước 3</span><h2>Kiến trúc testbench</h2></header>
+  <p>Khung phát cho các đội viết bằng SystemVerilog IEEE 1800-2017, không dùng UVM. Mỗi tác nhân là một <code>class</code> nối với DUT qua <code>interface</code>. Test là <code>task</code> trong <code>tests_pkg</code>, chọn bằng <code>+TEST=&lt;mã&gt;</code>. Đội dùng nguyên khung này và thêm test của mình, hoặc viết khung riêng với cùng quy ước kết quả ở bước 4.</p>
+  <div class="fig"><svg viewBox="0 0 900 400" role="img" aria-label="Sơ đồ khung testbench">
+    <rect class="bx" x="330" y="14" width="240" height="46" rx="5"/><text x="450" y="43" text-anchor="middle" class="m" font-size="15">tests_pkg::run()</text>
+    <path class="w" d="M450,60 V120"/><path class="w" d="M450,84 H125 V120"/><path class="w" d="M450,84 H775 V120"/>
+    <rect class="bx" x="40" y="120" width="170" height="46" rx="5"/><text x="125" y="149" text-anchor="middle" class="m" font-size="15">ApbMaster</text>
+    <rect class="bx" x="40" y="196" width="170" height="46" rx="5"/><text x="125" y="225" text-anchor="middle" class="m" font-size="15">RegModel</text>
+    <rect class="bx" x="40" y="272" width="170" height="46" rx="5"/><text x="125" y="301" text-anchor="middle" class="m" font-size="15">Coverage</text>
+    <path class="w" d="M125,166 V196"/>
+    <rect class="dut" x="330" y="120" width="240" height="190" rx="8"/><text x="450" y="210" text-anchor="middle" font-size="16" font-weight="600">apb_uart (DUT)</text><text x="450" y="234" text-anchor="middle" font-size="14" class="mu">16 cổng, nối theo tên</text>
+    <path class="w" d="M210,143 H330"/><text x="270" y="134" text-anchor="middle" class="m mu" font-size="14">apb_if</text>
+    <rect class="bx" x="690" y="120" width="170" height="46" rx="5"/><text x="775" y="149" text-anchor="middle" class="m" font-size="15">UartExtTx</text>
+    <rect class="bx" x="690" y="196" width="170" height="46" rx="5"/><text x="775" y="225" text-anchor="middle" class="m" font-size="15">UartExtRx</text>
+    <rect class="bx" x="690" y="272" width="170" height="46" rx="5"/><text x="775" y="301" text-anchor="middle" class="m" font-size="15">Scoreboard</text>
+    <path class="w" d="M690,143 H570"/><text x="630" y="134" text-anchor="middle" class="m mu" font-size="14">rx, cts_n</text>
+    <path class="w" d="M570,219 H690"/><text x="630" y="210" text-anchor="middle" class="m mu" font-size="14">tx, rts_n</text>
+    <path class="w" d="M775,242 V272"/>
+    <rect class="bx" x="330" y="340" width="240" height="46" rx="5"/><text x="450" y="369" text-anchor="middle" class="m" font-size="15">tb_checker (9 SVA)</text>
+    <path class="w" d="M450,310 V340"/>
+  </svg></div>
+  <div class="tblwrap"><table>
+    <thead><tr><th>Tệp</th><th>Vai trò</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">tb_pkg.sv</td><td>hằng địa chỉ thanh ghi, bit STAT, bảng BAUD 10 tốc độ, kiểu <code>frame_cfg_t</code>, <code>check()</code>, <code>check_eq()</code>, <code>report()</code>, watchdog</td></tr>
+      <tr><td class="mono">apb_if.sv, uart_if.sv</td><td>interface APB4 có clocking block ở sườn lên pclk; interface UART không clocking vì không đồng bộ với pclk</td></tr>
+      <tr><td class="mono">apb_master.sv</td><td><code>ApbMaster</code>: write, read, idle, reset; kiểm pready và pslverr kỳ vọng</td></tr>
+      <tr><td class="mono">reg_model.sv</td><td><code>RegModel</code>: bản sao TXDATA, CFG, BAUD, IER; ghép lane theo pstrb; dự đoán E1–E5 từ STAT đã đọc</td></tr>
+      <tr><td class="mono">uart_ext_tx.sv</td><td><code>UartExtTx</code>: phát khung vào rx theo thời gian thực (ns), lệch δ, tiêm lỗi parity, stop, xung nhiễu</td></tr>
+      <tr><td class="mono">uart_ext_rx.sv</td><td><code>UartExtRx</code>: giải mã khung trên tx, đo độ rộng bit trung bình từ sườn xuống start bit</td></tr>
+      <tr><td class="mono">scoreboard.sv</td><td><code>Scoreboard</code>: hàng đợi khung kỳ vọng phía RX; đối chiếu RXDATA và cờ STAT</td></tr>
+      <tr><td class="mono">coverage.sv</td><td>covergroup dạng khung × tốc độ, mã lỗi, nguồn irq</td></tr>
+      <tr><td class="mono">checker.sv</td><td>module <code>tb_checker</code>: 9 assertion cấp cổng (bước 5)</td></tr>
+      <tr><td class="mono">tests_pkg.sv, tests/*.sv</td><td>tiện ích dùng chung, thân test, bảng mã test → task</td></tr>
+      <tr><td class="mono">tb_top.sv</td><td>clock 25 MHz (40 ns), DUT, hai interface, checker, gọi <code>tests_pkg::run()</code></td></tr>
+    </tbody>
+  </table></div>
+  <div class="deliver"><b>Sản phẩm:</b> thư mục <code>tb/</code> của đội biên dịch được với RTL của đội bằng <code>make sim TEST=P1.1</code>; 20 test P chạy được.</div>
+</section>
+
+<!-- ======================================================== 4 -->
+<section class="step" id="b4" data-title="Viết test">
+  <header><span class="sn">Bước 4</span><h2>Viết test</h2></header>
+  <p>Mỗi test là một <code>task automatic</code> trong một tệp <code>tests/t_&lt;mã&gt;.sv</code>. Ba dòng chú thích đầu tệp ghi mục đặc tả, nội dung kiểm và tiêu chí đạt, chép từ testplan. Mọi so sánh đi qua <code>check()</code> hoặc <code>check_eq()</code> để được đếm; cuối mô phỏng <code>report()</code> in đúng một dòng kết quả và thoát mã khác 0 khi có lỗi.</p>
+  <div class="two">
+    <div><h3>Test thanh ghi (P1.2)</h3>
+<pre><button class="copy" type="button">Chép</button><span class="c">// P1.2 — spec mục 4: giá trị reset của mọi thanh ghi.
+// Nội dung kiểm: sau reset đọc 7 địa chỉ ...
+// Tiêu chí đạt: 7 giá trị đúng, pslverr = 0.</span>
+task automatic t_p1_2();
+  set_watchdog(100_000.0);
+  tb_start();
+  rd_chk(ADDR_TXDATA, 32'h0,      "reset TXDATA");
+  rd_chk(ADDR_RXDATA, 32'h0,      "reset RXDATA");
+  rd_chk(ADDR_CFG,    32'h0,      "reset CFG");
+  rd_chk(ADDR_CTRL,   32'h0,      "reset CTRL");
+  rd_chk(ADDR_STAT,   STAT_RESET, "reset STAT");
+  rd_chk(ADDR_BAUD,   BAUD_RESET, "reset BAUD");
+  rd_chk(ADDR_IER,    32'h0,      "reset IER");
+endtask</pre></div>
+    <div><h3>Test bộ thu (P4.3)</h3>
+<pre><button class="copy" type="button">Chép</button><span class="c">// P4.3 — spec 6.2: cờ parity_err với parity chẵn và lẻ.</span>
+task automatic t_p4_3();
+  frame_cfg_t cfgs [2] = '{mk_cfg(8, 0, 1, 1),
+                           mk_cfg(8, 0, 1, 0)};
+  real b = bit_ns(BAUD_RATE[BAUD_I115200]);
+  logic [7:0] d;
+  set_watchdog(5_000_000.0);
+  tb_start();
+  foreach (cfgs[i]) begin
+    uart_setup(cfgs[i], BAUD_I115200);
+    d = 8'($urandom);
+    rx_and_check(d, cfgs[i], b,
+      $sformatf("P4.3 %s sai parity", cfg_str(cfgs[i])), 1'b1);
+    d = 8'($urandom);
+    rx_and_check(d, cfgs[i], b,
+      $sformatf("P4.3 %s đúng parity", cfg_str(cfgs[i])));
+  end
+endtask</pre></div>
+  </div>
+  <h3>Đăng ký test mới</h3>
+<pre><button class="copy" type="button">Chép</button><span class="c">// tb/tests_pkg.sv: thêm include và một dòng trong case của run_test()</span>
+  `include "tests/t_d3_01.sv"
+  ...
+      "D3.01": t_d3_01();
+<span class="c"># suites/doi.txt: mỗi dòng một mã test của đội</span>
+D3.01</pre>
+  <div class="tblwrap"><table>
+    <thead><tr><th>Tiện ích trong tests_pkg</th><th>Việc làm</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">tb_start()</td><td>reset APB 3 chu kỳ, đưa RegModel về reset, xoá hàng đợi của UartExtRx</td></tr>
+      <tr><td class="mono">wr(addr, data, strb, exp_err)</td><td>ghi APB, kiểm pslverr bằng exp_err</td></tr>
+      <tr><td class="mono">rd_chk(addr, exp, tag)</td><td>đọc APB, so với giá trị kỳ vọng</td></tr>
+      <tr><td class="mono">uart_setup(cfg, baud_idx)</td><td>ghi BAUD và CFG của DUT; đặt dạng khung và độ dài bit danh định cho UartExtRx</td></tr>
+      <tr><td class="mono">tx_and_check(d, cfg, b, tag)</td><td>ghi TXDATA, start_tx; chờ tx_done; UartExtRx giải mã khung, kiểm dữ liệu và độ rộng bit</td></tr>
+      <tr><td class="mono">rx_and_check(d, cfg, b, tag, inj_par, inj_s1, inj_s2)</td><td>UartExtTx phát một khung, tuỳ chọn sai parity, stop bit 1, stop bit 2; chờ rx_done; Scoreboard kiểm RXDATA và cờ; kiểm cờ đã xoá sau khi đọc RXDATA</td></tr>
+      <tr><td class="mono">wait_stat(bit, val, timeout, ok, s)</td><td>đọc STAT liên tục tới khi bit bằng val hoặc hết giờ</td></tr>
+      <tr><td class="mono">soft_reset()</td><td>ghi CTRL.soft_rst, để trống 2 chu kỳ, đưa RegModel về reset</td></tr>
+    </tbody>
+  </table></div>
+  <div class="warn">Kết quả của mỗi test là đúng một dòng <code>PASS &lt;mã&gt; checks=&lt;n&gt; errors=0</code> hoặc <code>FAIL &lt;mã&gt; checks=&lt;n&gt; errors=&lt;m&gt;</code>, và mô phỏng thoát mã khác 0 khi FAIL. Ban tổ chức chấm phần D2 theo dòng này.</div>
+  <div class="deliver"><b>Sản phẩm:</b> mỗi dòng testplan có một task test; <code>make regress SUITE=doi</code> chạy hết bộ test của đội.</div>
+</section>
+
+<!-- ======================================================== 5 -->
+<section class="step" id="b5" data-title="Assertion">
+  <header><span class="sn">Bước 5</span><h2>Assertion cấp cổng</h2></header>
+  <p><code>tb_checker</code> nối với cổng DUT trong <code>tb_top</code> và chạy suốt mọi test. Assertion phía completer bắt lỗi của DUT; assertion phía master bắt lỗi của chính testbench khi đội tự viết chuỗi giao dịch APB. Assertion vi phạm làm test FAIL.</p>
+  <div class="tblwrap"><table>
+    <thead><tr><th>Tên</th><th>Thuộc tính</th><th>Phía</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">ap_pready_const</td><td class="mono">pready === 1</td><td>completer</td></tr>
+      <tr><td class="mono">ap_pslverr_only_access</td><td class="mono">pslverr |-> psel &amp;&amp; penable</td><td>completer</td></tr>
+      <tr><td class="mono">ap_pslverr_zero_in_reset</td><td class="mono">!presetn |-> !pslverr</td><td>completer</td></tr>
+      <tr><td class="mono">ap_prdata_known</td><td class="mono">psel &amp;&amp; penable |-> !$isunknown(prdata)</td><td>completer</td></tr>
+      <tr><td class="mono">ap_reset_outputs</td><td class="mono">$rose(presetn) |-> tx &amp;&amp; rts_n &amp;&amp; !irq</td><td>completer</td></tr>
+      <tr><td class="mono">ap_rts_eq</td><td>rts_n khớp rx_dis, rx_done của lần đọc STAT gần nhất</td><td>completer</td></tr>
+      <tr><td class="mono">ap_penable_after_psel</td><td class="mono">penable |-> psel &amp;&amp; $past(psel)</td><td>master</td></tr>
+      <tr><td class="mono">ap_stable_in_access</td><td>paddr, pwrite, pwdata, pstrb ổn định từ pha setup sang pha truy cập</td><td>master</td></tr>
+      <tr><td class="mono">ap_psel_hold</td><td class="mono">psel &amp;&amp; !penable |=&gt; psel</td><td>master</td></tr>
+    </tbody>
+  </table></div>
+<pre><button class="copy" type="button">Chép</button><span class="c">// Ví dụ assertion của đội trong checker.sv: irq = 0 khi IER = 0 (đặc tả mục 7).
+// ier_q là bản sao IER mà testbench cập nhật sau mỗi lệnh ghi IER thành công.</span>
+ap_irq_off: assert property (@(posedge pclk) disable iff (!presetn)
+  (ier_q == 3'b000) |-> ##[0:2] !irq)
+  else tb_pkg::sva_fail("ap_irq_off");</pre>
+  <div class="deliver"><b>Sản phẩm:</b> danh sách assertion của đội, mỗi assertion ghi mục đặc tả trong chú thích.</div>
+</section>
+
+<!-- ======================================================== 6 -->
+<section class="step" id="b6" data-title="Chạy và gỡ lỗi">
+  <header><span class="sn">Bước 6</span><h2>Chạy mô phỏng và gỡ lỗi</h2></header>
+<pre><button class="copy" type="button">Chép</button><span class="c"># trong public-tests/, RTL của đội ở ../rtl/*.v (hoặc truyền RTL="...")</span>
+source ~/tools/env.sh                       <span class="c"># Questa trong PATH</span>
+make sim TEST=P1.1                          <span class="c"># một test, seed 1 → run_P1.1_1/sim.log</span>
+make sim TEST=P3.1 SEED=7                   <span class="c"># đổi seed</span>
+make regress SUITE=public SEEDS="1 7 2026"  <span class="c"># 20 test × 3 seed → run_regress_&lt;thời gian&gt;_public/summary.csv</span>
+make regress RTL=tb/stub/apb_uart.v         <span class="c"># tự kiểm khung: mọi test phải FAIL trên module rỗng</span></pre>
+  <h3>Xem dạng sóng</h3>
+  <p><code>make sim</code> không ghi tín hiệu. Chạy lại test trong thư mục run đã biên dịch, ghi mọi tín hiệu vào tệp WLF, rồi mở bằng GUI:</p>
+<pre><button class="copy" type="button">Chép</button>cd run_P4.3_1
+vsim -c -lib work tb_top +TEST=P4.3 +SEED=1 -suppress 2685,2718 \
+     -wlf wave.wlf -do "log -r /*; run -all; quit -f"
+vsim -view wave.wlf                         <span class="c"># Add Wave: /tb_top/dut/*, /tb_top/uart/*</span></pre>
+  <h3>Đọc log khi FAIL</h3>
+  <p>Mỗi lần <code>check()</code> sai in một dòng <code>ERR</code> có thời điểm mô phỏng và chuỗi <code>tag</code> của test, ví dụ <code>P4.3 8E1 sai parity</code>. Tìm dòng <code>ERR</code> đầu tiên trong <code>sim.log</code>, mở dạng sóng tại thời điểm đó và so với hành vi mà mục đặc tả mô tả. Dòng <code>watchdog</code> nghĩa là test chờ một cờ không bao giờ lên, thường do DUT không phát hoặc không nhận khung.</p>
+  <div class="deliver"><b>Sản phẩm:</b> bảng kết quả mô phỏng cho báo cáo mục E5: mã test, seed, PASS/FAIL, đường dẫn <code>sim.log</code>, phiên bản Questa, ngày chạy.</div>
+</section>
+
+<!-- ======================================================== 7 -->
+<section class="step" id="b7" data-title="Độ phủ và tự cài lỗi">
+  <header><span class="sn">Bước 7</span><h2>Độ phủ mã và tự cài lỗi</h2></header>
+  <p>Phần D chấm testbench của đội trên RTL của đội. D1 lấy trung bình độ phủ statement, branch và FSM state: D1 = 6 × min(cov, 95 %) / 95 %. D2 chạy testbench của đội trên 10 bản RTL tham chiếu có cài lỗi, mỗi bản một lỗi ở một mục đặc tả khác nhau; testbench in FAIL trên bản tham chiếu đúng thì D2 = 0.</p>
+<pre><button class="copy" type="button">Chép</button>make regress SUITE=doi COV=1               <span class="c"># mỗi run_*/ có cov.ucdb</span>
+make cov                                    <span class="c"># gộp → merged.ucdb; in statement, branch, FSM state theo module RTL</span>
+<span class="c"># chi tiết dòng chưa phủ: cov.txt</span></pre>
+  <p>Ví dụ đầu ra của <code>make cov</code> khi chỉ chạy hai test P1.2 và P4.3 trên một RTL đúng:</p>
+<pre>module                    statement     branch  fsm_state
+apb_regs                     84.14%     76.47%          -
+baud_gen                     75.00%     85.71%          -
+sync2                       100.00%    100.00%          -
+uart_rx                      63.33%     73.52%     83.33%
+uart_tx                      28.57%     18.75%     16.66%</pre>
+  <h3>Tự kiểm khả năng bắt lỗi</h3>
+  <p>Chép RTL của đội sang một thư mục khác, cài một lỗi nhỏ vào một mục đặc tả, chạy bộ test của đội và ghi test nào FAIL. Mỗi mục 4.3, 4.5, 5.1, 5.2, 6.1, 6.2, 6.4, 7 nên có ít nhất một lỗi cài thử. Lỗi không test nào phát hiện chỉ ra một dòng testplan còn thiếu điểm kiểm.</p>
+<pre><button class="copy" type="button">Chép</button>cp -r ../rtl ../rtl_m1                       <span class="c"># sửa một dòng trong ../rtl_m1, ví dụ đảo điều kiện kiểm stop bit thứ hai</span>
+make regress SUITE=doi RTL="$(ls ../rtl_m1/*.v)" RUNTAG=_m1</pre>
+  <div class="deliver"><b>Sản phẩm:</b> bảng lỗi cài thử: mục đặc tả, mô tả lỗi, test phát hiện đầu tiên; độ phủ ≥ 95 % hoặc giải thích từng dòng chưa phủ.</div>
+</section>
+
+<!-- ======================================================== 8 -->
+<section class="step" id="b8" data-title="Chạy bộ kiểm mã hoá">
+  <header><span class="sn">Bước 8</span><h2>Chạy bộ kiểm mã hoá 108 test H</h2></header>
+  <p>Gói <code>public-tests/</code> có thêm <code>hidden-enc/tests_pkg.svp</code>: gói <code>tests_pkg</code> chứa 20 test P và 108 test H của bộ chấm phần A, mã hoá theo chuẩn IEEE 1735 bằng khoá Siemens <code>SIEMENS-VERIF-SIM-RSA-2</code>. Questa giải mã khi biên dịch; mã nguồn test không đọc được. Dòng <code>ERR</code> khi test sai vẫn in ra mục đặc tả và nội dung kiểm.</p>
+  <div class="tblwrap"><table>
+    <thead><tr><th>Tệp</th><th>Nội dung</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">hidden-enc/tests_pkg.svp</td><td>thay cho <code>tb/tests_pkg.sv</code>; cùng khung tb/ còn lại</td></tr>
+      <tr><td class="mono">files_hidden.f</td><td>danh sách tệp biên dịch, trỏ tới tệp mã hoá</td></tr>
+      <tr><td class="mono">suites/hidden.txt, suites/all.txt</td><td>108 mã H; 128 mã P và H</td></tr>
+    </tbody>
+  </table></div>
+<pre><button class="copy" type="button">Chép</button>make regress SUITE=hidden FILES_F=files_hidden.f              <span class="c"># 108 test H, seed 1</span>
+make regress SUITE=all    FILES_F=files_hidden.f SEEDS="1 7"   <span class="c"># 128 test × 2 seed</span>
+make sim TEST=H3.07 FILES_F=files_hidden.f                     <span class="c"># một test</span>
+make regress SUITE=hidden FILES_F=files_hidden.f RTL=tb/stub/apb_uart.v   <span class="c"># tự kiểm gói: mọi test FAIL</span></pre>
+  <p id="encStats" class="note">Lần chạy kiểm gói ngày 19/11/2026 (Questa Sim-64 2025.1_2, seed 1): RTL tham chiếu đạt 128/128 test P và H trong 281 s; module rỗng <code>tb/stub/apb_uart.v</code> đạt 0/108; một bản RTL cài lỗi đảo parity chẵn và lẻ đạt 50/108, H3.09 in <code>ERR H3.09 5O1 0x14: bit parity sai</code>.</p>
+  <h3>Ước tính điểm phần A từ summary.csv</h3>
+  <p>Dán nội dung <code>summary.csv</code> của một lần <code>regress</code> vào ô dưới. Điểm tính theo công thức <code>A = Σ w_g · đạt_g / số test_g</code> của tiêu chí chấm, riêng cho từng seed. Khi chấm, ban tổ chức dùng seed riêng, nên một test qua ở seed 1 có thể chưa qua ở seed khác.</p>
+  <label for="csvIn" class="note">summary.csv</label>
+  <textarea id="csvIn" spellcheck="false"></textarea>
+  <div class="calc-out" id="calcOut" aria-live="polite"></div>
+  <div class="warn">Gói mã hoá đã chạy thử trên Questa Sim-64 2025.1_2; phiên bản Questa khác chưa kiểm. Thiết kế không biên dịch được với gói này (sai tên module, tên hoặc độ rộng cổng) sẽ không biên dịch được với bộ chấm.</div>
+  <div class="deliver"><b>Sản phẩm:</b> <code>summary.csv</code> của bộ H trên RTL cuối cùng của đội, lưu cùng báo cáo.</div>
+</section>
+
+<footer class="ft">Nguồn: đặc tả <code>02-SPEC-APB-UART-DDAS.md</code> bản 1.2; tiêu chí chấm <code>03-tieu-chi-cham.md</code>; khung <code>public-tests/</code>. Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant.</footer>
+</main>
+</div>
+
+<script>
+(function(){
+"use strict";
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+function esc(s){return String(s).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));}
+const KEY="hd-tb-apbuart-done";
+let done={}; try{done=JSON.parse(localStorage.getItem(KEY)||"{}")||{};}catch(e){done={};}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(done));}catch(e){}}
+/* mục lục */
+const steps=$$("section.step");
+const ol=$("#tocList");
+steps.forEach((s,i)=>{
+  const li=document.createElement("li");
+  li.innerHTML=`<span class="num">${i+1}</span><a href="#${s.id}">${esc(s.dataset.title)}</a><input type="checkbox" id="ck-${s.id}" aria-label="Đã làm bước ${i+1}">`;
+  ol.appendChild(li);
+  const cb=li.querySelector("input"); cb.checked=!!done[s.id];
+  cb.addEventListener("change",()=>{done[s.id]=cb.checked;save();prog();});
+});
+function prog(){const n=steps.filter(s=>done[s.id]).length;$("#prog").textContent=`Đã làm ${n}/${steps.length} bước`;}
+prog();
+/* nút chép */
+$$("button.copy").forEach(b=>b.addEventListener("click",()=>{
+  const pre=b.parentElement; const t=[...pre.childNodes].filter(n=>n!==b).map(n=>n.textContent).join("");
+  const ok=()=>{b.textContent="Đã chép";setTimeout(()=>b.textContent="Chép",1400);};
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(ok,()=>sel(pre));}else sel(pre);
+}));
+function sel(el){const r=document.createRange();r.selectNodeContents(el);const s=window.getSelection();s.removeAllRanges();s.addRange(r);}
+/* bảng 20 test P */
+const P=[
+["P1.1","G1","2: giá trị đầu ra trong và ngay sau reset"],
+["P1.2","G1","4: giá trị reset của mọi thanh ghi"],
+["P1.3","G1","5.1: ghi theo byte lane pstrb cho TXDATA, CFG, BAUD, IER; pstrb = 0000 không đổi thanh ghi, không lỗi"],
+["P2.1","G2","5.2 E1: địa chỉ ngoài bảng và địa chỉ không căn 4 byte"],
+["P2.2","G2","5.2 E3: ghi TXDATA hoặc CTRL.start_tx khi tx_done = 0"],
+["P2.3","G2","5.2 E5: ghi BAUD mà giá trị sau khi ghi có div_int = 0"],
+["P3.1","G3","6.1, 4.3: bộ phát ở 115 200 baud, khung 8N1 và 8E1, 3 mẫu dữ liệu mỗi khung"],
+["P3.2","G3","6.3: thời điểm tx_done với 1 và 2 stop bit"],
+["P3.3","G3","6.3: cts_n lên 1 giữa khung thì khung vẫn phát hết; cts_n = 1 trước khi phát thì bộ phát chờ"],
+["P3.4","G3","6.5: soft_rst giữa khung đang phát"],
+["P4.1","G4","6.2: bộ thu ở 115 200 baud, δ = 0, 8 khung với dạng khung chọn ngẫu nhiên"],
+["P4.2","G4","6.2: xung thấp 0,30 và 0,39 bit trên đường nghỉ không tạo khung"],
+["P4.3","G4","6.2: cờ parity_err với parity chẵn và lẻ; dữ liệu vẫn vào RXDATA"],
+["P4.4","G4","6.2: cờ frame_err khi stop bit bằng 0"],
+["P4.5","G4","4.5, 6.2: đọc RXDATA xoá rx_done, parity_err, frame_err, overrun từ chu kỳ sau"],
+["P5.1","G5","6.2: overrun khi khung thứ hai tới lúc rx_done = 1"],
+["P5.2","G5","6.4: rts_n theo rx_dis và rx_done; về 0 sau khi đọc RXDATA"],
+["P6.1","G6","7: ngắt tx_done_ie"],
+["P6.2","G6","6.5: soft_rst đưa CFG, BAUD, IER, TXDATA về reset; tx = 1, rts_n = 1"],
+["P7.1","G7","1, 6: song công 100 ký tự mỗi chiều ở 115 200 baud 8N1"]];
+let gSel="all";
+const chips=$("#gChips");
+["all","G1","G2","G3","G4","G5","G6","G7"].forEach(g=>{const b=document.createElement("button");b.type="button";b.textContent=g==="all"?"Tất cả":g;b.dataset.g=g;b.setAttribute("aria-pressed",g===gSel?"true":"false");
+  b.addEventListener("click",()=>{gSel=g;$$("button",chips).forEach(x=>x.setAttribute("aria-pressed",x.dataset.g===g?"true":"false"));drawP();});chips.appendChild(b);});
+function drawP(){$("#pTable tbody").innerHTML=P.filter(r=>gSel==="all"||r[1]===gSel).map(r=>`<tr><td class="mono">${r[0]}</td><td>${r[1]}</td><td>${esc(r[2])}</td></tr>`).join("");}
+drawP();
+/* máy tính điểm phần A */
+const G={1:[12,6],2:[10,5],3:[30,9],4:[36,10],5:[8,4],6:[8,3],7:[4,3]};
+const SAMPLE="test,seed,checks,errors,result,seconds\nH1.01,1,15,0,PASS,1\nH1.02,1,9,0,PASS,1\nH3.01,1,1204,0,PASS,41\nH3.02,1,1180,3,FAIL,40\nH4.01,1,312,0,PASS,22\nH5.01,1,20,0,PASS,3";
+$("#csvIn").placeholder=SAMPLE;
+function calc(){
+  const txt=$("#csvIn").value.trim(); const out=$("#calcOut");
+  if(!txt){out.innerHTML=`<p class="note">Chưa có dữ liệu. Ô trên hiện một ví dụ dạng summary.csv.</p>`;return;}
+  const rows=txt.split(/\r?\n/).map(l=>l.split(",").map(x=>x.trim())).filter(r=>r.length>=5&&/^H\d\.\d\d$/.test(r[0]));
+  if(!rows.length){out.innerHTML=`<p class="note">Không thấy dòng test H nào. Mỗi dòng cần dạng <code>H3.07,1,…,PASS,…</code> (cột 1 mã test, cột 2 seed, cột 5 PASS/FAIL).</p>`;return;}
+  const seeds=[...new Set(rows.map(r=>r[1]))];
+  let h="";
+  seeds.forEach(sd=>{
+    const pass={},seen={}; for(let g=1;g<=7;g++){pass[g]=0;seen[g]=0;}
+    rows.filter(r=>r[1]===sd).forEach(r=>{const g=+r[0][1]; if(G[g]){seen[g]++; if(r[4]==="PASS")pass[g]++;}});
+    let A=0; let tr="";
+    for(let g=1;g<=7;g++){const [n,w]=G[g]; const a=w*pass[g]/n; A+=a;
+      tr+=`<tr><td>G${g}</td><td class="n">${pass[g]}/${n}</td><td class="n">${seen[g]}</td><td><div class="bar"><i style="width:${(100*pass[g]/n).toFixed(1)}%"></i></div></td><td class="n">${a.toFixed(2)} / ${w}</td></tr>`;}
+    const miss=Object.keys(G).reduce((s,g)=>s+G[g][0]-seen[g],0);
+    h+=`<h3>Seed ${esc(sd)}: <span class="score">${A.toFixed(2)}</span> / 40</h3>
+      <div class="tblwrap"><table><thead><tr><th>Nhóm</th><th class="n">PASS</th><th class="n">Đã chạy</th><th>Tỉ lệ</th><th class="n">Điểm</th></tr></thead><tbody>${tr}</tbody></table></div>
+      ${miss>0?`<p class="note"><span class="pill bad">${miss} test chưa có</span> trong dữ liệu; test thiếu được tính là không đạt.</p>`:`<p class="note"><span class="pill ok">đủ 108 test</span></p>`}`;
+  });
+  out.innerHTML=h;
+}
+$("#csvIn").addEventListener("input",calc); calc();
+})();
+</script>
+</body>
+</html>

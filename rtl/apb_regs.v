@@ -36,6 +36,7 @@ module apb_regs(
     input parity_err,
     input rx_busy,
     input frame_err,
+    input rx_overrun,
 
     // BAUD OUTPUT
     output [11:0] div_int,
@@ -64,11 +65,11 @@ module apb_regs(
     reg         rx_done_flag;
     reg         parity_err_flag;
     reg         frame_err_flag;
-    reg         overrun_flag;
+    reg         rx_done_prev;
 
     // STAT WIRE: overrun, frame_err, rx_dis, tx_dis, rx_busy, parity_err, rx_done, tx_done
     wire [7:0]  stat;
-    assign stat = {overrun_flag, frame_err_flag, cfg[6], cfg[5], rx_busy, parity_err_flag, rx_done_flag, tx_done};
+    assign stat = {rx_overrun, frame_err_flag, cfg[6], cfg[5], rx_busy, parity_err_flag, rx_done_flag, tx_done};
 
     // OUTPUT ASSIGNMENTS
     assign data_bits   = cfg[1:0];
@@ -88,7 +89,7 @@ module apb_regs(
 
     assign pready      = 1'b1;
 
-    assign irq = (ier[0] & tx_done) | (ier[1] & rx_done_flag) | (ier[2] & (parity_err_flag | frame_err_flag | overrun_flag));
+    assign irq = (ier[0] & tx_done) | (ier[1] & rx_done_flag) | (ier[2] & (parity_err_flag | frame_err_flag | rx_overrun));
 
     reg read_err;
     reg write_err;
@@ -214,34 +215,28 @@ module apb_regs(
             rx_done_flag    <= 1'b0;
             parity_err_flag <= 1'b0;
             frame_err_flag  <= 1'b0;
-            overrun_flag    <= 1'b0;
+            rx_done_prev    <= 1'b0;
         end
         else begin
             start_reg    <= 1'b0;
             soft_rst_reg <= 1'b0;
+            rx_done_prev <= rx_done;
 
             if(rxdata_read) begin
                 rx_done_flag    <= 1'b0;
                 parity_err_flag <= 1'b0;
                 frame_err_flag  <= 1'b0;
-                overrun_flag    <= 1'b0;
             end
-            else if(rx_done) begin
-                if(rx_done_flag && !rxdata_read) begin
-                    overrun_flag <= 1'b1;
-                end
-                else begin
-                    rx_done_flag    <= 1'b1;
-                    overrun_flag    <= 1'b0;
-                    parity_err_flag <= parity_err;
-                    frame_err_flag  <= frame_err;
-                    case(cfg[1:0])
-                        2'b00: rx_data_reg <= {3'b000, rx_data[4:0]};
-                        2'b01: rx_data_reg <= {2'b00, rx_data[5:0]};
-                        2'b10: rx_data_reg <= {1'b0, rx_data[6:0]};
-                        2'b11: rx_data_reg <= rx_data[7:0];
-                    endcase
-                end
+            else if(rx_done && !rx_done_prev) begin
+                rx_done_flag    <= 1'b1;
+                parity_err_flag <= parity_err;
+                frame_err_flag  <= frame_err;
+                case(cfg[1:0])
+                    2'b00: rx_data_reg <= {3'b000, rx_data[4:0]};
+                    2'b01: rx_data_reg <= {2'b00, rx_data[5:0]};
+                    2'b10: rx_data_reg <= {1'b0, rx_data[6:0]};
+                    2'b11: rx_data_reg <= rx_data[7:0];
+                endcase
             end
 
             if(psel & penable & pwrite & !write_err) begin
@@ -267,7 +262,7 @@ module apb_regs(
                             rx_done_flag    <= 1'b0;
                             parity_err_flag <= 1'b0;
                             frame_err_flag  <= 1'b0;
-                            overrun_flag    <= 1'b0;
+                            rx_done_prev    <= 1'b0;
                             start_reg       <= 1'b0;
                         end
                         else if(pstrb[0] && pwdata[0]) begin

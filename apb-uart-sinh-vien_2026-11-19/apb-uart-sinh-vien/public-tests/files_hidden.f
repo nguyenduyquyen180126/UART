@@ -1,0 +1,13 @@
++incdir+tb
+tb/tb_pkg.sv
+tb/apb_if.sv
+tb/uart_if.sv
+tb/apb_master.sv
+tb/reg_model.sv
+tb/uart_ext_tx.sv
+tb/uart_ext_rx.sv
+tb/scoreboard.sv
+tb/coverage.sv
+hidden-enc/tests_pkg.svp
+tb/checker.sv
+tb/tb_top.sv

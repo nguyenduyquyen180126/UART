@@ -102,6 +102,7 @@ module tx_uart #(
         .clk(clk),
         .rst_n(rst_n),
         .baud_tick(baud_tick),
+        .clr_tick(clr_baud),
         .tick_last(tick_last)
     );
 
@@ -137,10 +138,13 @@ module tx_uart #(
     );
     always @(*)begin
         if(stop_bit_num == 1'b0) begin
-            stop_last = (stop_cnt == 2'b01);
+            // stop_cnt counts completed stop-bit boundaries. Zero means the
+            // current stop bit is the final one-stop-bit interval.
+            stop_last = (stop_cnt == 2'b00);
         end
         else if(stop_bit_num == 1'b1) begin
-            stop_last = (stop_cnt == 2'b10);
+            // For two stop bits, count 1 means the second interval is active.
+            stop_last = (stop_cnt == 2'b01);
         end
         else begin
             stop_last = 1'b0;
