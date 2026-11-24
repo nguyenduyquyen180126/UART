@@ -30,7 +30,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
   background:linear-gradient(90deg,var(--acc),var(--teal) 45%,var(--violet))}
 /* footer của slide */
 .slide .foot{position:absolute;left:56px;right:56px;bottom:22px;display:flex;justify-content:space-between;
-  align-items:center;font-size:14px;color:var(--muted);border-top:1px solid var(--line);padding-top:8px}
+  alBạnign-items:center;font-size:14px;color:var(--muted);border-top:1px solid var(--line);padding-top:8px}
 h1.title{font-size:54px;line-height:1.1;font-weight:800;letter-spacing:-.02em}
 h2{font-size:30px;line-height:1.2;font-weight:750;letter-spacing:-.015em;color:var(--ink)}
 h3{font-size:19px;font-weight:700;color:var(--acc);margin-bottom:6px}
@@ -2006,6 +2006,158 @@ ul.steps li{display:flex;align-items:flex-start;gap:8px;font-size:15px;line-heig
     </div>
   </div>
   <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+<!-- STA CASE STUDY · UART project -->
+<section class="slide" data-sec="E · Dự án UART" data-title="Tổng hợp netlist UART">
+  <div class="hd"><div><div class="eyebrow">5.6 · Dự án UART</div><h2>Netlist tổng hợp bằng Yosys</h2></div><span class="tag">SkyWater Sky130 HD</span></div>
+  <div class="body g2a">
+    <div class="col">
+      <div class="card acc"><h4>Cấu hình tổng hợp</h4><ul class="tick">
+        <li>Top: <span class="k">top_uart</span> (SPI-to-APB + APB UART).</li>
+        <li>RTL: <span class="k">rtl/*.v</span>; Yosys flatten, ánh xạ DFF và logic sang thư viện Sky130 HD TT.</li>
+        <li>Netlist đầu ra: <span class="k">netlist_synth.v</span>.</li>
+        <li>Thống kê từ lần chạy hiện tại; recipe có chèn buffer bằng <span class="k">insbuf</span>.</li>
+      </ul></div>
+      <div class="card amber"><h4>Đọc đúng số cell</h4><p class="sub">Yosys báo 2.515 cell tổng cộng, trong đó có 21 cell nội bộ <span class="k">$scopeinfo</span>. Netlist thư viện có 2.494 standard cell. Vì vậy tổng số không nhất thiết trùng nếu công cụ đếm cả cell nội bộ.</p></div>
+    </div>
+    <div class="col">
+      <table><thead><tr><th>Thông số</th><th>Giá trị hiện tại</th></tr></thead><tbody>
+        <tr><td>Sequential area</td><td>6.637,616 µm²</td></tr>
+        <tr><td>Combinational area (xấp xỉ)</td><td>10.865,421 µm²</td></tr>
+        <tr class="hl"><td>Tổng cell area</td><td>17.503,04 µm²</td></tr>
+        <tr><td>Standard cells</td><td>2.494 cells</td></tr>
+        <tr><td>DFF</td><td>264 (239 dfrtp + 25 dfstp)</td></tr>
+        <tr><td>Latch</td><td>0 latch cell</td></tr>
+        <tr><td>I/O</td><td>11 ports / 11 bits</td></tr>
+        <tr><td>Wires / wire bits</td><td>2.996 / 3.775</td></tr>
+        <tr><td>buf_1 / clkinv_1 / conb_1</td><td>1.181 / 35 / 88</td></tr>
+      </tbody></table>
+    </div>
+  </div>
+  <p class="fn">Đo từ yosys_synth.log và netlist_synth.v, chạy lại bằng synth.sh trên RTL hiện tại (Yosys 0.71); thư viện sky130_fd_sc_hd__tt_025C_1v80.lib.</p>
+  <div class="foot"><span class="pg"></span><span>Phân tích STA dự án UART</span></div>
+</section>
+
+<section class="slide" data-sec="E · Dự án UART" data-title="Ràng buộc STA và CDC">
+  <div class="hd"><div><div class="eyebrow">5.6 · Dự án UART</div><h2>Ràng buộc STA và xử lý ngõ vào bất đồng bộ</h2></div><span class="tag">SDC</span></div>
+  <div class="body g2">
+    <div class="col">
+      <table><thead><tr><th>Ràng buộc</th><th>Giá trị</th></tr></thead><tbody>
+        <tr><td>Clock pclk</td><td>40 ns · 25 MHz</td></tr>
+        <tr><td>Clock uncertainty</td><td>Setup 0,500 ns · Hold 0,100 ns</td></tr>
+        <tr><td>Input delay</td><td>Max 8 ns · Min 0 ns</td></tr>
+        <tr><td>Output delay</td><td>Max 8 ns · Min 0 ns</td></tr>
+        <tr><td>Output load</td><td>0,010 (đơn vị theo Liberty)</td></tr>
+        <tr><td>Clock tree / parasitics</td><td>Clock lý tưởng · chưa có SPEF</td></tr>
+      </tbody></table>
+    </div>
+    <div class="col">
+      <div class="card acc"><h4>Exception CDC đã cập nhật</h4><p class="sub">SPI SCLK, MOSI, CS_N, UART RX và CTS_N không có quan hệ pha cố định với pclk. SDC bỏ kiểm tra setup/hold chỉ từ mỗi cổng vào tới chân D của flip-flop đồng bộ hóa đầu tiên.</p>
+        <p class="sub" style="margin-top:8px">Tầng đầu được tìm theo tên net trong thiết kế, không gắn với tên cell ẩn danh do Yosys sinh. Các đường từ tầng đồng bộ thứ nhất sang tầng tiếp theo vẫn được STA kiểm tra.</p></div>
+      <div class="card amber"><h4>Điểm cần nhớ</h4><p class="sub">False path không chứng minh mạch CDC an toàn và không loại bỏ nguy cơ metastability. Nó chỉ ngăn STA áp timing đồng bộ không phù hợp lên dữ liệu bất đồng bộ. Cần review cấu trúc synchronizer, đặc biệt tín hiệu điều khiển và reset.</p></div>
+      <p class="sub">Đường <span class="k">spi_cs_n → spi_miso</span> vẫn được phân tích vì đây là đường tổ hợp tới output, không phải đường tới D của tầng đồng bộ đầu.</p>
+    </div>
+  </div>
+  <p class="fn">constraints.sdc hiện tại; sta_tt.log xác nhận tìm được 5 chân D của tầng đồng bộ đầu tiên.</p>
+  <div class="foot"><span class="pg"></span><span>Phân tích STA dự án UART</span></div>
+</section>
+
+<section class="slide" data-sec="E · Dự án UART" data-title="Chọn tham số timing constraints UART">
+  <div class="hd"><div><div class="eyebrow">5.6 · Dự án UART</div><h2>Chọn tham số timing constraints</h2></div><span class="tag">Cần đối chiếu đặc tả</span></div>
+  <div class="body">
+    <p class="lead">Giá trị SDC phải đến từ yêu cầu clock và timing của thiết bị bên ngoài. Phần trăm chu kỳ chỉ là giả định khi chưa có timing budget.</p>
+    <table><thead><tr><th>Tham số</th><th>Đang khai báo</th><th>Cách xác định đúng</th><th>Tình trạng project</th></tr></thead><tbody>
+      <tr><td><span class="k">create_clock</span></td><td>pclk = 40 ns (25 MHz)</td><td>Tần số tối đa yêu cầu của hệ thống / clock source spec</td><td>Giá trị mục tiêu trong SDC; xác nhận với system spec</td></tr>
+      <tr><td><span class="k">uncertainty</span></td><td>Setup 0,500 ns<br>Hold 0,100 ns</td><td>Jitter clock + skew dự kiến + guard band; sau CTS tránh tính trùng skew đã đo</td><td>Cần đối chiếu clock/PLL spec và giai đoạn flow</td></tr>
+      <tr><td><span class="k">input_delay</span></td><td>Max 8 ns<br>Min 0 ns</td><td>Trễ lớn nhất/nhỏ nhất từ clock tham chiếu đến chân vào, gồm timing thiết bị phát và board</td><td>Hiện là 20% T; chưa có timing spec ngoài để chứng minh</td></tr>
+      <tr><td><span class="k">output_delay</span></td><td>Max 8 ns<br>Min 0 ns</td><td>Setup/hold của thiết bị nhận và board, quy chiếu theo clock lấy mẫu bên ngoài</td><td>Đặc biệt cần sửa hoặc xác nhận cho SPI MISO; không mặc định lấy pclk</td></tr>
+      <tr><td><span class="k">set_driving_cell</span></td><td>Sky130 <span class="k">buf_2</span></td><td>Cell hoặc transition đại diện cho driver thực ở phía ngoài chip</td><td>Mô hình gần đúng, cần datasheet hoặc transition đầu vào</td></tr>
+      <tr><td><span class="k">set_load</span></td><td>0,010 pF</td><td>Điện dung chân nhận + tải board/package ở mỗi output</td><td>Giá trị hiện tại cần xác nhận với interface / board</td></tr>
+    </tbody></table>
+    <div class="g2">
+      <div class="card teal"><h4>Riêng các tín hiệu bất đồng bộ</h4><p class="sub">SPI SCLK/MOSI/CS_N và UART RX/CTS không có pha cố định với pclk. False path tới D của tầng đồng bộ đầu đã được khai báo; để định thời MISO, cần biết SPI clock/mode và thời điểm master lấy mẫu.</p></div>
+      <div class="card amber"><h4>Trước khi chốt SDC</h4><p class="sub">Lấy clock spec, datasheet của master/slave, board delay và tải thực tế. Thay các giá trị giả định, chạy lại STA; kiểm tra cả -max (setup) lẫn -min (hold) và xem report có đường unconstrained hay không.</p></div>
+    </div>
+  </div>
+  <p class="fn">Giá trị hiện tại đọc từ constraints.sdc; cách chọn input/output budget phải dựa trên clock và timing spec của mạch ngoài, không suy ra từ RTL.</p>
+  <div class="foot"><span class="pg"></span><span>Phân tích STA dự án UART</span></div>
+</section>
+
+<section class="slide" data-sec="E · Dự án UART" data-title="Kết quả STA trên ba corner">
+  <div class="hd"><div><div class="eyebrow">5.6 · Dự án UART</div><h2>Kết quả STA trên ba corner</h2></div><span class="tag">Pre-layout</span></div>
+  <div class="body">
+    <p class="lead">Ba Liberty corner SS/TT/FF cùng bộ Sky130 HD đã được cài và chạy trên netlist tổng hợp mới nhất.</p>
+    <table><thead><tr><th>Corner</th><th>PVT</th><th>Liberty</th><th>Worst toàn đường<br>(setup / hold)</th><th>Worst pclk FF→FF<br>(setup / hold)</th></tr></thead><tbody>
+      <tr><td>SS</td><td>1,60 V · 100 °C</td><td>Có · 428 cells</td><td>22,697 / 0,398 ns</td><td>29,328 / 0,578 ns</td></tr>
+      <tr class="hl"><td>TT</td><td>1,80 V · 25 °C</td><td>Có · 428 cells</td><td>23,069 / 0,166 ns</td><td>34,610 / 0,231 ns</td></tr>
+      <tr><td>FF</td><td>1,95 V · −40 °C</td><td>Có · 428 cells</td><td>23,218 / 0,076 ns</td><td>36,655 / 0,104 ns</td></tr>
+    </tbody></table>
+    <div class="g2">
+      <div class="card teal"><h4>Đường thanh ghi pclk</h4><p class="sub">Worst setup FF→FF là +29,328 ns tại SS; worst hold FF→FF là +0,104 ns tại FF. Mọi slack được báo cáo đều dương; WNS/TNS bằng 0 ở cả ba lần chạy.</p></div>
+      <div class="card amber"><h4>Hai giới hạn cần xử lý</h4><p class="sub">Worst toàn đường là I/O spi_cs_n → spi_miso và phụ thuộc input/output delay 8 ns đang giả định theo pclk. Cần xác nhận budget giao tiếp SPI. Hold FF→FF +0,104 ns cũng có thể giảm sau CTS và khi tính parasitics dây; chưa phải signoff.</p></div>
+    </div>
+  </div>
+  <p class="fn">OpenSTA 3.2.0, sta_ss.log / sta_tt.log / sta_ff.log; Sky130 HD, bộ Liberty cùng commit; SDC pclk 40 ns, uncertainty setup/hold 0,500/0,100 ns.</p>
+  <div class="foot"><span class="pg"></span><span>Phân tích STA dự án UART</span></div>
+</section>
+
+<section class="slide" data-sec="E · Dự án UART" data-title="Worst setup path UART">
+  <div class="hd"><div><div class="eyebrow">5.6 · Dự án UART</div><h2>Worst setup path: spi_cs_n → spi_miso</h2></div><span class="tag">TT · max delay</span></div>
+  <div class="body g2a">
+    <div class="col">
+      <pre class="vlog" style="font-size:14px;line-height:1.55">Startpoint: spi_cs_n (input port)
+Endpoint:   spi_miso (output port)
+Path group: pclk                  Path type: max
+
+Input external delay                  8.000 ns
+Input port + combinational logic      0.431 ns
+Data arrival time                     8.431 ns
+
+Clock period                         40.000 ns
+Setup uncertainty                    -0.500 ns
+Output external delay                -8.000 ns
+Data required time                   31.500 ns
+
+Slack (MET)                          23.069 ns</pre>
+      <div class="stat ok"><span class="l">WORST SETUP SLACK — TT</span><span class="v">+23,069 ns</span><span class="l">Không vi phạm theo các giả định SDC hiện tại</span></div>
+    </div>
+    <div class="col">
+      <div class="card acc"><h4>Diễn giải</h4><p class="sub">Đường xấu nhất trong báo cáo là đường tổ hợp từ CS_N tới MISO. Arrival 8,431 ns đã gồm input delay 8 ns; required 31,500 ns còn lại sau output delay và setup uncertainty. Hiệu hai giá trị là slack +23,069 ns.</p></div>
+      <div class="card"><h4>Đường thanh ghi → thanh ghi</h4><p class="sub">Khi chỉ xét các đường register-to-register, setup slack nhỏ nhất là +34,610 ns (_3658_ → _3741_). Đây là một thống kê khác với worst setup toàn thiết kế vì đường spi_cs_n → spi_miso là input-to-output.</p></div>
+      <div class="card amber"><h4>Giới hạn</h4><p class="sub">Đường SPI này dùng input/output delay 8 ns theo SDC. Nếu độ trễ giao tiếp SPI thực tế khác, cần thay bằng timing budget/interface requirement đã xác nhận.</p></div>
+    </div>
+  </div>
+  <p class="fn">sta_tt.log, report_checks -path_delay max; OpenSTA trên netlist tổng hợp, ideal clock, chưa có parasitics dây.</p>
+  <div class="foot"><span class="pg"></span><span>Phân tích STA dự án UART</span></div>
+</section>
+
+<section class="slide" data-sec="E · Dự án UART" data-title="Worst hold path UART">
+  <div class="hd"><div><div class="eyebrow">5.6 · Dự án UART</div><h2>Worst hold path: spi_cs_n → spi_miso</h2></div><span class="tag">TT · min delay</span></div>
+  <div class="body g2a">
+    <div class="col">
+      <pre class="vlog" style="font-size:14px;line-height:1.55">Startpoint: spi_cs_n (input port)
+Endpoint:   spi_miso (output port)
+Path group: pclk                  Path type: min
+
+Input external delay                  0.000 ns
+Input port + combinational logic      0.266 ns
+Data arrival time                     0.266 ns
+
+Hold uncertainty                     +0.100 ns
+Output external delay                 0.000 ns
+Data required time                    0.100 ns
+
+Slack (MET)                           0.166 ns</pre>
+      <div class="stat ok"><span class="l">WORST HOLD SLACK — TT</span><span class="v">+0,166 ns</span><span class="l">Không vi phạm theo các giả định SDC hiện tại</span></div>
+    </div>
+    <div class="col">
+      <div class="card acc"><h4>Diễn giải</h4><p class="sub">Hold kiểm tra dữ liệu có đến quá sớm sau cạnh clock hay không. Với đường này, OpenSTA tính data arrival 0,266 ns và required 0,100 ns, nên slack còn dương 0,166 ns.</p></div>
+      <div class="card"><h4>Đường đồng bộ bên trong</h4><p class="sub">Hold slack nhỏ nhất trong các đường register-to-register là +0,231 ns, giữa hai tầng đồng bộ SPI clock. Các đường giữa các tầng đồng bộ vẫn được giữ lại để kiểm timing.</p></div>
+      <div class="card amber"><h4>Giới hạn pre-layout</h4><p class="sub">Chưa có clock tree và parasitics dây; skew và trễ dây sau layout có thể làm thay đổi hold slack. Cần chạy lại STA sau CTS với parasitics phù hợp và có corner nhanh.</p></div>
+    </div>
+  </div>
+  <p class="fn">sta_tt.log, report_checks -path_delay min; hold uncertainty 0,100 ns trong constraints.sdc.</p>
+  <div class="foot"><span class="pg"></span><span>Phân tích STA dự án UART</span></div>
 </section>
 </div></div>
 

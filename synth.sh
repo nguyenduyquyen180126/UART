@@ -9,6 +9,8 @@ if [ -z "$LIB_TT" ]; then
         LIB_TT="/foss/pdks/sky130A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__tt_025C_1v80.lib"
     elif [ -n "$PDK_ROOT" ] && [ -f "$PDK_ROOT/sky130A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__tt_025C_1v80.lib" ]; then
         LIB_TT="$PDK_ROOT/sky130A/libs.ref/sky130_fd_sc_hd/lib/sky130_fd_sc_hd__tt_025C_1v80.lib"
+    elif [ -f "$HOME/.local/share/sky130/sky130_fd_sc_hd__tt_025C_1v80.lib" ]; then
+        LIB_TT="$HOME/.local/share/sky130/sky130_fd_sc_hd__tt_025C_1v80.lib"
     fi
 fi
 
