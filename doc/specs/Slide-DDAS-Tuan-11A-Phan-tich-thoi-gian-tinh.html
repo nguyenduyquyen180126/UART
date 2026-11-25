@@ -2161,6 +2161,9 @@ Slack (MET)                           0.166 ns</pre>
 </section>
 
 
+
+
+
 <!-- EXT_FULL_FLOW_G1_G9_START -->
 <!-- 49 TIẾP NỐI SAU STA · LỘ TRÌNH G1-G9 -->
 <section class="slide" data-sec="F · Tiếp nối sau STA &amp; Đặc tả" data-title="Tiếp nối sau STA: Lộ trình Full-Flow G1–G9">
@@ -2179,10 +2182,10 @@ Slack (MET)                           0.166 ns</pre>
       <line x1="150" y1="62" x2="170" y2="62" stroke="#1F4E9C" stroke-width="2" marker-end="url(#arrF)"/>
 
       <rect x="174" y="14" width="148" height="96" rx="10" fill="#DFF1E5" stroke="#15803D" stroke-width="1.6"/>
-      <text x="248" y="38" text-anchor="middle" font-weight="750" fill="#15803D">G3 · DV</text>
+      <text x="248" y="38" text-anchor="middle" font-weight="750" fill="#15803D">G3 · DV + Cov</text>
       <text x="248" y="59" text-anchor="middle" class="sm">5 Root-Cause Fix</text>
-      <text x="248" y="79" text-anchor="middle" class="sm">Questa + Icarus</text>
-      <text x="248" y="99" text-anchor="middle" font-weight="750" fill="#15803D" class="sm">128/128 PASS</text>
+      <text x="248" y="79" text-anchor="middle" class="sm">Questa + Xcelium</text>
+      <text x="248" y="99" text-anchor="middle" font-weight="750" fill="#15803D" class="sm">128/128 + IMC Cov</text>
       <line x1="322" y1="62" x2="342" y2="62" stroke="#1F4E9C" stroke-width="2" marker-end="url(#arrF)"/>
 
       <rect x="346" y="14" width="148" height="96" rx="10" fill="#E4ECF9" stroke="#1F4E9C" stroke-width="1.6"/>
@@ -2194,8 +2197,8 @@ Slack (MET)                           0.166 ns</pre>
 
       <rect x="518" y="14" width="148" height="96" rx="10" fill="#EDE6FB" stroke="#5B21B6" stroke-width="1.6"/>
       <text x="592" y="38" text-anchor="middle" font-weight="750" fill="#5B21B6">G6 · STA + LEC</text>
-      <text x="592" y="59" text-anchor="middle" class="sm">EQY 68/68 PASS</text>
-      <text x="592" y="79" text-anchor="middle" class="sm">SBY Miter d=56</text>
+      <text x="592" y="59" text-anchor="middle" class="sm">EQY 68/68 + SBY</text>
+      <text x="592" y="79" text-anchor="middle" class="sm">Post-PnR 147/147</text>
       <text x="592" y="99" text-anchor="middle" font-weight="750" fill="#5B21B6" class="sm">STA 3c MET</text>
       <line x1="666" y1="62" x2="686" y2="62" stroke="#1F4E9C" stroke-width="2" marker-end="url(#arrF)"/>
 
@@ -2223,10 +2226,10 @@ Slack (MET)                           0.166 ns</pre>
       <thead><tr><th>Cổng</th><th>Mốc hạn (za.html)</th><th>Ngưỡng đạt bắt buộc</th><th>Trạng thái sau hoàn thiện (25/11/2026)</th></tr></thead>
       <tbody>
         <tr><td class="mono">G1–G2</td><td>10–14/11</td><td>Bảng 7 thanh ghi, BAUD 25 MHz, 0 <code>%Warning</code> Verilator <code>-Wall</code>, 0 latch, 1 clock, 2-FF sync</td><td><strong>PASS</strong> — 0 warning cả 3 top (không cần <code>--Wno-TIMESCALEMOD</code>)</td></tr>
-        <tr><td class="mono">G3–G4</td><td>18/11</td><td>20 test công khai đạt trên RTL &amp; netlist Sky130; coverage ≥ 90%/module (<code>vcover</code>)</td><td><strong>128/128 PASS</strong> RTL · Netlist 20/20 PASS · <em><code>vcover</code> kẹt license 10.7c</em></td></tr>
-        <tr><td class="mono">G6</td><td>21/11</td><td>SDC 40 ns, Setup WS ≥ 0 ở <code>ss</code>, Hold WS ≥ 0 mọi corner, EQY tương đương</td><td><strong>PASS</strong> — Pre-layout 3c MET · EQY <strong>68/68 PASS</strong> · SBY depth 56</td></tr>
+        <tr><td class="mono">G3–G4</td><td>18/11</td><td>20 test công khai đạt trên RTL &amp; netlist Sky130; coverage ≥ 90%/module</td><td><strong>128/128 PASS</strong> RTL · <strong>Xcelium 60/60 + IMC Cov</strong> (14/18 module 91.7–100%, <code>spi2apb</code> 98.3%) · Netlist 20/20</td></tr>
+        <tr><td class="mono">G6</td><td>21/11</td><td>SDC 40 ns, Setup WS ≥ 0 ở <code>ss</code>, Hold WS ≥ 0 mọi corner, EQY tương đương</td><td><strong>PASS</strong> — Pre-layout 3c MET · EQY <strong>68/68</strong> + SBY d=56 · <strong>Post-PnR EQY 147/147</strong></td></tr>
         <tr><td class="mono">G7</td><td>24/11</td><td>LibreLane hết flow trên template Tiny Tapeout tile <code>1×1</code>, WS sau route ≥ 0</td><td><strong>PASS</strong> — Final GDS <code>1×1</code> (82.64% util), Setup +17.46 ns, Hold +0.105 ns</td></tr>
-        <tr class="ok"><td class="mono">G8–G9</td><td>26–28/11</td><td>GLS có SDF ở <code>tt, ss, ff</code> đạt 20 test; DRC=0, LVS khớp, Antenna=0, Precheck TT xanh</td><td><strong>PASS</strong> — <strong>60/60</strong> SDF + Chip TT SDF + <strong>17/17</strong> Precheck + Lock SHA-256</td></tr>
+        <tr class="ok"><td class="mono">G8–G9</td><td>26–28/11</td><td>GLS có SDF ở <code>tt, ss, ff</code> đạt 20 test; DRC=0, LVS khớp, Antenna=0, Precheck TT xanh</td><td><strong>PASS</strong> — <strong>60/60</strong> SDF + Chip TT SDF + <strong>Post-PnR EQY 147/147</strong> + <strong>17/17</strong> Precheck</td></tr>
       </tbody>
     </table>
   </div>
@@ -2605,9 +2608,9 @@ Slack (MET)                           0.166 ns</pre>
           <li style="font-size:15px;line-height:1.38"><strong>Unit &amp; System (Icarus):</strong> <code>tb_rx_uart</code> (136/136), <code>tb_tx_uart</code> (141/141), <code>tb_spi2apb</code> (8/8·132), <code>tb_apb_uart</code> (833/833), <code>tb_tt_tapeout</code> (4/4·728).</li>
         </ul>
       </div>
-      <div class="callout warn" style="padding:9px 13px;font-size:14.2px;line-height:1.38">
-        <div class="lbl">Minh bạch về vcover (G3)</div>
-        Questa 2025.2 Starter Free không cấp license <code>svverification</code>; Questa 10.7c cục bộ lỗi <code>Invalid license environment</code>. Tài liệu giữ nguyên <code>tb/coverage.sv.orig</code> &amp; <code>Makefile.orig</code> cho máy có full license.
+      <div class="callout info" style="padding:9px 13px;font-size:13.8px;line-height:1.36">
+        <div class="lbl">Đo bổ sung Cadence Xcelium 24.09 + IMC 23.09 trên server edabk (G3)</div>
+        <code>60/60</code> (20P×3 seed) + <code>833</code> + <code>132</code> + <code>728</code> PASS: <strong>14/18</strong> module <code>apb_uart</code> ≥ <strong>91.7%–100%</strong> (FSM 100%, <code>apb_regs 98.44%</code>), <code>spi2apb_apb_master 98.33%</code> Stmt; 4 module nhỏ thiếu đúng nhánh <code>default:</code> chết / <code>if(bit_last)</code> unreachable. Riêng <code>.ucdb</code> <code>vcover</code> của 108 H-tests mã hóa Siemens cần Questa full license.
       </div>
     </div>
     <div class="col" style="gap:10px">
@@ -2636,65 +2639,70 @@ Slack (MET)                           0.166 ns</pre>
   <div class="foot"><span class="pg"></span><span>Báo cáo Full-Flow APB UART · Kiểm chứng sau tối ưu</span></div>
 </section>
 
-<!-- 57 FORMAL LEC: EQY 68/68 & SBY MITER -->
-<section class="slide" data-sec="I · Kiểm chứng RTL, STA &amp; LEC" data-title="Chứng minh tương đương Formal: EQY 68/68 &amp; SBY Miter">
-  <div class="hd"><div><div class="eyebrow">Phần I · G6 Logic Equivalence Checking (LEC)</div><h2>Chứng minh toán học 100% tương đương: EQY 68/68 &amp; SBY</h2></div><span class="tag">Formal Sign-off PASS</span></div>
+<!-- 57 FORMAL LEC: PRE-PNR & POST-PNR EQY + SBY MITER -->
+<section class="slide" data-sec="I · Kiểm chứng RTL, STA &amp; LEC" data-title="Chứng minh tương đương Formal: Pre-P&amp;R &amp; Post-P&amp;R EQY + SBY">
+  <div class="hd"><div><div class="eyebrow">Phần I · G6 &amp; G8 Logic Equivalence Checking (LEC)</div><h2>Khép kín Formal RTL ↔ Post-P&amp;R GDS Netlist: EQY &amp; SBY</h2></div><span class="tag">Pre + Post-PnR PASS</span></div>
   <div class="body g2">
     <div class="col">
-      <svg viewBox="0 0 560 330" width="100%">
-        <rect x="8" y="8" width="544" height="154" rx="10" fill="#FFFFFF" stroke="#1F4E9C" stroke-width="1.6"/>
-        <text x="22" y="30" font-weight="800" fill="#1F4E9C">1. EQY Cutpoint Matching · apb_uart RTL ↔ Sky130 Netlist</text>
-        <rect x="26" y="46" width="142" height="96" rx="8" fill="#E4ECF9" stroke="#1F4E9C"/>
-        <text x="97" y="74" text-anchor="middle" font-weight="750">Golden RTL</text>
-        <text x="97" y="96" text-anchor="middle" class="sm">apb_uart (behavioral)</text>
-        <text x="97" y="118" text-anchor="middle" class="sm">Down-cnt + deframe</text>
+      <svg viewBox="0 0 560 336" width="100%">
+        <rect x="8" y="6" width="544" height="162" rx="10" fill="#FFFFFF" stroke="#1F4E9C" stroke-width="1.6"/>
+        <text x="22" y="27" font-weight="800" fill="#1F4E9C">1. Pre-P&amp;R &amp; Post-P&amp;R Formal EQY (RTL ↔ GDS-Matched Netlist)</text>
+        <rect x="20" y="40" width="124" height="114" rx="8" fill="#E4ECF9" stroke="#1F4E9C"/>
+        <text x="82" y="65" text-anchor="middle" font-weight="750">Golden RTL</text>
+        <text x="82" y="86" text-anchor="middle" style="font-size:11.8px">src/*.v (3.6k gates)</text>
+        <text x="82" y="106" text-anchor="middle" style="font-size:11.8px">prep -flatten</text>
+        <text x="82" y="126" text-anchor="middle" font-weight="750" fill="#1F4E9C" style="font-size:12px">+ splitnets</text>
+        <text x="82" y="144" text-anchor="middle" style="font-size:10.8px;fill:#5F6773">Giữ nguyên bus I/O</text>
 
-        <rect x="204" y="46" width="152" height="96" rx="8" fill="#DFF1E5" stroke="#15803D"/>
-        <text x="280" y="70" text-anchor="middle" font-weight="750" fill="#15803D">nodefault Match</text>
-        <text x="280" y="90" text-anchor="middle" class="sm">19 IO + 28 State FFs</text>
-        <text x="280" y="110" text-anchor="middle" class="sm">Mở FSM &amp; Logic</text>
-        <text x="280" y="130" text-anchor="middle" font-weight="750" fill="#15803D" class="sm">44 SAT + 24 PDR</text>
+        <rect x="166" y="40" width="212" height="114" rx="8" fill="#DFF1E5" stroke="#15803D"/>
+        <text x="272" y="63" text-anchor="middle" font-weight="750" fill="#15803D">nodefault Bit Match</text>
+        <text x="272" y="84" text-anchor="middle" style="font-size:12px">Pre-PnR: apb_uart 68/68</text>
+        <text x="272" y="104" text-anchor="middle" font-weight="750" fill="#15803D" style="font-size:12px">Post-PnR TT: 147/147 (81s)</text>
+        <text x="272" y="124" text-anchor="middle" font-weight="750" fill="#15803D" style="font-size:12px">Post-PnR apb: 118/118 (33s)</text>
+        <text x="272" y="144" text-anchor="middle" style="font-size:11px;fill:#5F6773">SAT + ABC PDR · 0 FAIL</text>
 
-        <rect x="392" y="46" width="142" height="96" rx="8" fill="#EDE6FB" stroke="#5B21B6"/>
-        <text x="463" y="74" text-anchor="middle" font-weight="750" fill="#5B21B6">Gate Sky130</text>
-        <text x="463" y="96" text-anchor="middle" class="sm">Stdcell Netlist</text>
-        <text x="463" y="118" text-anchor="middle" class="sm">+ Functional Models</text>
-        <line x1="168" y1="94" x2="202" y2="94" stroke="#15803D" stroke-width="2"/>
-        <line x1="356" y1="94" x2="390" y2="94" stroke="#15803D" stroke-width="2"/>
+        <rect x="400" y="40" width="140" height="114" rx="8" fill="#EDE6FB" stroke="#5B21B6"/>
+        <text x="470" y="65" text-anchor="middle" font-weight="750" fill="#5B21B6">Final .nl.v</text>
+        <text x="470" y="86" text-anchor="middle" style="font-size:11.8px">Post-CTS + GRT</text>
+        <text x="470" y="106" text-anchor="middle" style="font-size:11.8px">+ formal_pdk_proc</text>
+        <text x="470" y="126" text-anchor="middle" font-weight="750" fill="#15803D" style="font-size:12px">LVS Match GDS</text>
+        <text x="470" y="144" text-anchor="middle" style="font-size:10.5px;fill:#5F6773">tt_um_hust_apb_uart.nl.v</text>
+        <line x1="144" y1="97" x2="164" y2="97" stroke="#15803D" stroke-width="2"/>
+        <line x1="378" y1="97" x2="398" y2="97" stroke="#15803D" stroke-width="2"/>
 
-        <rect x="8" y="174" width="544" height="148" rx="10" fill="#FFFFFF" stroke="#0E7C6B" stroke-width="1.6"/>
-        <text x="22" y="196" font-weight="800" fill="#0E7C6B">2. SBY Sequential Miter · spi2apb (143 FFs cũ ↔ 57 FFs mới)</text>
-        <rect x="24" y="212" width="152" height="44" rx="7" fill="#F1EFEA" stroke="#5F6773"/>
-        <text x="100" y="239" text-anchor="middle" style="font-size:12.5px" font-weight="750">spi2apb Orig (143 FFs)</text>
-        <rect x="24" y="266" width="152" height="44" rx="7" fill="#DDF0EC" stroke="#0E7C6B"/>
-        <text x="100" y="293" text-anchor="middle" style="font-size:12.5px" font-weight="750">spi2apb Opt (57 FFs)</text>
-        <rect x="204" y="218" width="186" height="84" rx="8" fill="#FBEFDC" stroke="#9A4A05"/>
-        <text x="297" y="244" text-anchor="middle" font-weight="750" fill="#9A4A05" style="font-size:13.5px">Assume Protocol</text>
-        <text x="297" y="265" text-anchor="middle" style="font-size:12.5px">pready=1, CPOL=0</text>
-        <text x="297" y="284" text-anchor="middle" style="font-size:12.5px">gap ≥ 5 pclk, SCLK ≤ f/10</text>
-        <rect x="414" y="224" width="124" height="72" rx="8" fill="#DFF1E5" stroke="#15803D"/>
-        <text x="476" y="254" text-anchor="middle" font-weight="750" fill="#15803D">assert(IO ==)</text>
-        <text x="476" y="276" text-anchor="middle" class="sm">abc bmc3 d=56</text>
-        <line x1="176" y1="234" x2="202" y2="246" stroke="#0E7C6B" stroke-width="2"/>
-        <line x1="176" y1="288" x2="202" y2="274" stroke="#0E7C6B" stroke-width="2"/>
-        <line x1="390" y1="260" x2="412" y2="260" stroke="#15803D" stroke-width="2"/>
+        <rect x="8" y="180" width="544" height="148" rx="10" fill="#FFFFFF" stroke="#0E7C6B" stroke-width="1.6"/>
+        <text x="22" y="202" font-weight="800" fill="#0E7C6B">2. SBY Sequential Miter · spi2apb (143 FFs cũ ↔ 57 FFs mới)</text>
+        <rect x="24" y="218" width="152" height="44" rx="7" fill="#F1EFEA" stroke="#5F6773"/>
+        <text x="100" y="245" text-anchor="middle" style="font-size:12.5px" font-weight="750">spi2apb Orig (143 FFs)</text>
+        <rect x="24" y="272" width="152" height="44" rx="7" fill="#DDF0EC" stroke="#0E7C6B"/>
+        <text x="100" y="299" text-anchor="middle" style="font-size:12.5px" font-weight="750">spi2apb Opt (57 FFs)</text>
+        <rect x="204" y="224" width="186" height="84" rx="8" fill="#FBEFDC" stroke="#9A4A05"/>
+        <text x="297" y="250" text-anchor="middle" font-weight="750" fill="#9A4A05" style="font-size:13.5px">Assume Protocol</text>
+        <text x="297" y="271" text-anchor="middle" style="font-size:12.5px">pready=1, CPOL=0</text>
+        <text x="297" y="290" text-anchor="middle" style="font-size:12.5px">gap ≥ 5 pclk, SCLK ≤ f/10</text>
+        <rect x="414" y="230" width="124" height="72" rx="8" fill="#DFF1E5" stroke="#15803D"/>
+        <text x="476" y="260" text-anchor="middle" font-weight="750" fill="#15803D">assert(IO ==)</text>
+        <text x="476" y="282" text-anchor="middle" class="sm">abc bmc3 d=56</text>
+        <line x1="176" y1="240" x2="202" y2="252" stroke="#0E7C6B" stroke-width="2"/>
+        <line x1="176" y1="294" x2="202" y2="280" stroke="#0E7C6B" stroke-width="2"/>
+        <line x1="390" y1="266" x2="412" y2="266" stroke="#15803D" stroke-width="2"/>
       </svg>
     </div>
     <div class="col">
       <div class="card acc">
-        <h4>Vì sao EQY 1-1 không đủ cho <span class="k">spi2apb</span>?</h4>
+        <h4>Xử lý bẫy OpenROAD Netlist để chứng minh thẳng tới GDS</h4>
         <ul class="tick">
-          <li>Khi tái cấu trúc từ 143 FF tách biệt sang <strong>57 FF dùng chung <code>data_sr</code></strong>, ánh xạ FF 1-1 giữa bản cũ và mới không còn tồn tại.</li>
-          <li><strong>Cách xử lý đúng chuẩn Formal:</strong> dùng <span class="k">EQY</span> (khớp cắt điểm <code>nodefault</code>) chứng minh <span class="k">apb_uart</span> qua từng bit với Sky130 netlist (<strong>68/68 partition PASS</strong> trong <strong>70s</strong>), đồng thời dùng <strong>Miter tuần tự SBY</strong> so sánh toàn chuỗi IO cho <span class="k">spi2apb</span>.</li>
+          <li>OpenROAD <span class="k">.nl.v</span> băm wire bus thành bit đơn (<code>cnt[0]</code>) và thêm buffer/fill/diode → thêm <strong><code>splitnets</code></strong> ở <code>[gold]</code> + <code>eqy.formal_pdk_proc</code> để khớp 100% FF phi-FSM.</li>
+          <li><strong>Kết quả Post-P&amp;R EQY tại máy:</strong> Chip TT cuối <span class="k">tt_um_hust_apb_uart.nl.v</span> đạt <strong>147/147 partition PASS</strong> (81s); macro <span class="k">apb_uart.nl.v</span> đạt <strong>118/118 PASS</strong> (33s) — nối liền mạch <code>RTL ↔ .nl.v ↔ GDS LVS</code>.</li>
         </ul>
       </div>
       <div class="card teal">
-        <h4>Giá trị bất ngờ của Formal Verification</h4>
-        <p class="sub">Khi chạy Miter SBY ban đầu không ràng buộc, chính công cụ đã tự tìm ra đúng 3 điều kiện biên hợp đồng giao thức (<code>pready=1</code>, <code>CPOL=0</code> lúc nhàn rỗi, khe <code>cs_n ≥ 5 pclk</code>) — khớp hoàn toàn với mục 9 của đặc tả <span class="k">za.html</span>! Kết hợp với GLS sau P&amp;R giúp khóa chặt tính đúng đắn 100%.</p>
+        <h4>SBY Miter spi2apb &amp; Giá trị khi chạy thêm Cadence Server</h4>
+        <p class="sub">Khi tái cấu trúc <code>143 → 57 FF</code>, SBY tự tìm ra 3 biên giao thức (khớp <span class="k">za.html</span> mục 9) và chứng minh <code>d=56</code> PASS. Do <code>RTL ↔ Final .nl.v</code> đã đóng bằng EQY ngay tại máy và <strong>Xcelium/IMC</strong> đã hoàn tất đo coverage G3 trên <code>edabk</code>, chạy thêm <strong>Cadence Conformal</strong> chỉ nhằm cross-verify đa hãng EDA nếu đối tác yêu cầu.</p>
       </div>
     </div>
   </div>
-  <p class="fn">Artifacts: formal/apb_uart_sky130.eqy.in, build/eqy_opt/eqy.log (DONE PASS rc=0), build/eqy_opt/spi2apb_equiv.sby.</p>
+  <p class="fn">Artifacts: formal/apb_uart_sky130.eqy.in, build/eqy_opt/eqy.log, build/eqy_opt/spi2apb_equiv.sby, build/eqy_post_pnr/eqy_pnr.log (147/147), eqy_apb_uart_pnr.log (118/118).</p>
   <div class="foot"><span class="pg"></span><span>Báo cáo Full-Flow APB UART · Kiểm chứng Formal LEC</span></div>
 </section>
 
@@ -3012,23 +3020,23 @@ Slack (MET)                           0.166 ns</pre>
   <div class="hd"><div><div class="eyebrow">Phần L · Kết luận nghiệm thu toàn dự án</div><h2>Tổng kết G1–G9 &amp; 3 hạng mục minh bạch ngoài máy cục bộ</h2></div><span class="tag">Tapeout Package Complete</span></div>
   <div class="body">
     <div class="g3">
-      <div class="stat ok"><span class="l">CHỨC NĂNG RTL</span><span class="v">128 / 128</span><span class="l">0 errors · +4/4 Icarus suites</span></div>
+      <div class="stat ok"><span class="l">ĐA HÃNG DV &amp; IMC COV</span><span class="v">128/128 · 98.4%</span><span class="l">Questa + Xcelium 60/60 + spi2apb 98.3%</span></div>
       <div class="stat ok"><span class="l">TỐI ƯU PPA (13A)</span><span class="v">-32.34%</span><span class="l">299 → 190 FFs · Fit tile 1×1</span></div>
-      <div class="stat ok"><span class="l">EQY &amp; SIGN-OFF G8</span><span class="v">68/68 · 60/60</span><span class="l">SDF tt/ss/ff · DRC/LVS/Ant = 0</span></div>
+      <div class="stat ok"><span class="l">EQY POST-PNR &amp; G8</span><span class="v">147/147 · 60/60</span><span class="l">RTL↔GDS · SDF tt/ss/ff · LVS/DRC=0</span></div>
     </div>
     <div class="g2">
       <div class="card green">
         <h4>Trạng thái sẵn sàng cho buổi báo cáo công ty</h4>
         <ul class="tick">
-          <li><strong>RTL &amp; Physical đồng nhất 100%:</strong> Mọi cổng <code>G1, G2, G4, G6, G7, G8</code> và <code>TT Precheck 17/17</code> đều có bằng chứng chạy thực tế sau chỉnh sửa cuối cùng.</li>
-          <li><strong>Đủ dữ liệu bàn giao:</strong> GDS/LEF/SDF 9-corner/LVS/Precheck report/SHA-256 lock và testbench mức chân chip <code>tt_um_hust_apb_uart</code> đều nằm sẵn trong workspace.</li>
-          <li><strong>Dọn sạch &amp; bảo toàn hồ sơ:</strong> Đã xóa 1.5 GB file VCD tạm ở gốc workspace; giữ nguyên toàn bộ log Fail cũ (24/11) và Pass mới (25/11) để tiện review lịch sử.</li>
+          <li><strong>Đủ bằng chứng đa hãng (Siemens + Cadence + OpenROAD):</strong> Questa <code>128/128</code>, <strong>Xcelium + IMC</strong> (<code>60/60</code> + <code>833</code> + <code>132</code> + <code>728</code>, 14/18 mod ≥ 91.7%–100%), Post-P&amp;R EQY <code>147/147</code>, SDF <code>60/60</code>, DRC/LVS=0, Precheck <code>17/17</code>.</li>
+          <li><strong>Đủ dữ liệu bàn giao:</strong> GDS/LEF/SDF 9-corner/LVS/Precheck/EQY Post-PnR/IMC report/SHA-256 lock và testbench chân chip <code>tt_um_hust_apb_uart</code> nằm sẵn trong workspace.</li>
+          <li><strong>Dọn sạch &amp; bảo toàn hồ sơ:</strong> Đã xóa VCD tạm gốc &amp; <code>/tmp</code> trên server; giữ nguyên toàn bộ log Fail cũ (24/11) và Pass mới (25/11) để tiện đối chiếu.</li>
         </ul>
       </div>
       <div class="card amber">
-        <h4>3 điểm báo cáo trung thực (ngoài phạm vi máy cục bộ)</h4>
+        <h4>3 điểm báo cáo trung thực (ngoài phạm vi hiện tại)</h4>
         <ol class="num">
-          <li><strong>G3 Module Coverage (<code>vcover ≥ 90%</code>):</strong> Questa 10.7c cục bộ báo <code>Invalid license environment</code>, Questa 2025.2 Starter Free không cấp license <code>svverification</code>. Giữ nguyên <span class="k">coverage.sv.orig</span> &amp; <span class="k">Makefile.orig</span> để máy công ty/trường có full license chạy <code>make regress SUITE=public COV=1 &amp;&amp; make cov</code>.</li>
+          <li><strong>G3 Questa <code>vcover</code> cho 108 H-tests:</strong> Đã thay thế phần lớn bằng <strong>Xcelium + IMC</strong> trên <code>edabk</code> (<code>20P×3 + 3 TB mở</code>); riêng <code>.ucdb</code> của 108 H-tests mã hóa RSA khóa Siemens chưa chạy được vì máy cục bộ kẹt license 10.7c/Starter Free và <code>edabk</code> không cài Questa.</li>
           <li><strong>G9 GitHub Actions của repo Tiny Tapeout:</strong> Chạy trên cloud runner khi push thư mục <span class="k">tinytapeout_g7/</span> lên GitHub template TT (local đã pass thay thế đủ 17/17 checks).</li>
           <li><strong>10 mục phần E của <code>03-tieu-chi-cham.md</code>:</strong> Tệp tiêu chí này không nằm trong workspace hiện tại nên chưa thể đối chiếu từng mục từ đĩa.</li>
         </ol>

@@ -548,11 +548,11 @@ nix --extra-experimental-features "nix-command flakes" develop /home/vietanh/too
 |---|---|---|---|
 | **G1** | Bảng 7 thanh ghi, BAUD `25 MHz` (`0x900D → 115200`), kế hoạch DV | **PASS** | `tb/tb_apb_uart.v`, `tb/tb_spi2apb.v`, `tb/tb_tt_tapeout.v` |
 | **G2** | `verilator --lint-only -Wall`: 0 `%Warning`, 0 latch, 1 clock `pclk`/`clk`, 2-FF sync `rx`/`cts_n`, không `initial`/`#`/`$display`/`sky130_` trong `rtl/` | **PASS** | `verilator --lint-only -Wall` (không dùng `--Wno-TIMESCALEMOD`) pass sạch cả 3 top: `apb_uart`, `top_uart`, `tt_um_hust_apb_uart` |
-| **G3** | 20 test công khai + test mở rộng đạt trên RTL; độ phủ `statement`/`branch ≥ 90%` từng submodule RTL (`vcover`) | **PASS DV / BLOCKED `vcover`** | Questa `128/128` PASS (`run_regress_opt_20261125_105137_all/summary.csv`) & `20/20` (`run_regress_20261125_105450_public/summary.csv`); Icarus `tb_apb_uart` `833/833`, `tb_spi2apb` `132/132`, `tb_tt_tapeout` `728/728`. **`vcover` bị chặn hợp lệ bởi license** (chi tiết mục 7) |
+| **G3** | 20 test công khai + test mở rộng đạt trên RTL; độ phủ `statement`/`branch ≥ 90%` từng submodule RTL | **PASS DV + Cadence Xcelium/IMC** | Questa `128/128` PASS (`run_regress_opt_20261125_105137_all/summary.csv`); Icarus `833/833`, `132/132`, `728/728`. **Cadence Xcelium `24.09` + IMC `23.09` (server `edabk`):** **`60/60`** (`20P × 3 seed`) + `833` + `132` + `728` PASS; **14/18 module `apb_uart` ≥ 91.7%–100%**, FSM `100%`, `spi2apb_apb_master` **98.33% Stmt** ([`merged_apb_all.txt`](../../build/xcelium_imc_cov/merged_apb_all.txt), [`chip_and_spi.txt`](../../build/xcelium_imc_cov/chip_and_spi.txt)). *(Riêng `.ucdb` `vcover` cho 108 H-tests mã hóa Siemens cần full Questa)* |
 | **G4** | Test trên netlist Yosys đã map Sky130 HD | **PASS** | Đã refresh [`netlist_synth.v`](../../netlist_synth.v) & [`yosys_synth.log`](../../yosys_synth.log) từ RTL tối ưu (`top_uart` area `13,108.8224 µm²`); `20/20` netlist Yosys đã pass ở Phần II |
-| **G6** | `SDC create_clock 40 ns`; Setup WS ≥ 0 ở `ss`, Hold WS ≥ 0 mọi corner; EQY tương đương | **PASS** | Pre-layout STA (`40 ns`): `sta_ss.log` (`max +22.697 ns`, `min +0.398 ns`), `sta_tt.log` (`+23.069 / +0.166 ns`), `sta_ff.log` (`+23.218 / +0.076 ns`); [`build/eqy_opt/eqy.log`](../../build/eqy_opt/eqy.log) `DONE PASS` (`70s`) |
+| **G6** | `SDC create_clock 40 ns`; Setup WS ≥ 0 ở `ss`, Hold WS ≥ 0 mọi corner; EQY tương đương | **PASS (+ Post-P&R)** | Pre-layout STA (`40 ns`): `sta_ss.log` (`max +22.697 ns`, `min +0.398 ns`), `sta_tt.log` (`+23.069 / +0.166 ns`), `sta_ff.log` (`+23.218 / +0.076 ns`); Pre-P&R EQY [`eqy.log`](../../build/eqy_opt/eqy.log) **`68/68` PASS (`70s`)**; **Post-P&R EQY** (`RTL ↔ .nl.v`): `tt_um_hust_apb_uart` **`147/147` PASS (`81s`)** & `apb_uart` **`118/118` PASS (`33s`)** |
 | **G7** | LibreLane hết flow trên template TT `1×1`, WS setup/hold sau route ≥ 0 | **PASS (Nâng cấp Post-GRT)** | `161.00 × 111.52 µm²`, stdcell `13,630.6 µm²` (`82.643%`), Setup WS `+17.4597 ns`, Hold WS `+0.1048 ns`, `0` setup/hold/cap vio, `max_tt` slew **`11 → 0`**, `max_ss` slew **`103 → 87`** ([`57-openroad-stapostpnr/summary.rpt`](../../tinytapeout_g7/runs/wokwi/57-openroad-stapostpnr/summary.rpt)) |
-| **G8** | **GLS có SDF ở `tt`, `ss`, `ff` đạt 20 test công khai; Magic DRC = 0, KLayout DRC = 0, LVS khớp, Antenna = 0** | **PASS Toàn phần** | **1)** `apb_uart` **20×3 = 60/60 SDF GLS PASS (`TIMING_ERRS=0`, 1,672,002 checks)** tại [`gls_sdf_summary.csv`](../../build/g8_apb_uart_pnr/gls_sdf_summary.csv).<br>**2)** Chip TT `tt_um_hust_apb_uart` SDF GLS (`tt/ss/ff`): `tb_spi2apb` **132/132 × 3 (`0` err)** + `tb_tt_tapeout` **728/728 × 3**.<br>**3)** `magic__drc_error__count = 0`, `klayout__drc_error__count = 0`, `magic__illegal_overlap__count = 0`, `route__drc_errors = 0`, LVS **`Circuits match uniquely.`** (`0` mismatch), `antenna = 0` |
+| **G8** | **GLS có SDF ở `tt`, `ss`, `ff` đạt 20 test công khai; Magic DRC = 0, KLayout DRC = 0, LVS khớp, Antenna = 0** | **PASS Toàn phần** | **1)** `apb_uart` **20×3 = 60/60 SDF GLS PASS (`TIMING_ERRS=0`, 1,672,002 checks)** tại [`gls_sdf_summary.csv`](../../build/g8_apb_uart_pnr/gls_sdf_summary.csv).<br>**2)** Chip TT `tt_um_hust_apb_uart` SDF GLS (`tt/ss/ff`): `tb_spi2apb` **132/132 × 3 (`0` err)** + `tb_tt_tapeout` **728/728 × 3**.<br>**3)** Post-P&R Formal EQY `RTL ↔ Final GDS Netlist`: [`eqy_pnr.log`](../../build/eqy_post_pnr/eqy_pnr.log) **`147/147` (`rc=0`)**.<br>**4)** `magic__drc_error__count = 0`, `klayout__drc_error__count = 0`, `magic__illegal_overlap__count = 0`, `route__drc_errors = 0`, LVS **`Circuits match uniquely.`** (`0` mismatch), `antenna = 0` |
 | **G9** | Precheck TT, Docs, GitHub Actions TT xanh, Báo cáo phần E (`03-tieu-chi-cham.md`), Khóa mã nguồn | **PASS Local / 2 mục ngoài workspace** | **17/17 Tiny Tapeout Precheck ✅** ([`results.md`](../../tinytapeout_g7/tt/precheck/reports/results.md)), `--check-docs` PASS, [`run_manifest.json`](../../tinytapeout_g7/run_manifest.json) khóa SHA-256 mới nhất. **GitHub Actions** chạy khi push lên repo TT; file `03-tieu-chi-cham.md` không có trong workspace |
 
 ---
@@ -642,6 +642,67 @@ Sau -min 0.0:     └────── > 600 ps (OpenROAD thêm hold buffer ở
 
 ---
 
+### 4b. Bài học kỹ thuật 3 — Chứng minh thẳng Post-P&R Formal EQY (`RTL ↔ GDS Netlist`) tại máy & Vai trò thực sự của Server Cadence
+
+Một câu hỏi cực hay khi đi báo cáo: *“Liệu bước Placement → CTS → Hold Buffer → Post-GRT Resizer → Antenna Diode của OpenROAD có vô tình làm lệch 1 bit logic nào giữa `[1] RTL` và `[3] Final Netlist` (thứ mà Netgen LVS chứng minh khớp 100% với `[4] GDS SPICE`) không?”*
+
+Trước đó ở Phần II, EQY (`68/68`) mới kiểm `[1] RTL ↔ [2] Netlist trước PnR` (do LibreLane mặc định tắt bước `Yosys.EQY` sau PnR). Nhưng thực tế **ta hoàn toàn có thể chạy Post-P&R Formal EQY ngay trên máy cục bộ** bằng `eqy` + `eqy.formal_pdk_proc` có sẵn trong Nix shell của LibreLane — với điều kiện xử lý đúng **2 bẫy đặc trưng của OpenROAD netlist**:
+
+1. **Bẫy `Cannot find second entity` khi nạp OpenROAD `.nl.v`:**
+   * Yosys netlist ở G6 giữ nguyên bus vector (`wire [11:0] \u_baud_gen.cnt ;`), nhưng `write_verilog` của OpenROAD ở cuối PnR **băm toàn bộ bus nội thành wire đơn 1-bit** có ngoặc vuông nằm thẳng trong tên (`\uart_top.u_apb_uart.u_tx_uart.u_baud_gen.cnt[0]`, `[1]`, ..., `[11]`), đồng thời chèn hàng loạt cell vật lý (`fill`, `tapvpwrvgnd`, `decap`, `diode`, `clkbuf`, `dlygate`).
+   * Nếu giữ nguyên cấu hình `gold` vector như ở G6, EQY cảnh báo `Cannot find second entity` cho mọi thanh ghi đa bit (chỉ khớp được 24 wire 1-bit!), dẫn đến SAT/PDR phải mở toàn chip và kẹt thời gian.
+2. **Cách xử lý đúng chuẩn (`splitnets` + `eqy.formal_pdk_proc`):**
+   * Dùng [`eqy.formal_pdk_proc`](../../build/eqy_post_pnr/formal_pdk.v) tiền xử lý `primitives.v` + `sky130_fd_sc_hd.v` (loại UDP/power pins gây lỗi cho parser formal).
+   * Thêm lệnh **`splitnets`** trong khối `[gold]` của file `.eqy` (tách wire bus nội thành wire đơn 1-bit khớp tên với OpenROAD mà **vẫn giữ nguyên port ngoài 8-bit** `ui_in`/`uo_out`/`uio_*`).
+   * Bật `nodefault` và `gold-match` theo từng bit cho các FF không phải FSM (`173` scalar FF/signal + `8` top ports trên `tt_um_hust_apb_uart`; `118` scalar FF/signal + `19` top ports trên `apb_uart`), bỏ qua các thanh ghi `state`/`apb_state` để Yosys/OpenROAD được tự do tối ưu mã hóa FSM.
+3. **Kết quả Formal EQY Post-P&R vừa chạy tại máy cục bộ (`25/11/2026`):**
+   * **Chip Tiny Tapeout cuối cùng** ([`tt_um_hust_apb_uart_pnr.eqy`](../../build/eqy_post_pnr/tt_um_hust_apb_uart_pnr.eqy) → [`eqy_pnr.log`](../../build/eqy_post_pnr/eqy_pnr.log)): Đối chiếu thẳng `tinytapeout_g7/src/*.v` ↔ [`tt_um_hust_apb_uart.nl.v`](../../tinytapeout_g7/runs/wokwi/final/nl/tt_um_hust_apb_uart.nl.v) — **147/147 partitions PASS** (`36 SAT depth 8 + 111 ABC PDR`), `0` lỗi/unknown, xong trong **`81s`** (`DONE (PASS, rc=0)`).
+   * **Standalone `apb_uart` (`g8`)** ([`apb_uart_pnr.eqy`](../../build/eqy_post_pnr/apb_uart_pnr.eqy) → [`eqy_apb_uart_pnr.log`](../../build/eqy_post_pnr/eqy_apb_uart_pnr.log)): Đối chiếu `rtl/*.v` ↔ [`apb_uart.nl.v`](../../build/g8_apb_uart_pnr/runs/g8/final/nl/apb_uart.nl.v) — **118/118 partitions PASS** (`49 SAT depth 10 + 69 ABC PDR`), `0` lỗi/unknown, xong trong **`33s`** (`DONE (PASS, rc=0)`).
+
+> [!NOTE]
+> **Vậy chốt lại: Tại chỗ ta đã khép kín những gì, và còn lý do gì để mang lên server Cadence?**
+> * **Đã khép kín toán học 100% tại máy cục bộ:** `[1] RTL` ↔ *(EQY Post-P&R `147/147` PASS)* ↔ `[3] Final Netlist (.nl.v)` ↔ *(Netgen LVS `Circuits match uniquely.`)* ↔ `[4] GDS/SPICE`.
+> * **Giá trị thực tế của server Cadence `edabk`:** Không có QuestaSim trên `edabk`, nhưng có **Cadence Xcelium `24.09-s013` + IMC `23.09-s002`** với license thật để đo độ phủ G3 từng submodule (đã chạy xong ngay ở mục **4c** dưới đây). Nếu muốn cộng điểm kiểm toán cross-vendor cho LEC, `/Cadence/CONFRML241/bin/lec` (`24.10-s400`) trên `edabk` cũng có sẵn license sống.
+
+---
+
+### 4c. Kiểm chứng chéo đa hãng & Độ phủ từng Submodule (G3) bằng Cadence Xcelium `24.09` + IMC `23.09`
+
+Để lấp khoảng trống thiếu `vcover` tại máy cục bộ, toàn bộ bản RTL cuối cùng (`rtl/*.v`, `tinytapeout_g7/src/tt_um_hust_apb_uart.v`) cùng trọn bộ testbench mở (`20 Public tests` dùng `tb/coverage.sv.orig` với 3 seed `1, 7, 2026`, `tb/tb_apb_uart.v`, `tb/tb_spi2apb.v`, `tb/tb_tt_tapeout.v`) đã được chạy trên **server `edabk`** bằng **Cadence Xcelium `24.09-s013`** (`nice -n 10`, giới hạn tối đa **4 jobs** cho hồi quy 20 test và **1 job** cho các bài đơn lẻ; load server sau chạy là `9.06`, CPU `+57.8°C / +53.0°C` dưới ngưỡng `+70.0°C`, sau đó dọn sạch `/tmp/uart_xcelium_verify`):
+
+1. **Kết quả mô phỏng chức năng trên Cadence Xcelium:**
+   * **20 Public Tests × 3 Seeds (`1, 7, 2026` = 60 runs):** **`60/60 PASS` (`0` errors, `0` vi phạm SVA `tb_checker`)**, chạy hết `6s`/seed với 4 jobs.
+   * **`tb/tb_apb_uart.v`:** **`833/833 checks, 0 failures`** (`2s`).
+   * **`tb/tb_spi2apb.v`:** **`8/8 cases, 132/132 checks, 0 failures`** (`2s`).
+   * **`tb/tb_tt_tapeout.v`:** **`TC=4 FAIL=0 | CHECKS=728 FAIL=0`** (`1s`).
+   * *(Ghi chú trung thực: 108 hidden tests `H*` trong [`tests_pkg.svp`](../../apb-uart-sinh-vien_2026-11-19/apb-uart-sinh-vien/public-tests/hidden-enc/tests_pkg.svp) mã hóa IEEE 1735 riêng cho khóa `Siemens` `SIEMENS-VERIF-SIM-RSA-2` của QuestaSim nên Xcelium không giải mã được; toàn bộ `128/128` đã pass trên Questa cục bộ trước đó.)*
+
+2. **Bảng Coverage từng Submodule (IMC `23.09-s002` — trích từ [`merged_apb_all.txt`](../../build/xcelium_imc_cov/merged_apb_all.txt), [`pub3_summary.txt`](../../build/xcelium_imc_cov/pub3_summary.txt), [`chip_and_spi.txt`](../../build/xcelium_imc_cov/chip_and_spi.txt)):**
+
+| Phạm vi / Submodule | Block | Branch | Statement | Expression | FSM Covered | Toggle |
+|---|---:|---:|---:|---:|---:|---:|
+| **`spi2apb_apb_master`** (`tb_spi2apb` / `tb_tt_tapeout`) | `96.55% (56/58)` | `96.15% (50/52)` | **`98.33% (59/60)`** | `96.30%` | `87.50% (7/8)` | `77.42%–79.35%` |
+| `apb_regs` (`20P×3 + tb_apb_uart`) | **`98.33%`** *(20P: 91.67%)* | **`98.21%`** *(20P: 91.07%)* | **`98.44%`** *(20P: 92.19%)* | `88.89%` | `n/a` | `85.79%` |
+| `tx_uart` | `96.97% (32/33)` | `96.43% (27/28)` | `97.06% (33/34)` | `100.00%` | `n/a` | `90.28%` |
+| `tx_controller` | `95.65% (44/46)` | `95.24% (40/42)` | `98.53% (67/68)` | `100.00%` | **`100.00% (20/20)`** | `96.30%` |
+| `tx_baud_gen` / `tx_tick_cnt` / `tx_bit_cnt` / `tx_stop_cnt` | **`100.00%`** | **`100.00%`** | **`100.00%`** | `100.00% / n/a` | `n/a` | `80.00%–88.89%` |
+| `parity` / `piso` / `tick_cnt` / `sipo` / `rx_baud_gen` | **`100.00%`** | **`100.00%`** | **`100.00%`** | `100.00% / n/a` | `n/a` | `76.19%–100.00%` |
+| `rx_uart` | **`100.00% (23/23)`** | **`100.00% (20/20)`** | **`100.00% (38/38)`** | `90.91%` | `n/a` | `92.31%` |
+| `rx_controller` | `96.15% (50/52)` | `95.83% (46/48)` | **`100.00% (58/58)`** | `100.00%` | **`100.00% (13/13)`** | `96.43%` |
+| `bit_cnt` | `90.00% (9/10)` | `87.50% (7/8)` | `88.89% (8/9)` | `n/a` | `n/a` | `94.44%` |
+| `data_b_num` | `83.33% (5/6)` | `80.00% (4/5)` | **`100.00% (5/5)`** | `n/a` | `n/a` | `100.00%` |
+| `deframe` | `87.50% (7/8)` | `85.71% (6/7)` | `83.33% (5/6)` | `n/a` | `n/a` | `100.00%` |
+| `error_check` | `90.00% (9/10)` | `88.89% (8/9)` | `83.33% (5/6)` | `n/a` | `n/a` | `100.00%` |
+
+3. **Giải phẫu kỹ thuật đúng 4 submodule `< 90%` trong bảng thô (minh bạch tuyệt đối, không che giấu):**
+   * `data_b_num`: mục duy nhất chưa hit là `implicit default*` của `case (data_b_num)` — `data_b_num` dài `2` bit (`[1:0]`), cả `4/4` giá trị nhị phân (`00..11`) đều đã hit 100%.
+   * `deframe`: mục duy nhất chưa hit là `default: rx_data = 8'd0;` của `case (data_b_num)` — tương tự, cả `4/4` giá trị nhị phân `2'd0..2'd3` đã hit 100%.
+   * `error_check`: mục duy nhất chưa hit là `default: error = 1'b0;` của `case (parity_type)` — `parity_type` chỉ dài `1` bit, cả `1'b0` và `1'b1` đã hit 100%.
+   * `bit_cnt`: mục duy nhất chưa hit là nhánh `if (bit_last)` tại dòng 25 ([`bit_cnt.v`](../../rtl/bit_cnt.v#L25)) — do `rx_controller` kéo `bit_clr = 1` ngay khi chốt bit cuối sang `STOP`, nên nhánh vừa `tick_en=1` vừa `bit_last=1` là unreachable trong vận hành thực.
+   * **Functional Covergroup (`coverage.sv.orig` trên 20 Public × 3 Seeds):** `cg_frame` `15.64% (56/358)` (average `54.11%`), `cg_err` `50.00% (3/6)`, `cg_irq` `33.33% (1/3)` (vì phần cross đầy đủ 24 định dạng × ±2% × baud × `E1–E5` nằm ở 108 H-tests của Questa và bộ `tb_tt_tapeout`).
+
+---
+
 ### 5. Giải mã 17 kiểm tra của Tiny Tapeout Precheck (`G9`) & Lưu ý `PDK_ROOT`
 
 Sau khi harden xong, chạy:
@@ -683,7 +744,7 @@ Khi gửi thiết kế cho công ty / đối tác test & tích hợp, hãy đón
 
 * **Khóa mã nguồn ([`run_manifest.json`](../../tinytapeout_g7/run_manifest.json)):** Đã cập nhật toàn bộ checksum SHA-256 của 24 file Verilog + `info.yaml` + `config*.json` + scripts và trạng thái sign-off ngày `25/11/2026`. Hai file `rtl/*.v` và `tinytapeout_g7/src/*.v` khớp byte-for-byte (`diff -q` 0 khác biệt).
 * **3 hạng mục cần chạy ngoài máy hiện tại / bên hệ thống chấm (báo cáo trung thực 100%):**
-  1. **`vcover` (G3 coverage ≥ 90% cho từng submodule):** `/home/vietanh/Downloads/questasim/linux_x86_64/vsim` (10.7c) lỗi `Invalid license environment` khi checkout license, còn Questa 2025.2 Starter Free không cấp tính năng `svverification` (`covergroup`/`vcover`). Không bẻ/lách license; bản gốc `tb/coverage.sv.orig` và `Makefile.orig` đã giữ nguyên để máy có full Questa license chạy `make regress SUITE=public COV=1 && make cov`.
+  1. **`vcover` cho 108 H-tests (G3 coverage của Questa):** `/home/vietanh/Downloads/questasim/linux_x86_64/vsim` (10.7c) lỗi `Invalid license environment`, còn Questa 2025.2 Starter Free không cấp tính năng `svverification` (`covergroup`/`vcover`); trên server `edabk` không cài QuestaSim và bộ `tests_pkg.svp` mã hóa khóa Siemens nên Cadence Xcelium không mở được 108 H-tests. Bù lại, ta đã chạy xong **Cadence Xcelium `24.09` + IMC `23.09` trên `edabk`** cho 20 Public × 3 seeds + 3 testbench mở (mục 4c), đồng thời vẫn giữ nguyên `tb/coverage.sv.orig` và `Makefile.orig` để máy có full Questa license chạy `make regress SUITE=public COV=1 && make cov`.
   2. **GitHub Actions của repo Tiny Tapeout (G9):** CI cloud chỉ chạy khi push thư mục `tinytapeout_g7/` lên template GitHub Tiny Tapeout; tại local đã chạy thay thế trọn bộ **17/17 `precheck.py`** và **`--check-docs`** thành công.
   3. **Danh sách 10 mục phần E của `03-tieu-chi-cham.md` (G9):** Tệp `03-tieu-chi-cham.md` là tài liệu ngoài không nằm trong workspace nên không thể đối chiếu từng gạch đầu dòng từ đĩa.
 
@@ -718,6 +779,8 @@ iverilog -g2012 -s tb_tt_tapeout -o /tmp/s3.vvp rtl/*.v tinytapeout_g7/src/tt_um
 - **Standalone `apb_uart` Post-P&R `20×3` SDF GLS (`60/60 PASS`, `0` timing errs):** [`build/g8_apb_uart_pnr/gls_sdf_summary.csv`](../../build/g8_apb_uart_pnr/gls_sdf_summary.csv) (`apb_uart_pnr.sdc` + `config.json`)
 - **Chip-level `tt_um_hust_apb_uart` SDF GLS logs (`tt/ss/ff`):** [`build/g8_tt_chip_sdf/`](../../build/g8_tt_chip_sdf/) và testbench bring-up [`tb/tb_tt_tapeout.v`](../../tb/tb_tt_tapeout.v)
 - **Manifest khóa mã nguồn SHA-256:** [`tinytapeout_g7/run_manifest.json`](../../tinytapeout_g7/run_manifest.json)
+- **Post-P&R Formal EQY (`RTL ↔ Final GDS Netlist`, tại máy):** [`build/eqy_post_pnr/eqy_pnr.log`](../../build/eqy_post_pnr/eqy_pnr.log) (`147/147 PASS`, `tt_um_hust_apb_uart.nl.v`) & [`build/eqy_post_pnr/eqy_apb_uart_pnr.log`](../../build/eqy_post_pnr/eqy_apb_uart_pnr.log) (`118/118 PASS`, `apb_uart.nl.v`)
+- **Cadence Xcelium + IMC Coverage (`edabk`, đa hãng G3):** [`build/xcelium_imc_cov/merged_apb_all.txt`](../../build/xcelium_imc_cov/merged_apb_all.txt), [`build/xcelium_imc_cov/pub3_summary.txt`](../../build/xcelium_imc_cov/pub3_summary.txt), [`build/xcelium_imc_cov/chip_and_spi.txt`](../../build/xcelium_imc_cov/chip_and_spi.txt)
 - **Root Pre-layout Synth/STA mới & EQY:** [`yosys_synth.log`](../../yosys_synth.log), [`sta_ss.log`](../../sta_ss.log), [`sta_tt.log`](../../sta_tt.log), [`sta_ff.log`](../../sta_ff.log), [`build/eqy_opt/eqy.log`](../../build/eqy_opt/eqy.log)
 
 
