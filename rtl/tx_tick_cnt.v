@@ -1,38 +1,26 @@
+`timescale 1ns/1ps
 module tx_tick_cnt #(
     parameter OS = 16,
     parameter WIDTH = $clog2(OS)
 )(
-    input clk, rst_n,
+    input clk,
+    /* verilator lint_off UNUSEDSIGNAL */
+    input rst_n, // Synchronously cleared via clr_tick in IDLE/WAIT_CTS -> dfxtp_1
+    /* verilator lint_on UNUSEDSIGNAL */
     input baud_tick,
     input clr_tick,
     output tick_last
 );
-    // WIDTH is $clog2(OS); OS-1 therefore fits the counter. The explicit
-    // narrowing below records the intended counter-width comparison.
-    /* verilator lint_off WIDTHTRUNC */
-    localparam [WIDTH-1:0] LAST_COUNT = OS - 1;
-    /* verilator lint_on WIDTHTRUNC */
-    reg [WIDTH - 1 : 0] cnt;
+    reg [WIDTH-1:0] cnt;
 
-    always @(posedge clk or negedge rst_n) begin
-        if(~rst_n) begin
+    // 4-bit counter (OS=16) wraps naturally from 4'hF to 4'h0 without an extra clear mux.
+    always @(posedge clk) begin
+        if (clr_tick) begin
             cnt <= {WIDTH{1'b0}};
-        end
-        else begin
-            if(clr_tick) begin
-                cnt <= {WIDTH{1'b0}};
-            end
-            else if(baud_tick) begin
-                if(cnt == LAST_COUNT) begin
-                    cnt <= {WIDTH{1'b0}};
-                end
-                else cnt <= cnt + 1'b1;
-            end
-            else begin
-                cnt <= cnt;
-            end
+        end else if (baud_tick) begin
+            cnt <= cnt + {{(WIDTH-1){1'b0}}, 1'b1};
         end
     end
 
-    assign tick_last = (cnt == LAST_COUNT) && baud_tick;
+    assign tick_last = (&cnt) & baud_tick;
 endmodule

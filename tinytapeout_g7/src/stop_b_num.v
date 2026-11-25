@@ -1,1 +1,0 @@
-../../rtl/stop_b_num.v

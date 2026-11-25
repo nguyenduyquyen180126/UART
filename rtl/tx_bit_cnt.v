@@ -1,26 +1,19 @@
+`timescale 1ns/1ps
 module tx_bit_cnt(
-    input clk, rst_n,
-    input baud_tick,
+    input clk,
+    /* verilator lint_off UNUSEDSIGNAL */
+    input rst_n,     // Synchronously cleared via clr_bit outside DATA -> dfxtp_1
+    input baud_tick, // Kept for interface compatibility; tick_last already gates baud_tick
+    /* verilator lint_on UNUSEDSIGNAL */
     input clr_bit,
     input tick_last,
     output reg [2:0] cnt
 );
-    always @(posedge clk or negedge rst_n) begin
-        if(~rst_n) begin
+    always @(posedge clk) begin
+        if (clr_bit) begin
             cnt <= 3'b000;
-        end
-        else begin
-            if(clr_bit) begin
-                cnt <= 3'b000;
-            end
-            else begin
-                if(baud_tick && tick_last) begin
-                    cnt <= cnt + 1'b1;
-                end
-                else begin
-                    cnt <= cnt;
-                end
-            end
+        end else if (tick_last) begin
+            cnt <= cnt + 3'd1;
         end
     end
 endmodule

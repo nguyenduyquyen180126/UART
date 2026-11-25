@@ -1,34 +1,19 @@
 [gold]
 read_verilog -formal @ROOT@/rtl/*.v
 prep -top apb_uart -flatten
+iopadmap -outpad $_BUF_ A:Y o:tx_done_status
 
 [gate]
 read_verilog -formal @CELL_MODELS@ @NETLIST@
 prep -top apb_uart -flatten
+iopadmap -outpad $_BUF_ A:Y o:tx_done_status
 
 [match apb_uart]
 nodefault
-# Top-level interface: these are the externally observable proof boundary.
-gold-match pclk
-gold-match presetn
-gold-match psel
-gold-match penable
-gold-match pwrite
-gold-match paddr
-gold-match pstrb
-gold-match pwdata
-gold-match pready
-gold-match pslverr
-gold-match prdata
-gold-match cts_n
-gold-match tx
-gold-match rx
-gold-match rts_n
-gold-match irq
-gold-match tx_done_status
-gold-match rx_done_status
-gold-match parity_err_status
-# Stable state/register cutpoints reduce proof size without cutting FSM decode.
+# Primary I/O ports are automatically matched as top-level proof boundaries
+# (rx_done_status and parity_err_status directly alias u_rx_uart.rx_done and
+# u_rx_uart.parity_err; tx_done_status is buffered from internal fanout above
+# so EQY never creates contradictory cutpoints with u_tx_uart.controller.state).
 gold-match u_apb_regs.baud
 gold-match u_apb_regs.cfg
 gold-match u_apb_regs.ier
@@ -40,29 +25,29 @@ gold-match u_rx_uart.frame_err
 gold-match u_rx_uart.overrun
 gold-match u_rx_uart.reset_release_pending
 gold-match u_rx_uart.rx_armed
-gold-match u_rx_uart.rx_controller_inst.first_stop_sampled
 gold-match u_rx_uart.rx_controller_inst.frame_error_latched
+gold-match u_rx_uart.rx_controller_inst.state
 gold-match u_rx_uart.rx_data
+gold-match u_rx_uart.rx_par_acc
+gold-match u_rx_uart.rx_shift
 gold-match u_rx_uart.rx_sync1
 gold-match u_rx_uart.rx_sync2
 gold-match u_rx_uart.tick_cnt_inst.tick_cnt
-gold-match u_rx_uart.u_rx_baud_gen.acc
+gold-match u_rx_uart.u_rx_baud_gen.acc_q
+gold-match u_rx_uart.u_rx_baud_gen.carry_q
 gold-match u_rx_uart.u_rx_baud_gen.cnt
+gold-match u_tx_uart.controller.state
 gold-match u_tx_uart.cts_n_sync1
 gold-match u_tx_uart.cts_n_sync2
-gold-match u_tx_uart.parity_latched
 gold-match u_tx_uart.tick_cnt_ins.cnt
-gold-match u_tx_uart.u_baud_gen.acc
+gold-match u_tx_uart.u_baud_gen.acc_q
+gold-match u_tx_uart.u_baud_gen.carry_q
 gold-match u_tx_uart.u_baud_gen.cnt
 gold-match u_tx_uart.u_bit_cnt.cnt
-gold-match u_tx_uart.u_piso.data
-gold-match u_tx_uart.u_stop_cnt.cnt
 
 [script]
 async2sync
 
-# First use bounded temporal induction for compact partitions. PDR is the
-# fallback for any partition SAT cannot close; it does not override a FAIL.
 [strategy simple]
 use sat
 depth 10

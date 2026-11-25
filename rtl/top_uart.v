@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 module top_uart #(
     parameter CLK_FREQ = 50_000_000
 )(
@@ -50,24 +51,24 @@ module top_uart #(
     apb_uart #(
         .CLK_FREQ (CLK_FREQ)
     ) u_apb_uart (
-        .pclk     (pclk),
-        .presetn  (presetn),
-        .psel     (psel),
-        .penable  (penable),
-        .pwrite   (pwrite),
-        .paddr    (paddr),
-        .pstrb    (pstrb),
-        .pwdata   (pwdata),
-        .pready   (pready),
-        .pslverr  (pslverr),
-        .prdata   (prdata),
-        .cts_n    (cts_n),
-        .tx       (tx),
-        .rx       (rx),
-        .rts_n    (rts_n),
-        .irq      (irq),
-        .tx_done_status (tx_done_status),
-        .rx_done_status (rx_done_status),
+        .pclk              (pclk),
+        .presetn           (presetn),
+        .psel              (psel),
+        .penable           (penable),
+        .pwrite            (pwrite),
+        .paddr             (paddr),
+        .pstrb             (pstrb),
+        .pwdata            (pwdata),
+        .pready            (pready),
+        .pslverr           (pslverr),
+        .prdata            (prdata),
+        .cts_n             (cts_n),
+        .tx                (tx),
+        .rx                (rx),
+        .rts_n             (rts_n),
+        .irq               (irq),
+        .tx_done_status    (tx_done_status),
+        .rx_done_status    (rx_done_status),
         .parity_err_status (parity_err_status)
     );
 
@@ -96,19 +97,19 @@ module spi2apb #(
     top_uart #(
         .CLK_FREQ(CLK_FREQ)
     ) u_top (
-        .pclk     (pclk),
-        .presetn  (presetn),
-        .spi_cs_n (spi_cs_n),
-        .spi_sclk (spi_sclk),
-        .spi_mosi (spi_mosi),
-        .spi_miso (spi_miso),
-        .cts_n    (cts_n),
-        .rx       (rx),
-        .tx       (tx),
-        .rts_n    (rts_n),
-        .irq      (irq),
-        .tx_done_status (tx_done_status),
-        .rx_done_status (rx_done_status),
+        .pclk              (pclk),
+        .presetn           (presetn),
+        .spi_cs_n          (spi_cs_n),
+        .spi_sclk          (spi_sclk),
+        .spi_mosi          (spi_mosi),
+        .spi_miso          (spi_miso),
+        .cts_n             (cts_n),
+        .rx                (rx),
+        .tx                (tx),
+        .rts_n             (rts_n),
+        .irq               (irq),
+        .tx_done_status    (tx_done_status),
+        .rx_done_status    (rx_done_status),
         .parity_err_status (parity_err_status)
     );
 endmodule

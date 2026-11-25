@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 // Tiny Tapeout 1x1 wrapper for the SPI-to-APB UART design.
 `default_nettype none
 

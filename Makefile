@@ -193,13 +193,8 @@ full_duplex_vsim_cli: work
 RX_UART_SRCS  := rtl/rx_uart.v \
                  rtl/rx_controller.v \
                  rtl/rx_baud_gen.v \
-                 rtl/data_b_num.v \
-                 rtl/stop_b_num.v \
                  rtl/bit_cnt.v \
-                 rtl/tick_cnt.v \
-                 rtl/sipo.v \
-                 rtl/deframe.v \
-                 rtl/error_check.v
+                 rtl/tick_cnt.v
 
 rx_uart tb_rx_uart test_rx:
 	@echo "==> Đang biên dịch và chạy mô phỏng tb_rx_uart bằng Icarus Verilog..."
@@ -214,10 +209,7 @@ TX_UART_SRCS  := rtl/tx_uart.v \
                  rtl/tx_controller.v \
                  rtl/tx_baud_gen.v \
                  rtl/tx_tick_cnt.v \
-                 rtl/tx_bit_cnt.v \
-                 rtl/tx_stop_cnt.v \
-                 rtl/tx_parity.v \
-                 rtl/tx_piso.v
+                 rtl/tx_bit_cnt.v
 
 tx_uart_iv tb_tx_uart test_tx:
 	@echo "==> Đang biên dịch và chạy mô phỏng tb_tx_uart bằng Icarus Verilog..."

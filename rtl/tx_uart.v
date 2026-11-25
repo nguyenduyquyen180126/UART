@@ -1,9 +1,11 @@
+`timescale 1ns/1ps
 module tx_uart #(
     /* verilator lint_off UNUSEDPARAM */
     parameter CLK_FREQ = 50_000_000
     /* verilator lint_on UNUSEDPARAM */
 )(
-    input clk, rst_n,
+    input clk,
+    input rst_n,
     input soft_rst,
     input start_tx,
     input [7:0] tx_data,
@@ -17,29 +19,22 @@ module tx_uart #(
     input [3:0] div_frac,
     output reg tx,
     output wire load_reg,
-    output reg tx_done,
-    output tx_busy
+    output wire tx_done,
+    output wire tx_busy
 );
-    wire stop_last;
-    wire bit_last;
-    wire baud_tick;
-    wire data_mux_in;
-    wire parity_bit;
-    wire stop_cnt_en;
-    reg parity_latched;
-    wire clr_bit;
-    wire clr_stop;
-    wire clr_baud;
+    wire       bit_last;
+    wire       baud_tick;
+    wire       clr_bit;
+    wire       clr_baud;
     wire [2:0] bit_cnt;
     wire [2:0] bit_cnt_last = {1'b1, data_bit_num};
-    wire stop_cnt;
     wire [1:0] tx_sel;
-    wire shift_reg;
-    wire tick_last;
-    reg [7:0] tx_data_masked;
+    wire       tick_last;
+
     reg cts_n_sync1, cts_n_sync2;
     wire soft_rst_i = (soft_rst === 1'b1);
 
+    // 2-FF synchronizer for external asynchronous CTS_N
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
             cts_n_sync1 <= 1'b1;
@@ -53,124 +48,71 @@ module tx_uart #(
         end
     end
 
-    wire tx_done_pulse;
-    always @(posedge clk or negedge rst_n) begin
-        if(!rst_n) begin
-            tx_done <= 1'b1;
-        end else if (soft_rst_i) begin
-            tx_done <= 1'b1;
-        end else begin
-            if(start_tx && !tx_dis ) begin
-                tx_done <= 1'b0;
-            end else if(tx_done_pulse) begin
-                tx_done <= 1'b1;
-            end
-        end
-    end
-
-
     tx_controller controller(
-        .clk(clk),
-        .rst_n(rst_n),
-        .soft_rst(soft_rst_i),
-        .start_tx(start_tx),
-        .parity_en(parity_en),
-        .stop_last(stop_last),
-        .baud_tick(baud_tick),
-        .bit_last(bit_last),
-        .tick_last(tick_last),
-        .tx_sel(tx_sel),
-        .load_reg(load_reg),
-        .shift_reg(shift_reg),
-        .cts_n(cts_n_sync2),
-        .tx_dis(tx_dis),
-        .clr_bit(clr_bit),
-        .clr_stop(clr_stop),
-        .clr_baud(clr_baud),
-        .tx_done_pulse(tx_done_pulse),
-        .stop_cnt_en(stop_cnt_en),
-        .tx_busy(tx_busy)
+        .clk          (clk),
+        .rst_n        (rst_n),
+        .soft_rst     (soft_rst_i),
+        .start_tx     (start_tx),
+        .parity_en    (parity_en),
+        .stop_bit_num (stop_bit_num),
+        .bit_last     (bit_last),
+        .cts_n        (cts_n_sync2),
+        .tx_dis       (tx_dis),
+        .tick_last    (tick_last),
+        .tx_sel       (tx_sel),
+        .load_reg     (load_reg),
+        .clr_bit      (clr_bit),
+        .clr_baud     (clr_baud),
+        .tx_done      (tx_done),
+        .tx_busy      (tx_busy)
     );
 
     tx_baud_gen u_baud_gen(
-        .div_int(div_int),
-        .div_frac(div_frac),
-        .pclk(clk),
-        .presetn(rst_n),
-        .clr_baud(clr_baud),
+        .div_int  (div_int),
+        .div_frac (div_frac),
+        .pclk     (clk),
+        .presetn  (rst_n),
+        .clr_baud (clr_baud),
         .baud_tick(baud_tick)
     );
+
     tx_tick_cnt tick_cnt_ins(
-        .clk(clk),
-        .rst_n(rst_n),
-        .baud_tick(baud_tick),
-        .clr_tick(clr_baud),
-        .tick_last(tick_last)
+        .clk       (clk),
+        .rst_n     (rst_n),
+        .baud_tick (baud_tick),
+        .clr_tick  (clr_baud),
+        .tick_last (tick_last)
     );
 
     tx_bit_cnt u_bit_cnt(
-        .clk(clk),
-        .rst_n(rst_n),
-        .clr_bit(clr_bit),
-        .baud_tick(baud_tick),
-        .tick_last(tick_last),
-        .cnt(bit_cnt)
+        .clk       (clk),
+        .rst_n     (rst_n),
+        .clr_bit   (clr_bit),
+        .baud_tick (baud_tick),
+        .tick_last (tick_last),
+        .cnt       (bit_cnt)
     );
 
     assign bit_last = (bit_cnt == bit_cnt_last);
 
-    tx_stop_cnt u_stop_cnt(
-        .clk(clk),
-        .rst_n(rst_n),
-        .clr_stop(clr_stop),
-        .stop_cnt_en(stop_cnt_en),
-        .cnt(stop_cnt)
-    );
-    assign stop_last = (stop_cnt == stop_bit_num);
-
-
-    always @(*) begin
-        case(data_bit_num)
-            2'b00:   tx_data_masked = {3'b0, tx_data[4:0]};
-            2'b01:   tx_data_masked = {2'b0, tx_data[5:0]};
-            2'b10:   tx_data_masked = {1'b0, tx_data[6:0]};
-            2'b11:   tx_data_masked = tx_data[7:0];
-            default: tx_data_masked = tx_data[7:0];
-        endcase
-    end
-
-
-    parity u_parity(
-        .data_in(tx_data_masked),
-        .parity_type(parity_type),
-        .parity_bit(parity_bit)
-    );
-
-    always @(posedge clk or negedge rst_n) begin
-        if (!rst_n)
-            parity_latched <= 1'b0;
-        else if (soft_rst_i)
-            parity_latched <= 1'b0;
-        else if (load_reg)
-            parity_latched <= parity_bit;
-    end
-
-    piso u_piso(
-        .clk(clk),
-        .rst_n(rst_n),
-        .soft_rst(soft_rst_i),
-        .load_reg(load_reg),
-        .shift_reg(shift_reg),
-        .data_in(tx_data_masked),
-        .data_tx(data_mux_in)
-    );
+    // V2 PPA: TXDATA and CFG are write-protected by E3/E4 while tx_done==0,
+    // so direct 8:1 muxing tx_data[bit_cnt] + combinational parity over masked
+    // tx_data eliminates the 8-FF PISO shift register and 1-FF parity_latched (-9 FFs).
+    wire data_mux_in = tx_data[bit_cnt];
+    wire [7:0] tx_masked = {
+        tx_data[7] & (&data_bit_num),
+        tx_data[6] & data_bit_num[1],
+        tx_data[5] & (|data_bit_num),
+        tx_data[4:0]
+    };
+    wire parity_bit = parity_type ? (^tx_masked) : ~(^tx_masked);
 
     always @(*) begin
-        case(tx_sel)
+        case (tx_sel)
             2'b00:   tx = 1'b0;
             2'b01:   tx = 1'b1;
             2'b10:   tx = data_mux_in;
-            2'b11:   tx = parity_latched;
+            2'b11:   tx = parity_bit;
             default: tx = 1'b1;
         endcase
     end
