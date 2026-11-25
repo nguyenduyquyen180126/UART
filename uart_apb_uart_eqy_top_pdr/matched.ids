@@ -1,0 +1,32 @@
+# [apb_uart] gold-match pclk
+apb_uart pclk pclk
+# [apb_uart] gold-match presetn
+apb_uart presetn presetn
+# [apb_uart] gold-match psel
+apb_uart psel psel
+# [apb_uart] gold-match penable
+apb_uart penable penable
+# [apb_uart] gold-match pwrite
+apb_uart pwrite pwrite
+# [apb_uart] gold-match paddr
+apb_uart paddr paddr
+# [apb_uart] gold-match pstrb
+apb_uart pstrb pstrb
+# [apb_uart] gold-match pwdata
+apb_uart pwdata pwdata
+# [apb_uart] gold-match pready
+apb_uart pready pready
+# [apb_uart] gold-match pslverr
+apb_uart pslverr pslverr
+# [apb_uart] gold-match prdata
+apb_uart prdata prdata
+# [apb_uart] gold-match cts_n
+apb_uart cts_n cts_n
+# [apb_uart] gold-match tx
+apb_uart tx tx
+# [apb_uart] gold-match rx
+apb_uart rx rx
+# [apb_uart] gold-match rts_n
+apb_uart rts_n rts_n
+# [apb_uart] gold-match irq
+apb_uart irq irq

@@ -1,3 +1,4 @@
+/* verilator lint_off DECLFILENAME */
 module piso(
     input clk, rst_n,
     input soft_rst,
@@ -29,3 +30,4 @@ module piso(
 
     assign data_tx = data[0];
 endmodule
+/* verilator lint_on DECLFILENAME */

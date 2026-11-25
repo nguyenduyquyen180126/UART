@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tuần 13 — Viết mã cho tổng hợp | ET4030 HUST</title>
+<style>
+:root{
+  --bg:#F7F6F3; --surface:#FFFFFF; --surface2:#F1EFEA; --line:#D7D2C8;
+  --ink:#171A20; --ink2:#363D49; --muted:#5F6773;
+  --acc:#1F4E9C; --acc-soft:#E4ECF9;
+  --teal:#0E7C6B; --teal-soft:#DDF0EC;
+  --violet:#5B21B6; --violet-soft:#EDE6FB;
+  --amber:#9A4A05; --amber-soft:#FBEFDC;
+  --red:#A91B14; --red-soft:#FAE3E1;
+  --green:#15803D; --green-soft:#DFF1E5;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --shadow:0 1px 2px rgba(20,25,35,.06),0 8px 24px rgba(20,25,35,.07);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;overflow:hidden;-webkit-font-smoothing:antialiased}
+#stage{position:fixed;inset:0;display:grid;place-items:center;overflow:hidden}
+#deck{position:relative;width:1280px;height:720px;transform-origin:center center}
+.slide{position:absolute;inset:0;width:1280px;height:720px;background:var(--surface);
+  padding:40px 56px 74px;display:none;flex-direction:column;border-radius:14px;box-shadow:var(--shadow);overflow:hidden}
+.slide.active{display:flex}
+.slide::after{content:"";position:absolute;left:0;right:0;top:0;height:5px;
+  background:linear-gradient(90deg,var(--acc),var(--teal) 45%,var(--violet))}
+/* footer của slide */
+.slide .foot{position:absolute;left:56px;right:56px;bottom:22px;display:flex;justify-content:space-between;
+  align-items:center;font-size:14px;color:var(--muted);border-top:1px solid var(--line);padding-top:8px}
+h1.title{font-size:54px;line-height:1.1;font-weight:800;letter-spacing:-.02em}
+h2{font-size:30px;line-height:1.2;font-weight:750;letter-spacing:-.015em;color:var(--ink)}
+h3{font-size:19px;font-weight:700;color:var(--acc);margin-bottom:6px}
+p,li{font-size:17px;line-height:1.5;color:var(--ink2)}
+.lead{font-size:18px;line-height:1.5;color:var(--ink2)}
+.sub{font-size:15px;color:var(--ink2);line-height:1.45}
+.eyebrow{font-size:14px;font-weight:750;letter-spacing:.1em;text-transform:uppercase;color:var(--acc)}
+strong{color:var(--ink);font-weight:700}
+code,.mono{font-family:var(--mono);font-size:15px}
+.k{font-family:var(--mono);background:var(--surface2);border:1px solid var(--line);border-radius:5px;
+   padding:1px 6px;font-size:15px;color:var(--ink);white-space:nowrap}
+.hd{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;
+    padding-bottom:10px;border-bottom:2px solid var(--line);margin-bottom:16px;flex:0 0 auto}
+.hd .tag{flex:0 0 auto;font-size:14px;font-weight:700;color:var(--acc);background:var(--acc-soft);
+   border-radius:999px;padding:5px 14px;white-space:nowrap}
+.body{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;gap:14px}
+.row{display:flex;gap:16px}
+.body.row{flex-direction:row}
+.col{display:flex;flex-direction:column;gap:12px;min-height:0}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.g2a{display:grid;grid-template-columns:1.2fr 1fr;gap:18px}
+.center{align-items:center;justify-content:center}
+.card{background:var(--surface2);border:1px solid var(--line);border-radius:11px;padding:14px 16px}
+.card.plain{background:transparent}
+.card h4{font-size:18px;font-weight:750;color:var(--ink);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.card .n{width:24px;height:24px;border-radius:7px;background:var(--acc);color:#fff;font-size:14px;
+   display:grid;place-items:center;font-weight:750;flex:0 0 auto}
+.card.acc{background:var(--acc-soft);border-color:transparent}
+.card.teal{background:var(--teal-soft);border-color:transparent}
+.card.violet{background:var(--violet-soft);border-color:transparent}
+.card.amber{background:var(--amber-soft);border-color:transparent}
+.card.red{background:var(--red-soft);border-color:transparent}
+.card.green{background:var(--green-soft);border-color:transparent}
+ul.tick{list-style:none;display:flex;flex-direction:column;gap:7px}
+ul.tick li{position:relative;padding-left:22px}
+ul.tick li::before{content:"";position:absolute;left:3px;top:9px;width:8px;height:8px;border-radius:2px;background:var(--acc)}
+ol.num{padding-left:22px;display:flex;flex-direction:column;gap:7px}
+.formula{font-family:var(--mono);background:var(--surface);border:1.5px solid var(--acc);border-radius:10px;
+  padding:12px 16px;font-size:17px;color:var(--ink);text-align:center;line-height:1.6}
+table{border-collapse:collapse;width:100%;font-size:15px}
+th,td{border:1px solid var(--line);padding:7px 10px;text-align:left;color:var(--ink2)}
+th{background:var(--surface2);font-weight:700;color:var(--ink);font-size:15px}
+td.mono,th.mono{font-family:var(--mono);font-size:15px}
+tr.hl td{background:var(--acc-soft);color:var(--ink);font-weight:600}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 13px;
+  display:flex;flex-direction:column;gap:3px}
+.stat .v{font-family:var(--mono);font-size:24px;font-weight:750;color:var(--acc);line-height:1.1}
+.stat .l{font-size:14px;color:var(--muted);font-weight:600}
+.stat.ok .v{color:var(--green)} .stat.bad .v{color:var(--red)} .stat.am .v{color:var(--amber)}
+svg{display:block;max-width:100%}
+svg text{font-family:var(--sans);font-size:15px;fill:var(--ink2)}
+svg text.mono{font-family:var(--mono);font-size:15px}
+svg text.sm{font-size:14px}
+pre.vlog{font-family:var(--mono);font-size:15px;line-height:1.55;color:var(--ink2);background:var(--surface);
+  border:1px solid var(--line);border-radius:8px;padding:10px 13px;overflow:auto;white-space:pre;tab-size:2}
+pre.vlog .kw{color:var(--violet);font-weight:700}
+pre.vlog .ty{color:var(--teal);font-weight:700}
+pre.vlog .nu{color:var(--amber)}
+pre.vlog .cm{color:var(--muted);font-style:italic}
+.assum{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--amber);background:var(--amber-soft);
+  border:1px solid var(--amber);border-radius:5px;padding:0 7px;white-space:nowrap}
+.assum.src{color:var(--green);background:var(--green-soft);border-color:var(--green)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:9px;overflow:hidden;background:var(--surface)}
+.seg button{border:none;background:transparent;padding:8px 14px;font-size:15px;font-weight:650;cursor:pointer;
+  color:var(--ink2);font-family:var(--sans)}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button.on{background:var(--acc);color:#fff}
+button.btn{font-family:var(--sans);font-size:15px;font-weight:650;padding:8px 15px;border-radius:8px;
+  border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+button.btn:hover{border-color:var(--acc)}
+.callout{border-left:4px solid var(--amber);background:var(--amber-soft);border-radius:0 9px 9px 0;padding:11px 15px}
+.callout.key{border-left-color:var(--acc);background:var(--acc-soft)}
+.callout.warn{border-left-color:var(--red);background:var(--red-soft)}
+.callout .lbl{font-size:14px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--amber);margin-bottom:3px}
+.callout.key .lbl{color:var(--acc)} .callout.warn .lbl{color:var(--red)}
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:15px;color:var(--ink2);align-items:center}
+.legend i{display:inline-block;width:14px;height:14px;border-radius:3px;margin-right:6px;vertical-align:-2px}
+.kbd{font-family:var(--mono);font-size:14px;background:var(--surface2);border:1px solid var(--line);
+  border-bottom-width:2px;border-radius:5px;padding:2px 7px;color:var(--ink2)}
+/* điều hướng ở góc trên bên phải, tách khỏi footer */
+#nav{position:fixed;right:16px;top:14px;display:flex;gap:8px;z-index:61}
+#nav button{width:38px;height:38px;border-radius:9px;border:1px solid var(--line);background:var(--surface);
+  color:var(--ink2);cursor:pointer;font-size:17px;display:grid;place-items:center;box-shadow:var(--shadow);font-family:var(--sans)}
+#nav button:hover{color:var(--acc);border-color:var(--acc)}
+#bar{position:fixed;left:0;bottom:0;height:3px;background:var(--acc);z-index:60;transition:width .25s}
+#ov{position:fixed;inset:0;background:var(--bg);z-index:80;display:none;overflow-y:auto;padding:26px}
+#ov.on{display:block}
+#ov h3{font-size:22px;color:var(--ink);margin-bottom:4px}
+#ovg{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px;margin-top:16px}
+.ovc{background:var(--surface);border:1.5px solid var(--line);border-radius:9px;padding:11px 13px;cursor:pointer;
+  min-height:76px;display:flex;flex-direction:column;gap:5px}
+.ovc:hover{border-color:var(--acc)}
+.ovc .num{font-family:var(--mono);font-size:14px;color:var(--acc);font-weight:750}
+.ovc .t{font-size:15px;font-weight:650;color:var(--ink);line-height:1.3}
+.ovsec{grid-column:1/-1;font-size:14px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--acc);
+  margin-top:10px;padding-bottom:5px;border-bottom:1.5px solid var(--line)}
+@media print{
+  body{overflow:visible} #stage{position:static;display:block}
+  #deck{transform:none!important;width:auto;height:auto}
+  .slide{display:flex!important;position:relative;page-break-after:always;box-shadow:none;margin:0 auto 8mm;border:1px solid #ccc}
+  #nav,#bar,#ov{display:none!important}
+}
+sub,sup{font-size:14px;line-height:0}
+/* bổ sung cho deck 11A, 13A: log, Tcl, caption, chú thích nguồn */
+pre.vlog.log{font-size:13px;line-height:1.38;padding:8px 11px}
+pre.vlog .hl{color:var(--acc);font-weight:700}
+pre.vlog .bad{color:var(--red);font-weight:700}
+pre.vlog .ok{color:var(--green);font-weight:700}
+pre.vlog .op{color:var(--teal);font-weight:600}
+.cap{font-size:12px;line-height:1.35;color:var(--muted);margin-top:4px}
+td.r,th.r{text-align:right}
+tr.bad td{background:var(--red-soft)}
+tr.ok td{background:var(--green-soft)}
+input[type=range]{accent-color:var(--acc)}
+table.tight th,table.tight td{padding:4px 9px;font-size:14px}
+.ovc .s{font-size:14px;color:var(--teal)}
+/* chú thích nguồn cuối slide, ngay trên footer */
+.fn{flex:0 0 auto;margin-top:auto;padding-top:6px;font-size:14px;line-height:1.35;color:var(--muted)}
+/* danh sách bước đánh số khớp với số trên hình */
+ul.steps{list-style:none;display:flex;flex-direction:column;gap:5px}
+ul.steps li{display:flex;align-items:flex-start;gap:8px;font-size:15px;line-height:1.4;color:var(--ink2)}
+.cn{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--ink);color:#fff;
+  font-size:14px;font-weight:800;flex:0 0 auto;margin-top:1px}
+/* deck 13A: chú thích nguồn cuối vùng nội dung (trên footer) */
+.fn{flex:0 0 auto;margin-top:8px;padding-top:5px;border-top:1px dashed var(--line);font-size:14px;line-height:1.35;color:var(--muted)}
+pre.vlog.c13{font-size:13px;line-height:1.4;padding:8px 11px}
+pre.vlog.c14{font-size:14px;line-height:1.45;padding:8px 11px}
+.seg button{font-size:15px}
+.bar{height:16px;border-radius:3px;background:var(--acc)}
+td.num{font-family:var(--mono);text-align:right;white-space:nowrap}
+</style>
+</head>
+<body>
+<div id="stage"><div id="deck">
+<!-- 1 -->
+<section class="slide" data-sec="Mở đầu" data-title="Trang bìa">
+  <div class="body center" style="gap:22px;text-align:center">
+    <div class="eyebrow">Trường Điện – Điện tử · Đại học Bách khoa Hà Nội</div>
+    <h1 class="title" style="max-width:1100px">TUẦN 13<br>VIẾT MÃ RTL CHO TỔNG HỢP</h1>
+    <div style="width:130px;height:4px;background:linear-gradient(90deg,var(--acc),var(--violet));border-radius:2px"></div>
+    <p class="lead" style="max-width:960px">Các phương án viết cùng một chức năng và kết quả tổng hợp của từng phương án trên Yosys + Sky130:
+      if và case, logic ưu tiên, latch; chia sẻ tài nguyên, thứ tự toán tử, vòng for và generate, hằng số, độ rộng, phân cấp;
+      vị trí thanh ghi, pipeline, kiểu reset, phép gán blocking và non-blocking.</p>
+    <div class="card plain" style="border:1px solid var(--line);border-radius:10px;padding:12px 18px">
+      <div class="sub"><span class="kbd">←</span> <span class="kbd">→</span> chuyển slide ·
+        <span class="kbd">O</span> mục lục · <span class="kbd">F</span> toàn màn hình · <span class="kbd">P</span> in ra PDF</div>
+    </div>
+  </div>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 2 -->
+<section class="slide" data-sec="Mở đầu" data-title="Nội dung và mục tiêu">
+  <div class="hd"><div><div class="eyebrow">Định hướng</div><h2>Nội dung và mục tiêu</h2></div>
+    <span class="tag">Tổng quan</span></div>
+  <div class="body g2a">
+
+    <div class="col">
+      <table><tbody>
+        <tr><td class="mono" style="width:9%">A</td><td>Câu lệnh chọn: if-else-if và case, logic ưu tiên và logic song song, latch từ câu lệnh thiếu nhánh</td></tr>
+        <tr><td class="mono">B</td><td>Toán tử số học: chia sẻ tài nguyên, thứ tự toán tử và tín hiệu đến muộn, vòng for và generate, thuật toán trong vòng lặp, hằng số, độ rộng thanh ghi, biên phân cấp</td></tr>
+        <tr><td class="mono">C</td><td>Thanh ghi: vị trí thanh ghi và pipeline, đầu ra có thanh ghi, kiểu reset, blocking và non-blocking, mã hoá trạng thái</td></tr>
+        <tr><td class="mono">D</td><td>Kiểm chứng tương đương, bảng tổng hợp, giới hạn của phép đo, bài tập</td></tr>
+      </tbody></table>
+      <div class="card"><h4>Ví dụ</h4>
+        <p class="sub"><span class="k">04-Vi-du/tuan-13A-viet-ma-cho-tong-hop</span>: 32 tệp RTL, 37 lượt tổng hợp, 34 phép kiểm chứng tương đương, 13 phép so sánh mô phỏng.</p></div>
+    </div>
+    <div class="col">
+      <div class="card acc"><h4>Mục tiêu (CLO3, CLO4)</h4>
+        <ol class="num">
+          <li>Dự đoán cấu trúc phần cứng (chuỗi mux, bộ chọn song song, latch, số bộ cộng, số flip-flop) từ một đoạn RTL.</li>
+          <li>So sánh hai phương án RTL bằng số ô, diện tích và trễ đường găng đo trên Yosys + OpenSTA.</li>
+          <li>Chọn cách viết theo ràng buộc: diện tích, trễ của một tín hiệu cụ thể, chu kỳ đồng hồ.</li>
+          <li>Kiểm chứng hai phương án tương đương bằng sat/cec hoặc mô phỏng trước khi so sánh kết quả tổng hợp.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 3 -->
+<section class="slide" data-sec="Mở đầu" data-title="Ba mức tối ưu của trình tổng hợp">
+  <div class="hd"><div><div class="eyebrow">Tổng quan</div><h2>Ba mức tối ưu của trình tổng hợp</h2></div>
+    <span class="tag">Khái niệm</span></div>
+  <div class="body ">
+
+    <div class="g3">
+      <div class="card acc"><h4><span class="n">1</span>Mức kiến trúc</h4>
+        <p class="sub">Trên toán tử RTL: chia sẻ tài nguyên, chọn cấu trúc bộ cộng/bộ nhân, sắp xếp lại toán tử, dùng chung biểu thức con, gộp hằng số.</p>
+        <p class="sub" style="margin-top:6px">Yosys: <span class="k">proc</span> <span class="k">opt</span> <span class="k">wreduce</span> <span class="k">alumacc</span> <span class="k">share</span> <span class="k">fsm</span></p></div>
+      <div class="card teal"><h4><span class="n">2</span>Mức logic</h4>
+        <p class="sub">Trên phương trình Boole: tái cấu trúc, phân tích nhân tử, làm phẳng; chưa gắn với ô thư viện.</p>
+        <p class="sub" style="margin-top:6px">Yosys: <span class="k">techmap</span>, ABC (<span class="k">strash</span>, <span class="k">dc2</span> …)</p></div>
+      <div class="card violet"><h4><span class="n">3</span>Mức cổng</h4>
+        <p class="sub">Ánh xạ sang ô chuẩn theo diện tích và trễ của thư viện liberty; ánh xạ flip-flop, latch.</p>
+        <p class="sub" style="margin-top:6px">Yosys: <span class="k">dfflibmap</span>, <span class="k">abc -liberty</span></p></div>
+    </div>
+    <div class="g2">
+      <div class="card"><h4>Phạm vi của trình tổng hợp</h4>
+        <ul class="tick">
+          <li>Hai mã RTL cùng chức năng có thể cho hai netlist khác nhau về diện tích và trễ.</li>
+          <li>Tối ưu mức logic và mức cổng không đổi cấu trúc do RTL quy định: số bộ cộng trong vòng lặp, vị trí thanh ghi, số flip-flop khai báo, ranh giới phân cấp.</li>
+          <li>Mức kiến trúc chỉ xét các toán tử nằm trong cùng phạm vi câu lệnh (cùng if/case, cùng biểu thức).</li>
+        </ul></div>
+      <div class="card amber"><h4>Design Compiler và Yosys</h4>
+        <p class="sub">Design Compiler chia <span class="k">compile</span> thành ba mức trên; quyết định ở mức kiến trúc dựa trên ràng buộc thời gian (ví dụ chỉ chia sẻ bộ cộng khi không làm tăng vi phạm).
+          Luồng Yosys của lớp dùng <span class="k">abc -liberty</span> không có ràng buộc trễ, nên mọi quyết định ở mức kiến trúc là cố định theo mã RTL.</p></div>
+    </div>
+  </div>
+  <div class="fn">[1, pp. 6-5, 6-64, 6-102, 6-103, 6-104]; danh sách pass: Yosys 0.70+255 <span class="mono">help synth</span> [3].</div>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 4 -->
+<section class="slide" data-sec="Mở đầu" data-title="Luồng đo và điều kiện">
+  <div class="hd"><div><div class="eyebrow">Phương pháp</div><h2>Luồng đo và điều kiện</h2></div>
+    <span class="tag">Thí nghiệm</span></div>
+  <div class="body g2">
+
+    <div class="col">
+      <pre class="vlog c14 lang-tcl" data-lang="tcl" id="tFlow"></pre>
+      <div class="card"><h4>Đại lượng đo</h4>
+        <table class="tight"><tbody>
+          <tr><td style="width:30%">Ô, FF, latch</td><td>số ô Sky130 trong netlist (<span class="k">stat -liberty</span>)</td></tr>
+          <tr><td>Diện tích</td><td>tổng diện tích ô theo liberty, µm²; chưa gồm dây</td></tr>
+          <tr><td>Trễ tổ hợp</td><td>data arrival time từ cổng vào tới cổng ra, đồng hồ ảo 10 ns</td></tr>
+          <tr><td>T<sub>min</sub></td><td><span class="k">report_clock_min_period</span>, đường thanh ghi → thanh ghi</td></tr>
+        </tbody></table></div>
+    </div>
+    <div class="col">
+      <div class="card"><h4>Điều kiện</h4>
+        <ul class="tick">
+          <li>Thư viện sky130_fd_sc_hd, góc tt, 25 °C, 1,80 V; loại trừ ô <span class="k">lpflow</span>.</li>
+          <li>Input transition 0,1 ns; tải 5 fF mỗi cổng ra; input/output delay 0 trừ khi ghi khác.</li>
+          <li>STA trước P&amp;R: đồng hồ lý tưởng, không có tải dây.</li>
+          <li><span class="k">abc -liberty</span> kịch bản mặc định, không có ràng buộc trễ.</li>
+        </ul></div>
+      <div class="card teal"><h4>Kiểm chứng trước khi so sánh</h4>
+        <ul class="tick">
+          <li>Mạch tổ hợp: Yosys <span class="k">miter -equiv</span> + <span class="k">sat -prove</span> (RTL ↔ RTL); ABC <span class="k">cec</span> (RTL ↔ netlist).</li>
+          <li>Mạch tuần tự: Verilator 5.053, testbench so với mô hình tham chiếu, 2 000 chu kỳ, RTL và netlist.</li>
+        </ul></div>
+    </div>
+  </div>
+  <div class="fn">Ví dụ tuan-13A-viet-ma-cho-tong-hop: synth.sh, sta.tcl, equiv.sh, tb/tb_seq.v; run_20261114_1202/synth-tools.txt, verilator-version.txt (chạy 14/11/2026) [3]–[6].</div>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 5 -->
+<section class="slide" data-sec="A · Câu lệnh chọn" data-title="if-else-if và case">
+  <div class="hd"><div><div class="eyebrow">A · Câu lệnh chọn</div><h2>Bộ chọn 8:1 viết bằng if-else-if và bằng case</h2></div>
+    <span class="tag">Mã nguồn</span></div>
+  <div class="body ">
+
+    <div class="g2">
+      <div class="col"><pre class="vlog c13 lang-verilog" data-lang="verilog" id="vMuxIf"></pre></div>
+      <div class="col"><pre class="vlog c13 lang-verilog" data-lang="verilog" id="vMuxCase"></pre></div>
+    </div>
+    <div class="g2" style="gap:16px">
+      <div class="card plain" style="border:1px solid var(--line);padding:6px 10px"><svg viewBox="0 0 560 190" style="width:100%;max-width:560px;height:auto;margin:0 auto"><text x="10" y="20" text-anchor="start" class="sm" font-weight="700">mux_ifelse sau proc: 6 $eq + 7 $mux nối chuỗi</text><text x="8" y="111.0" text-anchor="start" class="mono sm">d7</text><path d="M36 106.0 H69" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M70 106.0 L62 102.0 L62 110.0 Z" fill="var(--ink2)" stroke="none"/><rect class="box" x="70" y="78" width="72" height="56" rx="6" fill="var(--acc-soft)" stroke="var(--acc)" stroke-width="1.5"/><text x="106.0" y="102.0" text-anchor="middle" class="sm" font-weight="700">mux</text><text x="106.0" y="120.0" text-anchor="middle" class="sm">=6</text><text x="106.0" y="44" text-anchor="middle" class="mono sm">d6</text><path d="M106.0 50 V77" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M106.0 78 L102.0 70 L110.0 70 Z" fill="var(--ink2)" stroke="none"/><path d="M142 106.0 H174" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M175 106.0 L167 102.0 L167 110.0 Z" fill="var(--ink2)" stroke="none"/><rect class="box" x="175" y="78" width="72" height="56" rx="6" fill="var(--acc-soft)" stroke="var(--acc)" stroke-width="1.5"/><text x="211.0" y="102.0" text-anchor="middle" class="sm" font-weight="700">mux</text><text x="211.0" y="120.0" text-anchor="middle" class="sm">=5</text><text x="211.0" y="44" text-anchor="middle" class="mono sm">d5</text><path d="M211.0 50 V77" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M211.0 78 L207.0 70 L215.0 70 Z" fill="var(--ink2)" stroke="none"/><path d="M247 106.0 H265" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><text x="288.5" y="111.0" text-anchor="middle">…</text><path d="M312 106.0 H329" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M330 106.0 L322 102.0 L322 110.0 Z" fill="var(--ink2)" stroke="none"/><rect class="box" x="330" y="78" width="72" height="56" rx="6" fill="var(--acc-soft)" stroke="var(--acc)" stroke-width="1.5"/><text x="366.0" y="102.0" text-anchor="middle" class="sm" font-weight="700">mux</text><text x="366.0" y="120.0" text-anchor="middle" class="sm">=1</text><text x="366.0" y="44" text-anchor="middle" class="mono sm">d1</text><path d="M366.0 50 V77" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M366.0 78 L362.0 70 L370.0 70 Z" fill="var(--ink2)" stroke="none"/><path d="M402 106.0 H434" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M435 106.0 L427 102.0 L427 110.0 Z" fill="var(--ink2)" stroke="none"/><rect class="box" x="435" y="78" width="72" height="56" rx="6" fill="var(--acc-soft)" stroke="var(--acc)" stroke-width="1.5"/><text x="471.0" y="102.0" text-anchor="middle" class="sm" font-weight="700">mux</text><text x="471.0" y="120.0" text-anchor="middle" class="sm">=0</text><text x="471.0" y="44" text-anchor="middle" class="mono sm">d0</text><path d="M471.0 50 V77" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M471.0 78 L467.0 70 L475.0 70 Z" fill="var(--ink2)" stroke="none"/><path d="M507 106.0 H534" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M535 106.0 L527 102.0 L527 110.0 Z" fill="var(--ink2)" stroke="none"/><text x="540" y="111.0" text-anchor="start" class="mono sm">y</text><text x="10" y="172" text-anchor="start" class="sm">Điều kiện sau phụ thuộc kết quả các điều kiện trước</text></svg></div>
+      <div class="card plain" style="border:1px solid var(--line);padding:6px 10px"><svg viewBox="0 0 560 200" style="width:100%;max-width:560px;height:auto;margin:0 auto"><text x="10" y="20" text-anchor="start" class="sm" font-weight="700">mux_case sau proc: 6 $eq + 1 $pmux</text><rect class="box" x="200" y="30" width="110" height="140" rx="6" fill="var(--teal-soft)" stroke="var(--teal)" stroke-width="1.5"/><text x="255.0" y="96.0" text-anchor="middle" font-weight="700">$pmux</text><text x="255.0" y="114.0" text-anchor="middle" class="sm">8 : 1</text><text x="110" y="47.0" text-anchor="start" class="mono sm">d0</text><path d="M150 42.0 H199" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><text x="110" y="63.5" text-anchor="start" class="mono sm">d1</text><path d="M150 58.5 H199" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><text x="110" y="80.0" text-anchor="start" class="mono sm">d2</text><path d="M150 75.0 H199" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><text x="110" y="96.5" text-anchor="start" class="mono sm">d3</text><path d="M150 91.5 H199" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><text x="110" y="113.0" text-anchor="start" class="mono sm">d4</text><path d="M150 108.0 H199" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><text x="110" y="129.5" text-anchor="start" class="mono sm">d5</text><path d="M150 124.5 H199" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><text x="110" y="146.0" text-anchor="start" class="mono sm">d6</text><path d="M150 141.0 H199" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><text x="110" y="162.5" text-anchor="start" class="mono sm">d7</text><path d="M150 157.5 H199" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M255.0 186 V171" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M255.0 170 L251.0 178 L259.0 178 Z" fill="var(--ink2)" stroke="none"/><text x="267.0" y="196" text-anchor="start" class="mono sm">sel</text><path d="M310 100.0 H399" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M400 100.0 L392 96.0 L392 104.0 Z" fill="var(--ink2)" stroke="none"/><text x="406" y="105.0" text-anchor="start" class="mono sm">y</text><text x="330" y="140" text-anchor="start" class="sm">Một tầng chọn;</text><text x="330" y="160" text-anchor="start" class="sm">các nhánh loại trừ nhau</text></svg></div>
+    </div>
+  </div>
+  <div class="fn">Cổng: sel[2:0], d[127:0], y[15:0] (d<sub>i</sub> = d[16i+15:16i]). Sơ đồ vẽ lại từ run_20261114_1202/mux_ifelse.coarse.txt, mux_case.coarse.txt (thống kê ô sau <span class="mono">synth -run :fine</span>).</div>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 6 -->
+<section class="slide" data-sec="A · Câu lệnh chọn" data-title="Kết quả bộ chọn 8:1">
+  <div class="hd"><div><div class="eyebrow">A · Câu lệnh chọn</div><h2>Kết quả tổng hợp bộ chọn 8:1, 16 bit</h2></div>
+    <span class="tag">Kết quả</span></div>
+  <div class="body ">
+
+    <div class="col">
+      <table class="tight"><thead><tr><th>Biến thể</th><th class="r">Ô</th><th class="r">Diện tích (µm²)</th><th class="r">Trễ xấu nhất (ns)</th><th class="r">sel → y (ns)</th><th class="r">d → y (ns)</th></tr></thead><tbody><tr><td>mux_ifelse</td><td class="num">172</td><td class="num">1 059,766</td><td class="num">1,835</td><td class="num">1,835</td><td class="num">0,886</td></tr><tr class="hl"><td>mux_case</td><td class="num">83</td><td class="num">621,846</td><td class="num">1,425</td><td class="num">1,425</td><td class="num">0,442</td></tr></tbody></table>
+      <div class="g3">
+        <div class="stat ok"><span class="l">DIỆN TÍCH case / if</span><span class="v">−41,3 %</span><span class="l">621,846 / 1 059,766 µm²</span></div>
+        <div class="stat ok"><span class="l">TRỄ case / if</span><span class="v">−22,3 %</span><span class="l">1,425 / 1,835 ns</span></div>
+        <div class="stat"><span class="l">TƯƠNG ĐƯƠNG</span><span class="v">PASS</span><span class="l">sat, RTL ↔ RTL và RTL ↔ netlist</span></div>
+      </div>
+    </div>
+    <div class="g2">
+      <div class="card"><h4>Cơ chế</h4>
+        <p class="sub">Yosys <span class="k">proc</span> dịch mỗi <span class="k">else if</span> thành một <span class="k">$mux</span> 2:1 có thứ tự; <span class="k">case</span> trên cùng biến chọn thành một <span class="k">$pmux</span>.
+          Sau ABC chênh lệch vẫn còn (172 so với 83 ô). Netlist if: 16 mux2i_1, 4 mux2_1, 27 a21oi_1 …; netlist case: 49 a22oi_1, 10 a222oi_1, 11 nand4_1 ….</p></div>
+      <div class="card amber"><h4>Cách viết</h4>
+        <ul class="tick">
+          <li>Các điều kiện loại trừ nhau trên cùng một biến: dùng <span class="k">case</span>.</li>
+          <li>Dùng if-else-if khi thứ tự ưu tiên là một phần của đặc tả.</li>
+          <li>Mỗi if có nhánh else ngầm định; chuỗi if dài sinh cây mux khó tối ưu, có thể viết lại thành case.</li>
+        </ul></div>
+    </div>
+  </div>
+  <div class="fn">run_20261114_1202/summary.tsv, mux_ifelse.stat.txt, mux_case.stat.txt, *.sta.rpt (Yosys 0.70+255, OpenSTA 2.7.0, 14/11/2026); equiv.log. Ưu tiên của if: [2, p. 12-54].</div>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 7 -->
+<section class="slide" data-sec="A · Câu lệnh chọn" data-title="Logic ưu tiên và logic song song">
+  <div class="hd"><div><div class="eyebrow">A · Câu lệnh chọn</div><h2>Chọn theo 8 yêu cầu: ưu tiên và AND-OR</h2></div>
+    <span class="tag">Mã nguồn</span></div>
+  <div class="body ">
+
+    <div class="g2">
+      <div class="col"><pre class="vlog c13 lang-verilog" data-lang="verilog" id="vPriC"></pre></div>
+      <div class="col"><pre class="vlog c13 lang-verilog" data-lang="verilog" id="vPriA"></pre></div>
+    </div>
+    <div class="g2" style="gap:16px">
+      <div class="card plain" style="border:1px solid var(--line);padding:6px 10px"><svg viewBox="0 0 560 190" style="width:100%;max-width:560px;height:auto;margin:0 auto"><text x="10" y="20" text-anchor="start" class="sm" font-weight="700">pri_chain sau proc: 8 $mux nối chuỗi</text><text x="8" y="111.0" text-anchor="start" class="mono sm">0</text><path d="M36 106.0 H69" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M70 106.0 L62 102.0 L62 110.0 Z" fill="var(--ink2)" stroke="none"/><rect class="box" x="70" y="78" width="72" height="56" rx="6" fill="var(--acc-soft)" stroke="var(--acc)" stroke-width="1.5"/><text x="106.0" y="102.0" text-anchor="middle" class="sm" font-weight="700">mux</text><text x="106.0" y="120.0" text-anchor="middle" class="sm">req[7]</text><text x="106.0" y="44" text-anchor="middle" class="mono sm">d7</text><path d="M106.0 50 V77" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M106.0 78 L102.0 70 L110.0 70 Z" fill="var(--ink2)" stroke="none"/><path d="M142 106.0 H174" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M175 106.0 L167 102.0 L167 110.0 Z" fill="var(--ink2)" stroke="none"/><rect class="box" x="175" y="78" width="72" height="56" rx="6" fill="var(--acc-soft)" stroke="var(--acc)" stroke-width="1.5"/><text x="211.0" y="102.0" text-anchor="middle" class="sm" font-weight="700">mux</text><text x="211.0" y="120.0" text-anchor="middle" class="sm">req[6]</text><text x="211.0" y="44" text-anchor="middle" class="mono sm">d6</text><path d="M211.0 50 V77" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M211.0 78 L207.0 70 L215.0 70 Z" fill="var(--ink2)" stroke="none"/><path d="M247 106.0 H265" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><text x="288.5" y="111.0" text-anchor="middle">…</text><path d="M312 106.0 H329" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M330 106.0 L322 102.0 L322 110.0 Z" fill="var(--ink2)" stroke="none"/><rect class="box" x="330" y="78" width="72" height="56" rx="6" fill="var(--acc-soft)" stroke="var(--acc)" stroke-width="1.5"/><text x="366.0" y="102.0" text-anchor="middle" class="sm" font-weight="700">mux</text><text x="366.0" y="120.0" text-anchor="middle" class="sm">req[1]</text><text x="366.0" y="44" text-anchor="middle" class="mono sm">d1</text><path d="M366.0 50 V77" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M366.0 78 L362.0 70 L370.0 70 Z" fill="var(--ink2)" stroke="none"/><path d="M402 106.0 H434" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M435 106.0 L427 102.0 L427 110.0 Z" fill="var(--ink2)" stroke="none"/><rect class="box" x="435" y="78" width="72" height="56" rx="6" fill="var(--acc-soft)" stroke="var(--acc)" stroke-width="1.5"/><text x="471.0" y="102.0" text-anchor="middle" class="sm" font-weight="700">mux</text><text x="471.0" y="120.0" text-anchor="middle" class="sm">req[0]</text><text x="471.0" y="44" text-anchor="middle" class="mono sm">d0</text><path d="M471.0 50 V77" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M471.0 78 L467.0 70 L475.0 70 Z" fill="var(--ink2)" stroke="none"/><path d="M507 106.0 H534" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M535 106.0 L527 102.0 L527 110.0 Z" fill="var(--ink2)" stroke="none"/><text x="540" y="111.0" text-anchor="start" class="mono sm">y</text><text x="10" y="172" text-anchor="start" class="sm">req[0] ở tầng cuối, gần y nhất: ưu tiên cao nhất</text></svg></div>
+      <div class="card plain" style="border:1px solid var(--line);padding:6px 10px"><svg viewBox="0 0 560 205" style="width:100%;max-width:560px;height:auto;margin:0 auto"><text x="10" y="22" text-anchor="start" class="sm" font-weight="700">pri_andor sau proc: 8 $and + 7 $or</text><text x="10" y="47" text-anchor="start" class="mono sm">req[0]</text><text x="10" y="67" text-anchor="start" class="mono sm">d0</text><path d="M70 42 H139" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M70 62 H139" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><rect class="box" x="140" y="32" width="80" height="40" rx="6" fill="var(--acc-soft)" stroke="var(--acc)" stroke-width="1.5"/><text x="180.0" y="57.0" text-anchor="middle" class="sm" font-weight="700">AND ×16</text><text x="10" y="97" text-anchor="start" class="mono sm">req[1]</text><text x="10" y="117" text-anchor="start" class="mono sm">d1</text><path d="M70 92 H139" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M70 112 H139" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><rect class="box" x="140" y="82" width="80" height="40" rx="6" fill="var(--acc-soft)" stroke="var(--acc)" stroke-width="1.5"/><text x="180.0" y="107.0" text-anchor="middle" class="sm" font-weight="700">AND ×16</text><text x="10" y="167" text-anchor="start" class="mono sm">req[7]</text><text x="10" y="187" text-anchor="start" class="mono sm">d7</text><path d="M70 162 H139" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M70 182 H139" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><rect class="box" x="140" y="152" width="80" height="40" rx="6" fill="var(--acc-soft)" stroke="var(--acc)" stroke-width="1.5"/><text x="180.0" y="177.0" text-anchor="middle" class="sm" font-weight="700">AND ×16</text><text x="180" y="142" text-anchor="middle">⋮</text><path d="M220 52 H260 V100" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M220 102 H260 V100" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M220 172 H260 V130" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M260 115 H299" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M300 115 L292 111 L292 119 Z" fill="var(--ink2)" stroke="none"/><rect class="box" x="300" y="85" width="90" height="60" rx="6" fill="var(--teal-soft)" stroke="var(--teal)" stroke-width="1.5"/><text x="345.0" y="111.0" text-anchor="middle" font-weight="700">OR</text><text x="345.0" y="129.0" text-anchor="middle" class="sm">8 đầu vào</text><path d="M390 115 H449" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M450 115 L442 111 L442 119 Z" fill="var(--ink2)" stroke="none"/><text x="456" y="120" text-anchor="start" class="mono sm">y</text><text x="300" y="195" text-anchor="start" class="sm">Một tầng AND, cây OR</text></svg></div>
+    </div>
+  </div>
+  <div class="fn">Cổng: req[7:0], d[127:0], y[15:0]. Sơ đồ vẽ lại từ run_20261114_1202/pri_chain.coarse.txt, pri_andor.coarse.txt.</div>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 8 -->
+<section class="slide" data-sec="A · Câu lệnh chọn" data-title="Kết quả ưu tiên và song song">
+  <div class="hd"><div><div class="eyebrow">A · Câu lệnh chọn</div><h2>Kết quả và điều kiện để hai cách viết tương đương</h2></div>
+    <span class="tag">Kết quả</span></div>
+  <div class="body g2">
+
+    <div class="col">
+      <table class="tight"><thead><tr><th>Biến thể</th><th class="r">Ô</th><th class="r">Diện tích (µm²)</th><th class="r">req → y (ns)</th><th class="r">d → y (ns)</th></tr></thead><tbody><tr><td>pri_chain</td><td class="num">161</td><td class="num">1 007,216</td><td class="num">1,395</td><td class="num">0,752</td></tr><tr class="hl"><td>pri_andor</td><td class="num">71</td><td class="num">546,774</td><td class="num">0,442</td><td class="num">0,464</td></tr></tbody></table>
+      <div class="card"><h4>Kiểm chứng tương đương</h4>
+        <table class="tight"><thead><tr><th>Phép kiểm tra</th><th>Kết quả</th></tr></thead><tbody>
+          <tr class="bad"><td>sat, mọi giá trị req</td><td>FAIL; phản ví dụ req = 8'hC6 (bit 1, 2, 6, 7)</td></tr>
+          <tr class="ok"><td>sat, giả thiết req one-hot hoặc 0</td><td>PASS</td></tr>
+          <tr class="bad"><td>Verilator, req ngẫu nhiên</td><td>1 924 / 2 003 vector khác nhau</td></tr>
+          <tr class="ok"><td>Verilator, req one-hot hoặc 0</td><td>0 / 2 003 vector khác nhau</td></tr>
+        </tbody></table></div>
+    </div>
+    <div class="col">
+      <div class="card"><h4>Cơ chế</h4>
+        <p class="sub">pri_andor bỏ thứ tự ưu tiên: khi hai bit req bằng 1, y là OR của hai dữ liệu. Trễ req → y giảm từ 8 tầng chọn xuống một tầng AND và cây OR (−68,3 %), diện tích −45,7 %.</p></div>
+      <div class="card amber"><h4>Cách viết</h4>
+        <ul class="tick">
+          <li>Chỉ dùng cấu trúc song song khi đặc tả bảo đảm req one-hot; viết giả thiết thành <span class="k">assume</span>/<span class="k">assert</span> để kiểm chứng.</li>
+          <li><span class="k">// synopsys parallel_case</span>, <span class="k">full_case</span> đổi phần cứng mà không đổi mô phỏng RTL, dẫn tới khác biệt giữa mô phỏng RTL và netlist.</li>
+        </ul></div>
+    </div>
+  </div>
+  <div class="fn">run_20261114_1202/summary.tsv; equiv.log, eq_rtl_pri_chain__pri_andor.log, eq_pri_onehot.log (tb/eq_pri_onehot.v); sim.log (seed 20261114). full_case: [2, p. 12-38].</div>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 9 -->
+<section class="slide" data-sec="A · Câu lệnh chọn" data-title="Latch từ câu lệnh thiếu nhánh">
+  <div class="hd"><div><div class="eyebrow">A · Latch</div><h2>Latch suy ra từ khối always tổ hợp thiếu nhánh</h2></div>
+    <span class="tag">Mã nguồn</span></div>
+  <div class="body g2">
+
+    <div class="col">
+      <pre class="vlog c14 lang-verilog" data-lang="verilog" id="vLatch"></pre>
+      <pre class="vlog log lang-text" data-lang="text" id="tLatchW" style="font-size:13px"></pre>
+    </div>
+    <div class="col">
+      <div class="card plain" style="border:1px solid var(--line);padding:6px 10px"><svg viewBox="0 0 560 180" style="width:100%;max-width:560px;height:auto;margin:0 auto"><text x="10" y="22" text-anchor="start" class="sm" font-weight="700">latch_if sau tổng hợp (8 bit)</text><text x="10" y="75" text-anchor="start" class="mono sm">a, b, c</text><path d="M70 70 H119" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M120 70 L112 66 L112 74 Z" fill="var(--ink2)" stroke="none"/><text x="10" y="135" text-anchor="start" class="mono sm">sel</text><path d="M40 130 H95 V95 H119" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M120 95 L112 91 L112 99 Z" fill="var(--ink2)" stroke="none"/><rect class="box" x="120" y="50" width="130" height="60" rx="6" fill="var(--acc-soft)" stroke="var(--acc)" stroke-width="1.5"/><text x="185.0" y="76.0" text-anchor="middle" font-weight="700">logic chọn</text><text x="185.0" y="94.0" text-anchor="middle" class="sm">a221o, nor3b</text><path d="M250 70 H319" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M320 70 L312 66 L312 74 Z" fill="var(--ink2)" stroke="none"/><rect class="box" x="320" y="45" width="120" height="70" rx="6" fill="var(--red-soft)" stroke="var(--red)" stroke-width="1.5"/><text x="380.0" y="76.0" text-anchor="middle" font-weight="700">latch</text><text x="380.0" y="94.0" text-anchor="middle" class="sm">dlxtn_1 × 8</text><path d="M95 130 H185 V150 H380 V116" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M380 115 L376 123 L384 123 Z" fill="var(--ink2)" stroke="none"/><text x="390" y="150" text-anchor="start" class="sm">GATE_N ← (sel = 3)</text><path d="M440 80 H499" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M500 80 L492 76 L492 84 Z" fill="var(--ink2)" stroke="none"/><text x="506" y="85" text-anchor="start" class="mono sm">y</text></svg></div>
+      <div class="card"><h4>Cơ chế</h4>
+        <p class="sub">Khi sel = 3, khối <span class="k">always @*</span> không gán y; ngữ nghĩa Verilog yêu cầu y giữ giá trị trước. Yosys <span class="k">proc_dlatch</span> sinh <span class="k">$dlatch</span>, <span class="k">dfflibmap</span> ánh xạ thành 8 ô dlxtn_1 (latch, enable mức thấp).</p></div>
+      <div class="card red"><h4>Hệ quả</h4>
+        <p class="sub">Đường qua latch không được kiểm tra trong cấu hình STA tổ hợp (đồng hồ ảo); latch_if có 26 ô, 272,762 µm², gồm 8 latch 120,115 µm².</p></div>
+    </div>
+  </div>
+  <div class="fn">run_20261114_1202/latch_if.yosys.log (cảnh báo proc_dlatch), latch_if.stat.txt; [2, p. 12-38].</div>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 10 -->
+<section class="slide" data-sec="A · Câu lệnh chọn" data-title="Hai cách bỏ latch">
+  <div class="hd"><div><div class="eyebrow">A · Latch</div><h2>Hai cách bỏ latch và kết quả</h2></div>
+    <span class="tag">Kết quả</span></div>
+  <div class="body g2">
+
+    <div class="col">
+      <div class="g2"><pre class="vlog c13 lang-verilog" data-lang="verilog" id="vFix0"></pre><pre class="vlog c13 lang-verilog" data-lang="verilog" id="vFixX"></pre></div>
+      <table class="tight"><thead><tr><th>Biến thể</th><th class="r">Ô</th><th class="r">Latch</th><th class="r">Diện tích (µm²)</th><th class="r">Trễ (ns)</th></tr></thead><tbody><tr><td>latch_if</td><td class="num">26</td><td class="num">8</td><td class="num">272,762</td><td class="num">—</td></tr><tr><td>latch_fix0 (mặc định 0)</td><td class="num">18</td><td class="num">0</td><td class="num">152,646</td><td class="num">0,590</td></tr><tr class="hl"><td>latch_fixx (mặc định x)</td><td class="num">17</td><td class="num">0</td><td class="num">146,390</td><td class="num">0,586</td></tr></tbody></table>
+    </div>
+    <div class="col">
+      <div class="card"><h4>Mô phỏng Verilator (RTL, 2 003 chu kỳ)</h4>
+        <table class="tight"><tbody>
+          <tr><td>sel ≠ 3: latch_if = latch_fix0</td><td class="num">1 536 mẫu, 0 lệch</td></tr>
+          <tr><td>sel = 3: latch_if giữ giá trị cũ, latch_fix0 = 0</td><td class="num">467 mẫu, 0 lệch</td></tr>
+        </tbody></table></div>
+      <div class="card"><h4>Kiểm chứng hình thức</h4>
+        <p class="sub">latch_fixx ↔ latch_fix0 với <span class="k">miter -ignore_gold_x</span>: PASS (x là không quan tâm). Netlist của hai biến thể ↔ RTL: PASS.</p></div>
+      <div class="card amber"><h4>Cách viết</h4>
+        <ul class="tick">
+          <li>Gán mặc định mọi tín hiệu ra ở đầu khối <span class="k">always @*</span>, hoặc đủ nhánh <span class="k">else</span>/<span class="k">default</span>.</li>
+          <li>Giá trị x cho phép công cụ chọn hàm rẻ hơn (ở đây −1 ô, −6,256 µm²), đổi lại mô phỏng RTL ra x khi sel = 3.</li>
+          <li>Đọc log tổng hợp tìm “Latch inferred”.</li>
+        </ul></div>
+    </div>
+  </div>
+  <div class="fn">run_20261114_1202/summary.tsv, sim.log, equiv.log; [2, p. 12-38] (gán x cho nhánh mặc định).</div>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 11 -->
+<section class="slide" data-sec="B · Toán tử số học" data-title="Chia sẻ tài nguyên">
+  <div class="hd"><div><div class="eyebrow">B · Chia sẻ tài nguyên</div><h2>Chia sẻ bộ cộng: chọn sau và chọn trước</h2></div>
+    <span class="tag">Mã nguồn</span></div>
+  <div class="body ">
+
+    <div class="g2">
+      <div class="col"><pre class="vlog c13 lang-verilog" data-lang="verilog" id="vShA"></pre></div>
+      <div class="col"><pre class="vlog c13 lang-verilog" data-lang="verilog" id="vShB"></pre></div>
+    </div>
+    <div class="card plain" style="border:1px solid var(--line);padding:6px 10px"><svg viewBox="0 0 1100 210" style="width:100%;max-width:1100px;height:auto;margin:0 auto"><text x="10" y="20" text-anchor="start" class="sm" font-weight="700">share_two_add: hai bộ cộng, chọn sau</text><text x="600" y="20" text-anchor="start" class="sm" font-weight="700">share_mux_first: chọn trước, một bộ cộng</text><text x="20" y="58" text-anchor="start" class="mono sm">a</text><path d="M40 53 H99" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M100 53 L92 49 L92 57 Z" fill="var(--ink2)" stroke="none"/><text x="20" y="88" text-anchor="start" class="mono sm">b</text><path d="M40 83 H99" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M100 83 L92 79 L92 87 Z" fill="var(--ink2)" stroke="none"/><rect class="box" x="100" y="40" width="90" height="56" rx="6" fill="var(--acc-soft)" stroke="var(--acc)" stroke-width="1.5"/><text x="145.0" y="64.0" text-anchor="middle" font-weight="700">+</text><text x="145.0" y="82.0" text-anchor="middle" class="sm">16 bit</text><text x="20" y="148" text-anchor="start" class="mono sm">c</text><path d="M40 143 H99" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M100 143 L92 139 L92 147 Z" fill="var(--ink2)" stroke="none"/><text x="20" y="178" text-anchor="start" class="mono sm">d</text><path d="M40 173 H99" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M100 173 L92 169 L92 177 Z" fill="var(--ink2)" stroke="none"/><rect class="box" x="100" y="130" width="90" height="56" rx="6" fill="var(--acc-soft)" stroke="var(--acc)" stroke-width="1.5"/><text x="145.0" y="154.0" text-anchor="middle" font-weight="700">+</text><text x="145.0" y="172.0" text-anchor="middle" class="sm">16 bit</text><path d="M190 68 H250 V100 H279" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M280 100 L272 96 L272 104 Z" fill="var(--ink2)" stroke="none"/><path d="M190 158 H250 V130 H279" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M280 130 L272 126 L272 134 Z" fill="var(--ink2)" stroke="none"/><rect class="box" x="280" y="85" width="70" height="60" rx="6" fill="var(--teal-soft)" stroke="var(--teal)" stroke-width="1.5"/><text x="315.0" y="120.0" text-anchor="middle" font-weight="700">mux</text><path d="M315 185 V146" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M315 145 L311 153 L319 153 Z" fill="var(--ink2)" stroke="none"/><text x="325" y="198" text-anchor="start" class="mono sm">sel</text><path d="M350 115 H409" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M410 115 L402 111 L402 119 Z" fill="var(--ink2)" stroke="none"/><text x="416" y="120" text-anchor="start" class="mono sm">sum</text><text x="610" y="58" text-anchor="start" class="mono sm">a</text><path d="M630 53 H679" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M680 53 L672 49 L672 57 Z" fill="var(--ink2)" stroke="none"/><text x="610" y="88" text-anchor="start" class="mono sm">c</text><path d="M630 83 H679" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M680 83 L672 79 L672 87 Z" fill="var(--ink2)" stroke="none"/><rect class="box" x="680" y="40" width="70" height="56" rx="6" fill="var(--teal-soft)" stroke="var(--teal)" stroke-width="1.5"/><text x="715.0" y="73.0" text-anchor="middle" font-weight="700">mux</text><text x="762" y="60" text-anchor="start" class="mono sm">op1</text><text x="610" y="148" text-anchor="start" class="mono sm">b</text><path d="M630 143 H679" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M680 143 L672 139 L672 147 Z" fill="var(--ink2)" stroke="none"/><text x="610" y="178" text-anchor="start" class="mono sm">d</text><path d="M630 173 H679" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M680 173 L672 169 L672 177 Z" fill="var(--ink2)" stroke="none"/><rect class="box" x="680" y="130" width="70" height="56" rx="6" fill="var(--teal-soft)" stroke="var(--teal)" stroke-width="1.5"/><text x="715.0" y="163.0" text-anchor="middle" font-weight="700">mux</text><text x="762" y="180" text-anchor="start" class="mono sm">op2</text><path d="M750 68 H800 V100 H839" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M840 100 L832 96 L832 104 Z" fill="var(--ink2)" stroke="none"/><path d="M750 158 H800 V130 H839" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M840 130 L832 126 L832 134 Z" fill="var(--ink2)" stroke="none"/><path d="M715 200 V185" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M640 200 H715" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><text x="600" y="205" text-anchor="start" class="mono sm">sel</text><path d="M715 114 V97" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M715 96 L711 104 L719 104 Z" fill="var(--ink2)" stroke="none"/><text x="724" y="120" text-anchor="start" class="mono sm">sel</text><rect class="box" x="840" y="85" width="90" height="60" rx="6" fill="var(--acc-soft)" stroke="var(--acc)" stroke-width="1.5"/><text x="885.0" y="111.0" text-anchor="middle" font-weight="700">+</text><text x="885.0" y="129.0" text-anchor="middle" class="sm">16 bit</text><path d="M930 115 H989" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M990 115 L982 111 L982 119 Z" fill="var(--ink2)" stroke="none"/><text x="996" y="120" text-anchor="start" class="mono sm">sum</text></svg></div>
+  </div>
+  <div class="fn">[1, pp. 6-65–6-67, 6-104]; sơ đồ vẽ lại theo run_20261114_1202/share_two_add.coarse.txt (2 $alu, 1 $mux), share_mux_first.coarse.txt (1 $alu, 2 $mux).</div>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 12 -->
+<section class="slide" data-sec="B · Toán tử số học" data-title="Kết quả chia sẻ tài nguyên">
+  <div class="hd"><div><div class="eyebrow">B · Chia sẻ tài nguyên</div><h2>Kết quả: diện tích đổi lấy trễ của sel</h2></div>
+    <span class="tag">Kết quả</span></div>
+  <div class="body ">
+
+    <div class="col">
+      <table class="tight"><thead><tr><th>Biến thể</th><th class="r">Ô</th><th class="r">Diện tích (µm²)</th><th class="r">Trễ xấu nhất (ns)</th><th class="r">sel → sum (ns)</th><th class="r">a → sum (ns)</th></tr></thead><tbody><tr><td>share_two_add</td><td class="num">175</td><td class="num">1 072,278</td><td class="num">3,571</td><td class="num">0,344</td><td class="num">3,571</td></tr><tr><td>share_mux_first</td><td class="num">97</td><td class="num">780,749</td><td class="num">4,193</td><td class="num">4,193</td><td class="num">4,156</td></tr></tbody></table>
+      <div class="g3">
+        <div class="stat ok"><span class="l">DIỆN TÍCH</span><span class="v">−27,2 %</span><span class="l">780,749 / 1 072,278 µm²</span></div>
+        <div class="stat bad"><span class="l">TRỄ XẤU NHẤT</span><span class="v">+17,4 %</span><span class="l">4,193 / 3,571 ns</span></div>
+        <div class="stat bad"><span class="l">sel → sum</span><span class="v">×12,2</span><span class="l">4,193 / 0,344 ns</span></div>
+      </div>
+    </div>
+    <div class="g2">
+      <div class="card"><h4>Cơ chế</h4>
+        <p class="sub">share_two_add: sel chỉ đi qua bộ chọn cuối (0,344 ns). share_mux_first: sel chọn toán hạng, rồi đi qua cả chuỗi số nhớ 16 bit.
+          Pass <span class="k">share</span> của Yosys mặc định chỉ xét tài nguyên lớn, không gộp hai <span class="k">$alu</span> của share_two_add.</p></div>
+      <div class="card amber"><h4>Design Compiler</h4>
+        <p class="sub">DC chỉ xét chia sẻ các toán tử trong cùng một câu lệnh if/case và chỉ chia sẻ khi không tăng vi phạm thời gian.
+          Toán tử viết ngoài if (tính trước rồi chọn) không được chia sẻ; chọn toán hạng trước (share_mux_first) là kiến trúc cố định mà DC không tách lại được.</p></div>
+    </div>
+  </div>
+  <div class="fn">run_20261114_1202/summary.tsv, share_*.sta.rpt (from_sel, from_a); equiv.log: share_two_add ↔ share_mux_first PASS. [1, pp. 6-65–6-67]; Yosys <span class="mono">help share</span> [3].</div>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 13 -->
+<section class="slide" data-sec="B · Toán tử số học" data-title="Thứ tự toán tử và tín hiệu đến muộn">
+  <div class="hd"><div><div class="eyebrow">B · Thứ tự toán tử</div><h2>Cộng bốn toán hạng 16 bit, d đến muộn</h2></div>
+    <span class="tag">Mã nguồn</span></div>
+  <div class="body ">
+
+    <div class="g3">
+      <div class="col"><span class="sub mono">ord_late_first</span><pre class="vlog c13 lang-verilog" data-lang="verilog" id="vOrdF"></pre></div>
+      <div class="col"><span class="sub mono">ord_late_last</span><pre class="vlog c13 lang-verilog" data-lang="verilog" id="vOrdL"></pre></div>
+      <div class="col"><span class="sub mono">ord_bal</span><pre class="vlog c13 lang-verilog" data-lang="verilog" id="vOrdB"></pre></div>
+    </div>
+    <div class="card plain" style="border:1px solid var(--line);padding:6px 10px"><svg viewBox="0 0 1100 225" style="width:100%;max-width:1100px;height:auto;margin:0 auto"><text x="10" y="75" text-anchor="start" class="mono sm" font-weight="700">ord_late_first</text><text x="160" y="58" text-anchor="start" class="mono sm" style="fill:var(--red)">d</text><path d="M176 53 H209" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M210 53 L202 49 L202 57 Z" fill="var(--ink2)" stroke="none"/><text x="160" y="92" text-anchor="start" class="mono sm">a</text><path d="M176 87 H209" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M210 87 L202 83 L202 91 Z" fill="var(--ink2)" stroke="none"/><rect class="box" x="210" y="40" width="56" height="60" rx="6" fill="var(--acc-soft)" stroke="var(--acc)" stroke-width="1.5"/><text x="238.0" y="75.0" text-anchor="middle" font-weight="700">+</text><path d="M266 70 H309" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M310 70 L302 66 L302 74 Z" fill="var(--ink2)" stroke="none"/><rect class="box" x="310" y="50" width="56" height="40" rx="6" fill="var(--acc-soft)" stroke="var(--acc)" stroke-width="1.5"/><text x="338.0" y="75.0" text-anchor="middle" font-weight="700">+</text><text x="338" y="22" text-anchor="middle" class="mono sm">b</text><path d="M338 28 V41" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M338 50 L334 42 L342 42 Z" fill="var(--ink2)" stroke="none"/><path d="M366 70 H409" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M410 70 L402 66 L402 74 Z" fill="var(--ink2)" stroke="none"/><rect class="box" x="410" y="50" width="56" height="40" rx="6" fill="var(--acc-soft)" stroke="var(--acc)" stroke-width="1.5"/><text x="438.0" y="75.0" text-anchor="middle" font-weight="700">+</text><text x="438" y="22" text-anchor="middle" class="mono sm">c</text><path d="M438 28 V41" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M438 50 L434 42 L442 42 Z" fill="var(--ink2)" stroke="none"/><path d="M466 70 H509" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M510 70 L502 66 L502 74 Z" fill="var(--ink2)" stroke="none"/><text x="516" y="75" text-anchor="start" class="mono sm">y</text><text x="10" y="165" text-anchor="start" class="mono sm" font-weight="700">ord_late_last</text><text x="160" y="148" text-anchor="start" class="mono sm">a</text><path d="M176 143 H209" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M210 143 L202 139 L202 147 Z" fill="var(--ink2)" stroke="none"/><text x="160" y="182" text-anchor="start" class="mono sm">b</text><path d="M176 177 H209" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M210 177 L202 173 L202 181 Z" fill="var(--ink2)" stroke="none"/><rect class="box" x="210" y="130" width="56" height="60" rx="6" fill="var(--acc-soft)" stroke="var(--acc)" stroke-width="1.5"/><text x="238.0" y="165.0" text-anchor="middle" font-weight="700">+</text><path d="M266 160 H309" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M310 160 L302 156 L302 164 Z" fill="var(--ink2)" stroke="none"/><rect class="box" x="310" y="140" width="56" height="40" rx="6" fill="var(--acc-soft)" stroke="var(--acc)" stroke-width="1.5"/><text x="338.0" y="165.0" text-anchor="middle" font-weight="700">+</text><text x="338" y="112" text-anchor="middle" class="mono sm">c</text><path d="M338 118 V131" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M338 140 L334 132 L342 132 Z" fill="var(--ink2)" stroke="none"/><path d="M366 160 H409" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M410 160 L402 156 L402 164 Z" fill="var(--ink2)" stroke="none"/><rect class="box" x="410" y="140" width="56" height="40" rx="6" fill="var(--acc-soft)" stroke="var(--acc)" stroke-width="1.5"/><text x="438.0" y="165.0" text-anchor="middle" font-weight="700">+</text><text x="438" y="112" text-anchor="middle" class="mono sm" style="fill:var(--red)">d</text><path d="M438 118 V131" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M438 140 L434 132 L442 132 Z" fill="var(--ink2)" stroke="none"/><path d="M466 160 H509" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M510 160 L502 156 L502 164 Z" fill="var(--ink2)" stroke="none"/><text x="516" y="165" text-anchor="start" class="mono sm">y</text><text x="640" y="105" text-anchor="start" class="mono sm" font-weight="700">ord_bal</text><text x="730" y="58" text-anchor="start" class="mono sm">a</text><path d="M746 53 H779" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M780 53 L772 49 L772 57 Z" fill="var(--ink2)" stroke="none"/><text x="730" y="92" text-anchor="start" class="mono sm">b</text><path d="M746 87 H779" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M780 87 L772 83 L772 91 Z" fill="var(--ink2)" stroke="none"/><rect class="box" x="780" y="40" width="56" height="60" rx="6" fill="var(--acc-soft)" stroke="var(--acc)" stroke-width="1.5"/><text x="808.0" y="75.0" text-anchor="middle" font-weight="700">+</text><text x="730" y="148" text-anchor="start" class="mono sm">c</text><path d="M746 143 H779" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M780 143 L772 139 L772 147 Z" fill="var(--ink2)" stroke="none"/><text x="730" y="182" text-anchor="start" class="mono sm" style="fill:var(--red)">d</text><path d="M746 177 H779" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M780 177 L772 173 L772 181 Z" fill="var(--ink2)" stroke="none"/><rect class="box" x="780" y="130" width="56" height="60" rx="6" fill="var(--acc-soft)" stroke="var(--acc)" stroke-width="1.5"/><text x="808.0" y="165.0" text-anchor="middle" font-weight="700">+</text><path d="M836 70 H866 V105 H899" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M900 105 L892 101 L892 109 Z" fill="var(--ink2)" stroke="none"/><path d="M836 160 H866 V125 H899" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M900 125 L892 121 L892 129 Z" fill="var(--ink2)" stroke="none"/><rect class="box" x="900" y="92" width="56" height="46" rx="6" fill="var(--acc-soft)" stroke="var(--acc)" stroke-width="1.5"/><text x="928.0" y="120.0" text-anchor="middle" font-weight="700">+</text><path d="M956 115 H999" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M1000 115 L992 111 L992 119 Z" fill="var(--ink2)" stroke="none"/><text x="1006" y="120" text-anchor="start" class="mono sm">y</text><text x="10" y="218" text-anchor="start" class="sm">d (đỏ): toán hạng đến muộn; mỗi khối + là một bộ cộng riêng khi tổng trung gian có thuộc tính keep</text></svg></div>
+    <p class="sub"><span class="k">`KS</span> rỗng khi tổng hợp mặc định; với <span class="k">-DKEEP_SUM</span>, <span class="k">`KS</span> = <span class="k">(* keep *)</span> buộc giữ s1, s2 thành bộ cộng riêng (biến thể <span class="k">*_k</span>).</p>
+  </div>
+  <div class="fn">[1, pp. 6-68, 6-69, 6-106]; rtl/ord_late_first.v, ord_late_last.v, ord_bal.v.</div>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 14 -->
+<section class="slide" data-sec="B · Toán tử số học" data-title="Kết quả theo thời điểm tới của d" data-int="1">
+  <div class="hd"><div><div class="eyebrow">B · Thứ tự toán tử</div><h2>Trễ tới y theo thời điểm tới của d</h2></div>
+    <span class="tag">Tương tác</span></div>
+  <div class="body g2">
+
+    <div class="col">
+      <div class="row" style="align-items:center;gap:12px"><span class="sub">Input delay của d (ns)</span>
+        <div class="seg" id="ordSeg"></div></div>
+      <table class="tight" id="ordTb"></table>
+      <p class="sub">Không keep: ba cách viết cho cùng netlist (168 ô, 1 398,842 µm²). Keep: late_first và late_last 195 ô, 1 551,488 µm²; bal 218 ô, 1 461,402 µm².</p>
+    </div>
+    <div class="col">
+      <div class="card"><h4>Cơ chế</h4>
+        <p class="sub">Yosys <span class="k">alumacc</span> gộp chuỗi cộng thành một <span class="k">$macc_v2</span> rồi dựng một cấu trúc cộng nhiều toán hạng; dấu ngoặc và thứ tự viết không còn trong netlist.
+          Khi giữ s1, s2 (keep), d ở phép cộng cuối có dư 0,532 ns: d muộn 0,5 ns không đổi trễ ra; ở 1,0–2,0 ns late_last nhanh hơn late_first 0,515 ns.</p></div>
+      <div class="card amber"><h4>Design Compiler</h4>
+        <p class="sub">DC sắp xếp lại toán tử theo thời điểm tới của tín hiệu, trừ khi dấu ngoặc trong RTL ép thứ tự. Biểu thức viết liền một dòng để công cụ quyết định; tách tổng trung gian thành tín hiệu giữ lại (hoặc ra cổng, vào thanh ghi) cố định thứ tự.</p></div>
+    </div>
+  </div>
+  <div class="fn">run_20261114_1202/ord_*.sta.rpt (RESULT late_d_*: input delay của d = 0; 0,5; 1,0; 1,5; 2,0 ns, đồng hồ ảo 10 ns); summary.tsv. [1, pp. 6-68, 6-69].</div>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 15 -->
+<section class="slide" data-sec="B · Toán tử số học" data-title="Vòng for và generate">
+  <div class="hd"><div><div class="eyebrow">B · Vòng lặp</div><h2>Tổng 8 toán hạng 8 bit: vòng for và generate</h2></div>
+    <span class="tag">Kết quả</span></div>
+  <div class="body ">
+
+    <div class="g2">
+      <div class="col"><pre class="vlog c13 lang-verilog" data-lang="verilog" id="vTreeL"></pre></div>
+      <div class="col"><pre class="vlog c13 lang-verilog" data-lang="verilog" id="vTreeG"></pre></div>
+    </div>
+    <div class="g2">
+      <table class="tight"><thead><tr><th>Biến thể</th><th class="r">Ô</th><th class="r">Diện tích (µm²)</th><th class="r">Trễ (ns)</th></tr></thead><tbody><tr><td>tree_loop (chuỗi 7 phép cộng)</td><td class="num">158</td><td class="num">1 710,390</td><td class="num">3,605</td></tr><tr><td>tree_gen (cây 3 tầng)</td><td class="num">158</td><td class="num">1 710,390</td><td class="num">3,605</td></tr><tr><td>tree_gen_k (keep, 7 bộ cộng)</td><td class="num">196</td><td class="num">1 722,902</td><td class="num">4,342</td></tr></tbody></table>
+      <div class="card"><h4>Cơ chế</h4>
+        <p class="sub">Vòng for và generate đều được trải ra lúc phân tích cú pháp; số lần lặp phải là hằng. Cả hai thành một <span class="k">$macc_v2</span> 8 toán hạng, netlist giống nhau.
+          Giữ từng bộ cộng của cây (keep) làm trễ tăng 20,4 %: cấu trúc cộng nhiều toán hạng của Yosys tốt hơn cây bộ cộng 2 toán hạng.</p></div>
+    </div>
+  </div>
+  <div class="fn">run_20261114_1202/summary.tsv, tree_*.coarse.txt; equiv.log: tree_loop ↔ tree_gen PASS (sat), 3 netlist ↔ RTL PASS (cec). Cây cộng: [2, p. 12-44].</div>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 16 -->
+<section class="slide" data-sec="B · Toán tử số học" data-title="Thuật toán trong vòng for">
+  <div class="hd"><div><div class="eyebrow">B · Vòng lặp</div><h2>Địa chỉ vector ngắt: phép cộng trong và ngoài vòng for</h2></div>
+    <span class="tag">Mã nguồn</span></div>
+  <div class="body ">
+
+    <div class="g2">
+      <div class="col"><pre class="vlog c13 lang-verilog" data-lang="verilog" id="vIrqP"></pre></div>
+      <div class="col"><pre class="vlog c13 lang-verilog" data-lang="verilog" id="vIrqB"></pre></div>
+    </div>
+    <div class="card plain" style="border:1px solid var(--line);padding:6px 10px"><svg viewBox="0 0 1100 165" style="width:100%;max-width:1100px;height:auto;margin:0 auto"><text x="10" y="20" text-anchor="start" class="sm" font-weight="700">irq_poor: phép cộng trong vòng for (i = 0 … 7)</text><text x="10" y="82" text-anchor="start" class="mono sm">base</text><path d="M48 77 H69" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M70 77 L62 73 L62 81 Z" fill="var(--ink2)" stroke="none"/><rect class="box" x="70" y="50" width="80" height="56" rx="6" fill="var(--acc-soft)" stroke="var(--acc)" stroke-width="1.5"/><text x="110.0" y="74.0" text-anchor="middle" font-weight="700">+3</text><text x="110.0" y="92.0" text-anchor="middle" class="sm">i = 0</text><text x="110" y="136" text-anchor="middle" class="mono sm">irq[0]</text><path d="M110 122 V107" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M110 106 L106 114 L114 114 Z" fill="var(--ink2)" stroke="none"/><path d="M150 77 H184" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M185 77 L177 73 L177 81 Z" fill="var(--ink2)" stroke="none"/><rect class="box" x="185" y="50" width="80" height="56" rx="6" fill="var(--acc-soft)" stroke="var(--acc)" stroke-width="1.5"/><text x="225.0" y="74.0" text-anchor="middle" font-weight="700">+6</text><text x="225.0" y="92.0" text-anchor="middle" class="sm">i = 1</text><text x="225" y="136" text-anchor="middle" class="mono sm">irq[1]</text><path d="M225 122 V107" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M225 106 L221 114 L229 114 Z" fill="var(--ink2)" stroke="none"/><path d="M265 77 H285" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><text x="302.5" y="82" text-anchor="middle">…</text><path d="M320 77 H339" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M340 77 L332 73 L332 81 Z" fill="var(--ink2)" stroke="none"/><rect class="box" x="340" y="50" width="80" height="56" rx="6" fill="var(--acc-soft)" stroke="var(--acc)" stroke-width="1.5"/><text x="380.0" y="74.0" text-anchor="middle" font-weight="700">+21</text><text x="380.0" y="92.0" text-anchor="middle" class="sm">i = 6</text><text x="380" y="136" text-anchor="middle" class="mono sm">irq[6]</text><path d="M380 122 V107" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M380 106 L376 114 L384 114 Z" fill="var(--ink2)" stroke="none"/><path d="M420 77 H454" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M455 77 L447 73 L447 81 Z" fill="var(--ink2)" stroke="none"/><rect class="box" x="455" y="50" width="80" height="56" rx="6" fill="var(--acc-soft)" stroke="var(--acc)" stroke-width="1.5"/><text x="495.0" y="74.0" text-anchor="middle" font-weight="700">+24</text><text x="495.0" y="92.0" text-anchor="middle" class="sm">i = 7</text><text x="495" y="136" text-anchor="middle" class="mono sm">irq[7]</text><path d="M495 122 V107" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M495 106 L491 114 L499 114 Z" fill="var(--ink2)" stroke="none"/><path d="M535 77 H564" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M565 77 L557 73 L557 81 Z" fill="var(--ink2)" stroke="none"/><text x="500" y="30" text-anchor="start" class="sm"></text><text x="10" y="160" text-anchor="start" class="sm">8 bộ cộng nối tiếp, mỗi tầng thêm cờ done</text><text x="620" y="20" text-anchor="start" class="sm" font-weight="700">irq_better: vòng for chỉ chọn offset</text><text x="620" y="82" text-anchor="start" class="mono sm">irq</text><path d="M650 77 H679" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M680 77 L672 73 L672 81 Z" fill="var(--ink2)" stroke="none"/><rect class="box" x="680" y="45" width="150" height="64" rx="6" fill="var(--teal-soft)" stroke="var(--teal)" stroke-width="1.5"/><text x="755.0" y="73.0" text-anchor="middle" font-weight="700">chọn offset</text><text x="755.0" y="91.0" text-anchor="middle" class="sm">8 $mux ưu tiên</text><path d="M830 77 H909" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M910 77 L902 73 L902 81 Z" fill="var(--ink2)" stroke="none"/><text x="848" y="70" text-anchor="start" class="mono sm">off</text><rect class="box" x="910" y="50" width="80" height="56" rx="6" fill="var(--acc-soft)" stroke="var(--acc)" stroke-width="1.5"/><text x="950.0" y="74.0" text-anchor="middle" font-weight="700">+</text><text x="950.0" y="92.0" text-anchor="middle" class="sm">8 bit</text><text x="920" y="140" text-anchor="start" class="mono sm">base</text><path d="M950 124 V107" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M950 106 L946 114 L954 114 Z" fill="var(--ink2)" stroke="none"/><path d="M990 77 H1039" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M1040 77 L1032 73 L1032 81 Z" fill="var(--ink2)" stroke="none"/><text x="1046" y="82" text-anchor="start" class="mono sm">addr</text><text x="620" y="160" text-anchor="start" class="sm">một bộ cộng sau vòng lặp</text></svg></div>
+  </div>
+  <div class="fn">Cổng: irq[7:0], base[7:0], addr[7:0]. Theo [1, pp. 6-70, 6-71] (bảng offset khác bản gốc: offset bit i = 3·(i+1)); sơ đồ vẽ lại theo run_20261114_1202/irq_poor.coarse.txt (8 $alu, 15 $mux), irq_better.coarse.txt (1 $alu, 8 $mux).</div>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 17 -->
+<section class="slide" data-sec="B · Toán tử số học" data-title="Kết quả thuật toán vòng for">
+  <div class="hd"><div><div class="eyebrow">B · Vòng lặp</div><h2>Kết quả: một bộ cộng thay cho tám</h2></div>
+    <span class="tag">Kết quả</span></div>
+  <div class="body ">
+
+    <div class="col">
+      <table class="tight"><thead><tr><th>Biến thể</th><th class="r">$alu</th><th class="r">Ô</th><th class="r">Diện tích (µm²)</th><th class="r">irq → addr (ns)</th><th class="r">base → addr (ns)</th></tr></thead><tbody><tr><td>irq_poor</td><td class="num">8</td><td class="num">120</td><td class="num">822,038</td><td class="num">2,719</td><td class="num">2,775</td></tr><tr class="hl"><td>irq_better</td><td class="num">1</td><td class="num">44</td><td class="num">275,264</td><td class="num">1,543</td><td class="num">1,195</td></tr></tbody></table>
+      <div class="g3">
+        <div class="stat ok"><span class="l">DIỆN TÍCH</span><span class="v">−66,5 %</span><span class="l">275,264 / 822,038 µm²</span></div>
+        <div class="stat ok"><span class="l">TRỄ XẤU NHẤT</span><span class="v">−44,4 %</span><span class="l">1,543 / 2,775 ns</span></div>
+        <div class="stat"><span class="l">TƯƠNG ĐƯƠNG</span><span class="v">PASS</span><span class="l">sat RTL ↔ RTL</span></div>
+      </div>
+    </div>
+    <div class="g2">
+      <div class="card"><h4>Cơ chế</h4>
+        <p class="sub">Mỗi lần lặp của irq_poor sinh một bộ cộng và logic cờ done; trình tổng hợp không biết chỉ một bộ cộng có hiệu lực nên giữ cả 8 bộ cộng.
+          irq_better quét từ bit 7 về bit 0: phép gán sau ghi đè phép gán trước, tạo ưu tiên bit thấp mà không cần cờ.</p></div>
+      <div class="card amber"><h4>Cách viết</h4>
+        <ul class="tick">
+          <li>Vòng for sinh phần cứng cho mọi lần lặp; đưa toán tử đắt (cộng, nhân, so sánh rộng) ra ngoài vòng.</li>
+          <li>Trong vòng chỉ giữ phép chọn; dùng thứ tự lặp thay cho cờ dừng.</li>
+        </ul></div>
+    </div>
+  </div>
+  <div class="fn">run_20261114_1202/summary.tsv, irq_*.coarse.txt, irq_*.sta.rpt; equiv.log. [1, pp. 6-70, 6-71].</div>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 18 -->
+<section class="slide" data-sec="B · Toán tử số học" data-title="Toán hạng hằng số">
+  <div class="hd"><div><div class="eyebrow">B · Hằng số</div><h2>Nhân 8 bit: toán hạng biến, hằng số, dịch và cộng</h2></div>
+    <span class="tag">Kết quả</span></div>
+  <div class="body g2">
+
+    <div class="col">
+      <pre class="vlog c14 lang-verilog" data-lang="verilog" id="vMulV"></pre><pre class="vlog c14 lang-verilog" data-lang="verilog" id="vMulC"></pre><pre class="vlog c14 lang-verilog" data-lang="verilog" id="vMulS"></pre>
+      <table class="tight"><thead><tr><th>Biến thể</th><th class="r">Ô</th><th class="r">Diện tích (µm²)</th><th class="r">Trễ (ns)</th></tr></thead><tbody><tr><td>mul_var (a · b)</td><td class="num">225</td><td class="num">1 939,360</td><td class="num">3,410</td></tr><tr><td>mul_const (a · 10)</td><td class="num">37</td><td class="num">237,728</td><td class="num">1,325</td></tr><tr><td>mul_shift (8a + 2a)</td><td class="num">24</td><td class="num">185,178</td><td class="num">1,993</td></tr></tbody></table>
+    </div>
+    <div class="col">
+      <div class="card"><h4>Cơ chế</h4>
+        <p class="sub">Hằng số được lan truyền trước khi ánh xạ: a · 10 chỉ còn tổng hai bản dịch của a, diện tích bằng 12,3 % bộ nhân biến (237,728 / 1 939,360).
+          Hai cách viết a · 10 cho hai netlist khác nhau: dạng dịch-cộng nhỏ hơn 22,1 % nhưng chậm hơn 50,4 % (ABC chọn cấu trúc theo diện tích).</p></div>
+      <div class="card"><h4>Tối ưu biểu thức ở mức kiến trúc (Design Compiler)</h4>
+        <ul class="tick">
+          <li>Gộp hằng: A + 2B − 2 + B − A + 7 → 3B + 5.</li>
+          <li>Dùng chung biểu thức con giữa hai phép gán.</li>
+          <li>Nhân với hằng thành tổng các phép dịch.</li>
+        </ul></div>
+      <div class="card amber"><h4>Cách viết</h4>
+        <p class="sub">Tham số cố định khai báo là <span class="k">parameter</span>/<span class="k">localparam</span>, không đưa qua cổng vào; netlist tổng hợp riêng cho từng giá trị tham số.</p></div>
+    </div>
+  </div>
+  <div class="fn">run_20261114_1202/summary.tsv; equiv.log: mul_const ↔ mul_shift PASS; [1, p. 6-11].</div>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 19 -->
+<section class="slide" data-sec="B · Toán tử số học" data-title="Độ rộng thanh ghi">
+  <div class="hd"><div><div class="eyebrow">B · Độ rộng</div><h2>Bộ đếm modulo 100: khai báo 32 bit và 7 bit</h2></div>
+    <span class="tag">Kết quả</span></div>
+  <div class="body g2">
+
+    <div class="col">
+      <pre class="vlog c14 lang-verilog" data-lang="verilog" id="vCnt"></pre>
+      <p class="sub">cnt_w7 giống hệt, chỉ đổi <span class="k">reg [6:0] cnt</span>.</p>
+    </div>
+    <div class="col">
+      <table class="tight"><thead><tr><th>Biến thể</th><th class="r">FF</th><th class="r">Ô</th><th class="r">Diện tích (µm²)</th><th class="r">T<sub>min</sub> (ns)</th></tr></thead><tbody><tr><td>cnt_w32</td><td class="num">32</td><td class="num">122</td><td class="num">1 326,272</td><td class="num">3,73</td></tr><tr class="hl"><td>cnt_w7</td><td class="num">7</td><td class="num">23</td><td class="num">275,264</td><td class="num">1,21</td></tr></tbody></table>
+      <div class="g2"><div class="stat ok"><span class="l">DIỆN TÍCH</span><span class="v">−79,2 %</span><span class="l">275,264 / 1 326,272</span></div>
+        <div class="stat ok"><span class="l">T<sub>min</sub></span><span class="v">−67,6 %</span><span class="l">1,21 / 3,73 ns</span></div></div>
+      <div class="card"><h4>Cơ chế</h4>
+        <p class="sub">25 bit cao của cnt_w32 luôn bằng 0 khi chạy, nhưng tính chất này chỉ suy ra được bằng phân tích tập trạng thái đạt được; Yosys không làm việc đó, nên giữ 32 flip-flop dfrtp_1,
+          bộ tăng 32 bit và phép so sánh 32 bit. Mô phỏng: hai biến thể cho cùng tick ở 2 001/2 001 chu kỳ (RTL và netlist).</p></div>
+      <div class="card amber"><h4>Cách viết</h4><p class="sub">Khai báo độ rộng ⌈log₂ N⌉ cho bộ đếm modulo N; không để <span class="k">integer</span> làm thanh ghi.</p></div>
+    </div>
+  </div>
+  <div class="fn">run_20261114_1202/summary.tsv, cnt_*.stat.txt, cnt_*.sta.rpt; sim.log, gls.log (Verilator 5.053, 14/11/2026).</div>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 20 -->
+<section class="slide" data-sec="B · Toán tử số học" data-title="Biên phân cấp và logic không dùng">
+  <div class="hd"><div><div class="eyebrow">B · Phân cấp</div><h2>Biên phân cấp chặn việc loại logic không dùng</h2></div>
+    <span class="tag">Kết quả</span></div>
+  <div class="body g2">
+
+    <div class="col"><pre class="vlog c13 lang-verilog" data-lang="verilog" id="vHier"></pre>
+      <div class="card"><h4>Cơ chế</h4><p class="sub">mul16 được tối ưu như một module độc lập với cổng ra p 32 bit; khi phân cấp còn, công cụ không biết khối trên chỉ dùng p[7:0]. Làm phẳng: diện tích bằng 1/9,23.</p></div>
+    </div>
+    <div class="col">
+      <table class="tight"><thead><tr><th>Cách tổng hợp</th><th class="r">Ô</th><th class="r">Diện tích (µm²)</th><th class="r">Trễ (ns)</th></tr></thead><tbody><tr><td>giữ phân cấp</td><td class="num">1 139</td><td class="num">8 351,760</td><td class="num">2,179</td></tr><tr class="hl"><td>làm phẳng</td><td class="num">103</td><td class="num">904,618</td><td class="num">1,948</td></tr></tbody></table>
+      <div class="card plain" style="border:1px solid var(--line);padding:6px 10px"><svg viewBox="0 0 560 235" style="width:100%;max-width:560px;height:auto;margin:0 auto"><text x="10" y="18" text-anchor="start" class="sm" font-weight="700">hier_keep: giữ phân cấp</text><rect x="10" y="28" width="480" height="92" rx="8" fill="none" stroke="var(--line)" stroke-width="1.5" stroke-dasharray="6 4"/><text x="20" y="46" text-anchor="start" class="mono sm">hier_unused</text><text x="20" y="85" text-anchor="start" class="mono sm">a, b</text><path d="M56 80 H109" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M110 80 L102 76 L102 84 Z" fill="var(--ink2)" stroke="none"/><rect class="box" x="110" y="52" width="150" height="56" rx="6" fill="var(--red-soft)" stroke="var(--red)" stroke-width="1.5"/><text x="185.0" y="76.0" text-anchor="middle" font-weight="700">mul16</text><text x="185.0" y="94.0" text-anchor="middle" class="sm">1 139 ô, 32 bit</text><path d="M260 80 H439" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M440 80 L432 76 L432 84 Z" fill="var(--ink2)" stroke="none"/><text x="275" y="72" text-anchor="start" class="mono sm">p[7:0]</text><text x="275" y="104" text-anchor="start" class="sm">p[31:8] không dùng</text><text x="446" y="85" text-anchor="start" class="mono sm">y</text><text x="10" y="150" text-anchor="start" class="sm" font-weight="700">hier_flat: làm phẳng (-flatten)</text><text x="20" y="197" text-anchor="start" class="mono sm">a, b</text><path d="M56 192 H109" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M110 192 L102 188 L102 196 Z" fill="var(--ink2)" stroke="none"/><rect class="box" x="110" y="165" width="190" height="56" rx="6" fill="var(--green-soft)" stroke="var(--green)" stroke-width="1.5"/><text x="205.0" y="189.0" text-anchor="middle" font-weight="700">8 bit thấp của a·b</text><text x="205.0" y="207.0" text-anchor="middle" class="sm">103 ô</text><path d="M300 192 H439" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M440 192 L432 188 L432 196 Z" fill="var(--ink2)" stroke="none"/><text x="446" y="197" text-anchor="start" class="mono sm">y</text></svg></div>
+    </div>
+  </div>
+  <div class="fn">run_20261114_1202/hier_keep.stat.txt, hier_flat.stat.txt; equiv.log: hai netlist ↔ RTL PASS (cec). Boundary optimization, group/ungroup: [1, pp. 6-16–6-18, 6-78–6-84].</div>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 21 -->
+<section class="slide" data-sec="C · Thanh ghi" data-title="Vị trí thanh ghi pipeline">
+  <div class="hd"><div><div class="eyebrow">C · Pipeline</div><h2>y = a·b + c (16×16 + 32 bit): vị trí thanh ghi</h2></div>
+    <span class="tag">Kết quả</span></div>
+  <div class="body ">
+
+    <div class="card plain" style="border:1px solid var(--line);padding:6px 10px"><svg viewBox="0 0 1100 230" style="width:100%;max-width:1100px;height:auto;margin:0 auto"><text x="10" y="48" text-anchor="start" class="mono sm" font-weight="700">pipe0</text><rect class="box" x="90" y="18" width="36" height="46" rx="6" fill="var(--surface2)" stroke="var(--ink2)" stroke-width="1.5"/><text x="108.0" y="46.0" text-anchor="middle" font-weight="700">R</text><path d="M126 41 H155" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M156 41 L148 37 L148 45 Z" fill="var(--ink2)" stroke="none"/><rect class="box" x="156" y="18" width="200" height="46" rx="6" fill="var(--acc-soft)" stroke="var(--acc)" stroke-width="1.5"/><text x="256.0" y="46.0" text-anchor="middle" class="sm" font-weight="700">× 16×16 và + c</text><path d="M356 41 H385" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M386 41 L378 37 L378 45 Z" fill="var(--ink2)" stroke="none"/><rect class="box" x="386" y="18" width="36" height="46" rx="6" fill="var(--surface2)" stroke="var(--ink2)" stroke-width="1.5"/><text x="404.0" y="46.0" text-anchor="middle" font-weight="700">R</text><text x="462" y="46" text-anchor="start" class="sm" font-weight="700">Tmin 7,55 ns</text><text x="10" y="118" text-anchor="start" class="mono sm" font-weight="700">pipe1</text><rect class="box" x="90" y="88" width="36" height="46" rx="6" fill="var(--surface2)" stroke="var(--ink2)" stroke-width="1.5"/><text x="108.0" y="116.0" text-anchor="middle" font-weight="700">R</text><path d="M126 111 H155" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M156 111 L148 107 L148 115 Z" fill="var(--ink2)" stroke="none"/><rect class="box" x="156" y="88" width="200" height="46" rx="6" fill="var(--acc-soft)" stroke="var(--acc)" stroke-width="1.5"/><text x="256.0" y="116.0" text-anchor="middle" class="sm" font-weight="700">× 16×16</text><path d="M356 111 H385" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M386 111 L378 107 L378 115 Z" fill="var(--ink2)" stroke="none"/><rect class="box" x="386" y="88" width="36" height="46" rx="6" fill="var(--surface2)" stroke="var(--ink2)" stroke-width="1.5"/><text x="404.0" y="116.0" text-anchor="middle" font-weight="700">R</text><path d="M422 111 H451" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M452 111 L444 107 L444 115 Z" fill="var(--ink2)" stroke="none"/><rect class="box" x="452" y="88" width="200" height="46" rx="6" fill="var(--teal-soft)" stroke="var(--teal)" stroke-width="1.5"/><text x="552.0" y="116.0" text-anchor="middle" class="sm" font-weight="700">+ c</text><path d="M652 111 H681" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M682 111 L674 107 L674 115 Z" fill="var(--ink2)" stroke="none"/><rect class="box" x="682" y="88" width="36" height="46" rx="6" fill="var(--surface2)" stroke="var(--ink2)" stroke-width="1.5"/><text x="700.0" y="116.0" text-anchor="middle" font-weight="700">R</text><text x="758" y="116" text-anchor="start" class="sm" font-weight="700">Tmin 7,21 ns</text><text x="10" y="188" text-anchor="start" class="mono sm" font-weight="700">pipe2</text><rect class="box" x="90" y="158" width="36" height="46" rx="6" fill="var(--surface2)" stroke="var(--ink2)" stroke-width="1.5"/><text x="108.0" y="186.0" text-anchor="middle" font-weight="700">R</text><path d="M126 181 H155" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M156 181 L148 177 L148 185 Z" fill="var(--ink2)" stroke="none"/><rect class="box" x="156" y="158" width="200" height="46" rx="6" fill="var(--acc-soft)" stroke="var(--acc)" stroke-width="1.5"/><text x="256.0" y="186.0" text-anchor="middle" class="sm" font-weight="700">2 × (16×8)</text><path d="M356 181 H385" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M386 181 L378 177 L378 185 Z" fill="var(--ink2)" stroke="none"/><rect class="box" x="386" y="158" width="36" height="46" rx="6" fill="var(--surface2)" stroke="var(--ink2)" stroke-width="1.5"/><text x="404.0" y="186.0" text-anchor="middle" font-weight="700">R</text><path d="M422 181 H451" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M452 181 L444 177 L444 185 Z" fill="var(--ink2)" stroke="none"/><rect class="box" x="452" y="158" width="200" height="46" rx="6" fill="var(--teal-soft)" stroke="var(--teal)" stroke-width="1.5"/><text x="552.0" y="186.0" text-anchor="middle" class="sm" font-weight="700">pl + ph·2⁸ + c</text><path d="M652 181 H681" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M682 181 L674 177 L674 185 Z" fill="var(--ink2)" stroke="none"/><rect class="box" x="682" y="158" width="36" height="46" rx="6" fill="var(--surface2)" stroke="var(--ink2)" stroke-width="1.5"/><text x="700.0" y="186.0" text-anchor="middle" font-weight="700">R</text><text x="758" y="186" text-anchor="start" class="sm" font-weight="700">Tmin 6,05 ns</text></svg></div>
+    <div class="g2a">
+      <table class="tight"><thead><tr><th>Biến thể</th><th class="r">FF</th><th class="r">Ô</th><th class="r">Diện tích (µm²)</th><th class="r">reg → reg (ns)</th><th class="r">T<sub>min</sub> (ns)</th></tr></thead><tbody><tr><td>pipe0</td><td class="num">96</td><td class="num">1 353</td><td class="num">11 279,568</td><td class="num">7,425</td><td class="num">7,55</td></tr><tr><td>pipe1 (cắt sau bộ nhân)</td><td class="num">160</td><td class="num">1 445</td><td class="num">12 574,560</td><td class="num">7,084</td><td class="num">7,21</td></tr><tr class="hl"><td>pipe2 (hai tích riêng 16×8)</td><td class="num">176</td><td class="num">1 421</td><td class="num">12 773,501</td><td class="num">5,930</td><td class="num">6,05</td></tr></tbody></table>
+      <div class="card"><h4>Cơ chế</h4>
+        <p class="sub">Trong pipe0, phép cộng c được gộp vào cây cộng của bộ nhân; tách thanh ghi sau bộ nhân (pipe1) chỉ bỏ phần cộng: T<sub>min</sub> −4,5 %, FF +64.
+          pipe2 chia chính bộ nhân: T<sub>min</sub> −19,9 %, diện tích +13,2 %.</p></div>
+    </div>
+  </div>
+  <div class="fn">run_20261114_1202/summary.tsv, pipe*.sta.rpt (report_clock_min_period); sim.log, gls.log: pipe0 trễ 2, pipe1/pipe2 trễ 3 chu kỳ, 1 999 mẫu, 0 lệch. [1, pp. 6-29–6-33].</div>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 22 -->
+<section class="slide" data-sec="C · Thanh ghi" data-title="Retiming và mã RTL cho pipeline">
+  <div class="hd"><div><div class="eyebrow">C · Pipeline</div><h2>Retiming và cách viết pipeline</h2></div>
+    <span class="tag">Khái niệm</span></div>
+  <div class="body g2">
+
+    <div class="col">
+      <div class="card"><h4>Register retiming</h4>
+        <p class="sub">Công cụ di chuyển thanh ghi qua logic tổ hợp để cân bằng trễ giữa các tầng, không đổi số chu kỳ trễ từ vào tới ra. Ô thanh ghi sau khi di chuyển được đổi tên theo tầng.</p>
+        <pre class="vlog c14 lang-tcl" data-lang="tcl" id="tRetime" style="margin-top:8px"></pre></div>
+      <div class="card"><h4>Mã RTL cho retiming</h4>
+        <ul class="tick">
+          <li>Mỗi pipeline trong một module riêng, để chỉ áp retiming cho module đó.</li>
+          <li>Đặt các tầng thanh ghi D đơn giản liên tiếp ở đầu ra của khối tổ hợp; công cụ phân bố lại vào giữa.</li>
+          <li>Thanh ghi có chân điều khiển (set, reset) gom ở đầu vào của pipeline.</li>
+        </ul></div>
+    </div>
+    <div class="col">
+      <div class="card amber"><h4>Luồng Yosys của lớp</h4>
+        <p class="sub"><span class="k">synth</span> + <span class="k">abc -liberty</span> không di chuyển thanh ghi: vị trí thanh ghi trong netlist trùng vị trí trong RTL (pipe1, pipe2 ở slide trước).
+          Yosys có <span class="k">abc -dff</span> (ABC xử lý cả flip-flop) nhưng không dùng trong ví dụ.</p></div>
+      <div class="card"><h4>Ví dụ ba tầng thanh ghi ở đầu ra</h4>
+        <pre class="vlog c14 lang-verilog" data-lang="verilog" id="vRtm"></pre></div>
+    </div>
+  </div>
+  <div class="fn">[1, pp. 6-32–6-38]; Yosys <span class="mono">help abc</span> [3].</div>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 23 -->
+<section class="slide" data-sec="C · Thanh ghi" data-title="Đầu ra có thanh ghi và phân hoạch">
+  <div class="hd"><div><div class="eyebrow">C · Phân hoạch</div><h2>Đầu ra có thanh ghi và phân hoạch module</h2></div>
+    <span class="tag">Kết quả</span></div>
+  <div class="body ">
+
+    <div class="g2">
+      <div class="col"><pre class="vlog c14 lang-verilog" data-lang="verilog" id="vOutC"></pre></div>
+      <div class="col"><pre class="vlog c14 lang-verilog" data-lang="verilog" id="vOutR"></pre></div>
+    </div>
+    <div class="card plain" style="border:1px solid var(--line);padding:6px 10px"><svg viewBox="0 0 1100 170" style="width:100%;max-width:1100px;height:auto;margin:0 auto"><text x="10" y="20" text-anchor="start" class="sm" font-weight="700">out_comb: cổng ra tổ hợp</text><rect class="box" x="20" y="45" width="40" height="50" rx="6" fill="var(--surface2)" stroke="var(--ink2)" stroke-width="1.5"/><text x="40.0" y="75.0" text-anchor="middle" font-weight="700">R</text><path d="M60 70 H99" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M100 70 L92 66 L92 74 Z" fill="var(--ink2)" stroke="none"/><rect class="box" x="100" y="40" width="120" height="60" rx="6" fill="var(--acc-soft)" stroke="var(--acc)" stroke-width="1.5"/><text x="160.0" y="75.0" text-anchor="middle" font-weight="700">+ 16 bit</text><path d="M220 70 H299" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M300 70 L292 66 L292 74 Z" fill="var(--ink2)" stroke="none"/><text x="240" y="62" text-anchor="start" class="mono sm">y</text><rect class="box" x="300" y="40" width="150" height="60" rx="6" fill="var(--amber-soft)" stroke="var(--amber)" stroke-width="1.5"/><text x="375.0" y="75.0" text-anchor="middle" font-weight="700">logic khối sau</text><text x="20" y="130" text-anchor="start" class="sm">reg → cổng y: 4,319 ns; khối sau còn T − 4,319 ns</text><text x="580" y="20" text-anchor="start" class="sm" font-weight="700">out_reg: cổng ra từ thanh ghi</text><rect class="box" x="600" y="40" width="120" height="60" rx="6" fill="var(--acc-soft)" stroke="var(--acc)" stroke-width="1.5"/><text x="660.0" y="75.0" text-anchor="middle" font-weight="700">+ 16 bit</text><path d="M720 70 H759" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M760 70 L752 66 L752 74 Z" fill="var(--ink2)" stroke="none"/><rect class="box" x="760" y="45" width="40" height="50" rx="6" fill="var(--surface2)" stroke="var(--ink2)" stroke-width="1.5"/><text x="780.0" y="75.0" text-anchor="middle" font-weight="700">R</text><path d="M800 70 H879" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M880 70 L872 66 L872 74 Z" fill="var(--ink2)" stroke="none"/><text x="820" y="62" text-anchor="start" class="mono sm">y</text><rect class="box" x="880" y="40" width="150" height="60" rx="6" fill="var(--amber-soft)" stroke="var(--amber)" stroke-width="1.5"/><text x="955.0" y="75.0" text-anchor="middle" font-weight="700">logic khối sau</text><text x="600" y="130" text-anchor="start" class="sm">vào → R: 3,155 ns; R → cổng y: 0,298 ns</text></svg></div>
+    <div class="g2">
+      <table class="tight"><thead><tr><th>Biến thể</th><th class="r">FF</th><th class="r">Diện tích (µm²)</th><th class="r">vào → reg (ns)</th><th class="r">reg → ra (ns)</th></tr></thead><tbody><tr><td>out_comb</td><td class="num">32</td><td class="num">1 102,307</td><td class="num">0,000</td><td class="num">4,319</td></tr><tr><td>out_reg</td><td class="num">17</td><td class="num">809,526</td><td class="num">3,155</td><td class="num">0,298</td></tr></tbody></table>
+      <div class="card"><h4>Phân hoạch</h4>
+        <p class="sub">Mỗi khối có cổng ra lấy từ thanh ghi: ngân sách thời gian của khối sau gần đủ một chu kỳ, ràng buộc vào ra của từng khối dễ suy ra; logic giữa hai khối (glue) gộp vào khối kề.</p></div>
+    </div>
+  </div>
+  <div class="fn">run_20261114_1202/summary.tsv, out_*.sta.rpt; sim.log: out_comb = out_reg = a + b trễ 1 chu kỳ, 1 999 mẫu, 0 lệch. [1, pp. 6-38, 6-81–6-84].</div>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 24 -->
+<section class="slide" data-sec="C · Thanh ghi" data-title="Kiểu reset">
+  <div class="hd"><div><div class="eyebrow">C · Reset</div><h2>Đường trễ 4 tầng × 16 bit + valid: ba kiểu reset</h2></div>
+    <span class="tag">Kết quả</span></div>
+  <div class="body ">
+
+    <div class="g3"><pre class="vlog c13 lang-verilog" data-lang="verilog" id="vRstA"></pre><pre class="vlog c13 lang-verilog" data-lang="verilog" id="vRstS"></pre><pre class="vlog c13 lang-verilog" data-lang="verilog" id="vRstN"></pre></div>
+    <div class="card plain" style="border:1px solid var(--line);padding:6px 10px"><svg viewBox="0 0 1100 125" style="width:100%;max-width:1100px;height:auto;margin:0 auto"><text x="10" y="20" text-anchor="start" class="mono sm" font-weight="700">rst_async</text><text x="10" y="72" text-anchor="start" class="mono sm">D</text><path d="M24 67 H39" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M40 67 L32 63 L32 71 Z" fill="var(--ink2)" stroke="none"/><rect class="box" x="40" y="42" width="90" height="50" rx="6" fill="var(--acc-soft)" stroke="var(--acc)" stroke-width="1.5"/><text x="85.0" y="72.0" text-anchor="middle" class="sm" font-weight="700">dfrtp_1</text><path d="M130 67 H169" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M170 67 L162 63 L162 71 Z" fill="var(--ink2)" stroke="none"/><text x="174" y="72" text-anchor="start" class="mono sm">Q</text><text x="10" y="117" text-anchor="start" class="sm">RESET_B ← rst_n; 25,02 µm²/bit</text><text x="380" y="20" text-anchor="start" class="mono sm" font-weight="700">rst_sync</text><text x="380" y="72" text-anchor="start" class="mono sm">D</text><path d="M394 67 H409" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M410 67 L402 63 L402 71 Z" fill="var(--ink2)" stroke="none"/><rect class="box" x="410" y="42" width="90" height="50" rx="6" fill="var(--amber-soft)" stroke="var(--amber)" stroke-width="1.5"/><text x="455.0" y="72.0" text-anchor="middle" class="sm" font-weight="700">and2_0</text><path d="M500 67 H529" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M530 67 L522 63 L522 71 Z" fill="var(--ink2)" stroke="none"/><rect class="box" x="530" y="42" width="90" height="50" rx="6" fill="var(--acc-soft)" stroke="var(--acc)" stroke-width="1.5"/><text x="575.0" y="72.0" text-anchor="middle" class="sm" font-weight="700">dfxtp_1</text><path d="M620 67 H659" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M660 67 L652 63 L652 71 Z" fill="var(--ink2)" stroke="none"/><text x="664" y="72" text-anchor="start" class="mono sm">Q</text><text x="380" y="117" text-anchor="start" class="sm">AND trên đường D; 20,02 + 6,26 µm²/bit</text><text x="750" y="20" text-anchor="start" class="mono sm" font-weight="700">rst_none</text><text x="750" y="72" text-anchor="start" class="mono sm">D</text><path d="M764 67 H779" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M780 67 L772 63 L772 71 Z" fill="var(--ink2)" stroke="none"/><rect class="box" x="780" y="42" width="90" height="50" rx="6" fill="var(--acc-soft)" stroke="var(--acc)" stroke-width="1.5"/><text x="825.0" y="72.0" text-anchor="middle" class="sm" font-weight="700">dfxtp_1</text><path d="M870 67 H909" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M910 67 L902 63 L902 71 Z" fill="var(--ink2)" stroke="none"/><text x="914" y="72" text-anchor="start" class="mono sm">Q</text><text x="750" y="117" text-anchor="start" class="sm">không có chân reset; 20,02 µm²/bit</text></svg></div>
+    <div class="g2a">
+      <table class="tight"><thead><tr><th>Biến thể</th><th class="r">Ô</th><th class="r">Diện tích (µm²)</th><th class="r">Δ so với async</th><th class="r">T<sub>min</sub> (ns)</th></tr></thead><tbody><tr><td>rst_async</td><td class="num">68</td><td class="num">1 701,632</td><td class="num">—</td><td class="num">0,45</td></tr><tr><td>rst_sync</td><td class="num">136</td><td class="num">1 786,714</td><td class="num">+5,0 %</td><td class="num">0,51</td></tr><tr class="hl"><td>rst_none (64 dfxtp_1 + 4 dfrtp_1)</td><td class="num">68</td><td class="num">1 381,325</td><td class="num">−18,8 %</td><td class="num">0,45</td></tr></tbody></table>
+      <div class="card"><h4>Cơ chế</h4><p class="sub">Sky130 HD không có flip-flop reset đồng bộ (các ô sdf* là flip-flop quét): Yosys thêm một and2_0 trên chân D mỗi bit. Thanh ghi dữ liệu chỉ cần reset khi giá trị của nó được dùng trước lần nạp đầu; ở đây dout chỉ có nghĩa khi vout = 1.</p></div>
+    </div>
+  </div>
+  <div class="fn">run_20261114_1202/summary.tsv, rst_*.stat.txt; sim.log, gls.log: valid và dữ liệu khi valid của ba biến thể bằng nhau, 1 997 mẫu, 0 lệch. Thứ tự tín hiệu điều khiển thanh ghi: [2, pp. 12-35, 12-36].</div>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 25 -->
+<section class="slide" data-sec="C · Thanh ghi" data-title="Blocking và non-blocking">
+  <div class="hd"><div><div class="eyebrow">C · Phép gán</div><h2>Thanh ghi dịch 3 tầng: blocking và non-blocking</h2></div>
+    <span class="tag">Kết quả</span></div>
+  <div class="body g2">
+
+    <div class="col">
+      <div class="g2"><pre class="vlog c14 lang-verilog" data-lang="verilog" id="vBlk"></pre><pre class="vlog c14 lang-verilog" data-lang="verilog" id="vNb"></pre></div>
+      <table class="tight"><thead><tr><th>Biến thể</th><th class="r">FF</th><th class="r">Diện tích (µm²)</th><th>q3 so với din</th></tr></thead><tbody><tr><td>shift_blk</td><td class="num">8</td><td class="num">160,154</td><td>trễ 1 chu kỳ</td></tr><tr><td>shift_nb</td><td class="num">24</td><td class="num">480,461</td><td>trễ 3 chu kỳ</td></tr></tbody></table>
+      <div class="card"><h4>Mô phỏng Verilator</h4>
+        <table class="tight"><tbody>
+          <tr><td>shift_nb = din trễ 3; shift_blk = din trễ 1</td><td class="num">1 999 mẫu, 0 lệch</td></tr>
+          <tr><td>shift_blk ≠ shift_nb (RTL / netlist)</td><td class="num">1 993 / 1 990 trên 1 999</td></tr>
+        </tbody></table></div>
+      <div class="card amber"><h4>Cách viết</h4><ul class="tick"><li>Khối có sườn đồng hồ: chỉ dùng <span class="k">&lt;=</span>.</li><li>Khối <span class="k">always @*</span>: chỉ dùng <span class="k">=</span>.</li></ul></div>
+    </div>
+    <div class="col">
+      <div class="card plain" style="border:1px solid var(--line);padding:6px 10px"><svg viewBox="0 0 560 210" style="width:100%;max-width:560px;height:auto;margin:0 auto"><text x="10" y="20" text-anchor="start" class="sm" font-weight="700">shift_nb (non-blocking)</text><text x="10" y="65" text-anchor="start" class="mono sm">din</text><path d="M36 60 H59" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M60 60 L52 56 L52 64 Z" fill="var(--ink2)" stroke="none"/><rect class="box" x="60" y="35" width="70" height="50" rx="6" fill="var(--acc-soft)" stroke="var(--acc)" stroke-width="1.5"/><text x="95.0" y="56.0" text-anchor="middle" font-weight="700">q1</text><text x="95.0" y="74.0" text-anchor="middle" class="sm">8 FF</text><path d="M130 60 H169" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M170 60 L162 56 L162 64 Z" fill="var(--ink2)" stroke="none"/><rect class="box" x="170" y="35" width="70" height="50" rx="6" fill="var(--acc-soft)" stroke="var(--acc)" stroke-width="1.5"/><text x="205.0" y="56.0" text-anchor="middle" font-weight="700">q2</text><text x="205.0" y="74.0" text-anchor="middle" class="sm">8 FF</text><path d="M240 60 H279" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M280 60 L272 56 L272 64 Z" fill="var(--ink2)" stroke="none"/><rect class="box" x="280" y="35" width="70" height="50" rx="6" fill="var(--acc-soft)" stroke="var(--acc)" stroke-width="1.5"/><text x="315.0" y="56.0" text-anchor="middle" font-weight="700">q3</text><text x="315.0" y="74.0" text-anchor="middle" class="sm">8 FF</text><path d="M350 60 H399" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M400 60 L392 56 L392 64 Z" fill="var(--ink2)" stroke="none"/><text x="404" y="65" text-anchor="start" class="mono sm">q3</text><text x="10" y="125" text-anchor="start" class="sm" font-weight="700">shift_blk (blocking)</text><text x="10" y="170" text-anchor="start" class="mono sm">din</text><path d="M36 165 H59" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M60 165 L52 161 L52 169 Z" fill="var(--ink2)" stroke="none"/><rect class="box" x="60" y="140" width="70" height="50" rx="6" fill="var(--red-soft)" stroke="var(--red)" stroke-width="1.5"/><text x="95.0" y="161.0" text-anchor="middle" font-weight="700">q3</text><text x="95.0" y="179.0" text-anchor="middle" class="sm">8 FF</text><path d="M130 165 H179" fill="none" stroke="var(--ink2)" stroke-width="1.6"/><path d="M180 165 L172 161 L172 169 Z" fill="var(--ink2)" stroke="none"/><text x="184" y="170" text-anchor="start" class="mono sm">q3</text><text x="230" y="170" text-anchor="start" class="sm">q1, q2 không còn flip-flop</text></svg></div>
+      <div class="card"><h4>Cơ chế</h4><p class="sub">Phép gán blocking cập nhật ngay: trong một lần thực thi, q2 nhận giá trị mới của q1, q3 nhận giá trị mới của q2, cả ba bằng din. Chỉ q3 ra cổng, Yosys giữ 8 flip-flop. Đổi thứ tự ba dòng (q3 trước, q1 sau) cho lại thanh ghi dịch 3 tầng.</p></div>
+    </div>
+  </div>
+  <div class="fn">run_20261114_1202/summary.tsv, sim.log, gls.log; ngữ nghĩa phép gán: [7, Sec. 9.2.1, 9.2.2].</div>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 26 -->
+<section class="slide" data-sec="C · Thanh ghi" data-title="Mã hoá trạng thái">
+  <div class="hd"><div><div class="eyebrow">C · FSM</div><h2>Mã hoá trạng thái: kết quả của deck 05A</h2></div>
+    <span class="tag">Liên kết</span></div>
+  <div class="body g2a">
+
+    <div class="col">
+      <table class="tight"><thead><tr><th>Bộ nhận biết 1011, Moore (5 trạng thái)</th><th class="r">FF</th><th class="r">Diện tích (µm²)</th><th class="r">T<sub>min</sub> (ns)</th></tr></thead><tbody><tr><td>Mã nhị phân viết trong RTL</td><td class="num">3</td><td class="num">131,38</td><td class="num">0,80</td></tr><tr><td>Mã one-hot viết trong RTL (case so sánh đủ 5 bit)</td><td class="num">5</td><td class="num">213,96</td><td class="num">1,03</td></tr><tr class="hl"><td>RTL nhị phân, Yosys fsm_recode one-hot</td><td class="num">5</td><td class="num">163,91</td><td class="num">0,77</td></tr></tbody></table>
+      <div class="card"><h4>Liên hệ với cách viết mã</h4>
+        <ul class="tick">
+          <li>Cùng một mã one-hot: viết tay trong RTL cho 16 ô tổ hợp, để công cụ trích FSM rồi mã hoá lại cho 7 ô.</li>
+          <li><span class="k">fsm_recode</span> chỉ ánh xạ các trạng thái đạt được: nhánh <span class="k">default</span> của RTL không còn trong netlist one-hot.</li>
+        </ul></div>
+    </div>
+    <div class="col">
+      <div class="card acc"><h4>Chi tiết</h4>
+        <p class="sub">Deck <span class="k">Slide-DDAS-Tuan-05A-Phan-tu-nho-va-phep-gan.html</span>, phần B · Máy trạng thái hữu hạn: “Ba cách mã hoá trạng thái”, “Tổng hợp với mã viết trong RTL”, “Tổng hợp với fsm_recode”, “Trạng thái không hợp lệ và khởi tạo”.</p>
+        <p class="sub" style="margin-top:6px">Ví dụ <span class="k">04-Vi-du/tuan-05A-fsm-ma-hoa-trang-thai</span>, 10 biến thể (Moore, Mealy × nhị phân, Gray, one-hot).</p></div>
+    </div>
+  </div>
+  <div class="fn">04-Vi-du/tuan-05A-fsm-ma-hoa-trang-thai/run_20261114_0625/summary.tsv (Yosys 0.70+255, OpenSTA 2.7.0, 14/11/2026); guide.md của ví dụ đó, mục 5.</div>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 27 -->
+<section class="slide" data-sec="D · Tổng kết" data-title="Kiểm chứng tương đương">
+  <div class="hd"><div><div class="eyebrow">D · Kiểm chứng</div><h2>Kiểm chứng tương đương trước khi so sánh</h2></div>
+    <span class="tag">Kiểm chứng</span></div>
+  <div class="body ">
+
+    <div class="col">
+      <table class="tight"><thead><tr><th>Phương pháp</th><th>Đối tượng</th><th class="r">Số phép</th><th>Kết quả</th></tr></thead><tbody><tr><td>Yosys miter -equiv + sat -prove</td><td>RTL ↔ RTL, 7 cặp tổ hợp + latch_fixx ↔ latch_fix0</td><td class="num">8</td><td>PASS 8/8</td></tr><tr><td>Yosys sat, không giả thiết</td><td>pri_chain ↔ pri_andor</td><td class="num">1</td><td>FAIL (kỳ vọng FAIL)</td></tr><tr><td>Yosys sat + assume (read_verilog -formal)</td><td>pri_chain ↔ pri_andor, req one-hot</td><td class="num">1</td><td>PASS</td></tr><tr><td>ABC cec trên AIG</td><td>RTL ↔ netlist Sky130, biến thể tổ hợp</td><td class="num">23</td><td>PASS 23/23</td></tr><tr><td>Yosys sat -ignore_gold_x</td><td>RTL ↔ netlist latch_fixx</td><td class="num">1</td><td>PASS</td></tr><tr><td>Verilator 5.053, 2 000 chu kỳ</td><td>RTL: 12 biến thể tuần tự, latch, pri</td><td class="num">13</td><td>PASS 13/13</td></tr><tr><td>Verilator 5.053, netlist</td><td>12 biến thể tuần tự (mô hình ô từ liberty)</td><td class="num">9</td><td>PASS 9/9</td></tr></tbody></table>
+    </div>
+    <div class="g2">
+      <div class="card"><h4>Phạm vi</h4>
+        <p class="sub">sat và cec chứng minh cho mọi giá trị vào của mạch tổ hợp. Mô phỏng chỉ phủ các vector đã chạy (seed 20261114); mô phỏng netlist không có trễ.</p></div>
+      <div class="card amber"><h4>Biến thể khác chức năng có chủ ý</h4>
+        <p class="sub">latch_if (giữ giá trị khi sel = 3), pri_andor (khi req nhiều bit 1), shift_blk (trễ 1 chu kỳ thay cho 3): kết quả tổng hợp của chúng không so sánh như hai cách viết cùng chức năng.</p></div>
+    </div>
+  </div>
+  <div class="fn">run_20261114_1202/equiv.log (34/34 đúng kỳ vọng), eq_*.log, sim.log, gls.log; equiv.sh, tb/tb_seq.v, tb/eq_pri_onehot.v [3], [6].</div>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 28 -->
+<section class="slide" data-sec="D · Tổng kết" data-title="Bảng tổng hợp">
+  <div class="hd"><div><div class="eyebrow">D · Tổng kết</div><h2>Bảng tổng hợp các cặp phương án</h2></div>
+    <span class="tag">Kết quả</span></div>
+  <div class="body ">
+
+    <div class="col">
+      <table class="tight"><thead><tr><th>Cặp (A → B)</th><th class="r">Diện tích A (µm²)</th><th class="r">Diện tích B (µm²)</th><th class="r">Δ diện tích</th><th class="r">Trễ A (ns)</th><th class="r">Trễ B (ns)</th><th class="r">Δ trễ</th></tr></thead><tbody><tr><td>if-else-if → case</td><td class="num">1 059,766</td><td class="num">621,846</td><td class="num">−41,3 %</td><td class="num">1,835</td><td class="num">1,425</td><td class="num">−22,3 %</td></tr><tr><td>ưu tiên → AND-OR (req one-hot)</td><td class="num">1 007,216</td><td class="num">546,774</td><td class="num">−45,7 %</td><td class="num">1,395</td><td class="num">0,464</td><td class="num">−66,7 %</td></tr><tr><td>thiếu else → gán mặc định 0</td><td class="num">272,762</td><td class="num">152,646</td><td class="num">−44,0 %</td><td class="num">—</td><td class="num">0,590</td><td class="num">—</td></tr><tr><td>hai bộ cộng → chọn trước</td><td class="num">1 072,278</td><td class="num">780,749</td><td class="num">−27,2 %</td><td class="num">3,571</td><td class="num">4,193</td><td class="num">+17,4 %</td></tr><tr><td>keep: d ở đầu → d ở cuối (d muộn 1,0)</td><td class="num">1 551,488</td><td class="num">1 551,488</td><td class="num">0</td><td class="num">7,520</td><td class="num">7,005</td><td class="num">−6,8 %</td></tr><tr><td>keep → biểu thức liền (Yosys $macc)</td><td class="num">1 461,402</td><td class="num">1 398,842</td><td class="num">−4,3 %</td><td class="num">5,447</td><td class="num">3,933</td><td class="num">−27,8 %</td></tr><tr><td>cộng trong vòng for → ngoài vòng</td><td class="num">822,038</td><td class="num">275,264</td><td class="num">−66,5 %</td><td class="num">2,775</td><td class="num">1,543</td><td class="num">−44,4 %</td></tr><tr><td>a · b → a · 10</td><td class="num">1 939,360</td><td class="num">237,728</td><td class="num">−87,7 %</td><td class="num">3,410</td><td class="num">1,325</td><td class="num">−61,1 %</td></tr><tr><td>giữ phân cấp → làm phẳng</td><td class="num">8 351,760</td><td class="num">904,618</td><td class="num">−89,2 %</td><td class="num">2,179</td><td class="num">1,948</td><td class="num">−10,6 %</td></tr><tr><td>bộ đếm 32 bit → 7 bit</td><td class="num">1 326,272</td><td class="num">275,264</td><td class="num">−79,2 %</td><td class="num">3,73</td><td class="num">1,21</td><td class="num">−67,6 %</td></tr><tr><td>pipe0 → pipe2 (T<sub>min</sub>)</td><td class="num">11 279,568</td><td class="num">12 773,501</td><td class="num">+13,2 %</td><td class="num">7,55</td><td class="num">6,05</td><td class="num">−19,9 %</td></tr><tr><td>reset async → không reset dữ liệu</td><td class="num">1 701,632</td><td class="num">1 381,325</td><td class="num">−18,8 %</td><td class="num">0,45</td><td class="num">0,45</td><td class="num">0</td></tr></tbody></table>
+    </div>
+  </div>
+  <div class="fn">run_20261114_1202/summary.tsv (Yosys 0.70+255, OpenSTA 2.7.0, Sky130 HD tt_025C_1v80, 14/11/2026). Trễ: trễ xấu nhất vào → ra (tổ hợp) hoặc T<sub>min</sub> (tuần tự); dòng keep → $macc so ord_bal_k với ord_bal.</div>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 29 -->
+<section class="slide" data-sec="D · Tổng kết" data-title="Giới hạn của phép đo">
+  <div class="hd"><div><div class="eyebrow">D · Tổng kết</div><h2>Giới hạn của phép đo</h2></div>
+    <span class="tag">Phân tích</span></div>
+  <div class="body ">
+
+    <div class="g2">
+      <div class="card"><h4>Công cụ và ràng buộc</h4>
+        <ul class="tick">
+          <li><span class="k">abc -liberty</span> không nhận chu kỳ đồng hồ: bộ cộng, bộ nhân là cấu trúc nhỏ, chậm (bộ nhân 16×16 ≈ 7 ns ở tt). Với ràng buộc trễ, Design Compiler chọn bộ cộng nhanh hơn và có thể đổi kết luận của từng cặp.</li>
+          <li>DC chia sẻ tài nguyên và sắp xếp lại toán tử theo ràng buộc; luồng Yosys giữ đúng cấu trúc của RTL ở mức kiến trúc.</li>
+          <li>Yosys không phân tích trạng thái đạt được (bộ đếm 32 bit), không retiming trong luồng dùng ở lớp.</li>
+        </ul></div>
+      <div class="card"><h4>Mô hình thời gian và diện tích</h4>
+        <ul class="tick">
+          <li>STA trước P&amp;R: không có tải dây, đồng hồ lý tưởng; một góc tt, 25 °C, 1,80 V.</li>
+          <li>Diện tích là tổng diện tích ô theo liberty, chưa gồm mật độ đặt ô, dây, cây đồng hồ.</li>
+          <li>Chưa đo công suất; latch không được phân tích thời gian trong cấu hình đồng hồ ảo.</li>
+          <li>Mỗi kết quả thuộc một thiết kế nhỏ (8–32 bit); tỉ lệ phần trăm không suy rộng cho thiết kế lớn.</li>
+        </ul></div>
+    </div>
+    <div class="card amber"><h4>Đại lượng ổn định giữa các công cụ</h4>
+      <p class="sub">Số flip-flop, số latch, số bộ cộng/bộ nhân do RTL quy định (ví dụ 8 $alu của irq_poor, 32 FF của cnt_w32, 24 FF của shift_nb) không phụ thuộc kịch bản ánh xạ; diện tích tổ hợp và trễ phụ thuộc thư viện và ràng buộc.</p></div>
+  </div>
+  <div class="fn">guide.md của ví dụ tuan-13A-viet-ma-cho-tong-hop, mục 5 (Giới hạn); [1, pp. 6-102–6-106].</div>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 30 -->
+<section class="slide" data-sec="D · Tổng kết" data-title="Bài tập">
+  <div class="hd"><div><div class="eyebrow">Tổng kết</div><h2>Bài tập</h2></div>
+    <span class="tag">Bài tập</span></div>
+  <div class="body g2">
+
+    <div class="col">
+      <div class="card"><h4><span class="n">1</span>Bộ giải mã ưu tiên</h4>
+        <p class="sub">Viết bộ mã hoá ưu tiên 16 → 4 bit bằng if-else-if, bằng <span class="k">casez</span> và bằng vòng for. Kiểm chứng tương đương bằng <span class="k">miter</span> + <span class="k">sat</span>, so sánh ô, diện tích, trễ.</p></div>
+      <div class="card"><h4><span class="n">2</span>Chia sẻ bộ nhân</h4>
+        <p class="sub">Đổi share_two_add thành <code class="k">sel ? a*b : c*d</code> (8 bit). Đếm <span class="k">$mul</span> trong coarse.txt; giải thích kết quả bằng <span class="k">help share</span>.</p></div>
+      <div class="card"><h4><span class="n">3</span>Latch có chủ ý</h4>
+        <p class="sub">Viết latch D có enable bằng <span class="k">always @*</span>; tìm cảnh báo trong log Yosys và ô latch trong netlist; giải thích lý do không cần sửa.</p></div>
+    </div>
+    <div class="col">
+      <div class="card"><h4><span class="n">4</span>Thời điểm tới khác nhau</h4>
+        <p class="sub">Với ord_*_k, đặt input delay 1,0 ns cho a thay cho d. Dự đoán biến thể nhanh nhất rồi chạy <span class="k">sta.tcl</span> với <span class="k">SWEEP=a:1.0</span>.</p></div>
+      <div class="card"><h4><span class="n">5</span>Cân bằng pipeline</h4>
+        <p class="sub">Tìm vị trí cắt của pipe2 sao cho hai tầng có trễ gần bằng nhau (ví dụ bốn tích riêng 16×4). Báo cáo T<sub>min</sub>, FF, diện tích, kiểm tra bằng tb_seq.v.</p></div>
+      <div class="card"><h4><span class="n">6</span>Bộ đếm có tham số</h4>
+        <p class="sub">Viết bộ đếm modulo N với <span class="k">localparam W = $clog2(N)</span>; tổng hợp với N = 10, 100, 1 000 và lập bảng FF, diện tích, T<sub>min</sub>.</p></div>
+    </div>
+  </div>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+
+<!-- 31 -->
+<section class="slide" data-sec="D · Tổng kết" data-title="Nguồn tham khảo">
+  <div class="hd"><div><div class="eyebrow">Tài liệu</div><h2>Nguồn tham khảo</h2></div>
+    <span class="tag">IEEE</span></div>
+  <div class="body g2">
+
+    <div class="col">
+      <div class="card"><h4>Tài liệu tham khảo</h4>
+        <p class="sub ref" style="line-height:1.65">
+          [1] Synopsys, Inc., <em>Design Compiler 1 Workshop: Student Guide</em>, 10-I-011-SSG-016, ver. 2010.12. Mountain View, CA, USA: Synopsys, 2011, Unit 6 “Compiling RTL to Gates”.<br>
+          [2] Altera Corp., “Recommended HDL coding styles,” in <em>Quartus II Handbook</em>, vol. 1, ch. 12, QII51007, 2014.08.18.<br>
+          [3] C. Wolf and YosysHQ, “Yosys Open SYnthesis Suite,” ver. 0.70+255. [Online]. Available: https://github.com/YosysHQ/yosys<br>
+          [4] Parallax Software and The OpenROAD Project, “OpenSTA,” ver. 2.7.0. [Online]. Available: https://github.com/The-OpenROAD-Project/OpenSTA<br>
+          [5] SkyWater Technology and Google, “SkyWater SKY130 PDK,” thư viện sky130_fd_sc_hd, bản trong OpenROAD-flow-scripts commit 0fcc418. [Online]. Available: https://github.com/google/skywater-pdk<br>
+          [6] W. Snyder et al., “Verilator,” ver. 5.053 devel. [Online]. Available: https://github.com/verilator/verilator<br>
+          [7] <em>IEEE Standard for Verilog Hardware Description Language</em>, IEEE Std 1364-2005, 2006.
+        </p></div>
+    </div>
+    <div class="col">
+      <div class="card"><h4>Sử dụng tài liệu</h4>
+        <table class="tight"><tbody>
+          <tr><td style="width:36%">[1, pp. 6-5, 6-64, 6-102–6-106]</td><td>Ba mức tối ưu, chia sẻ tài nguyên, sắp xếp toán tử</td></tr>
+          <tr><td>[1, pp. 6-65–6-71]</td><td>Chia sẻ bộ cộng, thứ tự toán tử, thuật toán vòng for</td></tr>
+          <tr><td>[1, p. 6-11]</td><td>Gộp hằng, biểu thức con chung, nhân với hằng</td></tr>
+          <tr><td>[1, pp. 6-16–6-18, 6-78–6-84]</td><td>Biên phân cấp, group/ungroup, phân hoạch</td></tr>
+          <tr><td>[1, pp. 6-29–6-38]</td><td>Pipeline, retiming, đầu ra có thanh ghi</td></tr>
+          <tr><td>[2, pp. 12-35–12-38, 12-44, 12-54]</td><td>Tín hiệu điều khiển thanh ghi, latch, full_case, cây cộng, if mặc định</td></tr>
+          <tr><td>[3]–[6]</td><td>Công cụ của ví dụ tuan-13A-viet-ma-cho-tong-hop</td></tr>
+          <tr><td>[7, Sec. 9.2]</td><td>Phép gán blocking và non-blocking</td></tr>
+        </tbody></table></div>
+    </div>
+  </div>
+  <div class="foot"><span class="pg"></span><span>Nguyễn Đức Minh - SEEE - HUST &amp; AI Assistant</span></div>
+</section>
+</div></div>
+
+<div id="bar" style="width:0%"></div>
+<div id="nav">
+  <button id="btnPrev" title="Slide trước">‹</button>
+  <button id="btnNext" title="Slide sau">›</button>
+  <button id="btnOv" title="Mục lục">▦</button>
+  <button id="btnFs" title="Toàn màn hình">⤢</button>
+</div>
+<div id="ov">
+  <h3>Mục lục — Tuần 13: Viết mã cho tổng hợp</h3>
+  <p class="sub">Bấm vào một slide để chuyển tới. Nhấn <span class="kbd">Esc</span> hoặc <span class="kbd">O</span> để đóng.</p>
+  <div id="ovg"></div>
+</div>
+
+<script>
+"use strict";
+/* ════════════════════ TIỆN ÍCH CHUNG ════════════════════ */
+const $  = (s,r=document)=>r.querySelector(s);
+const $$ = (s,r=document)=>[...r.querySelectorAll(s)];
+const cv = n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
+const fmt=(v,d=0)=>v.toLocaleString('vi-VN',{minimumFractionDigits:d,maximumFractionDigits:d});
+function el(tag,attrs={},kids=[]){
+  const n=document.createElementNS('http://www.w3.org/2000/svg',tag);
+  for(const k in attrs) n.setAttribute(k,attrs[k]);
+  kids.forEach(k=>n.appendChild(k)); return n;
+}
+function svgClear(s){ while(s.firstChild) s.removeChild(s.firstChild); }
+function S(tag,a={},text){ // returns markup string
+  let s='<'+tag; for(const k in a) s+=` ${k}="${a[k]}"`;
+  if(text===undefined) return s+'/>';
+  return s+'>'+text+'</'+tag+'>';
+}
+/* dạng sóng số: evts = [{t,v}] , trả về path d */
+function wavePath(evts,t2x,hi,lo,tEnd,sl=3){
+  if(!evts.length) return '';
+  let y=evts[0].v?hi:lo, d=`M${t2x(evts[0].t)} ${y}`;
+  for(let i=1;i<evts.length;i++){
+    const x=t2x(evts[i].t), ny=evts[i].v?hi:lo;
+    if(ny!==y){ d+=` L${(x-sl).toFixed(1)} ${y} L${(x+sl).toFixed(1)} ${ny}`; y=ny; }
+  }
+  d+=` L${t2x(tEnd)} ${y}`; return d;
+}
+function clkEvts(t0,per,n,duty=0.5){
+  const e=[{t:0,v:0}];
+  for(let i=0;i<n;i++){ e.push({t:t0+i*per,v:1}); e.push({t:t0+i*per+per*duty,v:0}); }
+  return e;
+}
+/* bus nhiều bit: vẽ hai đường bao chéo nhau */
+function busSeg(x1,x2,yT,yB,sl=4){
+  return `M${x1+sl} ${yT} L${x2-sl} ${yT} L${x2} ${(yT+yB)/2} L${x2-sl} ${yB} L${x1+sl} ${yB} L${x1} ${(yT+yB)/2} Z`;
+}
+
+/* ════════════════════ ENGINE TRÌNH CHIẾU ════════════════════ */
+const slides=$$('.slide'); let cur=0;
+const deck=$('#deck'), stage=$('#stage');
+function fit(){
+  const pad=26, w=stage.clientWidth-pad, h=stage.clientHeight-pad;
+  const s=Math.min(w/1280,h/720);
+  deck.style.transform=`scale(${s})`;
+  deck.style.width='1280px'; deck.style.height='720px';
+}
+/* tự co nội dung nếu slide bị tràn — giữ nguyên bố cục, chỉ thu nhỏ tỉ lệ */
+function autofit(s){
+  if(!s) return;
+  const b=s.querySelector('.body'); if(!b) return;
+  b.style.transformOrigin='top left'; b.style.transform=''; b.style.width='';
+  if(s.scrollHeight<=s.clientHeight+1) return;
+  for(let k=.98;k>=.52;k-=.02){
+    b.style.transform=`scale(${k.toFixed(2)})`; b.style.width=(100/k).toFixed(3)+'%';
+    if(s.scrollHeight<=s.clientHeight+1) return;
+  }
+}
+function go(i,push=true){
+  i=clamp(i,0,slides.length-1);
+  slides[cur].classList.remove('active');
+  cur=i; slides[cur].classList.add('active');
+  const pg=slides[cur].querySelector('.pg'); if(pg) pg.textContent=`${i+1} / ${slides.length}`;
+  $('#bar').style.width=((i+1)/slides.length*100)+'%';
+  
+  if(push) history.replaceState(null,'','#'+(i+1));
+  window.dispatchEvent(new CustomEvent('slide',{detail:i}));
+  autofit(slides[cur]);
+}
+let afT=null;
+function afSoon(){ clearTimeout(afT); afT=setTimeout(()=>autofit(slides[cur]),90); }
+document.addEventListener('input',afSoon);
+document.addEventListener('click',afSoon);
+window.addEventListener('theme',afSoon);
+$('#btnPrev').onclick=()=>go(cur-1); $('#btnNext').onclick=()=>go(cur+1);
+$('#btnFs').onclick=()=>{ document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen(); };
+$('#btnOv').onclick=()=>toggleOv();
+function toggleOv(){ $('#ov').classList.toggle('on'); }
+/* mục lục */
+(function buildOv(){
+  const g=$('#ovg'); let last='';
+  slides.forEach((s,i)=>{
+    if(s.dataset.sec!==last){ last=s.dataset.sec;
+      const h=document.createElement('div'); h.className='ovsec'; h.textContent=last; g.appendChild(h); }
+    const c=document.createElement('div'); c.className='ovc';
+    c.innerHTML=`<span class="num">SLIDE ${i+1}</span><span class="t">${s.dataset.title}</span>`+
+      (s.dataset.int?`<span class="s">◆ có công cụ tương tác</span>`:'');
+    c.onclick=()=>{ go(i); toggleOv(); }; g.appendChild(c);
+  });
+})();
+document.addEventListener('keydown',e=>{
+  if(['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName)) return;
+  const k=e.key.toLowerCase();
+  if(k==='arrowright'||k==='pagedown'||k===' '){e.preventDefault();go(cur+1);}
+  else if(k==='arrowleft'||k==='pageup'){e.preventDefault();go(cur-1);}
+  else if(k==='home'){go(0);} else if(k==='end'){go(slides.length-1);}
+  else if(k==='o'){toggleOv();} else if(k==='escape'){$('#ov').classList.remove('on');}
+  else if(k==='f'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();}
+  else if(k==='p'){window.print();}
+});
+window.addEventListener('resize',()=>{fit();afSoon();});
+window.addEventListener('load',()=>{fit();autofit(slides[cur]);});
+fit();
+
+/* ═══════════ TÔ MÀU CÚ PHÁP VERILOG ═══════════ */
+const M0=String.fromCharCode(1), M1=String.fromCharCode(2);
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function vl(src){
+  let s=esc(src), cm=[];
+  s=s.replace(/\/\/[^\n]*/g,m=>{cm.push(m);return M0+String.fromCharCode(0x2460+cm.length-1)+M1;});
+  s=s.replace(/\b(module|endmodule|input|output|inout|always|initial|begin|end|if|else|case|casex|casez|endcase|default|assign|posedge|negedge|localparam|parameter|genvar|generate|endgenerate|integer|for|while|repeat|forever|fork|join|disable|force|release|and|or|xor|not|nand|nor|xnor|buf|function|endfunction|task|endtask|timescale)\b/g,
+    '<span class="kw">$1</span>');
+  s=s.replace(/\b(wire|reg|logic|real|time)\b/g,'<span class="ty">$1</span>');
+  s=s.replace(/(\d+'[bhdoBHDO][0-9a-fA-FxzXZ_?]+)/g,'<span class="nu">$1</span>');
+  s=s.replace(/(?<![\w#])(\d+)(?![\w'])/g,'<span class="nu">$1</span>');
+  /* chú thích đã được esc() ở bước đầu — không escape lần hai */
+  s=s.replace(new RegExp(M0+'(.)'+M1,'g'),(m,c)=>'<span class="cm">'+cm[c.charCodeAt(0)-0x2460]+'</span>');
+  return s;
+}
+function mark(html,cls){return '<span class="'+cls+'">'+html+'</span>';}
+const CO=['--acc','--teal','--violet','--amber','--green','--red','--pink'];
+/* mũi tên có đỉnh đặt đúng tại điểm nhận */
+function arw(px,py,dir,col,len,wid){
+  len=len||9; wid=wid||4.2;
+  const d={r:`M${px} ${py} l${-len} ${-wid} v${2*wid} z`,
+           l:`M${px} ${py} l${len} ${-wid} v${2*wid} z`,
+           d:`M${px} ${py} l${-wid} ${-len} h${2*wid} z`,
+           u:`M${px} ${py} l${-wid} ${len} h${2*wid} z`}[dir];
+  return S('path',{d:d,fill:`var(${col})`});
+}
+
+
+
+
+/* ═══════════ TÔ MÀU TCL / SDC VÀ LOG OPENSTA ═══════════ */
+function tl(src){
+  let s=esc(src), cm=[];
+  s=s.replace(/(^|\s)(#[^\n]*)/g,(m,a,c)=>{cm.push(c);return a+M0+String.fromCharCode(0x2460+cm.length-1)+M1;});
+  s=s.replace(/^(\s*)(create_clock|set_[a-z_]+|read_[a-z_]+|report_[a-z_]+|link_design|check_setup|foreach|if|set|puts|rjob|make)\b/gm,
+    '$1<span class="kw">$2</span>');
+  s=s.replace(/\[(get_[a-z_]+|all_[a-z_]+|expr)\b/g,'[<span class="op">$1</span>');
+  s=s.replace(/(\s)(-[a-z_]+)/g,'$1<span class="ty">$2</span>');
+  s=s.replace(/(?<![\w.])(\d+(?:\.\d+)?)(?![\w.])/g,'<span class="nu">$1</span>');
+  s=s.replace(new RegExp(M0+'(.)'+M1,'g'),(m,c)=>'<span class="cm">'+cm[c.charCodeAt(0)-0x2460]+'</span>');
+  return s;
+}
+function lg(src){
+  let s=esc(src);
+  s=s.replace(/^(.*slack \(VIOLATED\).*)$/gm,'<span class="bad">$1</span>');
+  s=s.replace(/^(.*\(VIOLATED\).*)$/gm,m=>m.indexOf('class="bad"')>=0?m:'<span class="bad">'+m+'</span>');
+  s=s.replace(/^(.*slack \(MET\).*)$/gm,'<span class="ok">$1</span>');
+  s=s.replace(/^(.*data (arrival|required) time.*)$/gm,'<span class="hl">$1</span>');
+  s=s.replace(/^(Warning:.*)$/gm,'<span class="bad">$1</span>');
+  s=s.replace(/^(\s*\.\.\..*)$/gm,'<span class="cm">$1</span>');
+  return s;
+}
+
+
+/* ───────── deck 13A: mã nguồn (trích từ 04-Vi-du/tuan-13A-viet-ma-cho-tong-hop/rtl), lệnh, tương tác ───────── */
+(function(){
+  const V={
+"vMuxIf": "// mux_ifelse.v — thân module\nalways @* begin\n    if      (sel == 3'd0) y = d[ 15:  0];\n    else if (sel == 3'd1) y = d[ 31: 16];\n    else if (sel == 3'd2) y = d[ 47: 32];\n    else if (sel == 3'd3) y = d[ 63: 48];\n    else if (sel == 3'd4) y = d[ 79: 64];\n    else if (sel == 3'd5) y = d[ 95: 80];\n    else if (sel == 3'd6) y = d[111: 96];\n    else                  y = d[127:112];\nend",
+"vMuxCase": "// mux_case.v — thân module\nalways @* begin\n    case (sel)\n        3'd0: y = d[ 15:  0];\n        3'd1: y = d[ 31: 16];\n        3'd2: y = d[ 47: 32];\n        3'd3: y = d[ 63: 48];\n        3'd4: y = d[ 79: 64];\n        3'd5: y = d[ 95: 80];\n        3'd6: y = d[111: 96];\n        default: y = d[127:112];\n    endcase\nend",
+"vPriC": "// pri_chain.v — thân module\ninteger i;\nalways @* begin\n    y = 16'd0;\n    // lặp từ 7 về 0: phép gán sau cùng (i nhỏ) được giữ\n    for (i = 7; i >= 0; i = i - 1)\n        if (req[i]) y = d[16*i +: 16];\nend",
+"vPriA": "// pri_andor.v — thân module\ninteger i;\nalways @* begin\n    y = 16'd0;\n    for (i = 0; i < 8; i = i + 1)\n        y = y | ({16{req[i]}} & d[16*i +: 16]);\nend",
+"vLatch": "module latch_if (\n    input  wire [1:0] sel,\n    input  wire [7:0] a, b, c,\n    output reg  [7:0] y\n);\n    always @* begin\n        if      (sel == 2'd0) y = a;\n        else if (sel == 2'd1) y = b;\n        else if (sel == 2'd2) y = c;\n        // thiếu else: sel == 2'd3 không gán y\n    end\nendmodule",
+"vFix0": "always @* begin\n    y = 8'd0;\n    if      (sel == 2'd0) y = a;\n    else if (sel == 2'd1) y = b;\n    else if (sel == 2'd2) y = c;\nend",
+"vFixX": "always @* begin\n    y = 8'bx;\n    if      (sel == 2'd0) y = a;\n    else if (sel == 2'd1) y = b;\n    else if (sel == 2'd2) y = c;\nend",
+"vShA": "module share_two_add (\n    input  wire        sel,\n    input  wire [15:0] a, b, c, d,\n    output reg  [16:0] sum\n);\n    always @* begin\n        if (sel) sum = a + b;\n        else     sum = c + d;\n    end\nendmodule",
+"vShB": "module share_mux_first (\n    input  wire        sel,\n    input  wire [15:0] a, b, c, d,\n    output wire [16:0] sum\n);\n    wire [15:0] op1 = sel ? a : c;\n    wire [15:0] op2 = sel ? b : d;\n    assign sum = op1 + op2;\nendmodule",
+"vOrdF": "`KS wire [16:0] s1 = d + a;     // d đến muộn\n`KS wire [17:0] s2 = s1 + b;\nassign y = s2 + c;",
+"vOrdL": "`KS wire [16:0] s1 = a + b;\n`KS wire [17:0] s2 = s1 + c;\nassign y = s2 + d;              // d đến muộn",
+"vOrdB": "`KS wire [16:0] s1 = a + b;\n`KS wire [16:0] s2 = c + d;\nassign y = s1 + s2;",
+"vTreeL": "module tree_loop (\n    input  wire [63:0] x,       // x[8*i +: 8] là toán hạng thứ i\n    output reg  [10:0] y\n);\n    integer i;\n    always @* begin\n        y = 11'd0;\n        for (i = 0; i < 8; i = i + 1)\n            y = y + x[8*i +: 8];\n    end\nendmodule",
+"vTreeG": "`KS wire [8:0] l1 [0:3];\n`KS wire [9:0] l2 [0:1];\ngenvar g;\ngenerate\n  for (g = 0; g < 4; g = g + 1) begin : L1\n    assign l1[g] = x[16*g +: 8] + x[16*g + 8 +: 8];\n  end\n  for (g = 0; g < 2; g = g + 1) begin : L2\n    assign l2[g] = l1[2*g] + l1[2*g + 1];\n  end\nendgenerate\nassign y = l2[0] + l2[1];",
+"vIrqP": "// irq_poor.v — thân module\ninteger i;\nreg done;\nalways @* begin\n    done = 1'b0;\n    addr = base;\n    for (i = 0; i < 8; i = i + 1)\n        if (irq[i] && !done) begin\n            addr = addr + 3 * (i + 1);\n            done = 1'b1;\n        end\nend",
+"vIrqB": "// irq_better.v — thân module\ninteger i;\nreg [4:0] off;\nalways @* begin\n    off = 5'd0;\n    for (i = 7; i >= 0; i = i - 1)\n        if (irq[i]) off = 3 * (i + 1);\n    addr = base + off;\nend",
+"vMulV": "assign y = a * b;                     // mul_var: b là cổng vào",
+"vMulC": "assign y = a * 8'd10;                 // mul_const",
+"vMulS": "assign y = ({8'd0, a} << 3) + ({8'd0, a} << 1);   // mul_shift: 8a + 2a",
+"vCnt": "module cnt_w32 (\n    input  wire clk,\n    input  wire rst_n,\n    output wire tick\n);\n    reg [31:0] cnt;\n    assign tick = (cnt == 99);\n    always @(posedge clk or negedge rst_n) begin\n        if (!rst_n)    cnt <= 0;\n        else if (tick) cnt <= 0;\n        else           cnt <= cnt + 1'b1;\n    end\nendmodule",
+"vHier": "module mul16 (\n    input  wire [15:0] a, b,\n    output wire [31:0] p\n);\n    assign p = a * b;\nendmodule\n\nmodule hier_unused (\n    input  wire [15:0] a, b,\n    output wire [7:0]  y\n);\n    wire [31:0] p;\n    mul16 u_mul (.a(a), .b(b), .p(p));\n    assign y = p[7:0];\nendmodule",
+"vPipe2": "module pipe2 (\n    input  wire        clk,\n    input  wire [15:0] a, b,\n    input  wire [31:0] c,\n    output reg  [31:0] y\n);\n    reg [15:0] ra, rb;\n    reg [31:0] rc, rc_d;\n    reg [23:0] pl, ph;\n    always @(posedge clk) begin\n        ra <= a; rb <= b; rc <= c;\n        pl   <= ra * rb[7:0];\n        ph   <= ra * rb[15:8];\n        rc_d <= rc;\n        y    <= pl + {ph, 8'd0} + rc_d;\n    end\nendmodule",
+"vRtm": "wire [31:0] data = a*b + c*d + e - f;\nalways @(posedge clk) begin\n    r1 <= data;  r2 <= r1;  r3 <= r2;\nend",
+"vOutC": "always @(posedge clk) begin\n    ra <= a; rb <= b;\nend\nassign y = ra + rb;       // out_comb",
+"vOutR": "always @(posedge clk)\n    y <= a + b;           // out_reg",
+"vRstA": "// rst_async\nalways @(posedge clk or negedge rst_n)\n  if (!rst_n) begin\n    v <= 0; d0 <= 0; /* ... d3 <= 0 */\n  end else begin\n    v <= {v[2:0], vin};\n    d0 <= din; /* ... d3 <= d2 */\n  end",
+"vRstS": "// rst_sync\nalways @(posedge clk)\n  if (!rst_n) begin\n    v <= 0; d0 <= 0; /* ... d3 <= 0 */\n  end else begin\n    v <= {v[2:0], vin};\n    d0 <= din; /* ... d3 <= d2 */\n  end",
+"vRstN": "// rst_none\nalways @(posedge clk or negedge rst_n)\n  if (!rst_n) v <= 0;\n  else        v <= {v[2:0], vin};\nalways @(posedge clk) begin\n  d0 <= din; d1 <= d0;\n  d2 <= d1;  d3 <= d2;\nend",
+"vBlk": "always @(posedge clk) begin      // shift_blk\n    q1 = din;\n    q2 = q1;\n    q3 = q2;\nend",
+"vNb": "always @(posedge clk) begin      // shift_nb\n    q1 <= din;\n    q2 <= q1;\n    q3 <= q2;\nend"
+};
+  const T={
+"tFlow": "read_verilog rtl/<biến thể>.v\nsynth -top <top> -flatten -run :fine ; stat     # coarse.txt\nsynth -top <top> -flatten -run fine:\ndfflibmap -liberty $LIB -dont_use *lpflow*\nabc       -liberty $LIB -dont_use *lpflow*\nhilomap ... ; stat -liberty $LIB ; write_verilog\nsta -exit sta.tcl                                # OpenSTA 2.7.0",
+"tLatchW": "Warning: Latch inferred for signal `\\latch_if.\\y' from process\n  `\\latch_if.$rtl/latch_if.v:8$proc$1'",
+"tRetime": "# Design Compiler (tham chiếu công nghiệp)\nset_optimize_registers true -design Pipeline\ncompile_ultra -retime"
+};
+  for(const k in V){ const p=document.getElementById(k); if(p) p.innerHTML=vl(V[k]); }
+  for(const k in T){ const p=document.getElementById(k); if(p) p.innerHTML=(k==='tLatchW'?lg(T[k]):tl(T[k])); }
+})();
+/* slide "Kết quả theo thời điểm tới của d": arrival (ns) từ RESULT late_d_* của run_20261114_1202 */
+(function(){
+  const seg=document.getElementById('ordSeg'), tb=document.getElementById('ordTb'); if(!seg||!tb) return;
+  const DL=[0,0.5,1.0,1.5,2.0];
+  const D={"ord_late_first": [3.933, 4.038, 4.538, 5.038, 5.538], "ord_late_last": [3.933, 4.038, 4.538, 5.038, 5.538], "ord_bal": [3.933, 4.038, 4.538, 5.038, 5.538], "ord_late_first_k": [6.537, 7.02, 7.52, 8.02, 8.52], "ord_late_last_k": [6.537, 6.537, 7.005, 7.505, 8.005], "ord_bal_k": [5.447, 5.928, 6.428, 6.928, 7.428]};
+  const NM={ord_late_first:'late_first',ord_late_last:'late_last',ord_bal:'bal'};
+  const f=v=>v.toFixed(3).replace('.',',');
+  function draw(k){
+    let h='<thead><tr><th>Cách viết</th><th class="r">Không keep (ns)</th><th class="r">Keep (ns)</th><th style="width:38%">Keep (thanh: 0–9 ns)</th></tr></thead><tbody>';
+    for(const n in NM){ const a=D[n][k], b=D[n+'_k'][k];
+      h+=`<tr><td class="mono">${NM[n]}</td><td class="num">${f(a)}</td><td class="num">${f(b)}</td><td><div class="bar" style="width:${(b/9*100).toFixed(1)}%"></div></td></tr>`; }
+    tb.innerHTML=h+'</tbody>';
+    [...seg.children].forEach((b,i)=>b.classList.toggle('on',i===k));
+  }
+  DL.forEach((d,i)=>{ const b=document.createElement('button'); b.textContent=d.toFixed(1).replace('.',','); b.onclick=()=>draw(i); seg.appendChild(b); });
+  draw(2);
+})();
+/* mở slide theo #số trên URL, mặc định slide 1 */
+go(Math.max(0,(parseInt(location.hash.slice(1))||1)-1),false);
+</script>
+</body>
+</html>

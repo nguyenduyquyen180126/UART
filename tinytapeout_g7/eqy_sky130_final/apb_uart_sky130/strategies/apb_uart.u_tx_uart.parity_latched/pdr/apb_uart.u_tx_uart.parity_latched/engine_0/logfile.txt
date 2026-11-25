@@ -1,0 +1,26 @@
+======== ABC command line "read_aiger model/design_aiger.aig; fold; strash; pdr -v -l; write_cex -a engine_0/trace.aiw"
+Warning: The last 15 outputs are interpreted as constraints.
+VarMax = 300. FrameMax = 10000. QueMax = 0. TimeMax = 119. MonoCNF = no. SkipGen = no. SolveAll = no.
+Frame Clauses                                                     Max Queue Flops Time
+1 : 0 4                                                                 1     5      0.00 sec  T/O =  0  PRV =  0
+2 : 0 13 14 ~1                                                           7    18      0.01 sec  T/O =  0  PRV =  0
+3 : 0 8 6 6 ~3                                                           0    18      0.02 sec  T/O =  0  PRV =  0
+4 : 0 10 9 11 15 ~3                                                      7    22      0.03 sec  T/O =  0  PRV =  0
+5 : 0 7 4 12 15 24 ~10                                                  11    22      0.06 sec  T/O =  0  PRV =  0
+6 : 0 7 3 6 1 1 23 ~12                                                   0    22      0.08 sec  T/O =  0  PRV =  0
+7 : 0 7 3 6 1 1 4 24 ~12                                                 4    22      0.09 sec  T/O =  0  PRV =  0
+8 : 0 7 3 6 0 0 0 0 6 ~30                                                0    22      0.11 sec  T/O =  0  PRV =  0
+Proved output 0 in frame 0 (converged).
+Block =   14  Oblig =   139  Clause =    92  Call =   754 (sat=53.4%)  Cex =   0  Start =   0
+SAT solving =     0.05 sec ( 41.75 %)
+unsat     =     0.02 sec ( 16.95 %)
+sat       =     0.03 sec ( 24.80 %)
+Generalize  =     0.03 sec ( 21.01 %)
+Push clause =     0.03 sec ( 20.95 %)
+Ternary sim =     0.00 sec (  2.28 %)
+Containment =     0.00 sec (  0.01 %)
+CNF compute =     0.00 sec (  3.36 %)
+Refinement  =     0.00 sec (  0.00 %)
+TOTAL       =     0.12 sec (100.00 %)
+Property proved.  Time =     0.12 sec
+Counter-example is not available.

@@ -13,7 +13,10 @@ module top_uart #(
     input  wire rx,
     output wire tx,
     output wire rts_n,
-    output wire irq
+    output wire irq,
+    output wire tx_done_status,
+    output wire rx_done_status,
+    output wire parity_err_status
 );
 
     wire        psel;
@@ -62,12 +65,16 @@ module top_uart #(
         .tx       (tx),
         .rx       (rx),
         .rts_n    (rts_n),
-        .irq      (irq)
+        .irq      (irq),
+        .tx_done_status (tx_done_status),
+        .rx_done_status (rx_done_status),
+        .parity_err_status (parity_err_status)
     );
 
 endmodule
 
 // Alias giu tuong thich cho cac testbench va scripts cu
+/* verilator lint_off DECLFILENAME */
 module spi2apb #(
     parameter CLK_FREQ = 50_000_000
 )(
@@ -81,7 +88,10 @@ module spi2apb #(
     input  wire rx,
     output wire tx,
     output wire rts_n,
-    output wire irq
+    output wire irq,
+    output wire tx_done_status,
+    output wire rx_done_status,
+    output wire parity_err_status
 );
     top_uart #(
         .CLK_FREQ(CLK_FREQ)
@@ -96,6 +106,10 @@ module spi2apb #(
         .rx       (rx),
         .tx       (tx),
         .rts_n    (rts_n),
-        .irq      (irq)
+        .irq      (irq),
+        .tx_done_status (tx_done_status),
+        .rx_done_status (rx_done_status),
+        .parity_err_status (parity_err_status)
     );
 endmodule
+/* verilator lint_on DECLFILENAME */

@@ -1,0 +1,126 @@
+EQY 21:52:52 [uart_apb_uart_eqy_reachable12] read_gold: starting process "yosys -ql uart_apb_uart_eqy_reachable12/gold.log uart_apb_uart_eqy_reachable12/gold.ys"
+EQY 21:52:52 [uart_apb_uart_eqy_reachable12] read_gold: finished (returncode=0)
+EQY 21:52:52 [uart_apb_uart_eqy_reachable12] read_gate: starting process "yosys -ql uart_apb_uart_eqy_reachable12/gate.log uart_apb_uart_eqy_reachable12/gate.ys"
+EQY 21:52:53 [uart_apb_uart_eqy_reachable12] read_gate: Warning: Wire apb_uart.\u_rx_uart.u_rx_baud_gen.sum [0] is used but has no driver.
+EQY 21:52:53 [uart_apb_uart_eqy_reachable12] read_gate: Warning: Wire apb_uart.\u_tx_uart.u_baud_gen.sum [0] is used but has no driver.
+EQY 21:52:53 [uart_apb_uart_eqy_reachable12] read_gate: Warning: Wire apb_uart.\_1842_ [0] is used but has no driver.
+EQY 21:52:53 [uart_apb_uart_eqy_reachable12] read_gate: Warning: Wire apb_uart.\_1845_ [0] is used but has no driver.
+EQY 21:52:53 [uart_apb_uart_eqy_reachable12] read_gate: Warning: Wire apb_uart.\_1837_ [0] is used but has no driver.
+EQY 21:52:53 [uart_apb_uart_eqy_reachable12] read_gate: Warning: Wire apb_uart.\_1835_ [0] is used but has no driver.
+EQY 21:52:53 [uart_apb_uart_eqy_reachable12] read_gate: Warning: Wire apb_uart.\_1834_ [3] is used but has no driver.
+EQY 21:52:53 [uart_apb_uart_eqy_reachable12] read_gate: Warning: Wire apb_uart.\u_tx_uart.controller.tx_sel [0] is used but has no driver.
+EQY 21:52:53 [uart_apb_uart_eqy_reachable12] read_gate: Warning: Wire apb_uart.\u_tx_uart.controller.tx_sel [1] is used but has no driver.
+EQY 21:52:53 [uart_apb_uart_eqy_reachable12] read_gate: Warning: Wire apb_uart.\u_rx_uart.ctrl_frame_err is used but has no driver.
+EQY 21:52:53 [uart_apb_uart_eqy_reachable12] read_gate: Warning: Wire apb_uart.\u_tx_uart.controller.stop_last is used but has no driver.
+EQY 21:52:53 [uart_apb_uart_eqy_reachable12] read_gate: Warning: Wire apb_uart.\u_rx_uart.clr_baud is used but has no driver.
+EQY 21:52:53 [uart_apb_uart_eqy_reachable12] read_gate: Warning: Wire apb_uart.\u_tx_uart.clr_baud is used but has no driver.
+EQY 21:52:53 [uart_apb_uart_eqy_reachable12] read_gate: Warning: Wire apb_uart.\u_rx_uart.num_stop_b [0] is used but has no driver.
+EQY 21:52:53 [uart_apb_uart_eqy_reachable12] read_gate: Warning: Wire apb_uart.\u_tx_uart.controller.tick_last is used but has no driver.
+EQY 21:52:53 [uart_apb_uart_eqy_reachable12] read_gate: Warning: Wire apb_uart.\u_tx_uart.clr_bit is used but has no driver.
+EQY 21:52:53 [uart_apb_uart_eqy_reachable12] read_gate: Warning: Wire apb_uart.\u_tx_uart.baud_tick is used but has no driver.
+EQY 21:52:53 [uart_apb_uart_eqy_reachable12] read_gate: Warning: Wire apb_uart.\u_tx_uart.controller.stop_cnt_en is used but has no driver.
+EQY 21:52:53 [uart_apb_uart_eqy_reachable12] read_gate: Warning: Wire apb_uart.\u_tx_uart.clr_stop is used but has no driver.
+EQY 21:52:53 [uart_apb_uart_eqy_reachable12] read_gate: Warning: Wire apb_uart.\u_tx_uart.parity_bit is used but has no driver.
+EQY 21:52:53 [uart_apb_uart_eqy_reachable12] read_gate: Warning: Wire apb_uart.\u_tx_uart.tx_data_masked [5] is used but has no driver.
+EQY 21:52:53 [uart_apb_uart_eqy_reachable12] read_gate: Warning: Wire apb_uart.\u_tx_uart.tx_data_masked [6] is used but has no driver.
+EQY 21:52:53 [uart_apb_uart_eqy_reachable12] read_gate: Warning: Wire apb_uart.\u_tx_uart.tx_data_masked [7] is used but has no driver.
+EQY 21:52:53 [uart_apb_uart_eqy_reachable12] read_gate: Warning: Wire apb_uart.\tx_load_reg_unused is used but has no driver.
+EQY 21:52:53 [uart_apb_uart_eqy_reachable12] read_gate: Warning: Wire apb_uart.\u_rx_uart.error_check_inst.error is used but has no driver.
+EQY 21:52:53 [uart_apb_uart_eqy_reachable12] read_gate: Warning: Wire apb_uart.\u_rx_uart.rx_controller_inst.rx is used but has no driver.
+EQY 21:52:53 [uart_apb_uart_eqy_reachable12] read_gate: Warning: Wire apb_uart.\u_rx_uart.data_out [0] is used but has no driver.
+EQY 21:52:53 [uart_apb_uart_eqy_reachable12] read_gate: Warning: Wire apb_uart.\u_rx_uart.data_out [1] is used but has no driver.
+EQY 21:52:53 [uart_apb_uart_eqy_reachable12] read_gate: Warning: Wire apb_uart.\u_rx_uart.data_out [2] is used but has no driver.
+EQY 21:52:53 [uart_apb_uart_eqy_reachable12] read_gate: Warning: Wire apb_uart.\u_rx_uart.bit_cnt_inst.data_b_num_out [0] is used but has no driver.
+EQY 21:52:53 [uart_apb_uart_eqy_reachable12] read_gate: Warning: Wire apb_uart.\u_rx_uart.bit_cnt_inst.data_b_num_out [1] is used but has no driver.
+EQY 21:52:53 [uart_apb_uart_eqy_reachable12] read_gate: Warning: Wire apb_uart.\u_rx_uart.bit_cnt_inst.data_b_num_out [2] is used but has no driver.
+EQY 21:52:53 [uart_apb_uart_eqy_reachable12] read_gate: Warning: Wire apb_uart.\u_rx_uart.bit_cnt_inst.data_b_num_out [3] is used but has no driver.
+EQY 21:52:53 [uart_apb_uart_eqy_reachable12] read_gate: Warning: Wire apb_uart.\u_rx_uart.bit_cnt_inst.bit_last is used but has no driver.
+EQY 21:52:53 [uart_apb_uart_eqy_reachable12] read_gate: Warning: Wire apb_uart.\u_rx_uart.bit_cnt_inst.tick_en is used but has no driver.
+EQY 21:52:53 [uart_apb_uart_eqy_reachable12] read_gate: Warning: Wire apb_uart.\u_rx_uart.rx_controller_inst.baud_tick is used but has no driver.
+EQY 21:52:53 [uart_apb_uart_eqy_reachable12] read_gate: Warning: Wire apb_uart.\rx_busy is used but has no driver.
+EQY 21:52:53 [uart_apb_uart_eqy_reachable12] read_gate: Warning: Wire apb_uart.\rx_clear is used but has no driver.
+EQY 21:52:54 [uart_apb_uart_eqy_reachable12] read_gate: finished (returncode=0)
+EQY 21:52:54 [uart_apb_uart_eqy_reachable12] combine: starting process "yosys -ql uart_apb_uart_eqy_reachable12/combine.log uart_apb_uart_eqy_reachable12/combine.ys"
+EQY 21:52:54 [uart_apb_uart_eqy_reachable12] combine: finished (returncode=0)
+EQY 21:52:55 [uart_apb_uart_eqy_reachable12] partition: starting process "cd uart_apb_uart_eqy_reachable12; yosys -ql partition.log partition.ys"
+EQY 21:52:57 [uart_apb_uart_eqy_reachable12] partition: finished (returncode=0)
+EQY 21:52:57 [uart_apb_uart_eqy_reachable12] run: starting process "make -C uart_apb_uart_eqy_reachable12 -f strategies.mk"
+EQY 21:52:57 [uart_apb_uart_eqy_reachable12] run: make: Entering directory '/home/vietanh/Downloads/code/UART/UART/uart_apb_uart_eqy_reachable12'
+EQY 21:52:57 [uart_apb_uart_eqy_reachable12] run: Running strategy 'simple' on 'apb_uart.irq'..
+EQY 21:52:57 [uart_apb_uart_eqy_reachable12] run: Proved equivalence of partition 'apb_uart.irq' using strategy 'simple'
+EQY 21:52:57 [uart_apb_uart_eqy_reachable12] run: Running strategy 'simple' on 'apb_uart.prdata'..
+EQY 21:53:01 [uart_apb_uart_eqy_reachable12] run: Could not prove equivalence of partition 'apb_uart.prdata' using strategy 'simple': equivalence unknown
+EQY 21:53:01 [uart_apb_uart_eqy_reachable12] run: Running strategy 'simple' on 'apb_uart.pready'..
+EQY 21:53:01 [uart_apb_uart_eqy_reachable12] run: Proved equivalence of partition 'apb_uart.pready' using strategy 'simple'
+EQY 21:53:01 [uart_apb_uart_eqy_reachable12] run: Running strategy 'simple' on 'apb_uart.pslverr'..
+EQY 21:53:05 [uart_apb_uart_eqy_reachable12] run: Could not prove equivalence of partition 'apb_uart.pslverr' using strategy 'simple': equivalence unknown
+EQY 21:53:05 [uart_apb_uart_eqy_reachable12] run: Running strategy 'simple' on 'apb_uart.rts_n'..
+EQY 21:53:05 [uart_apb_uart_eqy_reachable12] run: Proved equivalence of partition 'apb_uart.rts_n' using strategy 'simple'
+EQY 21:53:05 [uart_apb_uart_eqy_reachable12] run: Running strategy 'simple' on 'apb_uart.tx'..
+EQY 21:53:07 [uart_apb_uart_eqy_reachable12] run: Could not prove equivalence of partition 'apb_uart.tx' using strategy 'simple': equivalence unknown
+EQY 21:53:07 [uart_apb_uart_eqy_reachable12] run: Running strategy 'pdr' on 'apb_uart.tx'..
+EQY 21:53:08 [uart_apb_uart_eqy_reachable12] run: Proved equivalence of partition 'apb_uart.tx' using strategy 'pdr'
+EQY 21:53:08 [uart_apb_uart_eqy_reachable12] run: Running strategy 'simple' on 'apb_uart.u_apb_regs.baud'..
+EQY 21:53:15 [uart_apb_uart_eqy_reachable12] run: Could not prove equivalence of partition 'apb_uart.u_apb_regs.baud' using strategy 'simple': equivalence unknown
+EQY 21:53:15 [uart_apb_uart_eqy_reachable12] run: Running strategy 'pdr' on 'apb_uart.u_apb_regs.baud'..
+EQY 21:53:16 [uart_apb_uart_eqy_reachable12] run: Proved equivalence of partition 'apb_uart.u_apb_regs.baud' using strategy 'pdr'
+EQY 21:53:16 [uart_apb_uart_eqy_reachable12] run: Running strategy 'simple' on 'apb_uart.u_apb_regs.cfg'..
+EQY 21:53:21 [uart_apb_uart_eqy_reachable12] run: Could not prove equivalence of partition 'apb_uart.u_apb_regs.cfg' using strategy 'simple': equivalence unknown
+EQY 21:53:21 [uart_apb_uart_eqy_reachable12] run: Running strategy 'simple' on 'apb_uart.u_apb_regs.frame_err_flag'..
+EQY 21:53:21 [uart_apb_uart_eqy_reachable12] run: Proved equivalence of partition 'apb_uart.u_apb_regs.frame_err_flag' using strategy 'simple'
+EQY 21:53:21 [uart_apb_uart_eqy_reachable12] run: Running strategy 'simple' on 'apb_uart.u_apb_regs.ier'..
+EQY 21:53:21 [uart_apb_uart_eqy_reachable12] run: Proved equivalence of partition 'apb_uart.u_apb_regs.ier' using strategy 'simple'
+EQY 21:53:21 [uart_apb_uart_eqy_reachable12] run: Running strategy 'simple' on 'apb_uart.u_apb_regs.parity_err_flag'..
+EQY 21:53:22 [uart_apb_uart_eqy_reachable12] run: Proved equivalence of partition 'apb_uart.u_apb_regs.parity_err_flag' using strategy 'simple'
+EQY 21:53:22 [uart_apb_uart_eqy_reachable12] run: Running strategy 'simple' on 'apb_uart.u_apb_regs.rx_data_reg'..
+EQY 21:53:22 [uart_apb_uart_eqy_reachable12] run: Proved equivalence of partition 'apb_uart.u_apb_regs.rx_data_reg' using strategy 'simple'
+EQY 21:53:22 [uart_apb_uart_eqy_reachable12] run: Running strategy 'simple' on 'apb_uart.u_apb_regs.rx_done_flag'..
+EQY 21:53:22 [uart_apb_uart_eqy_reachable12] run: Proved equivalence of partition 'apb_uart.u_apb_regs.rx_done_flag' using strategy 'simple'
+EQY 21:53:22 [uart_apb_uart_eqy_reachable12] run: Running strategy 'simple' on 'apb_uart.u_apb_regs.rx_done_prev'..
+EQY 21:53:22 [uart_apb_uart_eqy_reachable12] run: Proved equivalence of partition 'apb_uart.u_apb_regs.rx_done_prev' using strategy 'simple'
+EQY 21:53:22 [uart_apb_uart_eqy_reachable12] run: Running strategy 'simple' on 'apb_uart.u_apb_regs.soft_rst_reg'..
+EQY 21:53:23 [uart_apb_uart_eqy_reachable12] run: Proved equivalence of partition 'apb_uart.u_apb_regs.soft_rst_reg' using strategy 'simple'
+EQY 21:53:23 [uart_apb_uart_eqy_reachable12] run: Running strategy 'simple' on 'apb_uart.u_apb_regs.start_reg'..
+EQY 21:53:23 [uart_apb_uart_eqy_reachable12] run: Proved equivalence of partition 'apb_uart.u_apb_regs.start_reg' using strategy 'simple'
+EQY 21:53:23 [uart_apb_uart_eqy_reachable12] run: Running strategy 'simple' on 'apb_uart.u_apb_regs.tx_data_reg'..
+EQY 21:53:23 [uart_apb_uart_eqy_reachable12] run: Proved equivalence of partition 'apb_uart.u_apb_regs.tx_data_reg' using strategy 'simple'
+EQY 21:53:23 [uart_apb_uart_eqy_reachable12] run: Running strategy 'simple' on 'apb_uart.u_rx_uart.bit_cnt_inst.bit_cnt'..
+EQY 21:53:24 [uart_apb_uart_eqy_reachable12] run: Proved equivalence of partition 'apb_uart.u_rx_uart.bit_cnt_inst.bit_cnt' using strategy 'simple'
+EQY 21:53:24 [uart_apb_uart_eqy_reachable12] run: Running strategy 'simple' on 'apb_uart.u_rx_uart.deframe_inst.parity_bit'..
+EQY 21:53:24 [uart_apb_uart_eqy_reachable12] run: Proved equivalence of partition 'apb_uart.u_rx_uart.deframe_inst.parity_bit' using strategy 'simple'
+EQY 21:53:24 [uart_apb_uart_eqy_reachable12] run: Running strategy 'simple' on 'apb_uart.u_rx_uart.deframe_inst.parity_exp'..
+EQY 21:53:24 [uart_apb_uart_eqy_reachable12] run: Proved equivalence of partition 'apb_uart.u_rx_uart.deframe_inst.parity_exp' using strategy 'simple'
+EQY 21:53:24 [uart_apb_uart_eqy_reachable12] run: Running strategy 'simple' on 'apb_uart.u_rx_uart.deframe_inst.rx_data'..
+EQY 21:53:25 [uart_apb_uart_eqy_reachable12] run: Proved equivalence of partition 'apb_uart.u_rx_uart.deframe_inst.rx_data' using strategy 'simple'
+EQY 21:53:25 [uart_apb_uart_eqy_reachable12] run: Running strategy 'simple' on 'apb_uart.u_rx_uart.frame_err'..
+EQY 21:53:28 [uart_apb_uart_eqy_reachable12] run: Could not prove equivalence of partition 'apb_uart.u_rx_uart.frame_err' using strategy 'simple': equivalence unknown
+EQY 21:53:28 [uart_apb_uart_eqy_reachable12] run: Running strategy 'simple' on 'apb_uart.u_rx_uart.overrun'..
+EQY 21:53:31 [uart_apb_uart_eqy_reachable12] run: Could not prove equivalence of partition 'apb_uart.u_rx_uart.overrun' using strategy 'simple': equivalence unknown
+EQY 21:53:31 [uart_apb_uart_eqy_reachable12] run: Running strategy 'simple' on 'apb_uart.u_rx_uart.parity_err'..
+EQY 21:53:34 [uart_apb_uart_eqy_reachable12] run: Could not prove equivalence of partition 'apb_uart.u_rx_uart.parity_err' using strategy 'simple': equivalence unknown
+EQY 21:53:34 [uart_apb_uart_eqy_reachable12] run: Running strategy 'simple' on 'apb_uart.u_rx_uart.reset_release_pending'..
+EQY 21:53:34 [uart_apb_uart_eqy_reachable12] run: Proved equivalence of partition 'apb_uart.u_rx_uart.reset_release_pending' using strategy 'simple'
+EQY 21:53:34 [uart_apb_uart_eqy_reachable12] run: Running strategy 'simple' on 'apb_uart.u_rx_uart.rx_controller_inst.first_stop_sampled'..
+EQY 21:53:35 [uart_apb_uart_eqy_reachable12] run: Proved equivalence of partition 'apb_uart.u_rx_uart.rx_controller_inst.first_stop_sampled' using strategy 'simple'
+EQY 21:53:35 [uart_apb_uart_eqy_reachable12] run: Running strategy 'simple' on 'apb_uart.u_rx_uart.rx_controller_inst.frame_error_latched'..
+EQY 21:53:38 [uart_apb_uart_eqy_reachable12] run: Could not prove equivalence of partition 'apb_uart.u_rx_uart.rx_controller_inst.frame_error_latched' using strategy 'simple': equivalence unknown
+EQY 21:53:38 [uart_apb_uart_eqy_reachable12] run: Running strategy 'simple' on 'apb_uart.u_rx_uart.rx_data'..
+EQY 21:53:42 [uart_apb_uart_eqy_reachable12] run: Could not prove equivalence of partition 'apb_uart.u_rx_uart.rx_data' using strategy 'simple': equivalence unknown
+EQY 21:53:42 [uart_apb_uart_eqy_reachable12] run: Running strategy 'simple' on 'apb_uart.u_rx_uart.rx_done'..
+EQY 21:53:46 [uart_apb_uart_eqy_reachable12] run: Could not prove equivalence of partition 'apb_uart.u_rx_uart.rx_done' using strategy 'simple': equivalence unknown
+EQY 21:53:46 [uart_apb_uart_eqy_reachable12] run: Running strategy 'simple' on 'apb_uart.u_rx_uart.rx_sync1'..
+EQY 21:53:46 [uart_apb_uart_eqy_reachable12] run: Proved equivalence of partition 'apb_uart.u_rx_uart.rx_sync1' using strategy 'simple'
+EQY 21:53:46 [uart_apb_uart_eqy_reachable12] run: Running strategy 'simple' on 'apb_uart.u_rx_uart.rx_sync2'..
+EQY 21:53:46 [uart_apb_uart_eqy_reachable12] run: Proved equivalence of partition 'apb_uart.u_rx_uart.rx_sync2' using strategy 'simple'
+EQY 21:53:46 [uart_apb_uart_eqy_reachable12] run: Running strategy 'simple' on 'apb_uart.u_rx_uart.sipo_inst.data_out'..
+EQY 21:53:50 [uart_apb_uart_eqy_reachable12] run: Could not prove equivalence of partition 'apb_uart.u_rx_uart.sipo_inst.data_out' using strategy 'simple': equivalence unknown
+EQY 21:53:50 [uart_apb_uart_eqy_reachable12] run: Running strategy 'pdr' on 'apb_uart.u_rx_uart.sipo_inst.data_out'..
+EQY 21:53:51 [uart_apb_uart_eqy_reachable12] run: Elapsed clock time [H:MM:SS (secs)]: 0:00:00 (0)
+EQY 21:53:51 [uart_apb_uart_eqy_reachable12] run: Elapsed process time [H:MM:SS (secs)]: 0:00:00 (0)
+EQY 21:53:51 [uart_apb_uart_eqy_reachable12] run: engine_0 (abc pdr) returned FAIL
+EQY 21:53:51 [uart_apb_uart_eqy_reachable12] run: engine_0 did not produce any traces
+EQY 21:53:51 [uart_apb_uart_eqy_reachable12] run: Execution of strategy 'pdr' on partition 'apb_uart.u_rx_uart.sipo_inst.data_out' encountered an error.
+EQY 21:53:51 [uart_apb_uart_eqy_reachable12] run: More details can be found in 'uart_apb_uart_eqy_reachable12/strategies/apb_uart.u_rx_uart.sipo_inst.data_out/pdr/apb_uart.u_rx_uart.sipo_inst.data_out/logfile.txt'.
+EQY 21:53:51 [uart_apb_uart_eqy_reachable12] run: make: *** [strategies.mk:90: strategies/apb_uart.u_rx_uart.sipo_inst.data_out/pdr/status] Error 1
+EQY 21:53:51 [uart_apb_uart_eqy_reachable12] run: make: Leaving directory '/home/vietanh/Downloads/code/UART/UART/uart_apb_uart_eqy_reachable12'
+EQY 21:53:51 [uart_apb_uart_eqy_reachable12] run: finished (returncode=2)

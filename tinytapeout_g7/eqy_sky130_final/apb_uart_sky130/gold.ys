@@ -1,0 +1,7 @@
+read_verilog -formal /home/vietanh/Downloads/code/UART/UART/rtl/*.v
+prep -top apb_uart -flatten
+async2sync
+opt_clean
+check -initdrv
+setundef -undriven -undef
+write_rtlil apb_uart_sky130/gold.il

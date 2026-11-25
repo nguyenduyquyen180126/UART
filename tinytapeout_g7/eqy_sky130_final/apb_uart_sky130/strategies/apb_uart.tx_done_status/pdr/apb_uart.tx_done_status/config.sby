@@ -1,0 +1,22 @@
+[options]
+mode prove
+depth 5
+expect pass,fail,unknown,timeout
+
+timeout 180
+
+[engines]
+abc pdr
+
+[script]
+verilog_defaults -add -D CHECK_OUTPUTS
+read_verilog -sv ../../../../../partitions/apb_uart.tx_done_status.sv
+read_rtlil ../../../../../partitions/apb_uart.tx_done_status.il
+hierarchy -top miter; proc
+
+async2sync
+formalff -clk2ff -ff2anyinit gate.apb_uart.tx_done_status
+setundef -anyseq gate.apb_uart.tx_done_status
+flatten -wb; dffunmap; opt_expr -keepdc -undriven; opt_clean
+xprop -formal -split-ports -assume-def-inputs miter
+

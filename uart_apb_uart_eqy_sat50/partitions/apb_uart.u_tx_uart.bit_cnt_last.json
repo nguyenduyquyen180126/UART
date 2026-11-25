@@ -1,0 +1,60 @@
+{
+  "partition": {
+    "index": 12,
+    "name": "apb_uart.u_tx_uart.bit_cnt_last",
+    "inbits": {
+      "u_apb_regs.cfg": [
+        0,
+        1
+      ]
+    },
+    "outbits": {
+      "u_tx_uart.bit_cnt_last": [
+        0,
+        1,
+        2
+      ]
+    },
+    "crossbits": {}
+  },
+  "gold_module": {
+    "name": "gold.apb_uart.u_tx_uart.bit_cnt_last",
+    "internal": {
+      "data_bits": [
+        0,
+        1
+      ],
+      "u_apb_regs.data_bits": [
+        0,
+        1
+      ],
+      "u_rx_uart.data_b_num": [
+        0,
+        1
+      ],
+      "u_rx_uart.data_b_num_inst.data_b_num": [
+        0,
+        1
+      ],
+      "u_tx_uart.data_bit_num": [
+        0,
+        1
+      ]
+    },
+    "unused": {},
+    "cellcount": 15,
+    "bitcount": 19
+  },
+  "gate_module": {
+    "name": "gold.apb_uart.u_tx_uart.bit_cnt_last",
+    "internal": {},
+    "unused": {
+      "u_apb_regs.cfg": [
+        0,
+        1
+      ]
+    },
+    "cellcount": 3,
+    "bitcount": 5
+  }
+}

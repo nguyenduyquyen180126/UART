@@ -1,0 +1,60 @@
+EQY 21:47:34 [uart_apb_uart_eqy_top_pdr] read_gold: starting process "yosys -ql uart_apb_uart_eqy_top_pdr/gold.log uart_apb_uart_eqy_top_pdr/gold.ys"
+EQY 21:47:34 [uart_apb_uart_eqy_top_pdr] read_gold: finished (returncode=0)
+EQY 21:47:34 [uart_apb_uart_eqy_top_pdr] read_gate: starting process "yosys -ql uart_apb_uart_eqy_top_pdr/gate.log uart_apb_uart_eqy_top_pdr/gate.ys"
+EQY 21:47:34 [uart_apb_uart_eqy_top_pdr] read_gate: Warning: Wire apb_uart.\u_rx_uart.u_rx_baud_gen.sum [0] is used but has no driver.
+EQY 21:47:34 [uart_apb_uart_eqy_top_pdr] read_gate: Warning: Wire apb_uart.\u_tx_uart.u_baud_gen.sum [0] is used but has no driver.
+EQY 21:47:34 [uart_apb_uart_eqy_top_pdr] read_gate: Warning: Wire apb_uart.\_1842_ [0] is used but has no driver.
+EQY 21:47:34 [uart_apb_uart_eqy_top_pdr] read_gate: Warning: Wire apb_uart.\_1845_ [0] is used but has no driver.
+EQY 21:47:34 [uart_apb_uart_eqy_top_pdr] read_gate: Warning: Wire apb_uart.\_1837_ [0] is used but has no driver.
+EQY 21:47:34 [uart_apb_uart_eqy_top_pdr] read_gate: Warning: Wire apb_uart.\_1835_ [0] is used but has no driver.
+EQY 21:47:34 [uart_apb_uart_eqy_top_pdr] read_gate: Warning: Wire apb_uart.\_1834_ [3] is used but has no driver.
+EQY 21:47:34 [uart_apb_uart_eqy_top_pdr] read_gate: Warning: Wire apb_uart.\u_tx_uart.controller.tx_sel [0] is used but has no driver.
+EQY 21:47:34 [uart_apb_uart_eqy_top_pdr] read_gate: Warning: Wire apb_uart.\u_tx_uart.controller.tx_sel [1] is used but has no driver.
+EQY 21:47:34 [uart_apb_uart_eqy_top_pdr] read_gate: Warning: Wire apb_uart.\u_rx_uart.ctrl_frame_err is used but has no driver.
+EQY 21:47:34 [uart_apb_uart_eqy_top_pdr] read_gate: Warning: Wire apb_uart.\u_tx_uart.controller.stop_last is used but has no driver.
+EQY 21:47:34 [uart_apb_uart_eqy_top_pdr] read_gate: Warning: Wire apb_uart.\u_rx_uart.clr_baud is used but has no driver.
+EQY 21:47:34 [uart_apb_uart_eqy_top_pdr] read_gate: Warning: Wire apb_uart.\u_tx_uart.clr_baud is used but has no driver.
+EQY 21:47:34 [uart_apb_uart_eqy_top_pdr] read_gate: Warning: Wire apb_uart.\u_rx_uart.num_stop_b [0] is used but has no driver.
+EQY 21:47:34 [uart_apb_uart_eqy_top_pdr] read_gate: Warning: Wire apb_uart.\u_tx_uart.controller.tick_last is used but has no driver.
+EQY 21:47:34 [uart_apb_uart_eqy_top_pdr] read_gate: Warning: Wire apb_uart.\u_tx_uart.clr_bit is used but has no driver.
+EQY 21:47:34 [uart_apb_uart_eqy_top_pdr] read_gate: Warning: Wire apb_uart.\u_tx_uart.baud_tick is used but has no driver.
+EQY 21:47:34 [uart_apb_uart_eqy_top_pdr] read_gate: Warning: Wire apb_uart.\u_tx_uart.controller.stop_cnt_en is used but has no driver.
+EQY 21:47:34 [uart_apb_uart_eqy_top_pdr] read_gate: Warning: Wire apb_uart.\u_tx_uart.clr_stop is used but has no driver.
+EQY 21:47:34 [uart_apb_uart_eqy_top_pdr] read_gate: Warning: Wire apb_uart.\u_tx_uart.parity_bit is used but has no driver.
+EQY 21:47:34 [uart_apb_uart_eqy_top_pdr] read_gate: Warning: Wire apb_uart.\u_tx_uart.tx_data_masked [5] is used but has no driver.
+EQY 21:47:34 [uart_apb_uart_eqy_top_pdr] read_gate: Warning: Wire apb_uart.\u_tx_uart.tx_data_masked [6] is used but has no driver.
+EQY 21:47:34 [uart_apb_uart_eqy_top_pdr] read_gate: Warning: Wire apb_uart.\u_tx_uart.tx_data_masked [7] is used but has no driver.
+EQY 21:47:34 [uart_apb_uart_eqy_top_pdr] read_gate: Warning: Wire apb_uart.\tx_load_reg_unused is used but has no driver.
+EQY 21:47:34 [uart_apb_uart_eqy_top_pdr] read_gate: Warning: Wire apb_uart.\u_rx_uart.error_check_inst.error is used but has no driver.
+EQY 21:47:34 [uart_apb_uart_eqy_top_pdr] read_gate: Warning: Wire apb_uart.\u_rx_uart.rx_controller_inst.rx is used but has no driver.
+EQY 21:47:34 [uart_apb_uart_eqy_top_pdr] read_gate: Warning: Wire apb_uart.\u_rx_uart.data_out [0] is used but has no driver.
+EQY 21:47:34 [uart_apb_uart_eqy_top_pdr] read_gate: Warning: Wire apb_uart.\u_rx_uart.data_out [1] is used but has no driver.
+EQY 21:47:34 [uart_apb_uart_eqy_top_pdr] read_gate: Warning: Wire apb_uart.\u_rx_uart.data_out [2] is used but has no driver.
+EQY 21:47:34 [uart_apb_uart_eqy_top_pdr] read_gate: Warning: Wire apb_uart.\u_rx_uart.bit_cnt_inst.data_b_num_out [0] is used but has no driver.
+EQY 21:47:34 [uart_apb_uart_eqy_top_pdr] read_gate: Warning: Wire apb_uart.\u_rx_uart.bit_cnt_inst.data_b_num_out [1] is used but has no driver.
+EQY 21:47:34 [uart_apb_uart_eqy_top_pdr] read_gate: Warning: Wire apb_uart.\u_rx_uart.bit_cnt_inst.data_b_num_out [2] is used but has no driver.
+EQY 21:47:34 [uart_apb_uart_eqy_top_pdr] read_gate: Warning: Wire apb_uart.\u_rx_uart.bit_cnt_inst.data_b_num_out [3] is used but has no driver.
+EQY 21:47:34 [uart_apb_uart_eqy_top_pdr] read_gate: Warning: Wire apb_uart.\u_rx_uart.bit_cnt_inst.bit_last is used but has no driver.
+EQY 21:47:34 [uart_apb_uart_eqy_top_pdr] read_gate: Warning: Wire apb_uart.\u_rx_uart.bit_cnt_inst.tick_en is used but has no driver.
+EQY 21:47:34 [uart_apb_uart_eqy_top_pdr] read_gate: Warning: Wire apb_uart.\u_rx_uart.rx_controller_inst.baud_tick is used but has no driver.
+EQY 21:47:34 [uart_apb_uart_eqy_top_pdr] read_gate: Warning: Wire apb_uart.\rx_busy is used but has no driver.
+EQY 21:47:34 [uart_apb_uart_eqy_top_pdr] read_gate: Warning: Wire apb_uart.\rx_clear is used but has no driver.
+EQY 21:47:36 [uart_apb_uart_eqy_top_pdr] read_gate: finished (returncode=0)
+EQY 21:47:36 [uart_apb_uart_eqy_top_pdr] combine: starting process "yosys -ql uart_apb_uart_eqy_top_pdr/combine.log uart_apb_uart_eqy_top_pdr/combine.ys"
+EQY 21:47:36 [uart_apb_uart_eqy_top_pdr] combine: finished (returncode=0)
+EQY 21:47:37 [uart_apb_uart_eqy_top_pdr] partition: starting process "cd uart_apb_uart_eqy_top_pdr; yosys -ql partition.log partition.ys"
+EQY 21:47:38 [uart_apb_uart_eqy_top_pdr] partition: finished (returncode=0)
+EQY 21:47:38 [uart_apb_uart_eqy_top_pdr] run: starting process "make -C uart_apb_uart_eqy_top_pdr -f strategies.mk"
+EQY 21:47:38 [uart_apb_uart_eqy_top_pdr] run: make: Entering directory '/home/vietanh/Downloads/code/UART/UART/uart_apb_uart_eqy_top_pdr'
+EQY 21:47:38 [uart_apb_uart_eqy_top_pdr] run: Running strategy 'pdr' on 'apb_uart.top_outputs'..
+EQY 21:50:40 [uart_apb_uart_eqy_top_pdr] run: Could not prove equivalence of partition 'apb_uart.top_outputs' using strategy 'pdr': timeout
+EQY 21:50:40 [uart_apb_uart_eqy_top_pdr] run: make -f strategies.mk summary
+EQY 21:50:40 [uart_apb_uart_eqy_top_pdr] run: make[1]: Entering directory '/home/vietanh/Downloads/code/UART/UART/uart_apb_uart_eqy_top_pdr'
+EQY 21:50:40 [uart_apb_uart_eqy_top_pdr] run: make[1]: Leaving directory '/home/vietanh/Downloads/code/UART/UART/uart_apb_uart_eqy_top_pdr'
+EQY 21:50:40 [uart_apb_uart_eqy_top_pdr] run: make: Leaving directory '/home/vietanh/Downloads/code/UART/UART/uart_apb_uart_eqy_top_pdr'
+EQY 21:50:40 [uart_apb_uart_eqy_top_pdr] run: finished (returncode=0)
+EQY 21:50:40 [uart_apb_uart_eqy_top_pdr] Warning: Failed to prove equivalence for 1/1 partitions:
+EQY 21:50:40 [uart_apb_uart_eqy_top_pdr] Failed to prove equivalence of partition apb_uart.top_outputs
+EQY 21:50:40 [uart_apb_uart_eqy_top_pdr] summary: Elapsed clock time [H:MM:SS (secs)]: 0:03:06 (186)
+EQY 21:50:40 [uart_apb_uart_eqy_top_pdr] summary: Elapsed process time [H:MM:SS (secs)]: 0:03:07 (187)
+EQY 21:50:40 [uart_apb_uart_eqy_top_pdr] DONE (FAIL, rc=2)

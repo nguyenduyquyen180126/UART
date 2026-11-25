@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 module apb_regs(
     // SYSTEM SIGNAL
     input pclk,
@@ -8,11 +9,13 @@ module apb_regs(
     input penable,
     input pwrite,
     input [11:0] paddr,
-    input [3:0] pstrb,
-    input [31:0] pwdata,
+    /* verilator lint_off UNUSEDSIGNAL */
+    input [3:0] pstrb, // Upper byte strobes [3:2] are RFU.
+    input [31:0] pwdata, // Upper APB write-data bits are reserved and ignored.
+    /* verilator lint_on UNUSEDSIGNAL */
     output pready,
     output pslverr,
-    output reg [31:0] prdata,
+    output [31:0] prdata,
 
     // TX RX CFG OUTPUT
     output [1:0] data_bits,
@@ -54,22 +57,17 @@ module apb_regs(
 
     // REGS
     reg [7:0]   tx_data_reg;
-    reg [7:0]   rx_data_reg;
     reg [6:0]   cfg;            // rx_dis, tx_dis, parity_type, parity_en, stop_bits, data_bits[1:0]
     reg         start_reg;
     reg         soft_rst_reg;
     reg [15:0]  baud;           // div_frac[15:12], div_int[11:0]
     reg [2:0]   ier;            // err_ie, rx_done_ie, tx_done_ie
 
-    // INTERNAL STATUS FLAGS
-    reg         rx_done_flag;
-    reg         parity_err_flag;
-    reg         frame_err_flag;
-    reg         rx_done_prev;
-
+    // INTERNAL CONTROL FLAGS (RX status & data are consumed directly from rx_uart
+    // so STAT.rx_done stays cycle-aligned with rts_n and no duplicate FFs are synthesized.)
     // STAT WIRE: overrun, frame_err, rx_dis, tx_dis, rx_busy, parity_err, rx_done, tx_done
     wire [7:0]  stat;
-    assign stat = {rx_overrun, frame_err_flag, cfg[6], cfg[5], rx_busy, parity_err_flag, rx_done_flag, tx_done};
+    assign stat = {rx_overrun, frame_err, cfg[6], cfg[5], rx_busy, parity_err, rx_done, tx_done};
 
     // OUTPUT ASSIGNMENTS
     assign data_bits   = cfg[1:0];
@@ -89,51 +87,28 @@ module apb_regs(
 
     assign pready      = 1'b1;
 
-    assign irq = (ier[0] & tx_done) | (ier[1] & rx_done_flag) | (ier[2] & (parity_err_flag | frame_err_flag | rx_overrun));
+    assign irq = (ier[0] & tx_done) | (ier[1] & rx_done) | (ier[2] & (parity_err | frame_err | rx_overrun));
 
+    reg [15:0] prdata_lo;
     reg read_err;
     reg write_err;
 
+    assign prdata = {16'h0, prdata_lo};
+
     always @(*) begin
+        prdata_lo = 16'h0;
+        read_err  = 1'b0;
         if(psel & penable & ~pwrite) begin
             case(paddr)
-                TXDATA: begin
-                    prdata   = {24'h0, tx_data_reg};
-                    read_err = 1'b0;
-                end
-                RXDATA: begin
-                    prdata   = {24'h0, rx_data_reg};
-                    read_err = 1'b0;
-                end
-                CFG: begin
-                    prdata   = {25'h0, cfg};
-                    read_err = 1'b0;
-                end
-                CTRL: begin
-                    prdata   = 32'h0;
-                    read_err = 1'b0;
-                end
-                STAT: begin
-                    prdata   = {24'h0, stat};
-                    read_err = 1'b0;
-                end
-                BAUD: begin
-                    prdata   = {16'h0, baud};
-                    read_err = 1'b0;
-                end
-                IER: begin
-                    prdata   = {29'h0, ier};
-                    read_err = 1'b0;
-                end
-                default: begin
-                    prdata   = 32'h0;
-                    read_err = 1'b1;
-                end
+                TXDATA: prdata_lo = {8'h0, tx_data_reg};
+                RXDATA: prdata_lo = {8'h0, rx_data};
+                CFG:    prdata_lo = {9'h0, cfg};
+                CTRL:   prdata_lo = 16'h0;
+                STAT:   prdata_lo = {8'h0, stat};
+                BAUD:   prdata_lo = baud;
+                IER:    prdata_lo = {13'h0, ier};
+                default: read_err = 1'b1;
             endcase
-        end
-        else begin
-            prdata   = 32'h0;
-            read_err = 1'b0;
         end
     end
 
@@ -141,12 +116,7 @@ module apb_regs(
         if(psel & penable & pwrite) begin
             case(paddr)
                 TXDATA: begin
-                    if(!tx_done && (|pstrb)) begin
-                        write_err = 1'b1;
-                    end
-                    else begin
-                        write_err = 1'b0;
-                    end
+                    write_err = (!tx_done) & pstrb[0];
                 end
                 RXDATA: begin
                     write_err = 1'b1;
@@ -200,44 +170,18 @@ module apb_regs(
 
     assign pslverr = (psel & penable) & (pwrite ? write_err : read_err);
 
-    // Doc RXDATA xoa rx_done, parity_err, frame_err, overrun
-    wire rxdata_read = psel & penable & ~pwrite & (paddr == RXDATA) & ~read_err;
-
     always @(posedge pclk or negedge presetn) begin
         if(!presetn) begin
             tx_data_reg     <= 8'h00;
-            rx_data_reg     <= 8'h00;
             cfg             <= 7'h00;
             baud            <= 16'h900D;
             ier             <= 3'h0;
             start_reg       <= 1'b0;
             soft_rst_reg    <= 1'b0;
-            rx_done_flag    <= 1'b0;
-            parity_err_flag <= 1'b0;
-            frame_err_flag  <= 1'b0;
-            rx_done_prev    <= 1'b0;
         end
         else begin
             start_reg    <= 1'b0;
             soft_rst_reg <= 1'b0;
-            rx_done_prev <= rx_done;
-
-            if(rxdata_read) begin
-                rx_done_flag    <= 1'b0;
-                parity_err_flag <= 1'b0;
-                frame_err_flag  <= 1'b0;
-            end
-            else if(rx_done && !rx_done_prev) begin
-                rx_done_flag    <= 1'b1;
-                parity_err_flag <= parity_err;
-                frame_err_flag  <= frame_err;
-                case(cfg[1:0])
-                    2'b00: rx_data_reg <= {3'b000, rx_data[4:0]};
-                    2'b01: rx_data_reg <= {2'b00, rx_data[5:0]};
-                    2'b10: rx_data_reg <= {1'b0, rx_data[6:0]};
-                    2'b11: rx_data_reg <= rx_data[7:0];
-                endcase
-            end
 
             if(psel & penable & pwrite & !write_err) begin
                 case(paddr)
@@ -258,11 +202,6 @@ module apb_regs(
                             baud            <= 16'h900D;
                             ier             <= 3'h0;
                             tx_data_reg     <= 8'h00;
-                            rx_data_reg     <= 8'h00;
-                            rx_done_flag    <= 1'b0;
-                            parity_err_flag <= 1'b0;
-                            frame_err_flag  <= 1'b0;
-                            rx_done_prev    <= 1'b0;
                             start_reg       <= 1'b0;
                         end
                         else if(pstrb[0] && pwdata[0]) begin

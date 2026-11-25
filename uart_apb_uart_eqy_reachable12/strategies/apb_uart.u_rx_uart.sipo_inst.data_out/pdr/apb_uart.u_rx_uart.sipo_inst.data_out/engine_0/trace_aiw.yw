@@ -1,0 +1,50 @@
+{
+  "format": "Yosys Witness Trace",
+  "generator": "yosys-witness aiw2yw",
+  "clocks": [
+    {"path": ["\\__pi_pclk"], "edge": "posedge", "offset": 0}
+  ],
+  "signals": [
+    {"path": ["\\__pi_pclk"], "width": 1, "offset": 0, "init_only": false},
+    {"path": ["\\__pi_presetn"], "width": 1, "offset": 0, "init_only": false},
+    {"path": ["\\__pi_u_apb_regs.baud"], "width": 16, "offset": 0, "init_only": false},
+    {"path": ["\\__pi_u_apb_regs.cfg__3_0"], "width": 4, "offset": 0, "init_only": false},
+    {"path": ["\\__pi_u_apb_regs.cfg__6"], "width": 1, "offset": 0, "init_only": false},
+    {"path": ["\\__pi_u_apb_regs.soft_rst_reg"], "width": 1, "offset": 0, "init_only": false},
+    {"path": ["\\__pi_u_rx_uart.bit_cnt_inst.bit_cnt"], "width": 4, "offset": 0, "init_only": false},
+    {"path": ["\\__pi_u_rx_uart.rx_controller_inst.first_stop_sampled"], "width": 1, "offset": 0, "init_only": false},
+    {"path": ["\\__pi_u_rx_uart.rx_sync2"], "width": 1, "offset": 0, "init_only": false},
+    {"path": ["\\__pi_u_rx_uart.tick_cnt_inst.tick_cnt"], "width": 4, "offset": 0, "init_only": false},
+    {"path": ["\\__pi_u_rx_uart.u_rx_baud_gen.acc"], "width": 4, "offset": 0, "init_only": false},
+    {"path": ["\\__pi_u_rx_uart.u_rx_baud_gen.cnt"], "width": 12, "offset": 0, "init_only": false},
+    {"path": ["\\__po_u_rx_uart.sipo_inst.data_out__assert", "\\in_gate"], "width": 3, "offset": 0, "init_only": false},
+    {"path": ["\\_witness_", "\\anyseq_flatten_gate__auto_setundef_cc_552_execute_23606"], "width": 1, "offset": 0, "init_only": false},
+    {"path": ["\\_witness_", "\\anyseq_flatten_gate__auto_setundef_cc_552_execute_23608"], "width": 1, "offset": 0, "init_only": false},
+    {"path": ["\\_witness_", "\\anyseq_flatten_gate__auto_setundef_cc_552_execute_23610"], "width": 1, "offset": 0, "init_only": false},
+    {"path": ["\\_witness_", "\\anyseq_flatten_gate__auto_setundef_cc_552_execute_23612"], "width": 1, "offset": 0, "init_only": false},
+    {"path": ["\\_witness_", "\\anyseq_flatten_gate__auto_setundef_cc_552_execute_23614"], "width": 1, "offset": 0, "init_only": false},
+    {"path": ["\\_witness_", "\\anyseq_flatten_gate__auto_setundef_cc_552_execute_23616"], "width": 1, "offset": 0, "init_only": false},
+    {"path": ["\\_witness_", "\\anyseq_flatten_gate__auto_setundef_cc_552_execute_23618"], "width": 1, "offset": 0, "init_only": false},
+    {"path": ["\\_witness_", "\\anyseq_flatten_gate__auto_setundef_cc_552_execute_23620"], "width": 1, "offset": 0, "init_only": false},
+    {"path": ["\\_witness_", "\\anyseq_flatten_gate__auto_setundef_cc_552_execute_23622"], "width": 1, "offset": 0, "init_only": false},
+    {"path": ["\\_witness_", "\\anyseq_flatten_gate__auto_setundef_cc_552_execute_23624"], "width": 1, "offset": 0, "init_only": false},
+    {"path": ["\\_witness_", "\\anyseq_flatten_gate__auto_setundef_cc_552_execute_23626"], "width": 1, "offset": 0, "init_only": false},
+    {"path": ["\\_witness_", "\\anyseq_flatten_gate__auto_setundef_cc_552_execute_23628"], "width": 1, "offset": 0, "init_only": false},
+    {"path": ["\\_witness_", "\\anyseq_flatten_gate__auto_setundef_cc_552_execute_23630"], "width": 1, "offset": 0, "init_only": false},
+    {"path": ["\\_witness_", "\\anyseq_flatten_gate__auto_setundef_cc_552_execute_23632"], "width": 1, "offset": 0, "init_only": false},
+    {"path": ["\\_witness_", "\\anyinit_flatten_gate___2783___base__dff0__procdff_429"], "width": 1, "offset": 0, "init_only": true},
+    {"path": ["\\_witness_", "\\anyinit_flatten_gate___2784___base__dff0__procdff_429"], "width": 1, "offset": 0, "init_only": true},
+    {"path": ["\\_witness_", "\\anyinit_flatten_gate___2869___base__dff0__procdff_426"], "width": 1, "offset": 0, "init_only": true},
+    {"path": ["\\_witness_", "\\anyinit_flatten_gate___2870___base__dff0__procdff_426"], "width": 1, "offset": 0, "init_only": true},
+    {"path": ["\\_witness_", "\\anyinit_flatten_gate___2871___base__dff0__procdff_426"], "width": 1, "offset": 0, "init_only": true},
+    {"path": ["\\_witness_", "\\anyinit_flatten_gate___2872___base__dff0__procdff_426"], "width": 1, "offset": 0, "init_only": true},
+    {"path": ["\\_witness_", "\\anyinit_flatten_gate___2873___base__dff0__procdff_426"], "width": 1, "offset": 0, "init_only": true},
+    {"path": ["\\_witness_", "\\anyinit_flatten_gate___2874___base__dff0__procdff_426"], "width": 1, "offset": 0, "init_only": true},
+    {"path": ["\\_witness_", "\\anyinit_flatten_gate___2875___base__dff0__procdff_426"], "width": 1, "offset": 0, "init_only": true},
+    {"path": ["\\_witness_", "\\anyinit_flatten_gate___2876___base__dff0__procdff_426"], "width": 1, "offset": 0, "init_only": true},
+    {"path": ["\\_witness_", "\\anyinit_flatten_gate___2877___base__dff0__procdff_426"], "width": 1, "offset": 0, "init_only": true}
+  ],
+  "steps": [
+    {"bits": "000000000000000000000000000000000000000000000000000000000000000000000000000000"}
+  ]
+}

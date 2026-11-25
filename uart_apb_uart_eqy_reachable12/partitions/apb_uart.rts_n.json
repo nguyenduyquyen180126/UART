@@ -1,0 +1,1431 @@
+{
+  "partition": {
+    "index": 40,
+    "name": "apb_uart.rts_n",
+    "inbits": {
+      "presetn": [
+        0
+      ],
+      "u_apb_regs.cfg": [
+        6
+      ],
+      "u_apb_regs.soft_rst_reg": [
+        0
+      ],
+      "u_rx_uart.reset_release_pending": [
+        0
+      ],
+      "u_rx_uart.rx_done": [
+        0
+      ]
+    },
+    "outbits": {
+      "rts_n": [
+        0
+      ]
+    },
+    "crossbits": {}
+  },
+  "gold_module": {
+    "name": "gold.apb_uart.rts_n",
+    "internal": {
+      "rx_dis": [
+        0
+      ],
+      "rx_done": [
+        0
+      ],
+      "soft_rst": [
+        0
+      ],
+      "u_apb_regs.presetn": [
+        0
+      ],
+      "u_apb_regs.rx_dis": [
+        0
+      ],
+      "u_apb_regs.rx_done": [
+        0
+      ],
+      "u_apb_regs.soft_rst": [
+        0
+      ],
+      "u_apb_regs.stat": [
+        5
+      ],
+      "u_rx_uart.bit_cnt_inst.rst_n": [
+        0
+      ],
+      "u_rx_uart.deframe_inst.rst_n": [
+        0
+      ],
+      "u_rx_uart.rst_n": [
+        0
+      ],
+      "u_rx_uart.rx_controller_inst.rst_n": [
+        0
+      ],
+      "u_rx_uart.rx_controller_inst.soft_rst": [
+        0
+      ],
+      "u_rx_uart.rx_dis": [
+        0
+      ],
+      "u_rx_uart.sipo_inst.rst_n": [
+        0
+      ],
+      "u_rx_uart.soft_rst": [
+        0
+      ],
+      "u_rx_uart.soft_rst_i": [
+        0
+      ],
+      "u_rx_uart.tick_cnt_inst.rst_n": [
+        0
+      ],
+      "u_rx_uart.u_rx_baud_gen.presetn": [
+        0
+      ],
+      "u_tx_uart.controller.rst_n": [
+        0
+      ],
+      "u_tx_uart.controller.soft_rst": [
+        0
+      ],
+      "u_tx_uart.rst_n": [
+        0
+      ],
+      "u_tx_uart.soft_rst": [
+        0
+      ],
+      "u_tx_uart.soft_rst_i": [
+        0
+      ],
+      "u_tx_uart.tick_cnt_ins.rst_n": [
+        0
+      ],
+      "u_tx_uart.u_baud_gen.presetn": [
+        0
+      ],
+      "u_tx_uart.u_bit_cnt.rst_n": [
+        0
+      ],
+      "u_tx_uart.u_piso.rst_n": [
+        0
+      ],
+      "u_tx_uart.u_piso.soft_rst": [
+        0
+      ],
+      "u_tx_uart.u_stop_cnt.rst_n": [
+        0
+      ]
+    },
+    "unused": {},
+    "cellcount": 35,
+    "bitcount": 40
+  },
+  "gate_module": {
+    "name": "gold.apb_uart.rts_n",
+    "internal": {
+      "_2096_.A": [
+        0
+      ],
+      "_2096_.base.A": [
+        0
+      ],
+      "_2168_.A1": [
+        0
+      ],
+      "_2168_.base.A1": [
+        0
+      ],
+      "_2175_.A1": [
+        0
+      ],
+      "_2175_.base.A1": [
+        0
+      ],
+      "_2180_.Y": [
+        0
+      ],
+      "_2180_.base.Y": [
+        0
+      ],
+      "_2180_.base.nor0_out_Y": [
+        0
+      ],
+      "_2181_.A": [
+        0
+      ],
+      "_2181_.B": [
+        0
+      ],
+      "_2181_.C": [
+        0
+      ],
+      "_2181_.base.A": [
+        0
+      ],
+      "_2181_.base.B": [
+        0
+      ],
+      "_2181_.base.C": [
+        0
+      ],
+      "_2332_.Y": [
+        0
+      ],
+      "_2332_.base.Y": [
+        0
+      ],
+      "_2332_.base.not0_out_Y": [
+        0
+      ],
+      "_2690_.base.not0_out": [
+        0
+      ],
+      "_2737_.A": [
+        0
+      ],
+      "_2737_.base.A": [
+        0
+      ],
+      "_2783_.RESET_B": [
+        0
+      ],
+      "_2783_.base.RESET_B": [
+        0
+      ],
+      "_2784_.RESET_B": [
+        0
+      ],
+      "_2784_.base.RESET_B": [
+        0
+      ],
+      "_2785_.SET_B": [
+        0
+      ],
+      "_2785_.base.SET_B": [
+        0
+      ],
+      "_2786_.RESET_B": [
+        0
+      ],
+      "_2786_.base.RESET_B": [
+        0
+      ],
+      "_2787_.RESET_B": [
+        0
+      ],
+      "_2787_.base.RESET_B": [
+        0
+      ],
+      "_2788_.RESET_B": [
+        0
+      ],
+      "_2788_.base.RESET_B": [
+        0
+      ],
+      "_2789_.RESET_B": [
+        0
+      ],
+      "_2789_.base.RESET_B": [
+        0
+      ],
+      "_2790_.RESET_B": [
+        0
+      ],
+      "_2790_.base.RESET_B": [
+        0
+      ],
+      "_2791_.RESET_B": [
+        0
+      ],
+      "_2791_.base.RESET_B": [
+        0
+      ],
+      "_2792_.RESET_B": [
+        0
+      ],
+      "_2792_.base.RESET_B": [
+        0
+      ],
+      "_2793_.RESET_B": [
+        0
+      ],
+      "_2793_.base.RESET_B": [
+        0
+      ],
+      "_2794_.RESET_B": [
+        0
+      ],
+      "_2794_.base.RESET_B": [
+        0
+      ],
+      "_2795_.RESET_B": [
+        0
+      ],
+      "_2795_.base.RESET_B": [
+        0
+      ],
+      "_2796_.RESET_B": [
+        0
+      ],
+      "_2796_.base.RESET_B": [
+        0
+      ],
+      "_2797_.RESET_B": [
+        0
+      ],
+      "_2797_.base.RESET_B": [
+        0
+      ],
+      "_2798_.RESET_B": [
+        0
+      ],
+      "_2798_.base.RESET_B": [
+        0
+      ],
+      "_2799_.SET_B": [
+        0
+      ],
+      "_2799_.base.SET_B": [
+        0
+      ],
+      "_2800_.RESET_B": [
+        0
+      ],
+      "_2800_.base.RESET_B": [
+        0
+      ],
+      "_2801_.RESET_B": [
+        0
+      ],
+      "_2801_.base.RESET_B": [
+        0
+      ],
+      "_2802_.SET_B": [
+        0
+      ],
+      "_2802_.base.SET_B": [
+        0
+      ],
+      "_2803_.SET_B": [
+        0
+      ],
+      "_2803_.base.SET_B": [
+        0
+      ],
+      "_2804_.RESET_B": [
+        0
+      ],
+      "_2804_.base.RESET_B": [
+        0
+      ],
+      "_2805_.SET_B": [
+        0
+      ],
+      "_2805_.base.SET_B": [
+        0
+      ],
+      "_2806_.SET_B": [
+        0
+      ],
+      "_2806_.base.SET_B": [
+        0
+      ],
+      "_2807_.RESET_B": [
+        0
+      ],
+      "_2807_.base.RESET_B": [
+        0
+      ],
+      "_2808_.RESET_B": [
+        0
+      ],
+      "_2808_.base.RESET_B": [
+        0
+      ],
+      "_2809_.RESET_B": [
+        0
+      ],
+      "_2809_.base.RESET_B": [
+        0
+      ],
+      "_2810_.RESET_B": [
+        0
+      ],
+      "_2810_.base.RESET_B": [
+        0
+      ],
+      "_2811_.RESET_B": [
+        0
+      ],
+      "_2811_.base.RESET_B": [
+        0
+      ],
+      "_2812_.RESET_B": [
+        0
+      ],
+      "_2812_.base.RESET_B": [
+        0
+      ],
+      "_2813_.RESET_B": [
+        0
+      ],
+      "_2813_.base.RESET_B": [
+        0
+      ],
+      "_2814_.RESET_B": [
+        0
+      ],
+      "_2814_.base.RESET_B": [
+        0
+      ],
+      "_2815_.RESET_B": [
+        0
+      ],
+      "_2815_.base.RESET_B": [
+        0
+      ],
+      "_2816_.RESET_B": [
+        0
+      ],
+      "_2816_.base.RESET_B": [
+        0
+      ],
+      "_2817_.RESET_B": [
+        0
+      ],
+      "_2817_.base.RESET_B": [
+        0
+      ],
+      "_2818_.RESET_B": [
+        0
+      ],
+      "_2818_.base.RESET_B": [
+        0
+      ],
+      "_2819_.RESET_B": [
+        0
+      ],
+      "_2819_.base.RESET_B": [
+        0
+      ],
+      "_2820_.RESET_B": [
+        0
+      ],
+      "_2820_.base.RESET_B": [
+        0
+      ],
+      "_2821_.RESET_B": [
+        0
+      ],
+      "_2821_.base.RESET_B": [
+        0
+      ],
+      "_2822_.RESET_B": [
+        0
+      ],
+      "_2822_.base.RESET_B": [
+        0
+      ],
+      "_2823_.RESET_B": [
+        0
+      ],
+      "_2823_.base.RESET_B": [
+        0
+      ],
+      "_2824_.RESET_B": [
+        0
+      ],
+      "_2824_.base.RESET_B": [
+        0
+      ],
+      "_2825_.RESET_B": [
+        0
+      ],
+      "_2825_.base.RESET_B": [
+        0
+      ],
+      "_2826_.RESET_B": [
+        0
+      ],
+      "_2826_.base.RESET_B": [
+        0
+      ],
+      "_2827_.RESET_B": [
+        0
+      ],
+      "_2827_.base.RESET_B": [
+        0
+      ],
+      "_2828_.RESET_B": [
+        0
+      ],
+      "_2828_.base.RESET_B": [
+        0
+      ],
+      "_2829_.RESET_B": [
+        0
+      ],
+      "_2829_.base.RESET_B": [
+        0
+      ],
+      "_2830_.RESET_B": [
+        0
+      ],
+      "_2830_.base.RESET_B": [
+        0
+      ],
+      "_2831_.RESET_B": [
+        0
+      ],
+      "_2831_.base.RESET_B": [
+        0
+      ],
+      "_2832_.RESET_B": [
+        0
+      ],
+      "_2832_.base.RESET_B": [
+        0
+      ],
+      "_2833_.RESET_B": [
+        0
+      ],
+      "_2833_.base.RESET_B": [
+        0
+      ],
+      "_2834_.RESET_B": [
+        0
+      ],
+      "_2834_.base.RESET_B": [
+        0
+      ],
+      "_2835_.RESET_B": [
+        0
+      ],
+      "_2835_.base.RESET_B": [
+        0
+      ],
+      "_2836_.RESET_B": [
+        0
+      ],
+      "_2836_.base.RESET_B": [
+        0
+      ],
+      "_2837_.RESET_B": [
+        0
+      ],
+      "_2837_.base.RESET_B": [
+        0
+      ],
+      "_2838_.RESET_B": [
+        0
+      ],
+      "_2838_.base.RESET_B": [
+        0
+      ],
+      "_2839_.RESET_B": [
+        0
+      ],
+      "_2839_.base.RESET_B": [
+        0
+      ],
+      "_2840_.RESET_B": [
+        0
+      ],
+      "_2840_.base.RESET_B": [
+        0
+      ],
+      "_2841_.RESET_B": [
+        0
+      ],
+      "_2841_.base.RESET_B": [
+        0
+      ],
+      "_2842_.RESET_B": [
+        0
+      ],
+      "_2842_.base.RESET_B": [
+        0
+      ],
+      "_2843_.RESET_B": [
+        0
+      ],
+      "_2843_.base.RESET_B": [
+        0
+      ],
+      "_2844_.RESET_B": [
+        0
+      ],
+      "_2844_.base.RESET_B": [
+        0
+      ],
+      "_2845_.RESET_B": [
+        0
+      ],
+      "_2845_.base.RESET_B": [
+        0
+      ],
+      "_2846_.RESET_B": [
+        0
+      ],
+      "_2846_.base.RESET_B": [
+        0
+      ],
+      "_2847_.RESET_B": [
+        0
+      ],
+      "_2847_.base.RESET_B": [
+        0
+      ],
+      "_2848_.RESET_B": [
+        0
+      ],
+      "_2848_.base.RESET_B": [
+        0
+      ],
+      "_2849_.RESET_B": [
+        0
+      ],
+      "_2849_.base.RESET_B": [
+        0
+      ],
+      "_2850_.RESET_B": [
+        0
+      ],
+      "_2850_.base.RESET_B": [
+        0
+      ],
+      "_2851_.RESET_B": [
+        0
+      ],
+      "_2851_.base.RESET_B": [
+        0
+      ],
+      "_2852_.RESET_B": [
+        0
+      ],
+      "_2852_.base.RESET_B": [
+        0
+      ],
+      "_2853_.RESET_B": [
+        0
+      ],
+      "_2853_.base.RESET_B": [
+        0
+      ],
+      "_2854_.RESET_B": [
+        0
+      ],
+      "_2854_.base.RESET_B": [
+        0
+      ],
+      "_2855_.RESET_B": [
+        0
+      ],
+      "_2855_.base.RESET_B": [
+        0
+      ],
+      "_2856_.RESET_B": [
+        0
+      ],
+      "_2856_.base.RESET_B": [
+        0
+      ],
+      "_2857_.RESET_B": [
+        0
+      ],
+      "_2857_.base.RESET_B": [
+        0
+      ],
+      "_2858_.RESET_B": [
+        0
+      ],
+      "_2858_.base.RESET_B": [
+        0
+      ],
+      "_2859_.RESET_B": [
+        0
+      ],
+      "_2859_.base.RESET_B": [
+        0
+      ],
+      "_2860_.RESET_B": [
+        0
+      ],
+      "_2860_.base.RESET_B": [
+        0
+      ],
+      "_2861_.RESET_B": [
+        0
+      ],
+      "_2861_.base.RESET_B": [
+        0
+      ],
+      "_2862_.RESET_B": [
+        0
+      ],
+      "_2862_.base.RESET_B": [
+        0
+      ],
+      "_2863_.RESET_B": [
+        0
+      ],
+      "_2863_.base.RESET_B": [
+        0
+      ],
+      "_2864_.RESET_B": [
+        0
+      ],
+      "_2864_.base.RESET_B": [
+        0
+      ],
+      "_2865_.RESET_B": [
+        0
+      ],
+      "_2865_.base.RESET_B": [
+        0
+      ],
+      "_2866_.RESET_B": [
+        0
+      ],
+      "_2866_.base.RESET_B": [
+        0
+      ],
+      "_2867_.RESET_B": [
+        0
+      ],
+      "_2867_.base.RESET_B": [
+        0
+      ],
+      "_2868_.RESET_B": [
+        0
+      ],
+      "_2868_.base.RESET_B": [
+        0
+      ],
+      "_2869_.SET_B": [
+        0
+      ],
+      "_2869_.base.SET_B": [
+        0
+      ],
+      "_2870_.SET_B": [
+        0
+      ],
+      "_2870_.base.SET_B": [
+        0
+      ],
+      "_2871_.SET_B": [
+        0
+      ],
+      "_2871_.base.SET_B": [
+        0
+      ],
+      "_2872_.SET_B": [
+        0
+      ],
+      "_2872_.base.SET_B": [
+        0
+      ],
+      "_2873_.SET_B": [
+        0
+      ],
+      "_2873_.base.SET_B": [
+        0
+      ],
+      "_2874_.SET_B": [
+        0
+      ],
+      "_2874_.base.SET_B": [
+        0
+      ],
+      "_2875_.SET_B": [
+        0
+      ],
+      "_2875_.base.SET_B": [
+        0
+      ],
+      "_2876_.SET_B": [
+        0
+      ],
+      "_2876_.base.SET_B": [
+        0
+      ],
+      "_2877_.SET_B": [
+        0
+      ],
+      "_2877_.base.SET_B": [
+        0
+      ],
+      "_2878_.RESET_B": [
+        0
+      ],
+      "_2878_.base.RESET_B": [
+        0
+      ],
+      "_2879_.RESET_B": [
+        0
+      ],
+      "_2879_.base.RESET_B": [
+        0
+      ],
+      "_2880_.RESET_B": [
+        0
+      ],
+      "_2880_.base.RESET_B": [
+        0
+      ],
+      "_2881_.RESET_B": [
+        0
+      ],
+      "_2881_.base.RESET_B": [
+        0
+      ],
+      "_2882_.RESET_B": [
+        0
+      ],
+      "_2882_.base.RESET_B": [
+        0
+      ],
+      "_2883_.RESET_B": [
+        0
+      ],
+      "_2883_.base.RESET_B": [
+        0
+      ],
+      "_2884_.RESET_B": [
+        0
+      ],
+      "_2884_.base.RESET_B": [
+        0
+      ],
+      "_2885_.RESET_B": [
+        0
+      ],
+      "_2885_.base.RESET_B": [
+        0
+      ],
+      "_2886_.RESET_B": [
+        0
+      ],
+      "_2886_.base.RESET_B": [
+        0
+      ],
+      "_2887_.RESET_B": [
+        0
+      ],
+      "_2887_.base.RESET_B": [
+        0
+      ],
+      "_2888_.RESET_B": [
+        0
+      ],
+      "_2888_.base.RESET_B": [
+        0
+      ],
+      "_2889_.RESET_B": [
+        0
+      ],
+      "_2889_.base.RESET_B": [
+        0
+      ],
+      "_2890_.RESET_B": [
+        0
+      ],
+      "_2890_.base.RESET_B": [
+        0
+      ],
+      "_2891_.SET_B": [
+        0
+      ],
+      "_2891_.base.SET_B": [
+        0
+      ],
+      "_2892_.RESET_B": [
+        0
+      ],
+      "_2892_.base.RESET_B": [
+        0
+      ],
+      "_2893_.RESET_B": [
+        0
+      ],
+      "_2893_.base.RESET_B": [
+        0
+      ],
+      "_2894_.RESET_B": [
+        0
+      ],
+      "_2894_.base.RESET_B": [
+        0
+      ],
+      "_2895_.RESET_B": [
+        0
+      ],
+      "_2895_.base.RESET_B": [
+        0
+      ],
+      "_2896_.RESET_B": [
+        0
+      ],
+      "_2896_.base.RESET_B": [
+        0
+      ],
+      "_2897_.RESET_B": [
+        0
+      ],
+      "_2897_.base.RESET_B": [
+        0
+      ],
+      "_2898_.RESET_B": [
+        0
+      ],
+      "_2898_.base.RESET_B": [
+        0
+      ],
+      "_2899_.RESET_B": [
+        0
+      ],
+      "_2899_.base.RESET_B": [
+        0
+      ],
+      "_2900_.RESET_B": [
+        0
+      ],
+      "_2900_.base.RESET_B": [
+        0
+      ],
+      "_2901_.RESET_B": [
+        0
+      ],
+      "_2901_.base.RESET_B": [
+        0
+      ],
+      "_2902_.RESET_B": [
+        0
+      ],
+      "_2902_.base.RESET_B": [
+        0
+      ],
+      "_2903_.RESET_B": [
+        0
+      ],
+      "_2903_.base.RESET_B": [
+        0
+      ],
+      "_2904_.RESET_B": [
+        0
+      ],
+      "_2904_.base.RESET_B": [
+        0
+      ],
+      "_2905_.RESET_B": [
+        0
+      ],
+      "_2905_.base.RESET_B": [
+        0
+      ],
+      "_2906_.RESET_B": [
+        0
+      ],
+      "_2906_.base.RESET_B": [
+        0
+      ],
+      "_2907_.RESET_B": [
+        0
+      ],
+      "_2907_.base.RESET_B": [
+        0
+      ],
+      "_2908_.RESET_B": [
+        0
+      ],
+      "_2908_.base.RESET_B": [
+        0
+      ],
+      "_2909_.RESET_B": [
+        0
+      ],
+      "_2909_.base.RESET_B": [
+        0
+      ],
+      "_2910_.RESET_B": [
+        0
+      ],
+      "_2910_.base.RESET_B": [
+        0
+      ],
+      "_2911_.RESET_B": [
+        0
+      ],
+      "_2911_.base.RESET_B": [
+        0
+      ],
+      "_2912_.RESET_B": [
+        0
+      ],
+      "_2912_.base.RESET_B": [
+        0
+      ],
+      "_2913_.RESET_B": [
+        0
+      ],
+      "_2913_.base.RESET_B": [
+        0
+      ],
+      "_2914_.RESET_B": [
+        0
+      ],
+      "_2914_.base.RESET_B": [
+        0
+      ],
+      "_2915_.RESET_B": [
+        0
+      ],
+      "_2915_.base.RESET_B": [
+        0
+      ],
+      "_2916_.RESET_B": [
+        0
+      ],
+      "_2916_.base.RESET_B": [
+        0
+      ],
+      "_2917_.RESET_B": [
+        0
+      ],
+      "_2917_.base.RESET_B": [
+        0
+      ],
+      "_2918_.RESET_B": [
+        0
+      ],
+      "_2918_.base.RESET_B": [
+        0
+      ],
+      "_2919_.SET_B": [
+        0
+      ],
+      "_2919_.base.SET_B": [
+        0
+      ],
+      "_2920_.SET_B": [
+        0
+      ],
+      "_2920_.base.SET_B": [
+        0
+      ],
+      "_2921_.RESET_B": [
+        0
+      ],
+      "_2921_.base.RESET_B": [
+        0
+      ],
+      "_2922_.RESET_B": [
+        0
+      ],
+      "_2922_.base.RESET_B": [
+        0
+      ],
+      "_2923_.RESET_B": [
+        0
+      ],
+      "_2923_.base.RESET_B": [
+        0
+      ],
+      "_2924_.RESET_B": [
+        0
+      ],
+      "_2924_.base.RESET_B": [
+        0
+      ],
+      "_2925_.RESET_B": [
+        0
+      ],
+      "_2925_.base.RESET_B": [
+        0
+      ],
+      "_2926_.RESET_B": [
+        0
+      ],
+      "_2926_.base.RESET_B": [
+        0
+      ],
+      "_2927_.RESET_B": [
+        0
+      ],
+      "_2927_.base.RESET_B": [
+        0
+      ],
+      "_2928_.RESET_B": [
+        0
+      ],
+      "_2928_.base.RESET_B": [
+        0
+      ],
+      "_2929_.RESET_B": [
+        0
+      ],
+      "_2929_.base.RESET_B": [
+        0
+      ],
+      "_2930_.RESET_B": [
+        0
+      ],
+      "_2930_.base.RESET_B": [
+        0
+      ],
+      "_2931_.RESET_B": [
+        0
+      ],
+      "_2931_.base.RESET_B": [
+        0
+      ],
+      "_2932_.RESET_B": [
+        0
+      ],
+      "_2932_.base.RESET_B": [
+        0
+      ],
+      "_2933_.SET_B": [
+        0
+      ],
+      "_2933_.base.SET_B": [
+        0
+      ],
+      "_2934_.SET_B": [
+        0
+      ],
+      "_2934_.base.SET_B": [
+        0
+      ],
+      "_2935_.SET_B": [
+        0
+      ],
+      "_2935_.base.SET_B": [
+        0
+      ],
+      "_3063_.A": [
+        0
+      ],
+      "_3063_.X": [
+        0
+      ],
+      "_3063_.base.A": [
+        0
+      ],
+      "_3063_.base.X": [
+        0
+      ],
+      "_3063_.base.buf0_out_X": [
+        0
+      ],
+      "_3087_.A": [
+        0
+      ],
+      "_3087_.X": [
+        0
+      ],
+      "_3087_.base.A": [
+        0
+      ],
+      "_3087_.base.X": [
+        0
+      ],
+      "_3087_.base.buf0_out_X": [
+        0
+      ],
+      "_3090_.A": [
+        0
+      ],
+      "_3090_.X": [
+        0
+      ],
+      "_3090_.base.A": [
+        0
+      ],
+      "_3090_.base.X": [
+        0
+      ],
+      "_3090_.base.buf0_out_X": [
+        0
+      ],
+      "_3101_.A": [
+        0
+      ],
+      "_3101_.X": [
+        0
+      ],
+      "_3101_.base.A": [
+        0
+      ],
+      "_3101_.base.X": [
+        0
+      ],
+      "_3101_.base.buf0_out_X": [
+        0
+      ],
+      "_3137_.A": [
+        0
+      ],
+      "_3137_.X": [
+        0
+      ],
+      "_3137_.base.A": [
+        0
+      ],
+      "_3137_.base.X": [
+        0
+      ],
+      "_3137_.base.buf0_out_X": [
+        0
+      ],
+      "_3145_.A": [
+        0
+      ],
+      "_3145_.X": [
+        0
+      ],
+      "_3145_.base.A": [
+        0
+      ],
+      "_3145_.base.X": [
+        0
+      ],
+      "_3145_.base.buf0_out_X": [
+        0
+      ],
+      "_3153_.A": [
+        0
+      ],
+      "_3153_.X": [
+        0
+      ],
+      "_3153_.base.A": [
+        0
+      ],
+      "_3153_.base.X": [
+        0
+      ],
+      "_3153_.base.buf0_out_X": [
+        0
+      ],
+      "_3157_.A": [
+        0
+      ],
+      "_3157_.X": [
+        0
+      ],
+      "_3157_.base.A": [
+        0
+      ],
+      "_3157_.base.X": [
+        0
+      ],
+      "_3157_.base.buf0_out_X": [
+        0
+      ],
+      "_3180_.A": [
+        0
+      ],
+      "_3180_.X": [
+        0
+      ],
+      "_3180_.base.A": [
+        0
+      ],
+      "_3180_.base.X": [
+        0
+      ],
+      "_3180_.base.buf0_out_X": [
+        0
+      ],
+      "_3183_.A": [
+        0
+      ],
+      "_3183_.X": [
+        0
+      ],
+      "_3183_.base.A": [
+        0
+      ],
+      "_3183_.base.X": [
+        0
+      ],
+      "_3183_.base.buf0_out_X": [
+        0
+      ],
+      "_3326_.A": [
+        0
+      ],
+      "_3326_.X": [
+        0
+      ],
+      "_3326_.base.A": [
+        0
+      ],
+      "_3326_.base.X": [
+        0
+      ],
+      "_3326_.base.buf0_out_X": [
+        0
+      ],
+      "_3346_.A": [
+        0
+      ],
+      "_3346_.X": [
+        0
+      ],
+      "_3346_.base.A": [
+        0
+      ],
+      "_3346_.base.X": [
+        0
+      ],
+      "_3346_.base.buf0_out_X": [
+        0
+      ],
+      "_3349_.A": [
+        0
+      ],
+      "_3349_.X": [
+        0
+      ],
+      "_3349_.base.A": [
+        0
+      ],
+      "_3349_.base.X": [
+        0
+      ],
+      "_3349_.base.buf0_out_X": [
+        0
+      ],
+      "_3368_.A": [
+        0
+      ],
+      "_3368_.X": [
+        0
+      ],
+      "_3368_.base.A": [
+        0
+      ],
+      "_3368_.base.X": [
+        0
+      ],
+      "_3368_.base.buf0_out_X": [
+        0
+      ],
+      "_3424_.A": [
+        0
+      ],
+      "_3424_.X": [
+        0
+      ],
+      "_3424_.base.A": [
+        0
+      ],
+      "_3424_.base.X": [
+        0
+      ],
+      "_3424_.base.buf0_out_X": [
+        0
+      ],
+      "_3820_.A": [
+        0
+      ],
+      "_3820_.X": [
+        0
+      ],
+      "_3820_.base.A": [
+        0
+      ],
+      "_3820_.base.X": [
+        0
+      ],
+      "_3820_.base.buf0_out_X": [
+        0
+      ],
+      "u_apb_regs.presetn": [
+        0
+      ],
+      "u_apb_regs.rx_dis": [
+        0
+      ],
+      "u_apb_regs.stat": [
+        5
+      ],
+      "u_rx_uart.bit_cnt_inst.rst_n": [
+        0
+      ],
+      "u_rx_uart.deframe_inst.rst_n": [
+        0
+      ],
+      "u_rx_uart.rst_n": [
+        0
+      ],
+      "u_rx_uart.rx_controller_inst.rst_n": [
+        0
+      ],
+      "u_rx_uart.rx_controller_inst.soft_rst": [
+        0
+      ],
+      "u_rx_uart.rx_dis": [
+        0
+      ],
+      "u_rx_uart.sipo_inst.rst_n": [
+        0
+      ],
+      "u_rx_uart.soft_rst": [
+        0
+      ],
+      "u_rx_uart.soft_rst_i": [
+        0
+      ],
+      "u_rx_uart.tick_cnt_inst.rst_n": [
+        0
+      ],
+      "u_rx_uart.u_rx_baud_gen.presetn": [
+        0
+      ],
+      "u_tx_uart.controller.rst_n": [
+        0
+      ],
+      "u_tx_uart.controller.soft_rst": [
+        0
+      ],
+      "u_tx_uart.rst_n": [
+        0
+      ],
+      "u_tx_uart.soft_rst": [
+        0
+      ],
+      "u_tx_uart.soft_rst_i": [
+        0
+      ],
+      "u_tx_uart.tick_cnt_ins.rst_n": [
+        0
+      ],
+      "u_tx_uart.u_baud_gen.presetn": [
+        0
+      ],
+      "u_tx_uart.u_bit_cnt.rst_n": [
+        0
+      ],
+      "u_tx_uart.u_piso.rst_n": [
+        0
+      ],
+      "u_tx_uart.u_piso.soft_rst": [
+        0
+      ],
+      "u_tx_uart.u_stop_cnt.rst_n": [
+        0
+      ]
+    },
+    "unused": {},
+    "cellcount": 437,
+    "bitcount": 442
+  }
+}

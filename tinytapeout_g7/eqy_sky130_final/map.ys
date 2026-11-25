@@ -1,0 +1,8 @@
+read_verilog /home/vietanh/Downloads/code/UART/UART/rtl/*.v
+synth -top apb_uart -flatten
+check -assert
+dfflibmap -liberty /home/vietanh/.local/share/sky130/sky130_fd_sc_hd__tt_025C_1v80.lib
+abc -liberty /home/vietanh/.local/share/sky130/sky130_fd_sc_hd__tt_025C_1v80.lib -dont_use *lpflow*
+hilomap -hicell sky130_fd_sc_hd__conb_1 HI -locell sky130_fd_sc_hd__conb_1 LO
+stat -liberty /home/vietanh/.local/share/sky130/sky130_fd_sc_hd__tt_025C_1v80.lib
+write_verilog -noattr /home/vietanh/Downloads/code/UART/UART/tinytapeout_g7/eqy_sky130_final/apb_uart_sky130.v

@@ -69,14 +69,8 @@ module tx_controller(
                 end
             end
             DATA: begin
-                if(~bit_last && baud_tick) begin
-                    next_state = DATA;
-                end
-                else if(bit_last && baud_tick && parity_en && tick_last) begin
-                    next_state = PARITY;
-                end
-                else if(bit_last && baud_tick && ~parity_en && tick_last) begin
-                    next_state = STOP;
+                if(bit_last && baud_tick && tick_last) begin
+                    next_state = parity_en ? PARITY : STOP;
                 end
             end
             PARITY: begin
@@ -157,6 +151,9 @@ module tx_controller(
                 if(tick_last) begin
                     stop_cnt_en = 1'b1;
                 end
+            end
+            default: begin
+                // Keep the safe output defaults for illegal FSM encodings.
             end
         endcase
     end

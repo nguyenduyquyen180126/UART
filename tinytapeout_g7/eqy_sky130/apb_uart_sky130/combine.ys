@@ -1,0 +1,11 @@
+plugin -i /tmp/uart-eqy-src/src/eqy_combine.so
+read_rtlil apb_uart_sky130/gold.il
+uniquify
+hierarchy
+design -stash gold
+read_rtlil apb_uart_sky130/gate_recoded.il
+uniquify
+hierarchy
+design -stash gate
+eqy_combine -gold_ids apb_uart_sky130/gold.ids -gate_ids apb_uart_sky130/gate_recoded.ids
+write_rtlil apb_uart_sky130/combined.il

@@ -1,0 +1,74 @@
+[gold]
+read_verilog -formal @ROOT@/rtl/*.v
+prep -top apb_uart -flatten
+
+[gate]
+read_verilog -formal @CELL_MODELS@ @NETLIST@
+prep -top apb_uart -flatten
+
+[match apb_uart]
+nodefault
+# Top-level interface: these are the externally observable proof boundary.
+gold-match pclk
+gold-match presetn
+gold-match psel
+gold-match penable
+gold-match pwrite
+gold-match paddr
+gold-match pstrb
+gold-match pwdata
+gold-match pready
+gold-match pslverr
+gold-match prdata
+gold-match cts_n
+gold-match tx
+gold-match rx
+gold-match rts_n
+gold-match irq
+gold-match tx_done_status
+gold-match rx_done_status
+gold-match parity_err_status
+# Stable state/register cutpoints reduce proof size without cutting FSM decode.
+gold-match u_apb_regs.baud
+gold-match u_apb_regs.cfg
+gold-match u_apb_regs.ier
+gold-match u_apb_regs.soft_rst_reg
+gold-match u_apb_regs.start_reg
+gold-match u_apb_regs.tx_data_reg
+gold-match u_rx_uart.bit_cnt_inst.bit_cnt
+gold-match u_rx_uart.frame_err
+gold-match u_rx_uart.overrun
+gold-match u_rx_uart.reset_release_pending
+gold-match u_rx_uart.rx_armed
+gold-match u_rx_uart.rx_controller_inst.first_stop_sampled
+gold-match u_rx_uart.rx_controller_inst.frame_error_latched
+gold-match u_rx_uart.rx_data
+gold-match u_rx_uart.rx_sync1
+gold-match u_rx_uart.rx_sync2
+gold-match u_rx_uart.tick_cnt_inst.tick_cnt
+gold-match u_rx_uart.u_rx_baud_gen.acc
+gold-match u_rx_uart.u_rx_baud_gen.cnt
+gold-match u_tx_uart.cts_n_sync1
+gold-match u_tx_uart.cts_n_sync2
+gold-match u_tx_uart.parity_latched
+gold-match u_tx_uart.tick_cnt_ins.cnt
+gold-match u_tx_uart.u_baud_gen.acc
+gold-match u_tx_uart.u_baud_gen.cnt
+gold-match u_tx_uart.u_bit_cnt.cnt
+gold-match u_tx_uart.u_piso.data
+gold-match u_tx_uart.u_stop_cnt.cnt
+
+[script]
+async2sync
+
+# First use bounded temporal induction for compact partitions. PDR is the
+# fallback for any partition SAT cannot close; it does not override a FAIL.
+[strategy simple]
+use sat
+depth 10
+
+[strategy pdr]
+apply *
+use sby
+engine abc pdr
+timeout 180

@@ -1,0 +1,1 @@
+../../rtl/tick_cnt.v

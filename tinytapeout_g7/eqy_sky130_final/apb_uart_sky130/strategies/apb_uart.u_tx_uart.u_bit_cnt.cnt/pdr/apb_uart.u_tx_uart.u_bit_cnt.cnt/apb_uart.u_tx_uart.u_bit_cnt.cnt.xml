@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+<testsuite timestamp="2026-11-24T22:46:27" hostname="vietanh-Precision-7560" package="apb_uart.u_tx_uart.u_bit_cnt.cnt" id="0" name="default" tests="1" errors="0" failures="0" time="0" skipped="0">
+<properties>
+<property name="os" value="Linux"/>
+<property name="expect" value="PASS, FAIL, UNKNOWN, TIMEOUT"/>
+<property name="status" value="PASS"/>
+</properties>
+<testcase classname="default" name="default" time="0">
+</testcase>
+<system-out>SBY 22:46:26 [apb_uart.u_tx_uart.u_bit_cnt.cnt] Removing directory '/home/vietanh/Downloads/code/UART/UART/tinytapeout_g7/eqy_sky130_final/apb_uart_sky130/strategies/apb_uart.u_tx_uart.u_bit_cnt.cnt/pdr/apb_uart.u_tx_uart.u_bit_cnt.cnt'.
+SBY 22:46:26 [apb_uart.u_tx_uart.u_bit_cnt.cnt] engine_0: abc pdr
+SBY 22:46:26 [apb_uart.u_tx_uart.u_bit_cnt.cnt] base: starting process &quot;cd apb_uart.u_tx_uart.u_bit_cnt.cnt/src; yosys -ql ../model/design.log ../model/design.ys&quot;
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] base: finished (returncode=0)
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] prep: starting process &quot;cd apb_uart.u_tx_uart.u_bit_cnt.cnt/model; yosys -ql design_prep.log design_prep.ys&quot;
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] prep: finished (returncode=0)
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] aig: starting process &quot;cd apb_uart.u_tx_uart.u_bit_cnt.cnt/model; yosys -ql design_aiger.log design_aiger.ys&quot;
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] aig: Warning: Treating undriven bit miter.\__pi_pclk like $anyseq.
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] aig: Warning: Treating undriven bit miter.\__pi_presetn like $anyseq.
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [0] like $anyseq.
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [1] like $anyseq.
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [2] like $anyseq.
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [3] like $anyseq.
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [4] like $anyseq.
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [5] like $anyseq.
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [6] like $anyseq.
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [7] like $anyseq.
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [8] like $anyseq.
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [9] like $anyseq.
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [10] like $anyseq.
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [11] like $anyseq.
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [12] like $anyseq.
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [13] like $anyseq.
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [14] like $anyseq.
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [15] like $anyseq.
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.cfg__3_0 [0] like $anyseq.
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.cfg__3_0 [1] like $anyseq.
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.cfg__3_0 [2] like $anyseq.
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.cfg__3_0 [3] like $anyseq.
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.cfg__5 like $anyseq.
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.soft_rst_reg like $anyseq.
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.start_reg like $anyseq.
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.cts_n_sync2 like $anyseq.
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.tick_cnt_ins.cnt [0] like $anyseq.
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.tick_cnt_ins.cnt [1] like $anyseq.
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.tick_cnt_ins.cnt [2] like $anyseq.
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.tick_cnt_ins.cnt [3] like $anyseq.
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_baud_gen.acc [0] like $anyseq.
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_baud_gen.acc [1] like $anyseq.
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_baud_gen.acc [2] like $anyseq.
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_baud_gen.acc [3] like $anyseq.
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_baud_gen.cnt [0] like $anyseq.
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_baud_gen.cnt [1] like $anyseq.
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_baud_gen.cnt [2] like $anyseq.
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_baud_gen.cnt [3] like $anyseq.
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_baud_gen.cnt [4] like $anyseq.
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_baud_gen.cnt [5] like $anyseq.
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_baud_gen.cnt [6] like $anyseq.
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_baud_gen.cnt [7] like $anyseq.
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_baud_gen.cnt [8] like $anyseq.
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_baud_gen.cnt [9] like $anyseq.
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_baud_gen.cnt [10] like $anyseq.
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_baud_gen.cnt [11] like $anyseq.
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_stop_cnt.cnt [0] like $anyseq.
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_stop_cnt.cnt [1] like $anyseq.
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] aig: Warning: Treating a total of 48 undriven bits in miter like $anyseq.
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] aig: finished (returncode=0)
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] engine_0: starting process &quot;cd apb_uart.u_tx_uart.u_bit_cnt.cnt; yosys-abc -c 'read_aiger model/design_aiger.aig; fold; strash; pdr -v -l; write_cex -a engine_0/trace.aiw'&quot;
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] engine_0: ======== ABC command line &quot;read_aiger model/design_aiger.aig; fold; strash; pdr -v -l; write_cex -a engine_0/trace.aiw&quot;
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] engine_0: Warning: The last 14 outputs are interpreted as constraints.
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] engine_0: VarMax = 300. FrameMax = 10000. QueMax = 0. TimeMax = 119. MonoCNF = no. SkipGen = no. SolveAll = no.
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] engine_0: Frame Clauses                                                     Max Queue Flops Time
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] engine_0: 1 : 0 12                                                                1    13      0.01 sec  T/O =  0  PRV =  0
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] engine_0: 2 : 0 15 19 ~3                                                           3    24      0.02 sec  T/O =  0  PRV =  0
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] engine_0: 3 : 0 7 12 26 ~7                                                         7    29      0.03 sec  T/O =  0  PRV =  0
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] engine_0: 4 : 0 5 2 6 16 ~16                                                       2    29      0.05 sec  T/O =  0  PRV =  0
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] engine_0: 5 : 0 5 2 5 9 10 ~14                                                     1    29      0.07 sec  T/O =  0  PRV =  0
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] engine_0: 6 : 0 5 2 5 9 12 18 ~14                                                  4    29      0.09 sec  T/O =  0  PRV =  0
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] engine_0: 7 : 0 4 3 5 4 3 5 15 ~15                                                 0    29      0.10 sec  T/O =  0  PRV =  0
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] engine_0: 8 : 0 4 3 5 4 4 7 24 27 ~15                                              8    29      0.13 sec  T/O =  0  PRV =  0
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] engine_0: 9 : 0 4 3 5 4 2 3 6 10 24 ~15                                            2    29      0.15 sec  T/O =  0  PRV =  0
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] engine_0: 10 : 0 4 3 5 4 2 3 6 6 7 23 ~15                                           2    29      0.17 sec  T/O =  0  PRV =  0
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] engine_0: 11 : 0 4 3 5 4 2 3 6 7 5 15 18 ~15                                        5    29      0.20 sec  T/O =  0  PRV =  0
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] engine_0: 12 : 0 4 3 5 4 2 3 6 5 3 5 9 31 ~15                                       6    29      0.22 sec  T/O =  0  PRV =  0
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] engine_0: 13 : 0 4 3 5 4 2 3 6 5 3 0 0 0 32 ~15                                     0    29      0.25 sec  T/O =  0  PRV =  0
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] engine_0: Proved output 0 in frame 0 (converged).
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] engine_0: Block =   49  Oblig =   249  Clause =   157  Call =  1557 (sat=56.3%)  Cex =   0  Start =   0
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] engine_0: SAT solving =     0.11 sec ( 44.62 %)
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] engine_0: unsat     =     0.04 sec ( 15.63 %)
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] engine_0: sat       =     0.07 sec ( 28.99 %)
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] engine_0: Generalize  =     0.05 sec ( 19.69 %)
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] engine_0: Push clause =     0.07 sec ( 26.78 %)
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] engine_0: Ternary sim =     0.01 sec (  2.89 %)
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] engine_0: Containment =     0.00 sec (  0.03 %)
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] engine_0: CNF compute =     0.01 sec (  4.34 %)
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] engine_0: Refinement  =     0.00 sec (  0.00 %)
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] engine_0: TOTAL       =     0.25 sec (100.00 %)
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] engine_0: Property proved.  Time =     0.26 sec
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] engine_0: Counter-example is not available.
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] engine_0: finished (returncode=0)
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] engine_0: Status returned by engine: PASS
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] summary: Elapsed clock time [H:MM:SS (secs)]: 0:00:00 (0)
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] summary: Elapsed process time [H:MM:SS (secs)]: 0:00:00 (0)
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] summary: engine_0 (abc pdr) returned PASS
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] summary: engine_0 did not produce any traces
+SBY 22:46:27 [apb_uart.u_tx_uart.u_bit_cnt.cnt] DONE (PASS, rc=0)
+</system-out>
+<system-err>
+</system-err>
+</testsuite>
+</testsuites>

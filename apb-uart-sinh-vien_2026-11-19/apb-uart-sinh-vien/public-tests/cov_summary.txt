@@ -1,0 +1,5 @@
+QuestaSim-64 vcover 10.7c Coverage Utility 2018.08 Aug 17 2018
+Start time: 20:19:37 on Nov 24,2026
+vcover report -summary -code bfs -du=* merged.ucdb 
+End time: 20:19:37 on Nov 24,2026, Elapsed time: 0:00:00
+Errors: 1, Warnings: 0

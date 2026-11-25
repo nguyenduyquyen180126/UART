@@ -1,0 +1,453 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+<testsuite timestamp="2026-11-24T21:50:40" hostname="vietanh-Precision-7560" package="apb_uart.top_outputs" id="0" name="default" tests="1" errors="0" failures="0" time="8" skipped="0">
+<properties>
+<property name="os" value="Linux"/>
+<property name="expect" value="PASS, FAIL, UNKNOWN, TIMEOUT"/>
+<property name="status" value="TIMEOUT"/>
+</properties>
+<testcase classname="default" name="default" time="8">
+</testcase>
+<system-out>SBY 21:47:38 [apb_uart.top_outputs] Removing directory '/home/vietanh/Downloads/code/UART/UART/uart_apb_uart_eqy_top_pdr/strategies/apb_uart.top_outputs/pdr/apb_uart.top_outputs'.
+SBY 21:47:38 [apb_uart.top_outputs] engine_0: abc pdr
+SBY 21:47:38 [apb_uart.top_outputs] base: starting process &quot;cd apb_uart.top_outputs/src; yosys -ql ../model/design.log ../model/design.ys&quot;
+SBY 21:47:39 [apb_uart.top_outputs] base: finished (returncode=0)
+SBY 21:47:39 [apb_uart.top_outputs] prep: starting process &quot;cd apb_uart.top_outputs/model; yosys -ql design_prep.log design_prep.ys&quot;
+SBY 21:47:41 [apb_uart.top_outputs] prep: finished (returncode=0)
+SBY 21:47:41 [apb_uart.top_outputs] aig: starting process &quot;cd apb_uart.top_outputs/model; yosys -ql design_aiger.log design_aiger.ys&quot;
+SBY 21:47:44 [apb_uart.top_outputs] aig: Warning: Treating undriven bit miter.\__pi_cts_n like $anyseq.
+SBY 21:47:44 [apb_uart.top_outputs] aig: Warning: Treating undriven bit miter.\__pi_paddr [0] like $anyseq.
+SBY 21:47:44 [apb_uart.top_outputs] aig: Warning: Treating undriven bit miter.\__pi_paddr [1] like $anyseq.
+SBY 21:47:44 [apb_uart.top_outputs] aig: Warning: Treating undriven bit miter.\__pi_paddr [2] like $anyseq.
+SBY 21:47:44 [apb_uart.top_outputs] aig: Warning: Treating undriven bit miter.\__pi_paddr [3] like $anyseq.
+SBY 21:47:44 [apb_uart.top_outputs] aig: Warning: Treating undriven bit miter.\__pi_paddr [4] like $anyseq.
+SBY 21:47:44 [apb_uart.top_outputs] aig: Warning: Treating undriven bit miter.\__pi_paddr [5] like $anyseq.
+SBY 21:47:44 [apb_uart.top_outputs] aig: Warning: Treating undriven bit miter.\__pi_paddr [6] like $anyseq.
+SBY 21:47:44 [apb_uart.top_outputs] aig: Warning: Treating undriven bit miter.\__pi_paddr [7] like $anyseq.
+SBY 21:47:44 [apb_uart.top_outputs] aig: Warning: Treating undriven bit miter.\__pi_paddr [8] like $anyseq.
+SBY 21:47:44 [apb_uart.top_outputs] aig: Warning: Treating undriven bit miter.\__pi_paddr [9] like $anyseq.
+SBY 21:47:44 [apb_uart.top_outputs] aig: Warning: Treating undriven bit miter.\__pi_paddr [10] like $anyseq.
+SBY 21:47:44 [apb_uart.top_outputs] aig: Warning: Treating undriven bit miter.\__pi_paddr [11] like $anyseq.
+SBY 21:47:44 [apb_uart.top_outputs] aig: Warning: Treating undriven bit miter.\__pi_pclk like $anyseq.
+SBY 21:47:44 [apb_uart.top_outputs] aig: Warning: Treating undriven bit miter.\__pi_penable like $anyseq.
+SBY 21:47:44 [apb_uart.top_outputs] aig: Warning: Treating undriven bit miter.\__pi_presetn like $anyseq.
+SBY 21:47:44 [apb_uart.top_outputs] aig: Warning: Treating undriven bit miter.\__pi_psel like $anyseq.
+SBY 21:47:44 [apb_uart.top_outputs] aig: Warning: Treating undriven bit miter.\__pi_pstrb [0] like $anyseq.
+SBY 21:47:44 [apb_uart.top_outputs] aig: Warning: Treating undriven bit miter.\__pi_pstrb [1] like $anyseq.
+SBY 21:47:44 [apb_uart.top_outputs] aig: Warning: Treating undriven bit miter.\__pi_pstrb [2] like $anyseq.
+SBY 21:47:44 [apb_uart.top_outputs] aig: Warning: Treating undriven bit miter.\__pi_pstrb [3] like $anyseq.
+SBY 21:47:44 [apb_uart.top_outputs] aig: Warning: Treating undriven bit miter.\__pi_pwdata__15_0 [0] like $anyseq.
+SBY 21:47:44 [apb_uart.top_outputs] aig: Warning: Treating undriven bit miter.\__pi_pwdata__15_0 [1] like $anyseq.
+SBY 21:47:44 [apb_uart.top_outputs] aig: Warning: Treating undriven bit miter.\__pi_pwdata__15_0 [2] like $anyseq.
+SBY 21:47:44 [apb_uart.top_outputs] aig: Warning: Treating undriven bit miter.\__pi_pwdata__15_0 [3] like $anyseq.
+SBY 21:47:44 [apb_uart.top_outputs] aig: Warning: Treating undriven bit miter.\__pi_pwdata__15_0 [4] like $anyseq.
+SBY 21:47:44 [apb_uart.top_outputs] aig: Warning: Treating undriven bit miter.\__pi_pwdata__15_0 [5] like $anyseq.
+SBY 21:47:44 [apb_uart.top_outputs] aig: Warning: Treating undriven bit miter.\__pi_pwdata__15_0 [6] like $anyseq.
+SBY 21:47:44 [apb_uart.top_outputs] aig: Warning: Treating undriven bit miter.\__pi_pwdata__15_0 [7] like $anyseq.
+SBY 21:47:44 [apb_uart.top_outputs] aig: Warning: Treating undriven bit miter.\__pi_pwdata__15_0 [8] like $anyseq.
+SBY 21:47:44 [apb_uart.top_outputs] aig: Warning: Treating undriven bit miter.\__pi_pwdata__15_0 [9] like $anyseq.
+SBY 21:47:44 [apb_uart.top_outputs] aig: Warning: Treating undriven bit miter.\__pi_pwdata__15_0 [10] like $anyseq.
+SBY 21:47:44 [apb_uart.top_outputs] aig: Warning: Treating undriven bit miter.\__pi_pwdata__15_0 [11] like $anyseq.
+SBY 21:47:44 [apb_uart.top_outputs] aig: Warning: Treating undriven bit miter.\__pi_pwdata__15_0 [12] like $anyseq.
+SBY 21:47:44 [apb_uart.top_outputs] aig: Warning: Treating undriven bit miter.\__pi_pwdata__15_0 [13] like $anyseq.
+SBY 21:47:44 [apb_uart.top_outputs] aig: Warning: Treating undriven bit miter.\__pi_pwdata__15_0 [14] like $anyseq.
+SBY 21:47:44 [apb_uart.top_outputs] aig: Warning: Treating undriven bit miter.\__pi_pwdata__15_0 [15] like $anyseq.
+SBY 21:47:44 [apb_uart.top_outputs] aig: Warning: Treating undriven bit miter.\__pi_pwrite like $anyseq.
+SBY 21:47:44 [apb_uart.top_outputs] aig: Warning: Treating undriven bit miter.\__pi_rx like $anyseq.
+SBY 21:47:44 [apb_uart.top_outputs] aig: Warning: Treating a total of 39 undriven bits in miter like $anyseq.
+SBY 21:47:45 [apb_uart.top_outputs] aig: finished (returncode=0)
+SBY 21:47:45 [apb_uart.top_outputs] engine_0: starting process &quot;cd apb_uart.top_outputs; yosys-abc -c 'read_aiger model/design_aiger.aig; fold; strash; pdr -v -l; write_cex -a engine_0/trace.aiw'&quot;
+SBY 21:47:45 [apb_uart.top_outputs] engine_0: ======== ABC command line &quot;read_aiger model/design_aiger.aig; fold; strash; pdr -v -l; write_cex -a engine_0/trace.aiw&quot;
+SBY 21:47:45 [apb_uart.top_outputs] engine_0: Warning: The last 12 outputs are interpreted as constraints.
+SBY 21:47:45 [apb_uart.top_outputs] engine_0: VarMax = 300. FrameMax = 10000. QueMax = 0. TimeMax = 219. MonoCNF = no. SkipGen = no. SolveAll = no.
+SBY 21:47:45 [apb_uart.top_outputs] engine_0: Proved output 2 in frame 0 (trivial).
+SBY 21:47:45 [apb_uart.top_outputs] engine_0: Frame Clauses                                                     Max Queue Flops Time
+SBY 21:47:45 [apb_uart.top_outputs] engine_0: 1 : 0 219                                                               1   216      0.13 sec  T/O =  0  PRV =  1
+SBY 21:47:45 [apb_uart.top_outputs] engine_0: 2 : 0 137 96 ~63                                                         6   266      0.33 sec  T/O =  0  PRV =  1
+SBY 21:47:45 [apb_uart.top_outputs] engine_0: 2 : 0 153 192 ~63                                                        4   283      0.45 sec  T/O =  0  PRV =  1
+SBY 21:47:45 [apb_uart.top_outputs] engine_0: Timing out on output 1 in frame 2 (retrying in next anytime pass).
+SBY 21:47:45 [apb_uart.top_outputs] engine_0: 2 : 0 157 206 ~63                                                        4   289      0.47 sec  T/O =  1  PRV =  1
+SBY 21:47:45 [apb_uart.top_outputs] engine_0: 3 : 0 131 121 105 ~74                                                    5   297      0.69 sec  T/O =  1  PRV =  1
+SBY 21:47:45 [apb_uart.top_outputs] engine_0: Timing out on output 0 in frame 3 (retrying in next anytime pass).
+SBY 21:47:45 [apb_uart.top_outputs] engine_0: 3 : 0 154 142 127 ~74                                                   16   326      0.77 sec  T/O =  2  PRV =  1
+SBY 21:47:46 [apb_uart.top_outputs] engine_0: 3 : 0 157 170 238 ~74                                                   16   343      0.94 sec  T/O =  2  PRV =  1
+SBY 21:47:46 [apb_uart.top_outputs] engine_0: 4 : 0 130 113 83 150 ~111                                                3   345      1.17 sec  T/O =  2  PRV =  1
+SBY 21:47:46 [apb_uart.top_outputs] engine_0: Timing out on output 3 in frame 4 (retrying in next anytime pass).
+SBY 21:47:46 [apb_uart.top_outputs] engine_0: 4 : 0 148 133 93 163 ~111                                               20   363      1.29 sec  T/O =  3  PRV =  1
+SBY 21:47:46 [apb_uart.top_outputs] engine_0: 4 : 0 153 141 94 163 ~111                                               27   367      1.33 sec  T/O =  3  PRV =  1
+SBY 21:47:46 [apb_uart.top_outputs] engine_0: Timing out on output 5 in frame 4 (retrying in next anytime pass).
+SBY 21:47:46 [apb_uart.top_outputs] engine_0: 4 : 0 153 141 94 163 ~111                                                0   367      1.33 sec  T/O =  4  PRV =  1
+SBY 21:47:46 [apb_uart.top_outputs] engine_0: 5 : 0 144 85 116 147 72 ~118                                            12   374      1.69 sec  T/O =  4  PRV =  1
+SBY 21:47:46 [apb_uart.top_outputs] engine_0: Timing out on output 4 in frame 5 (retrying in next anytime pass).
+SBY 21:47:46 [apb_uart.top_outputs] engine_0: 5 : 0 144 85 116 147 72 ~118                                             0   374      1.69 sec  T/O =  5  PRV =  1
+SBY 21:47:46 [apb_uart.top_outputs] engine_0: 6 : 0 120 54 113 148 39 20 ~131                                          0   374      1.86 sec  T/O =  5  PRV =  1
+SBY 21:47:46 [apb_uart.top_outputs] engine_0: All outputs solved or timed out in frame 6.
+SBY 21:47:46 [apb_uart.top_outputs] engine_0: Starting new anytime pass, reusing clauses.
+SBY 21:47:46 [apb_uart.top_outputs] engine_0: Frame Clauses                                                     Max Queue Flops Time
+SBY 21:47:47 [apb_uart.top_outputs] engine_0: 1 : 0 492 ~131                                                           0     0      0.23 sec  T/O =  0  PRV =  1
+SBY 21:47:47 [apb_uart.top_outputs] engine_0: 2 : 0 134 394 ~131                                                       4    39      0.33 sec  T/O =  0  PRV =  1
+SBY 21:47:47 [apb_uart.top_outputs] engine_0: 3 : 0 124 70 335 ~132                                                    4    58      0.63 sec  T/O =  0  PRV =  1
+SBY 21:47:48 [apb_uart.top_outputs] engine_0: 4 : 0 124 80 146 246 ~132                                                7   111      1.07 sec  T/O =  0  PRV =  1
+SBY 21:47:48 [apb_uart.top_outputs] engine_0: Timing out on output 0 in frame 4 (retrying in next anytime pass).
+SBY 21:47:48 [apb_uart.top_outputs] engine_0: 4 : 0 124 83 160 257 ~132                                                8   127      1.18 sec  T/O =  1  PRV =  1
+SBY 21:47:48 [apb_uart.top_outputs] engine_0: Timing out on output 1 in frame 4 (retrying in next anytime pass).
+SBY 21:47:48 [apb_uart.top_outputs] engine_0: 4 : 0 124 83 181 294 ~132                                                4   162      1.33 sec  T/O =  2  PRV =  1
+SBY 21:47:48 [apb_uart.top_outputs] engine_0: 4 : 0 124 83 186 304 ~132                                                3   168      1.38 sec  T/O =  2  PRV =  1
+SBY 21:47:48 [apb_uart.top_outputs] engine_0: Timing out on output 3 in frame 4 (retrying in next anytime pass).
+SBY 21:47:48 [apb_uart.top_outputs] engine_0: 4 : 0 124 83 189 315 ~132                                                4   179      1.40 sec  T/O =  3  PRV =  1
+SBY 21:47:48 [apb_uart.top_outputs] engine_0: 5 : 0 115 82 192 222 124 ~140                                           17   194      1.98 sec  T/O =  3  PRV =  1
+SBY 21:47:48 [apb_uart.top_outputs] engine_0: 5 : 0 115 84 192 232 140 ~140                                           20   205      2.03 sec  T/O =  3  PRV =  1
+SBY 21:47:48 [apb_uart.top_outputs] engine_0: Timing out on output 4 in frame 5 (retrying in next anytime pass).
+SBY 21:47:49 [apb_uart.top_outputs] engine_0: 5 : 0 115 84 192 250 169 ~140                                            3   217      2.11 sec  T/O =  4  PRV =  1
+SBY 21:47:49 [apb_uart.top_outputs] engine_0: 6 : 0 115 79 69 128 128 145 ~159                                        21   227      2.50 sec  T/O =  4  PRV =  1
+SBY 21:47:49 [apb_uart.top_outputs] engine_0: Timing out on output 5 in frame 6 (retrying in next anytime pass).
+SBY 21:47:49 [apb_uart.top_outputs] engine_0: 6 : 0 115 79 69 128 128 145 ~159                                         0   227      2.50 sec  T/O =  5  PRV =  1
+SBY 21:47:49 [apb_uart.top_outputs] engine_0: 7 : 0 115 79 69 118 113 115 33 ~161                                      0   227      2.77 sec  T/O =  5  PRV =  1
+SBY 21:47:49 [apb_uart.top_outputs] engine_0: All outputs solved or timed out in frame 7.
+SBY 21:47:49 [apb_uart.top_outputs] engine_0: Starting new anytime pass, reusing clauses.
+SBY 21:47:49 [apb_uart.top_outputs] engine_0: Frame Clauses                                                     Max Queue Flops Time
+SBY 21:47:50 [apb_uart.top_outputs] engine_0: 1 : 0 640 ~161                                                           0     0      0.35 sec  T/O =  0  PRV =  1
+SBY 21:47:50 [apb_uart.top_outputs] engine_0: 2 : 0 115 525 ~161                                                       0     0      0.39 sec  T/O =  0  PRV =  1
+SBY 21:47:50 [apb_uart.top_outputs] engine_0: 3 : 0 115 79 446 ~161                                                    0     0      0.45 sec  T/O =  0  PRV =  1
+SBY 21:47:50 [apb_uart.top_outputs] engine_0: 4 : 0 115 86 108 477 ~161                                                8   125      0.91 sec  T/O =  0  PRV =  1
+SBY 21:47:51 [apb_uart.top_outputs] engine_0: 5 : 0 115 76 66 96 379 ~185                                             12   147      1.39 sec  T/O =  0  PRV =  1
+SBY 21:47:51 [apb_uart.top_outputs] engine_0: Timing out on output 1 in frame 5 (retrying in next anytime pass).
+SBY 21:47:51 [apb_uart.top_outputs] engine_0: 5 : 0 119 81 79 108 393 ~185                                            16   163      1.59 sec  T/O =  1  PRV =  1
+SBY 21:47:51 [apb_uart.top_outputs] engine_0: 5 : 0 127 97 89 111 410 ~185                                            31   183      1.76 sec  T/O =  1  PRV =  1
+SBY 21:47:51 [apb_uart.top_outputs] engine_0: 5 : 0 127 102 94 111 410 ~185                                           34   184      1.79 sec  T/O =  1  PRV =  1
+SBY 21:47:51 [apb_uart.top_outputs] engine_0: Timing out on output 3 in frame 5 (retrying in next anytime pass).
+SBY 21:47:51 [apb_uart.top_outputs] engine_0: 5 : 0 127 102 94 111 410 ~185                                            0   184      1.79 sec  T/O =  2  PRV =  1
+SBY 21:47:52 [apb_uart.top_outputs] engine_0: 6 : 0 122 100 77 114 223 228 ~205                                       19   196      2.47 sec  T/O =  2  PRV =  1
+SBY 21:47:52 [apb_uart.top_outputs] engine_0: 6 : 0 122 100 77 114 227 243 ~205                                       17   198      2.53 sec  T/O =  2  PRV =  1
+SBY 21:47:52 [apb_uart.top_outputs] engine_0: Timing out on output 0 in frame 6 (retrying in next anytime pass).
+SBY 21:47:52 [apb_uart.top_outputs] engine_0: 6 : 0 122 101 83 136 244 253 ~205                                       20   212      2.80 sec  T/O =  3  PRV =  1
+SBY 21:47:52 [apb_uart.top_outputs] engine_0: 6 : 0 122 101 87 148 255 259 ~205                                       32   214      2.93 sec  T/O =  3  PRV =  1
+SBY 21:47:52 [apb_uart.top_outputs] engine_0: Timing out on output 4 in frame 6 (retrying in next anytime pass).
+SBY 21:47:52 [apb_uart.top_outputs] engine_0: 6 : 0 122 101 87 148 255 260 ~205                                        1   215      2.93 sec  T/O =  4  PRV =  1
+SBY 21:47:53 [apb_uart.top_outputs] engine_0: 7 : 0 122 101 81 129 237 206 139 ~209                                   16   236      3.55 sec  T/O =  4  PRV =  1
+SBY 21:47:53 [apb_uart.top_outputs] engine_0: 7 : 0 122 101 81 129 237 238 172 ~209                                   16   259      3.72 sec  T/O =  4  PRV =  1
+SBY 21:47:53 [apb_uart.top_outputs] engine_0: 7 : 0 122 101 81 129 237 250 185 ~209                                   16   260      3.77 sec  T/O =  4  PRV =  1
+SBY 21:47:53 [apb_uart.top_outputs] engine_0: Timing out on output 5 in frame 7 (retrying in next anytime pass).
+SBY 21:47:53 [apb_uart.top_outputs] engine_0: 7 : 0 122 101 81 129 237 250 185 ~209                                    0   260      3.77 sec  T/O =  5  PRV =  1
+SBY 21:47:53 [apb_uart.top_outputs] engine_0: 8 : 0 122 101 80 128 233 249 121 60 ~212                                 0   260      4.16 sec  T/O =  5  PRV =  1
+SBY 21:47:53 [apb_uart.top_outputs] engine_0: All outputs solved or timed out in frame 8.
+SBY 21:47:53 [apb_uart.top_outputs] engine_0: Starting new anytime pass, reusing clauses.
+SBY 21:47:53 [apb_uart.top_outputs] engine_0: Frame Clauses                                                     Max Queue Flops Time
+SBY 21:47:54 [apb_uart.top_outputs] engine_0: 1 : 0 1094 ~212                                                          0     0      0.57 sec  T/O =  0  PRV =  1
+SBY 21:47:54 [apb_uart.top_outputs] engine_0: 2 : 0 122 972 ~212                                                       0     0      0.62 sec  T/O =  0  PRV =  1
+SBY 21:47:54 [apb_uart.top_outputs] engine_0: 3 : 0 122 101 871 ~212                                                   0     0      0.69 sec  T/O =  0  PRV =  1
+SBY 21:47:54 [apb_uart.top_outputs] engine_0: 4 : 0 122 101 80 791 ~212                                                0     0      0.79 sec  T/O =  0  PRV =  1
+SBY 21:47:54 [apb_uart.top_outputs] engine_0: 5 : 0 123 103 83 133 673 ~212                                            7    34      1.04 sec  T/O =  0  PRV =  1
+SBY 21:47:55 [apb_uart.top_outputs] engine_0: 6 : 0 123 103 83 141 230 490 ~212                                        9    80      1.78 sec  T/O =  0  PRV =  1
+SBY 21:47:56 [apb_uart.top_outputs] engine_0: 6 : 0 123 103 88 147 251 515 ~212                                       13    99      2.11 sec  T/O =  0  PRV =  1
+SBY 21:47:56 [apb_uart.top_outputs] engine_0: 6 : 0 123 103 88 149 306 638 ~212                                        5   160      2.67 sec  T/O =  0  PRV =  1
+SBY 21:47:56 [apb_uart.top_outputs] engine_0: 6 : 0 123 103 88 150 309 686 ~212                                        4   165      2.83 sec  T/O =  0  PRV =  1
+SBY 21:47:56 [apb_uart.top_outputs] engine_0: 6 : 0 123 103 88 150 320 714 ~212                                        3   169      2.95 sec  T/O =  0  PRV =  1
+SBY 21:47:56 [apb_uart.top_outputs] engine_0: Timing out on output 1 in frame 6 (retrying in next anytime pass).
+SBY 21:47:57 [apb_uart.top_outputs] engine_0: 6 : 0 123 110 96 157 334 730 ~212                                       13   176      3.15 sec  T/O =  1  PRV =  1
+SBY 21:47:57 [apb_uart.top_outputs] engine_0: 6 : 0 123 121 109 170 348 730 ~212                                      29   186      3.35 sec  T/O =  1  PRV =  1
+SBY 21:47:57 [apb_uart.top_outputs] engine_0: 6 : 0 123 124 115 184 363 738 ~212                                      37   188      3.50 sec  T/O =  1  PRV =  1
+SBY 21:47:57 [apb_uart.top_outputs] engine_0: 6 : 0 123 124 115 184 374 791 ~212                                       6   209      3.63 sec  T/O =  1  PRV =  1
+SBY 21:47:58 [apb_uart.top_outputs] engine_0: 7 : 0 123 116 92 164 282 439 402 ~217                                    4   221      4.47 sec  T/O =  1  PRV =  1
+SBY 21:47:58 [apb_uart.top_outputs] engine_0: Timing out on output 0 in frame 7 (retrying in next anytime pass).
+SBY 21:47:58 [apb_uart.top_outputs] engine_0: 7 : 0 123 116 92 164 282 460 428 ~217                                    5   231      4.59 sec  T/O =  2  PRV =  1
+SBY 21:47:58 [apb_uart.top_outputs] engine_0: Timing out on output 3 in frame 7 (retrying in next anytime pass).
+SBY 21:47:58 [apb_uart.top_outputs] engine_0: 7 : 0 123 116 92 164 294 486 445 ~217                                   20   237      4.74 sec  T/O =  3  PRV =  1
+SBY 21:47:58 [apb_uart.top_outputs] engine_0: 7 : 0 123 116 92 164 294 508 484 ~217                                   19   248      4.81 sec  T/O =  3  PRV =  1
+SBY 21:47:58 [apb_uart.top_outputs] engine_0: 7 : 0 123 116 92 164 294 511 498 ~217                                   17   254      4.83 sec  T/O =  3  PRV =  1
+SBY 21:47:59 [apb_uart.top_outputs] engine_0: 8 : 0 123 116 90 156 184 260 197 334 ~242                               30   255      5.85 sec  T/O =  3  PRV =  1
+SBY 21:48:00 [apb_uart.top_outputs] engine_0: 8 : 0 123 116 90 156 190 275 215 345 ~242                               35   256      6.08 sec  T/O =  3  PRV =  1
+SBY 21:48:00 [apb_uart.top_outputs] engine_0: Timing out on output 4 in frame 8 (retrying in next anytime pass).
+SBY 21:48:00 [apb_uart.top_outputs] engine_0: 8 : 0 123 116 90 156 190 275 216 349 ~242                                2   257      6.09 sec  T/O =  4  PRV =  1
+SBY 21:48:01 [apb_uart.top_outputs] engine_0: 9 : 0 125 119 90 159 208 294 189 208 166 ~242                           38   261      7.10 sec  T/O =  4  PRV =  1
+SBY 21:48:01 [apb_uart.top_outputs] engine_0: 9 : 0 125 119 90 162 219 315 201 216 167 ~242                           53   262      7.34 sec  T/O =  4  PRV =  1
+SBY 21:48:01 [apb_uart.top_outputs] engine_0: 9 : 0 125 119 90 162 220 328 213 216 167 ~242                           50   262      7.46 sec  T/O =  4  PRV =  1
+SBY 21:48:01 [apb_uart.top_outputs] engine_0: Timing out on output 5 in frame 9 (retrying in next anytime pass).
+SBY 21:48:01 [apb_uart.top_outputs] engine_0: 9 : 0 125 119 90 162 220 328 213 216 167 ~242                            0   262      7.46 sec  T/O =  5  PRV =  1
+SBY 21:48:01 [apb_uart.top_outputs] engine_0: 10 : 0 125 119 90 159 209 303 154 270 120 56 ~243                         0   262      8.04 sec  T/O =  5  PRV =  1
+SBY 21:48:01 [apb_uart.top_outputs] engine_0: All outputs solved or timed out in frame 10.
+SBY 21:48:02 [apb_uart.top_outputs] engine_0: Starting new anytime pass, reusing clauses.
+SBY 21:48:02 [apb_uart.top_outputs] engine_0: Frame Clauses                                                     Max Queue Flops Time
+SBY 21:48:02 [apb_uart.top_outputs] engine_0: 1 : 0 1601 ~243                                                          0     0      0.94 sec  T/O =  0  PRV =  1
+SBY 21:48:03 [apb_uart.top_outputs] engine_0: 2 : 0 125 1476 ~243                                                      0     0      0.99 sec  T/O =  0  PRV =  1
+SBY 21:48:03 [apb_uart.top_outputs] engine_0: 3 : 0 125 119 1357 ~243                                                  0     0      1.08 sec  T/O =  0  PRV =  1
+SBY 21:48:03 [apb_uart.top_outputs] engine_0: 4 : 0 125 119 90 1267 ~243                                               0     0      1.19 sec  T/O =  0  PRV =  1
+SBY 21:48:03 [apb_uart.top_outputs] engine_0: 5 : 0 125 119 90 159 1108 ~243                                           0     0      1.36 sec  T/O =  0  PRV =  1
+SBY 21:48:03 [apb_uart.top_outputs] engine_0: 6 : 0 125 119 96 173 231 929 ~243                                       13    54      1.83 sec  T/O =  0  PRV =  1
+SBY 21:48:05 [apb_uart.top_outputs] engine_0: 7 : 0 125 119 92 159 227 326 647 ~244                                    9    99      3.02 sec  T/O =  0  PRV =  1
+SBY 21:48:06 [apb_uart.top_outputs] engine_0: 8 : 0 125 119 92 159 215 315 204 505 ~245                                4   157      4.14 sec  T/O =  0  PRV =  1
+SBY 21:48:06 [apb_uart.top_outputs] engine_0: 8 : 0 125 119 92 159 215 315 233 541 ~245                                5   176      4.39 sec  T/O =  0  PRV =  1
+SBY 21:48:06 [apb_uart.top_outputs] engine_0: 8 : 0 125 119 92 160 216 331 284 599 ~245                               33   215      4.95 sec  T/O =  0  PRV =  1
+SBY 21:48:07 [apb_uart.top_outputs] engine_0: 8 : 0 125 119 92 160 216 340 305 637 ~245                               11   224      5.22 sec  T/O =  0  PRV =  1
+SBY 21:48:08 [apb_uart.top_outputs] engine_0: 9 : 0 125 119 91 158 207 309 227 301 434 ~252                            6   230      6.44 sec  T/O =  0  PRV =  1
+SBY 21:48:08 [apb_uart.top_outputs] engine_0: 9 : 0 125 119 91 158 207 309 232 329 463 ~252                            7   230      6.80 sec  T/O =  0  PRV =  1
+SBY 21:48:08 [apb_uart.top_outputs] engine_0: 9 : 0 125 119 91 158 207 309 232 334 468 ~252                            5   230      6.87 sec  T/O =  0  PRV =  1
+SBY 21:48:08 [apb_uart.top_outputs] engine_0: Timing out on output 0 in frame 9 (retrying in next anytime pass).
+SBY 21:48:09 [apb_uart.top_outputs] engine_0: 9 : 0 125 119 91 160 212 316 245 364 511 ~252                           19   251      7.39 sec  T/O =  1  PRV =  1
+SBY 21:48:09 [apb_uart.top_outputs] engine_0: 9 : 0 125 119 91 160 213 320 251 367 518 ~252                           21   251      7.46 sec  T/O =  1  PRV =  1
+SBY 21:48:09 [apb_uart.top_outputs] engine_0: Timing out on output 1 in frame 9 (retrying in next anytime pass).
+SBY 21:48:09 [apb_uart.top_outputs] engine_0: 9 : 0 125 119 91 160 213 320 251 376 558 ~252                            3   272      7.59 sec  T/O =  2  PRV =  1
+SBY 21:48:11 [apb_uart.top_outputs] engine_0: 10 : 0 125 119 90 152 205 313 222 238 218 559 ~256                        6   274      9.28 sec  T/O =  2  PRV =  1
+SBY 21:48:11 [apb_uart.top_outputs] engine_0: 10 : 0 125 119 90 152 205 313 222 240 233 584 ~256                        5   274      9.49 sec  T/O =  2  PRV =  1
+SBY 21:48:12 [apb_uart.top_outputs] engine_0: 11 : 0 125 119 90 152 205 313 221 237 213 265 402 ~256                   11   283     10.97 sec  T/O =  2  PRV =  1
+SBY 21:48:12 [apb_uart.top_outputs] engine_0: Timing out on output 3 in frame 11 (retrying in next anytime pass).
+SBY 21:48:13 [apb_uart.top_outputs] engine_0: 11 : 0 125 119 90 152 205 313 222 239 217 271 421 ~256                    9   283     11.10 sec  T/O =  3  PRV =  1
+SBY 21:48:14 [apb_uart.top_outputs] engine_0: 12 : 0 125 119 90 152 205 316 229 247 209 169 259 281 ~256               32   284     12.42 sec  T/O =  3  PRV =  1
+SBY 21:48:15 [apb_uart.top_outputs] engine_0: 12 : 0 125 119 90 152 205 316 232 259 237 194 262 281 ~256               59   285     13.12 sec  T/O =  3  PRV =  1
+SBY 21:48:15 [apb_uart.top_outputs] engine_0: 12 : 0 125 119 90 152 205 316 233 263 259 213 269 281 ~256               78   286     13.37 sec  T/O =  3  PRV =  1
+SBY 21:48:15 [apb_uart.top_outputs] engine_0: 12 : 0 125 119 90 152 205 317 236 267 264 219 270 281 ~256               82   286     13.50 sec  T/O =  3  PRV =  1
+SBY 21:48:15 [apb_uart.top_outputs] engine_0: Timing out on output 4 in frame 12 (retrying in next anytime pass).
+SBY 21:48:15 [apb_uart.top_outputs] engine_0: 12 : 0 125 119 90 152 205 317 236 267 264 219 270 281 ~256                0   286     13.50 sec  T/O =  4  PRV =  1
+SBY 21:48:17 [apb_uart.top_outputs] engine_0: 13 : 0 125 119 90 152 205 316 236 264 258 229 299 149 155 ~256           28   287     15.04 sec  T/O =  4  PRV =  1
+SBY 21:48:17 [apb_uart.top_outputs] engine_0: 13 : 0 125 119 90 152 205 316 236 265 263 243 321 174 155 ~256           54   288     15.58 sec  T/O =  4  PRV =  1
+SBY 21:48:17 [apb_uart.top_outputs] engine_0: 13 : 0 125 119 90 152 205 316 236 265 264 253 336 192 157 ~256           69   289     15.96 sec  T/O =  4  PRV =  1
+SBY 21:48:17 [apb_uart.top_outputs] engine_0: Timing out on output 5 in frame 13 (retrying in next anytime pass).
+SBY 21:48:17 [apb_uart.top_outputs] engine_0: 13 : 0 125 119 90 152 205 316 236 265 264 253 336 192 157 ~256            0   289     15.96 sec  T/O =  5  PRV =  1
+SBY 21:48:18 [apb_uart.top_outputs] engine_0: 14 : ... 125 119 90 152 205 316 236 263 251 235 319 206 118 49 ~256       0   289     16.87 sec  T/O =  5  PRV =  1
+SBY 21:48:18 [apb_uart.top_outputs] engine_0: All outputs solved or timed out in frame 14.
+SBY 21:48:18 [apb_uart.top_outputs] engine_0: Starting new anytime pass, reusing clauses.
+SBY 21:48:18 [apb_uart.top_outputs] engine_0: Frame Clauses                                                     Max Queue Flops Time
+SBY 21:48:20 [apb_uart.top_outputs] engine_0: 1 : 0 2682 ~256                                                          0     0      1.87 sec  T/O =  0  PRV =  1
+SBY 21:48:20 [apb_uart.top_outputs] engine_0: 2 : 0 125 2557 ~256                                                      0     0      1.94 sec  T/O =  0  PRV =  1
+SBY 21:48:20 [apb_uart.top_outputs] engine_0: 3 : 0 125 119 2438 ~256                                                  0     0      2.03 sec  T/O =  0  PRV =  1
+SBY 21:48:21 [apb_uart.top_outputs] engine_0: 4 : 0 125 119 90 2348 ~256                                               0     0      2.16 sec  T/O =  0  PRV =  1
+SBY 21:48:21 [apb_uart.top_outputs] engine_0: 5 : 0 125 119 90 152 2196 ~256                                           0     0      2.33 sec  T/O =  0  PRV =  1
+SBY 21:48:21 [apb_uart.top_outputs] engine_0: 6 : 0 125 119 90 152 205 1991 ~256                                       0     0      2.58 sec  T/O =  0  PRV =  1
+SBY 21:48:21 [apb_uart.top_outputs] engine_0: 7 : 0 125 119 90 152 205 316 1675 ~256                                   0     0      2.91 sec  T/O =  0  PRV =  1
+SBY 21:48:22 [apb_uart.top_outputs] engine_0: 8 : 0 125 119 90 152 205 316 236 1439 ~256                               0     0      3.33 sec  T/O =  0  PRV =  1
+SBY 21:48:23 [apb_uart.top_outputs] engine_0: 9 : 0 125 119 93 155 207 320 248 276 1199 ~256                          16    51      4.17 sec  T/O =  0  PRV =  1
+SBY 21:48:25 [apb_uart.top_outputs] engine_0: 10 : 0 125 119 92 153 205 316 236 286 315 1031 ~256                      10   122      6.42 sec  T/O =  0  PRV =  1
+SBY 21:48:25 [apb_uart.top_outputs] engine_0: 10 : 0 125 119 92 153 206 318 238 290 320 1047 ~256                       8   136      6.52 sec  T/O =  0  PRV =  1
+SBY 21:48:27 [apb_uart.top_outputs] engine_0: 11 : 0 125 119 92 153 206 314 233 263 284 330 784 ~256                   14   182      8.33 sec  T/O =  0  PRV =  1
+SBY 21:48:27 [apb_uart.top_outputs] engine_0: 11 : 0 125 119 92 153 206 314 233 263 285 354 816 ~256                    7   187      8.74 sec  T/O =  0  PRV =  1
+SBY 21:48:28 [apb_uart.top_outputs] engine_0: 11 : 0 125 119 92 153 207 321 257 277 293 368 848 ~256                   40   205      9.53 sec  T/O =  0  PRV =  1
+SBY 21:48:28 [apb_uart.top_outputs] engine_0: 11 : 0 127 121 99 162 223 338 266 277 293 368 849 ~256                   67   209      9.90 sec  T/O =  0  PRV =  1
+SBY 21:48:29 [apb_uart.top_outputs] engine_0: 11 : 0 128 131 115 178 242 339 266 277 293 368 849 ~256                  85   210     10.14 sec  T/O =  0  PRV =  1
+SBY 21:48:29 [apb_uart.top_outputs] engine_0: 11 : 0 128 131 115 178 261 378 269 277 293 368 854 ~256                  96   215     10.50 sec  T/O =  0  PRV =  1
+SBY 21:48:29 [apb_uart.top_outputs] engine_0: 11 : 0 128 131 115 178 266 408 294 278 293 368 858 ~256                 125   216     10.90 sec  T/O =  0  PRV =  1
+SBY 21:48:30 [apb_uart.top_outputs] engine_0: 11 : 0 128 131 115 178 266 442 312 279 293 368 860 ~256                 150   220     11.20 sec  T/O =  0  PRV =  1
+SBY 21:48:30 [apb_uart.top_outputs] engine_0: 11 : 0 128 131 115 178 266 448 318 279 293 368 860 ~256                 155   221     11.28 sec  T/O =  0  PRV =  1
+SBY 21:48:30 [apb_uart.top_outputs] engine_0: Timing out on output 1 in frame 11 (retrying in next anytime pass).
+SBY 21:48:30 [apb_uart.top_outputs] engine_0: 11 : 0 128 131 115 178 266 448 318 284 313 386 875 ~256                  23   223     11.66 sec  T/O =  1  PRV =  1
+SBY 21:48:30 [apb_uart.top_outputs] engine_0: 11 : 0 128 131 115 178 266 448 318 284 323 394 909 ~256                  25   234     11.83 sec  T/O =  1  PRV =  1
+SBY 21:48:31 [apb_uart.top_outputs] engine_0: 11 : 0 128 131 115 178 266 448 325 301 345 397 913 ~256                  44   238     12.09 sec  T/O =  1  PRV =  1
+SBY 21:48:31 [apb_uart.top_outputs] engine_0: 11 : 0 128 131 115 178 266 448 335 328 368 398 918 ~256                  65   240     12.42 sec  T/O =  1  PRV =  1
+SBY 21:48:31 [apb_uart.top_outputs] engine_0: 11 : 0 128 131 115 178 266 448 338 342 397 409 923 ~256                  84   240     12.83 sec  T/O =  1  PRV =  1
+SBY 21:48:32 [apb_uart.top_outputs] engine_0: 11 : 0 128 131 115 178 266 452 348 366 410 414 932 ~256                 111   242     13.26 sec  T/O =  1  PRV =  1
+SBY 21:48:32 [apb_uart.top_outputs] engine_0: 11 : 0 128 131 115 178 266 452 351 381 430 417 946 ~256                 125   243     13.62 sec  T/O =  1  PRV =  1
+SBY 21:48:32 [apb_uart.top_outputs] engine_0: 11 : 0 128 131 115 178 266 452 353 389 441 421 978 ~256                 137   243     13.98 sec  T/O =  1  PRV =  1
+SBY 21:48:33 [apb_uart.top_outputs] engine_0: 11 : 0 128 131 115 178 266 452 354 402 455 433 999 ~256                 149   244     14.39 sec  T/O =  1  PRV =  1
+SBY 21:48:33 [apb_uart.top_outputs] engine_0: 11 : 0 128 131 115 178 266 452 354 402 456 438 1004 ~256                147   245     14.47 sec  T/O =  1  PRV =  1
+SBY 21:48:33 [apb_uart.top_outputs] engine_0: Timing out on output 3 in frame 11 (retrying in next anytime pass).
+SBY 21:48:33 [apb_uart.top_outputs] engine_0: 11 : 0 128 131 115 178 266 452 354 402 456 438 1004 ~256                  0   245     14.47 sec  T/O =  2  PRV =  1
+SBY 21:48:35 [apb_uart.top_outputs] engine_0: 12 : 0 128 128 99 168 234 344 339 378 421 362 450 690 ~296               25   248     16.31 sec  T/O =  2  PRV =  1
+SBY 21:48:36 [apb_uart.top_outputs] engine_0: 12 : 0 128 128 99 168 234 344 339 379 438 391 528 793 ~296               28   257     17.59 sec  T/O =  2  PRV =  1
+SBY 21:48:36 [apb_uart.top_outputs] engine_0: 12 : 0 128 128 99 168 234 344 339 380 453 413 538 799 ~296               50   257     17.90 sec  T/O =  2  PRV =  1
+SBY 21:48:37 [apb_uart.top_outputs] engine_0: 12 : 0 128 128 99 168 234 344 339 381 465 443 551 805 ~296               76   257     18.23 sec  T/O =  2  PRV =  1
+SBY 21:48:37 [apb_uart.top_outputs] engine_0: 12 : 0 128 128 99 168 234 344 339 381 469 468 572 810 ~296               98   258     18.51 sec  T/O =  2  PRV =  1
+SBY 21:48:37 [apb_uart.top_outputs] engine_0: 12 : 0 128 128 99 168 234 344 342 390 474 474 587 820 ~296              102   258     18.70 sec  T/O =  2  PRV =  1
+SBY 21:48:37 [apb_uart.top_outputs] engine_0: 12 : 0 128 128 99 168 234 344 342 390 491 499 597 824 ~296               98   258     18.97 sec  T/O =  2  PRV =  1
+SBY 21:48:38 [apb_uart.top_outputs] engine_0: 12 : 0 128 128 99 168 234 344 342 393 498 514 614 838 ~296              124   258     19.23 sec  T/O =  2  PRV =  1
+SBY 21:48:38 [apb_uart.top_outputs] engine_0: 12 : 0 128 128 99 168 234 344 342 393 500 522 631 866 ~296              141   258     19.46 sec  T/O =  2  PRV =  1
+SBY 21:48:38 [apb_uart.top_outputs] engine_0: 12 : 0 128 128 99 168 234 344 342 393 500 524 642 904 ~296              152   258     19.63 sec  T/O =  2  PRV =  1
+SBY 21:48:38 [apb_uart.top_outputs] engine_0: 12 : 0 128 128 99 168 234 344 342 393 500 528 649 945 ~296              159   258     19.81 sec  T/O =  2  PRV =  1
+SBY 21:48:39 [apb_uart.top_outputs] engine_0: 12 : 0 128 128 99 168 234 344 342 393 502 551 682 948 ~296              193   258     20.18 sec  T/O =  2  PRV =  1
+SBY 21:48:39 [apb_uart.top_outputs] engine_0: 12 : 0 128 128 99 168 234 344 342 393 508 565 695 949 ~296              205   258     20.37 sec  T/O =  2  PRV =  1
+SBY 21:48:39 [apb_uart.top_outputs] engine_0: Timing out on output 4 in frame 12 (retrying in next anytime pass).
+SBY 21:48:39 [apb_uart.top_outputs] engine_0: 12 : 0 128 128 99 168 234 344 342 393 508 565 695 949 ~296                0   258     20.37 sec  T/O =  3  PRV =  1
+SBY 21:48:41 [apb_uart.top_outputs] engine_0: 13 : 0 128 128 96 163 211 347 338 362 434 425 669 587 358 ~430           15   261     22.42 sec  T/O =  3  PRV =  1
+SBY 21:48:41 [apb_uart.top_outputs] engine_0: 13 : 0 128 128 96 163 211 347 338 362 434 425 669 619 388 ~430           16   262     22.62 sec  T/O =  3  PRV =  1
+SBY 21:48:41 [apb_uart.top_outputs] engine_0: 13 : 0 128 128 96 163 211 347 338 362 434 425 672 636 392 ~430           23   263     22.70 sec  T/O =  3  PRV =  1
+SBY 21:48:41 [apb_uart.top_outputs] engine_0: Timing out on output 0 in frame 13 (retrying in next anytime pass).
+SBY 21:48:42 [apb_uart.top_outputs] engine_0: 13 : 0 128 128 96 163 211 349 343 371 442 432 683 643 402 ~430           22   267     23.13 sec  T/O =  4  PRV =  1
+SBY 21:48:42 [apb_uart.top_outputs] engine_0: 13 : 0 128 128 96 163 211 350 356 383 458 437 690 643 402 ~430           42   267     23.56 sec  T/O =  4  PRV =  1
+SBY 21:48:42 [apb_uart.top_outputs] engine_0: 13 : 0 128 128 96 163 213 362 385 401 459 437 690 643 403 ~430           74   268     23.98 sec  T/O =  4  PRV =  1
+SBY 21:48:43 [apb_uart.top_outputs] engine_0: 13 : 0 128 128 96 163 222 379 399 419 459 437 690 646 403 ~430          107   268     24.32 sec  T/O =  4  PRV =  1
+SBY 21:48:43 [apb_uart.top_outputs] engine_0: 13 : 0 129 129 106 180 240 383 412 419 459 437 690 646 403 ~430         131   268     24.57 sec  T/O =  4  PRV =  1
+SBY 21:48:43 [apb_uart.top_outputs] engine_0: 13 : 0 129 129 106 185 271 412 412 419 459 437 690 646 403 ~430         162   268     24.87 sec  T/O =  4  PRV =  1
+SBY 21:48:44 [apb_uart.top_outputs] engine_0: 13 : 0 129 129 106 185 283 458 421 419 459 437 690 646 403 ~430         185   268     25.16 sec  T/O =  4  PRV =  1
+SBY 21:48:44 [apb_uart.top_outputs] engine_0: 13 : 0 129 129 106 185 286 488 452 419 459 437 690 646 403 ~430         213   268     25.56 sec  T/O =  4  PRV =  1
+SBY 21:48:44 [apb_uart.top_outputs] engine_0: 13 : 0 130 132 113 192 298 509 456 419 459 437 690 647 403 ~430         223   268     25.83 sec  T/O =  4  PRV =  1
+SBY 21:48:44 [apb_uart.top_outputs] engine_0: 13 : 0 130 132 113 192 299 512 465 419 459 437 690 647 403 ~430         227   268     25.90 sec  T/O =  4  PRV =  1
+SBY 21:48:44 [apb_uart.top_outputs] engine_0: Timing out on output 5 in frame 13 (retrying in next anytime pass).
+SBY 21:48:44 [apb_uart.top_outputs] engine_0: 13 : 0 130 132 113 192 299 512 465 419 459 437 690 647 403 ~430           0   268     25.90 sec  T/O =  5  PRV =  1
+SBY 21:48:46 [apb_uart.top_outputs] engine_0: 14 : ... 130 132 97 180 284 488 436 409 450 431 672 633 223 192 ~446      0   268     27.78 sec  T/O =  5  PRV =  1
+SBY 21:48:46 [apb_uart.top_outputs] engine_0: All outputs solved or timed out in frame 14.
+SBY 21:48:46 [apb_uart.top_outputs] engine_0: Starting new anytime pass, reusing clauses.
+SBY 21:48:46 [apb_uart.top_outputs] engine_0: Frame Clauses                                                     Max Queue Flops Time
+SBY 21:48:50 [apb_uart.top_outputs] engine_0: 1 : 0 4753 ~445                                                          0     0      3.93 sec  T/O =  0  PRV =  1
+SBY 21:48:50 [apb_uart.top_outputs] engine_0: 2 : 0 130 4623 ~445                                                      0     0      4.05 sec  T/O =  0  PRV =  1
+SBY 21:48:51 [apb_uart.top_outputs] engine_0: 3 : 0 130 132 4491 ~445                                                  0     0      4.21 sec  T/O =  0  PRV =  1
+SBY 21:48:51 [apb_uart.top_outputs] engine_0: 4 : 0 130 132 97 4394 ~445                                               0     0      4.37 sec  T/O =  0  PRV =  1
+SBY 21:48:51 [apb_uart.top_outputs] engine_0: 5 : 0 130 132 97 180 4214 ~445                                           0     0      4.61 sec  T/O =  0  PRV =  1
+SBY 21:48:51 [apb_uart.top_outputs] engine_0: 6 : 0 130 132 97 180 284 3930 ~445                                       0     0      4.94 sec  T/O =  0  PRV =  1
+SBY 21:48:52 [apb_uart.top_outputs] engine_0: 7 : 0 130 132 97 180 284 488 3442 ~445                                   0     0      5.44 sec  T/O =  0  PRV =  1
+SBY 21:48:52 [apb_uart.top_outputs] engine_0: 8 : 0 130 132 97 180 284 488 436 3006 ~445                               0     0      6.11 sec  T/O =  0  PRV =  1
+SBY 21:48:53 [apb_uart.top_outputs] engine_0: 9 : 0 130 132 97 180 284 488 436 409 2597 ~445                           0     0      6.90 sec  T/O =  0  PRV =  1
+SBY 21:48:54 [apb_uart.top_outputs] engine_0: 10 : 0 130 132 97 180 284 488 436 409 450 2147 ~445                       0     0      7.85 sec  T/O =  0  PRV =  1
+SBY 21:48:56 [apb_uart.top_outputs] engine_0: 11 : 0 130 132 97 180 284 492 456 439 451 433 1717 ~445                  37    56      9.46 sec  T/O =  0  PRV =  1
+SBY 21:48:56 [apb_uart.top_outputs] engine_0: 11 : 0 130 132 97 180 284 494 465 470 473 436 1718 ~445                  68    64     10.04 sec  T/O =  0  PRV =  1
+SBY 21:48:57 [apb_uart.top_outputs] engine_0: 11 : 0 130 132 97 180 284 495 476 500 495 437 1718 ~445                  97    75     10.50 sec  T/O =  0  PRV =  1
+SBY 21:48:57 [apb_uart.top_outputs] engine_0: 11 : 0 130 132 97 180 288 518 493 510 495 437 1723 ~445                 127    97     10.98 sec  T/O =  0  PRV =  1
+SBY 21:48:58 [apb_uart.top_outputs] engine_0: 11 : 0 130 132 97 180 296 543 516 511 495 437 1728 ~445                 150   103     11.52 sec  T/O =  0  PRV =  1
+SBY 21:48:58 [apb_uart.top_outputs] engine_0: 11 : 0 130 134 100 189 313 560 524 511 495 437 1730 ~445                176   112     11.92 sec  T/O =  0  PRV =  1
+SBY 21:48:59 [apb_uart.top_outputs] engine_0: 11 : 0 130 134 100 189 315 566 552 529 495 437 1732 ~445                182   122     12.26 sec  T/O =  0  PRV =  1
+SBY 21:48:59 [apb_uart.top_outputs] engine_0: 11 : 0 130 134 100 189 315 567 582 561 495 438 1732 ~445                214   122     12.78 sec  T/O =  0  PRV =  1
+SBY 21:49:00 [apb_uart.top_outputs] engine_0: 11 : 0 130 134 100 189 315 568 602 595 496 438 1738 ~445                229   127     13.29 sec  T/O =  0  PRV =  1
+SBY 21:49:00 [apb_uart.top_outputs] engine_0: 11 : 0 130 134 100 189 315 568 603 615 507 440 1756 ~445                214   131     13.72 sec  T/O =  0  PRV =  1
+SBY 21:49:01 [apb_uart.top_outputs] engine_0: 11 : 0 130 134 100 189 315 568 604 639 537 442 1766 ~445                234   133     14.34 sec  T/O =  0  PRV =  1
+SBY 21:49:01 [apb_uart.top_outputs] engine_0: 11 : 0 130 134 100 189 315 568 610 659 561 443 1780 ~445                252   150     14.89 sec  T/O =  0  PRV =  1
+SBY 21:49:02 [apb_uart.top_outputs] engine_0: 11 : 0 130 134 100 189 315 569 614 682 582 448 1789 ~445                279   151     15.33 sec  T/O =  0  PRV =  1
+SBY 21:49:02 [apb_uart.top_outputs] engine_0: 11 : 0 130 134 100 189 315 569 614 683 585 448 1789 ~445                279   151     15.37 sec  T/O =  0  PRV =  1
+SBY 21:49:02 [apb_uart.top_outputs] engine_0: Timing out on output 1 in frame 11 (retrying in next anytime pass).
+SBY 21:49:02 [apb_uart.top_outputs] engine_0: 11 : 0 130 134 100 189 316 580 637 691 595 454 1790 ~445                 39   151     15.91 sec  T/O =  1  PRV =  1
+SBY 21:49:03 [apb_uart.top_outputs] engine_0: 11 : 0 130 134 100 189 318 590 669 709 595 454 1790 ~445                 75   151     16.39 sec  T/O =  1  PRV =  1
+SBY 21:49:03 [apb_uart.top_outputs] engine_0: 11 : 0 130 134 100 189 318 610 704 721 595 454 1790 ~445                108   151     16.83 sec  T/O =  1  PRV =  1
+SBY 21:49:04 [apb_uart.top_outputs] engine_0: 11 : 0 130 134 100 189 321 635 736 726 595 454 1790 ~445                143   151     17.63 sec  T/O =  1  PRV =  1
+SBY 21:49:04 [apb_uart.top_outputs] engine_0: 11 : 0 130 134 100 189 322 665 771 726 595 454 1790 ~445                175   151     18.11 sec  T/O =  1  PRV =  1
+SBY 21:49:05 [apb_uart.top_outputs] engine_0: 11 : 0 130 134 100 189 322 684 810 727 595 454 1790 ~445                215   153     18.52 sec  T/O =  1  PRV =  1
+SBY 21:49:05 [apb_uart.top_outputs] engine_0: 11 : 0 130 134 100 189 322 685 843 760 595 454 1790 ~445                247   153     18.98 sec  T/O =  1  PRV =  1
+SBY 21:49:06 [apb_uart.top_outputs] engine_0: 11 : 0 130 134 100 189 324 699 866 775 595 454 1797 ~445                277   153     19.39 sec  T/O =  1  PRV =  1
+SBY 21:49:06 [apb_uart.top_outputs] engine_0: 11 : 0 130 134 100 189 324 702 899 804 595 454 1798 ~445                300   153     19.80 sec  T/O =  1  PRV =  1
+SBY 21:49:07 [apb_uart.top_outputs] engine_0: 11 : 0 130 134 100 189 324 706 927 839 595 454 1799 ~445                325   153     20.29 sec  T/O =  1  PRV =  1
+SBY 21:49:07 [apb_uart.top_outputs] engine_0: 11 : 0 130 134 100 189 324 715 956 867 596 454 1799 ~445                358   153     20.79 sec  T/O =  1  PRV =  1
+SBY 21:49:08 [apb_uart.top_outputs] engine_0: 11 : 0 130 134 100 189 326 726 995 880 596 454 1799 ~445                393   153     21.21 sec  T/O =  1  PRV =  1
+SBY 21:49:08 [apb_uart.top_outputs] engine_0: 11 : 0 130 134 100 189 326 727 1019 912 596 454 1799 ~445               417   153     21.76 sec  T/O =  1  PRV =  1
+SBY 21:49:08 [apb_uart.top_outputs] engine_0: Timing out on output 3 in frame 11 (retrying in next anytime pass).
+SBY 21:49:08 [apb_uart.top_outputs] engine_0: 11 : 0 130 134 100 189 326 727 1019 912 596 454 1799 ~445                 0   153     21.76 sec  T/O =  2  PRV =  1
+SBY 21:49:11 [apb_uart.top_outputs] engine_0: 12 : 0 130 133 92 170 256 471 901 899 642 483 711 1121 ~455              31   155     25.14 sec  T/O =  2  PRV =  1
+SBY 21:49:12 [apb_uart.top_outputs] engine_0: 12 : 0 130 133 92 170 256 471 901 901 649 504 727 1132 ~455              52   155     25.69 sec  T/O =  2  PRV =  1
+SBY 21:49:13 [apb_uart.top_outputs] engine_0: 12 : 0 130 133 92 170 256 471 901 904 669 527 745 1133 ~455              80   155     26.33 sec  T/O =  2  PRV =  1
+SBY 21:49:13 [apb_uart.top_outputs] engine_0: 12 : 0 130 133 92 170 256 471 901 920 694 546 746 1134 ~455             117   155     26.74 sec  T/O =  2  PRV =  1
+SBY 21:49:14 [apb_uart.top_outputs] engine_0: 12 : 0 130 133 92 170 256 471 916 958 702 546 746 1134 ~455             156   155     27.23 sec  T/O =  2  PRV =  1
+SBY 21:49:14 [apb_uart.top_outputs] engine_0: 12 : 0 130 133 92 170 256 471 919 1002 713 546 746 1134 ~455            198   155     27.70 sec  T/O =  2  PRV =  1
+SBY 21:49:15 [apb_uart.top_outputs] engine_0: 12 : 0 130 133 92 170 256 471 920 1032 746 548 746 1136 ~455            226   155     28.20 sec  T/O =  2  PRV =  1
+SBY 21:49:15 [apb_uart.top_outputs] engine_0: 12 : 0 130 133 92 170 256 472 937 1062 759 548 748 1136 ~455            263   155     28.74 sec  T/O =  2  PRV =  1
+SBY 21:49:15 [apb_uart.top_outputs] engine_0: 12 : 0 130 133 92 170 256 472 956 1097 771 548 748 1137 ~455            293   155     29.15 sec  T/O =  2  PRV =  1
+SBY 21:49:16 [apb_uart.top_outputs] engine_0: 12 : 0 130 133 92 170 256 474 983 1130 771 549 748 1138 ~455            328   156     29.72 sec  T/O =  2  PRV =  1
+SBY 21:49:17 [apb_uart.top_outputs] engine_0: 12 : 0 130 133 92 170 256 479 1020 1146 771 549 748 1139 ~455           368   156     30.20 sec  T/O =  2  PRV =  1
+SBY 21:49:17 [apb_uart.top_outputs] engine_0: 12 : 0 130 133 92 170 256 480 1046 1179 772 549 748 1143 ~455           392   156     30.62 sec  T/O =  2  PRV =  1
+SBY 21:49:17 [apb_uart.top_outputs] engine_0: 12 : 0 130 133 92 170 256 481 1075 1217 772 549 748 1143 ~455           419   156     31.01 sec  T/O =  2  PRV =  1
+SBY 21:49:17 [apb_uart.top_outputs] engine_0: 12 : 0 130 133 92 170 256 481 1076 1218 772 549 748 1143 ~455           420   156     31.03 sec  T/O =  2  PRV =  1
+SBY 21:49:17 [apb_uart.top_outputs] engine_0: Timing out on output 4 in frame 12 (retrying in next anytime pass).
+SBY 21:49:17 [apb_uart.top_outputs] engine_0: 12 : 0 130 133 92 170 256 481 1076 1218 772 549 748 1143 ~455             0   156     31.03 sec  T/O =  3  PRV =  1
+SBY 21:49:22 [apb_uart.top_outputs] engine_0: 13 : 0 130 133 92 169 240 428 958 1127 758 571 759 697 542 ~470           4   171     35.21 sec  T/O =  3  PRV =  1
+SBY 21:49:22 [apb_uart.top_outputs] engine_0: 13 : 0 130 133 92 169 240 428 958 1127 758 572 763 723 575 ~470           9   171     35.66 sec  T/O =  3  PRV =  1
+SBY 21:49:23 [apb_uart.top_outputs] engine_0: 13 : 0 130 133 92 169 240 428 958 1127 758 572 764 746 611 ~470           5   172     36.28 sec  T/O =  3  PRV =  1
+SBY 21:49:23 [apb_uart.top_outputs] engine_0: 13 : 0 130 133 92 169 240 428 958 1127 758 572 766 765 650 ~470           4   172     36.62 sec  T/O =  3  PRV =  1
+SBY 21:49:23 [apb_uart.top_outputs] engine_0: 13 : 0 130 133 92 169 240 428 958 1127 758 572 766 773 665 ~470           4   173     36.81 sec  T/O =  3  PRV =  1
+SBY 21:49:26 [apb_uart.top_outputs] engine_0: 14 : ... 133 92 169 239 421 951 1121 745 562 752 768 400 310 ~474        23   212     40.12 sec  T/O =  3  PRV =  1
+SBY 21:49:27 [apb_uart.top_outputs] engine_0: 14 : ... 133 92 169 239 421 951 1121 745 562 752 769 426 343 ~474        26   234     40.52 sec  T/O =  3  PRV =  1
+SBY 21:49:27 [apb_uart.top_outputs] engine_0: 14 : ... 133 92 169 239 421 951 1121 745 562 752 773 458 369 ~474        28   245     41.02 sec  T/O =  3  PRV =  1
+SBY 21:49:28 [apb_uart.top_outputs] engine_0: 14 : ... 133 92 169 239 421 951 1121 745 562 752 776 485 400 ~474        32   248     41.75 sec  T/O =  3  PRV =  1
+SBY 21:49:29 [apb_uart.top_outputs] engine_0: 14 : ... 133 92 169 239 421 951 1121 745 562 752 780 518 421 ~474        34   251     42.26 sec  T/O =  3  PRV =  1
+SBY 21:49:29 [apb_uart.top_outputs] engine_0: 14 : ... 133 92 169 239 421 951 1121 745 562 752 780 541 458 ~474        34   251     42.74 sec  T/O =  3  PRV =  1
+SBY 21:49:30 [apb_uart.top_outputs] engine_0: 14 : ... 133 92 169 239 421 951 1121 745 562 752 785 572 489 ~474        37   251     43.45 sec  T/O =  3  PRV =  1
+SBY 21:49:30 [apb_uart.top_outputs] engine_0: 14 : ... 133 92 169 239 421 951 1121 745 562 752 786 585 506 ~474        31   252     43.75 sec  T/O =  3  PRV =  1
+SBY 21:49:30 [apb_uart.top_outputs] engine_0: Timing out on output 0 in frame 14 (retrying in next anytime pass).
+SBY 21:49:31 [apb_uart.top_outputs] engine_0: 14 : ... 133 92 169 239 421 951 1123 746 569 757 788 606 524 ~474        16   270     44.24 sec  T/O =  4  PRV =  1
+SBY 21:49:31 [apb_uart.top_outputs] engine_0: 14 : ... 133 92 169 239 421 951 1123 747 574 782 817 606 524 ~474        52   274     44.95 sec  T/O =  4  PRV =  1
+SBY 21:49:32 [apb_uart.top_outputs] engine_0: 14 : ... 133 92 169 239 421 951 1123 751 581 797 838 617 525 ~474        75   274     45.88 sec  T/O =  4  PRV =  1
+SBY 21:49:33 [apb_uart.top_outputs] engine_0: 14 : ... 133 92 169 239 421 951 1125 766 601 809 842 622 525 ~474       100   277     46.85 sec  T/O =  4  PRV =  1
+SBY 21:49:34 [apb_uart.top_outputs] engine_0: 14 : ... 133 92 169 239 421 951 1125 774 622 834 845 629 525 ~474       128   278     47.67 sec  T/O =  4  PRV =  1
+SBY 21:49:35 [apb_uart.top_outputs] engine_0: 14 : ... 133 92 169 239 421 951 1129 788 644 852 851 630 525 ~474       155   278     48.55 sec  T/O =  4  PRV =  1
+SBY 21:49:36 [apb_uart.top_outputs] engine_0: 14 : ... 133 92 169 239 421 954 1160 796 648 856 852 634 525 ~474       194   279     49.38 sec  T/O =  4  PRV =  1
+SBY 21:49:36 [apb_uart.top_outputs] engine_0: 14 : ... 133 92 169 239 421 955 1167 811 666 857 852 634 526 ~474       194   279     50.15 sec  T/O =  4  PRV =  1
+SBY 21:49:36 [apb_uart.top_outputs] engine_0: Timing out on output 5 in frame 14 (retrying in next anytime pass).
+SBY 21:49:36 [apb_uart.top_outputs] engine_0: 14 : ... 133 92 169 239 421 955 1167 811 666 857 852 634 526 ~474         0   279     50.15 sec  T/O =  5  PRV =  1
+SBY 21:49:40 [apb_uart.top_outputs] engine_0: 15 : ... 89 168 233 414 953 1156 791 640 812 841 628 324 217 ~493         0   279     53.52 sec  T/O =  5  PRV =  1
+SBY 21:49:40 [apb_uart.top_outputs] engine_0: All outputs solved or timed out in frame 15.
+SBY 21:49:40 [apb_uart.top_outputs] engine_0: Starting new anytime pass, reusing clauses.
+SBY 21:49:40 [apb_uart.top_outputs] engine_0: Frame Clauses                                                     Max Queue Flops Time
+SBY 21:49:47 [apb_uart.top_outputs] engine_0: 1 : 0 7522 ~493                                                          0     0      6.86 sec  T/O =  0  PRV =  1
+SBY 21:49:47 [apb_uart.top_outputs] engine_0: 2 : 0 130 7392 ~493                                                      0     0      7.07 sec  T/O =  0  PRV =  1
+SBY 21:49:47 [apb_uart.top_outputs] engine_0: 3 : 0 130 133 7259 ~493                                                  0     0      7.33 sec  T/O =  0  PRV =  1
+SBY 21:49:48 [apb_uart.top_outputs] engine_0: 4 : 0 130 133 89 7170 ~493                                               0     0      7.62 sec  T/O =  0  PRV =  1
+SBY 21:49:48 [apb_uart.top_outputs] engine_0: 5 : 0 130 133 89 168 7002 ~493                                           0     0      7.98 sec  T/O =  0  PRV =  1
+SBY 21:49:48 [apb_uart.top_outputs] engine_0: 6 : 0 130 133 89 168 233 6769 ~493                                       0     0      8.42 sec  T/O =  0  PRV =  1
+SBY 21:49:49 [apb_uart.top_outputs] engine_0: 7 : 0 130 133 89 168 233 414 6355 ~493                                   0     0      9.06 sec  T/O =  0  PRV =  1
+SBY 21:49:50 [apb_uart.top_outputs] engine_0: 8 : 0 130 133 89 168 233 414 952 5403 ~493                               0     0     10.03 sec  T/O =  0  PRV =  1
+SBY 21:49:52 [apb_uart.top_outputs] engine_0: 9 : 0 130 133 89 168 233 414 952 1156 4247 ~493                          0     0     11.48 sec  T/O =  0  PRV =  1
+SBY 21:49:53 [apb_uart.top_outputs] engine_0: 10 : 0 130 133 89 168 233 414 952 1156 791 3456 ~493                      0     0     13.28 sec  T/O =  0  PRV =  1
+SBY 21:49:56 [apb_uart.top_outputs] engine_0: 11 : 0 130 133 89 168 233 414 954 1183 816 647 2818 ~493                 37    51     16.21 sec  T/O =  0  PRV =  1
+SBY 21:49:57 [apb_uart.top_outputs] engine_0: 11 : 0 130 133 89 168 233 414 955 1217 841 647 2818 ~493                 71    71     16.92 sec  T/O =  0  PRV =  1
+SBY 21:49:58 [apb_uart.top_outputs] engine_0: 11 : 0 130 133 89 168 233 415 967 1253 850 647 2820 ~493                109    76     17.66 sec  T/O =  0  PRV =  1
+SBY 21:49:59 [apb_uart.top_outputs] engine_0: 11 : 0 130 133 89 168 233 419 985 1287 855 647 2821 ~493                138    82     18.73 sec  T/O =  0  PRV =  1
+SBY 21:50:00 [apb_uart.top_outputs] engine_0: 11 : 0 130 133 89 168 233 419 986 1319 883 651 2824 ~493                167    84     19.72 sec  T/O =  0  PRV =  1
+SBY 21:50:00 [apb_uart.top_outputs] engine_0: 11 : 0 130 133 89 168 233 422 998 1350 897 651 2825 ~493                197    84     20.38 sec  T/O =  0  PRV =  1
+SBY 21:50:01 [apb_uart.top_outputs] engine_0: 11 : 0 130 133 89 168 233 422 999 1386 920 651 2825 ~493                229    85     20.84 sec  T/O =  0  PRV =  1
+SBY 21:50:01 [apb_uart.top_outputs] engine_0: 11 : 0 130 133 89 168 233 422 1000 1419 953 651 2825 ~493               262    85     21.46 sec  T/O =  0  PRV =  1
+SBY 21:50:02 [apb_uart.top_outputs] engine_0: 11 : 0 130 133 89 168 233 422 1001 1452 982 652 2825 ~493               294    86     22.16 sec  T/O =  0  PRV =  1
+SBY 21:50:03 [apb_uart.top_outputs] engine_0: 11 : 0 130 133 89 168 233 422 1002 1485 1014 652 2825 ~493              326    86     23.05 sec  T/O =  0  PRV =  1
+SBY 21:50:04 [apb_uart.top_outputs] engine_0: 11 : 0 130 133 89 168 233 422 1002 1513 1049 652 2825 ~493              347    86     23.70 sec  T/O =  0  PRV =  1
+SBY 21:50:04 [apb_uart.top_outputs] engine_0: 11 : 0 130 133 89 168 233 422 1005 1536 1089 652 2825 ~493              362    86     24.38 sec  T/O =  0  PRV =  1
+SBY 21:50:05 [apb_uart.top_outputs] engine_0: 11 : 0 130 133 89 168 233 422 1007 1562 1127 652 2825 ~493              381    86     24.86 sec  T/O =  0  PRV =  1
+SBY 21:50:06 [apb_uart.top_outputs] engine_0: 11 : 0 130 133 89 168 233 422 1007 1575 1169 652 2825 ~493              394    86     25.49 sec  T/O =  0  PRV =  1
+SBY 21:50:06 [apb_uart.top_outputs] engine_0: 11 : 0 130 133 89 168 233 422 1007 1581 1208 662 2828 ~493              425    86     26.05 sec  T/O =  0  PRV =  1
+SBY 21:50:07 [apb_uart.top_outputs] engine_0: 11 : 0 130 133 89 168 233 422 1008 1588 1251 663 2828 ~493              469    86     26.53 sec  T/O =  0  PRV =  1
+SBY 21:50:07 [apb_uart.top_outputs] engine_0: 11 : 0 130 133 89 168 233 422 1008 1589 1285 684 2828 ~493              497    87     26.98 sec  T/O =  0  PRV =  1
+SBY 21:50:08 [apb_uart.top_outputs] engine_0: 11 : 0 130 133 89 168 233 422 1008 1591 1319 712 2830 ~493              529   108     27.66 sec  T/O =  0  PRV =  1
+SBY 21:50:08 [apb_uart.top_outputs] engine_0: 11 : 0 130 133 89 168 233 422 1008 1591 1337 734 2831 ~493              548   113     28.06 sec  T/O =  0  PRV =  1
+SBY 21:50:08 [apb_uart.top_outputs] engine_0: Timing out on output 1 in frame 11 (retrying in next anytime pass).
+SBY 21:50:09 [apb_uart.top_outputs] engine_0: 11 : 0 130 133 89 168 233 422 1008 1591 1338 767 2862 ~493                7   114     28.83 sec  T/O =  1  PRV =  1
+SBY 21:50:09 [apb_uart.top_outputs] engine_0: 11 : 0 130 133 89 168 233 422 1008 1591 1342 803 2880 ~493               20   119     29.30 sec  T/O =  1  PRV =  1
+SBY 21:50:10 [apb_uart.top_outputs] engine_0: 11 : 0 130 133 89 168 233 422 1008 1591 1356 845 2883 ~493               58   122     29.95 sec  T/O =  1  PRV =  1
+SBY 21:50:11 [apb_uart.top_outputs] engine_0: 11 : 0 130 133 89 168 233 422 1008 1592 1384 876 2887 ~493               90   129     30.85 sec  T/O =  1  PRV =  1
+SBY 21:50:11 [apb_uart.top_outputs] engine_0: 11 : 0 130 133 89 168 233 422 1008 1592 1415 904 2894 ~493              117   133     31.46 sec  T/O =  1  PRV =  1
+SBY 21:50:12 [apb_uart.top_outputs] engine_0: 11 : 0 130 133 89 168 233 422 1008 1592 1445 936 2897 ~493              147   134     32.18 sec  T/O =  1  PRV =  1
+SBY 21:50:13 [apb_uart.top_outputs] engine_0: 11 : 0 130 133 89 168 233 422 1008 1593 1468 972 2902 ~493              178   135     32.71 sec  T/O =  1  PRV =  1
+SBY 21:50:13 [apb_uart.top_outputs] engine_0: 11 : 0 130 133 89 168 233 422 1008 1593 1469 994 2938 ~493              181   138     33.14 sec  T/O =  1  PRV =  1
+SBY 21:50:14 [apb_uart.top_outputs] engine_0: 11 : 0 130 133 89 168 233 422 1008 1593 1469 1009 2979 ~493             182   141     33.52 sec  T/O =  1  PRV =  1
+SBY 21:50:14 [apb_uart.top_outputs] engine_0: 11 : 0 130 133 89 168 233 422 1008 1593 1471 1029 3017 ~493             182   143     33.96 sec  T/O =  1  PRV =  1
+SBY 21:50:14 [apb_uart.top_outputs] engine_0: 11 : 0 130 133 89 168 233 422 1008 1593 1475 1043 3054 ~493             183   143     34.38 sec  T/O =  1  PRV =  1
+SBY 21:50:15 [apb_uart.top_outputs] engine_0: 11 : 0 130 133 89 168 233 422 1008 1593 1475 1070 3092 ~493             181   146     34.85 sec  T/O =  1  PRV =  1
+SBY 21:50:15 [apb_uart.top_outputs] engine_0: 11 : 0 130 133 89 168 233 422 1008 1593 1475 1096 3126 ~493             180   147     35.30 sec  T/O =  1  PRV =  1
+SBY 21:50:16 [apb_uart.top_outputs] engine_0: 11 : 0 130 133 89 168 233 422 1008 1593 1475 1118 3164 ~493             180   148     35.85 sec  T/O =  1  PRV =  1
+SBY 21:50:16 [apb_uart.top_outputs] engine_0: 11 : 0 130 133 89 168 233 422 1008 1593 1477 1146 3200 ~493             184   150     36.39 sec  T/O =  1  PRV =  1
+SBY 21:50:17 [apb_uart.top_outputs] engine_0: 11 : 0 130 133 89 168 233 422 1008 1593 1481 1173 3233 ~493             182   153     36.88 sec  T/O =  1  PRV =  1
+SBY 21:50:17 [apb_uart.top_outputs] engine_0: 11 : 0 130 133 89 168 233 422 1008 1593 1486 1189 3273 ~493             179   153     37.35 sec  T/O =  1  PRV =  1
+SBY 21:50:18 [apb_uart.top_outputs] engine_0: 11 : 0 130 133 89 168 233 422 1008 1593 1490 1221 3301 ~493             182   154     38.14 sec  T/O =  1  PRV =  1
+SBY 21:50:19 [apb_uart.top_outputs] engine_0: 11 : 0 130 133 89 168 233 422 1008 1593 1501 1250 3325 ~493             188   155     39.14 sec  T/O =  1  PRV =  1
+SBY 21:50:20 [apb_uart.top_outputs] engine_0: 11 : 0 130 133 89 168 233 422 1008 1594 1534 1282 3326 ~493             220   155     39.84 sec  T/O =  1  PRV =  1
+SBY 21:50:21 [apb_uart.top_outputs] engine_0: 11 : 0 130 133 89 168 233 422 1008 1595 1545 1313 3347 ~493             236   155     40.51 sec  T/O =  1  PRV =  1
+SBY 21:50:21 [apb_uart.top_outputs] engine_0: 11 : 0 130 133 89 168 233 422 1008 1595 1545 1333 3368 ~493             237   155     40.85 sec  T/O =  1  PRV =  1
+SBY 21:50:21 [apb_uart.top_outputs] engine_0: Timing out on output 3 in frame 11 (retrying in next anytime pass).
+SBY 21:50:21 [apb_uart.top_outputs] engine_0: 11 : 0 130 133 89 168 233 422 1008 1595 1545 1333 3368 ~493               0   155     40.85 sec  T/O =  2  PRV =  1
+SBY 21:50:27 [apb_uart.top_outputs] engine_0: 12 : 0 130 133 89 168 220 300 531 1169 1816 1376 1140 2188 ~525          38   155     46.63 sec  T/O =  2  PRV =  1
+SBY 21:50:27 [apb_uart.top_outputs] engine_0: 12 : 0 130 133 89 168 220 300 531 1169 1845 1411 1140 2188 ~525          72   155     47.20 sec  T/O =  2  PRV =  1
+SBY 21:50:28 [apb_uart.top_outputs] engine_0: 12 : 0 130 133 89 168 220 300 531 1169 1852 1448 1161 2189 ~525         105   155     47.69 sec  T/O =  2  PRV =  1
+SBY 21:50:28 [apb_uart.top_outputs] engine_0: 12 : 0 130 133 89 168 220 300 531 1169 1858 1488 1173 2190 ~525         143   156     48.24 sec  T/O =  2  PRV =  1
+SBY 21:50:29 [apb_uart.top_outputs] engine_0: 12 : 0 130 133 89 168 220 300 531 1169 1860 1520 1200 2195 ~525         172   156     48.67 sec  T/O =  2  PRV =  1
+SBY 21:50:29 [apb_uart.top_outputs] engine_0: 12 : 0 130 133 89 168 220 300 531 1169 1874 1553 1209 2195 ~525         204   157     49.15 sec  T/O =  2  PRV =  1
+SBY 21:50:30 [apb_uart.top_outputs] engine_0: 12 : 0 130 133 89 168 220 300 531 1169 1874 1595 1219 2199 ~525         238   157     49.64 sec  T/O =  2  PRV =  1
+SBY 21:50:30 [apb_uart.top_outputs] engine_0: 12 : 0 130 133 89 168 220 300 531 1169 1878 1631 1238 2202 ~525         273   157     50.21 sec  T/O =  2  PRV =  1
+SBY 21:50:31 [apb_uart.top_outputs] engine_0: 12 : 0 130 133 89 168 220 300 531 1169 1879 1663 1270 2204 ~525         300   157     50.94 sec  T/O =  2  PRV =  1
+SBY 21:50:32 [apb_uart.top_outputs] engine_0: 12 : 0 130 133 89 168 220 300 531 1169 1884 1698 1289 2208 ~525         331   158     51.73 sec  T/O =  2  PRV =  1
+SBY 21:50:33 [apb_uart.top_outputs] engine_0: 12 : 0 130 133 89 168 220 300 531 1169 1888 1726 1317 2208 ~525         355   161     52.63 sec  T/O =  2  PRV =  1
+SBY 21:50:33 [apb_uart.top_outputs] engine_0: 12 : 0 130 133 89 168 220 300 531 1170 1915 1755 1321 2212 ~525         384   161     53.11 sec  T/O =  2  PRV =  1
+SBY 21:50:34 [apb_uart.top_outputs] engine_0: 12 : 0 130 133 89 168 220 300 531 1170 1920 1786 1341 2220 ~525         410   161     53.54 sec  T/O =  2  PRV =  1
+SBY 21:50:34 [apb_uart.top_outputs] engine_0: 12 : 0 130 133 89 168 220 300 531 1170 1922 1817 1365 2228 ~525         436   162     54.04 sec  T/O =  2  PRV =  1
+SBY 21:50:34 [apb_uart.top_outputs] engine_0: 12 : 0 130 133 89 168 220 300 531 1170 1930 1853 1373 2236 ~525         463   162     54.44 sec  T/O =  2  PRV =  1
+SBY 21:50:35 [apb_uart.top_outputs] engine_0: 12 : 0 130 133 89 168 220 300 531 1170 1940 1877 1395 2244 ~525         486   162     54.88 sec  T/O =  2  PRV =  1
+SBY 21:50:35 [apb_uart.top_outputs] engine_0: 12 : 0 130 133 89 168 220 300 531 1170 1943 1907 1417 2252 ~525         510   164     55.30 sec  T/O =  2  PRV =  1
+SBY 21:50:36 [apb_uart.top_outputs] engine_0: 12 : 0 130 133 89 168 220 300 531 1170 1946 1937 1449 2256 ~525         537   164     55.87 sec  T/O =  2  PRV =  1
+SBY 21:50:36 [apb_uart.top_outputs] engine_0: 12 : 0 130 133 89 168 220 300 531 1172 1963 1958 1465 2264 ~525         565   164     56.33 sec  T/O =  2  PRV =  1
+SBY 21:50:37 [apb_uart.top_outputs] engine_0: 12 : 0 130 133 89 168 220 300 531 1172 1972 1975 1472 2289 ~525         576   164     56.70 sec  T/O =  2  PRV =  1
+SBY 21:50:37 [apb_uart.top_outputs] engine_0: 12 : 0 130 133 89 168 220 300 531 1172 1975 2007 1495 2293 ~525         606   164     57.34 sec  T/O =  2  PRV =  1
+SBY 21:50:38 [apb_uart.top_outputs] engine_0: 12 : 0 130 133 89 168 220 300 531 1172 1975 2026 1514 2316 ~525         622   164     57.80 sec  T/O =  2  PRV =  1
+SBY 21:50:38 [apb_uart.top_outputs] engine_0: 12 : 0 130 133 89 168 220 300 531 1172 1975 2058 1547 2319 ~525         651   164     58.32 sec  T/O =  2  PRV =  1
+SBY 21:50:39 [apb_uart.top_outputs] engine_0: 12 : 0 130 133 89 168 220 300 531 1172 1978 2084 1567 2321 ~525         676   164     58.83 sec  T/O =  2  PRV =  1
+SBY 21:50:39 [apb_uart.top_outputs] engine_0: Timing out on output 4 in frame 12 (retrying in next anytime pass).
+SBY 21:50:39 [apb_uart.top_outputs] engine_0: 12 : 0 130 133 89 168 220 300 531 1172 1978 2084 1567 2321 ~525           0   164     58.84 sec  T/O =  3  PRV =  1
+SBY 21:50:40 [apb_uart.top_outputs] Reached TIMEOUT (180 seconds). Terminating all subprocesses.
+SBY 21:50:40 [apb_uart.top_outputs] engine_0: terminating process
+SBY 21:50:40 [apb_uart.top_outputs] summary: Elapsed clock time [H:MM:SS (secs)]: 0:03:01 (181)
+SBY 21:50:40 [apb_uart.top_outputs] summary: Elapsed process time [H:MM:SS (secs)]: 0:00:08 (8)
+SBY 21:50:40 [apb_uart.top_outputs] summary: engine_0 (abc pdr) did not return a status
+SBY 21:50:40 [apb_uart.top_outputs] summary: engine_0 did not produce any traces
+SBY 21:50:40 [apb_uart.top_outputs] DONE (TIMEOUT, rc=0)
+</system-out>
+<system-err>
+</system-err>
+</testsuite>
+</testsuites>

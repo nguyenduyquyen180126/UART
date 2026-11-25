@@ -1,0 +1,64 @@
+EQY 21:50:13 [uart_apb_uart_eqy_reachable] read_gold: starting process "yosys -ql uart_apb_uart_eqy_reachable/gold.log uart_apb_uart_eqy_reachable/gold.ys"
+EQY 21:50:13 [uart_apb_uart_eqy_reachable] read_gold: finished (returncode=0)
+EQY 21:50:13 [uart_apb_uart_eqy_reachable] read_gate: starting process "yosys -ql uart_apb_uart_eqy_reachable/gate.log uart_apb_uart_eqy_reachable/gate.ys"
+EQY 21:50:14 [uart_apb_uart_eqy_reachable] read_gate: Warning: Wire apb_uart.\u_rx_uart.u_rx_baud_gen.sum [0] is used but has no driver.
+EQY 21:50:14 [uart_apb_uart_eqy_reachable] read_gate: Warning: Wire apb_uart.\u_tx_uart.u_baud_gen.sum [0] is used but has no driver.
+EQY 21:50:14 [uart_apb_uart_eqy_reachable] read_gate: Warning: Wire apb_uart.\_1842_ [0] is used but has no driver.
+EQY 21:50:14 [uart_apb_uart_eqy_reachable] read_gate: Warning: Wire apb_uart.\_1845_ [0] is used but has no driver.
+EQY 21:50:14 [uart_apb_uart_eqy_reachable] read_gate: Warning: Wire apb_uart.\_1837_ [0] is used but has no driver.
+EQY 21:50:14 [uart_apb_uart_eqy_reachable] read_gate: Warning: Wire apb_uart.\_1835_ [0] is used but has no driver.
+EQY 21:50:14 [uart_apb_uart_eqy_reachable] read_gate: Warning: Wire apb_uart.\_1834_ [3] is used but has no driver.
+EQY 21:50:14 [uart_apb_uart_eqy_reachable] read_gate: Warning: Wire apb_uart.\u_tx_uart.controller.tx_sel [0] is used but has no driver.
+EQY 21:50:14 [uart_apb_uart_eqy_reachable] read_gate: Warning: Wire apb_uart.\u_tx_uart.controller.tx_sel [1] is used but has no driver.
+EQY 21:50:14 [uart_apb_uart_eqy_reachable] read_gate: Warning: Wire apb_uart.\u_rx_uart.ctrl_frame_err is used but has no driver.
+EQY 21:50:14 [uart_apb_uart_eqy_reachable] read_gate: Warning: Wire apb_uart.\u_tx_uart.controller.stop_last is used but has no driver.
+EQY 21:50:14 [uart_apb_uart_eqy_reachable] read_gate: Warning: Wire apb_uart.\u_rx_uart.clr_baud is used but has no driver.
+EQY 21:50:14 [uart_apb_uart_eqy_reachable] read_gate: Warning: Wire apb_uart.\u_tx_uart.clr_baud is used but has no driver.
+EQY 21:50:14 [uart_apb_uart_eqy_reachable] read_gate: Warning: Wire apb_uart.\u_rx_uart.num_stop_b [0] is used but has no driver.
+EQY 21:50:14 [uart_apb_uart_eqy_reachable] read_gate: Warning: Wire apb_uart.\u_tx_uart.controller.tick_last is used but has no driver.
+EQY 21:50:14 [uart_apb_uart_eqy_reachable] read_gate: Warning: Wire apb_uart.\u_tx_uart.clr_bit is used but has no driver.
+EQY 21:50:14 [uart_apb_uart_eqy_reachable] read_gate: Warning: Wire apb_uart.\u_tx_uart.baud_tick is used but has no driver.
+EQY 21:50:14 [uart_apb_uart_eqy_reachable] read_gate: Warning: Wire apb_uart.\u_tx_uart.controller.stop_cnt_en is used but has no driver.
+EQY 21:50:14 [uart_apb_uart_eqy_reachable] read_gate: Warning: Wire apb_uart.\u_tx_uart.clr_stop is used but has no driver.
+EQY 21:50:14 [uart_apb_uart_eqy_reachable] read_gate: Warning: Wire apb_uart.\u_tx_uart.parity_bit is used but has no driver.
+EQY 21:50:14 [uart_apb_uart_eqy_reachable] read_gate: Warning: Wire apb_uart.\u_tx_uart.tx_data_masked [5] is used but has no driver.
+EQY 21:50:14 [uart_apb_uart_eqy_reachable] read_gate: Warning: Wire apb_uart.\u_tx_uart.tx_data_masked [6] is used but has no driver.
+EQY 21:50:14 [uart_apb_uart_eqy_reachable] read_gate: Warning: Wire apb_uart.\u_tx_uart.tx_data_masked [7] is used but has no driver.
+EQY 21:50:14 [uart_apb_uart_eqy_reachable] read_gate: Warning: Wire apb_uart.\tx_load_reg_unused is used but has no driver.
+EQY 21:50:14 [uart_apb_uart_eqy_reachable] read_gate: Warning: Wire apb_uart.\u_rx_uart.error_check_inst.error is used but has no driver.
+EQY 21:50:14 [uart_apb_uart_eqy_reachable] read_gate: Warning: Wire apb_uart.\u_rx_uart.rx_controller_inst.rx is used but has no driver.
+EQY 21:50:14 [uart_apb_uart_eqy_reachable] read_gate: Warning: Wire apb_uart.\u_rx_uart.data_out [0] is used but has no driver.
+EQY 21:50:14 [uart_apb_uart_eqy_reachable] read_gate: Warning: Wire apb_uart.\u_rx_uart.data_out [1] is used but has no driver.
+EQY 21:50:14 [uart_apb_uart_eqy_reachable] read_gate: Warning: Wire apb_uart.\u_rx_uart.data_out [2] is used but has no driver.
+EQY 21:50:14 [uart_apb_uart_eqy_reachable] read_gate: Warning: Wire apb_uart.\u_rx_uart.bit_cnt_inst.data_b_num_out [0] is used but has no driver.
+EQY 21:50:14 [uart_apb_uart_eqy_reachable] read_gate: Warning: Wire apb_uart.\u_rx_uart.bit_cnt_inst.data_b_num_out [1] is used but has no driver.
+EQY 21:50:14 [uart_apb_uart_eqy_reachable] read_gate: Warning: Wire apb_uart.\u_rx_uart.bit_cnt_inst.data_b_num_out [2] is used but has no driver.
+EQY 21:50:14 [uart_apb_uart_eqy_reachable] read_gate: Warning: Wire apb_uart.\u_rx_uart.bit_cnt_inst.data_b_num_out [3] is used but has no driver.
+EQY 21:50:14 [uart_apb_uart_eqy_reachable] read_gate: Warning: Wire apb_uart.\u_rx_uart.bit_cnt_inst.bit_last is used but has no driver.
+EQY 21:50:14 [uart_apb_uart_eqy_reachable] read_gate: Warning: Wire apb_uart.\u_rx_uart.bit_cnt_inst.tick_en is used but has no driver.
+EQY 21:50:14 [uart_apb_uart_eqy_reachable] read_gate: Warning: Wire apb_uart.\u_rx_uart.rx_controller_inst.baud_tick is used but has no driver.
+EQY 21:50:14 [uart_apb_uart_eqy_reachable] read_gate: Warning: Wire apb_uart.\rx_busy is used but has no driver.
+EQY 21:50:14 [uart_apb_uart_eqy_reachable] read_gate: Warning: Wire apb_uart.\rx_clear is used but has no driver.
+EQY 21:50:15 [uart_apb_uart_eqy_reachable] read_gate: finished (returncode=0)
+EQY 21:50:15 [uart_apb_uart_eqy_reachable] combine: starting process "yosys -ql uart_apb_uart_eqy_reachable/combine.log uart_apb_uart_eqy_reachable/combine.ys"
+EQY 21:50:16 [uart_apb_uart_eqy_reachable] combine: finished (returncode=0)
+EQY 21:50:17 [uart_apb_uart_eqy_reachable] partition: starting process "cd uart_apb_uart_eqy_reachable; yosys -ql partition.log partition.ys"
+EQY 21:50:19 [uart_apb_uart_eqy_reachable] partition: finished (returncode=0)
+EQY 21:50:19 [uart_apb_uart_eqy_reachable] run: starting process "make -C uart_apb_uart_eqy_reachable -f strategies.mk"
+EQY 21:50:19 [uart_apb_uart_eqy_reachable] run: make: Entering directory '/home/vietanh/Downloads/code/UART/UART/uart_apb_uart_eqy_reachable'
+EQY 21:50:19 [uart_apb_uart_eqy_reachable] run: Running strategy 'simple' on 'apb_uart.irq'..
+EQY 21:50:19 [uart_apb_uart_eqy_reachable] run: Proved equivalence of partition 'apb_uart.irq' using strategy 'simple'
+EQY 21:50:19 [uart_apb_uart_eqy_reachable] run: Running strategy 'simple' on 'apb_uart.prdata'..
+EQY 21:50:25 [uart_apb_uart_eqy_reachable] run: Proved equivalence of partition 'apb_uart.prdata' using strategy 'simple'
+EQY 21:50:25 [uart_apb_uart_eqy_reachable] run: Running strategy 'simple' on 'apb_uart.pready'..
+EQY 21:50:25 [uart_apb_uart_eqy_reachable] run: Proved equivalence of partition 'apb_uart.pready' using strategy 'simple'
+EQY 21:50:25 [uart_apb_uart_eqy_reachable] run: Running strategy 'simple' on 'apb_uart.pslverr'..
+EQY 21:50:30 [uart_apb_uart_eqy_reachable] run: Proved equivalence of partition 'apb_uart.pslverr' using strategy 'simple'
+EQY 21:50:30 [uart_apb_uart_eqy_reachable] run: Running strategy 'simple' on 'apb_uart.rts_n'..
+EQY 21:50:30 [uart_apb_uart_eqy_reachable] run: Proved equivalence of partition 'apb_uart.rts_n' using strategy 'simple'
+EQY 21:50:30 [uart_apb_uart_eqy_reachable] run: Running strategy 'simple' on 'apb_uart.tx'..
+EQY 21:51:22 [uart_apb_uart_eqy_reachable] run: Could not prove equivalence of partition 'apb_uart.tx' using strategy 'simple': equivalence unknown
+EQY 21:51:22 [uart_apb_uart_eqy_reachable] run: Running strategy 'pdr' on 'apb_uart.tx'..
+EQY 21:51:23 [uart_apb_uart_eqy_reachable] run: Proved equivalence of partition 'apb_uart.tx' using strategy 'pdr'
+EQY 21:51:23 [uart_apb_uart_eqy_reachable] run: Running strategy 'simple' on 'apb_uart.u_apb_regs.baud'..
+EQY 21:52:52 [uart_apb_uart_eqy_reachable] run: terminating process

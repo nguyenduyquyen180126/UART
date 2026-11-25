@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+<testsuite timestamp="2026-11-24T22:46:04" hostname="vietanh-Precision-7560" package="apb_uart.u_tx_uart.parity_latched" id="0" name="default" tests="1" errors="0" failures="0" time="0" skipped="0">
+<properties>
+<property name="os" value="Linux"/>
+<property name="expect" value="PASS, FAIL, UNKNOWN, TIMEOUT"/>
+<property name="status" value="PASS"/>
+</properties>
+<testcase classname="default" name="default" time="0">
+</testcase>
+<system-out>SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] Removing directory '/home/vietanh/Downloads/code/UART/UART/tinytapeout_g7/eqy_sky130_final/apb_uart_sky130/strategies/apb_uart.u_tx_uart.parity_latched/pdr/apb_uart.u_tx_uart.parity_latched'.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] engine_0: abc pdr
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] base: starting process &quot;cd apb_uart.u_tx_uart.parity_latched/src; yosys -ql ../model/design.log ../model/design.ys&quot;
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] base: finished (returncode=0)
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] prep: starting process &quot;cd apb_uart.u_tx_uart.parity_latched/model; yosys -ql design_prep.log design_prep.ys&quot;
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] prep: finished (returncode=0)
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: starting process &quot;cd apb_uart.u_tx_uart.parity_latched/model; yosys -ql design_aiger.log design_aiger.ys&quot;
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_pclk like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_presetn like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [0] like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [1] like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [2] like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [3] like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [4] like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [5] like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [6] like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [7] like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [8] like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [9] like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [10] like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [11] like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [12] like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [13] like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [14] like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [15] like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.cfg__5_0 [0] like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.cfg__5_0 [1] like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.cfg__5_0 [2] like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.cfg__5_0 [3] like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.cfg__5_0 [4] like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.cfg__5_0 [5] like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.soft_rst_reg like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.start_reg like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.tx_data_reg [0] like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.tx_data_reg [1] like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.tx_data_reg [2] like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.tx_data_reg [3] like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.tx_data_reg [4] like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.tx_data_reg [5] like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.tx_data_reg [6] like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.tx_data_reg [7] like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.cts_n_sync2 like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.tick_cnt_ins.cnt [0] like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.tick_cnt_ins.cnt [1] like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.tick_cnt_ins.cnt [2] like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.tick_cnt_ins.cnt [3] like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_baud_gen.acc [0] like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_baud_gen.acc [1] like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_baud_gen.acc [2] like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_baud_gen.acc [3] like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_baud_gen.cnt [0] like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_baud_gen.cnt [1] like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_baud_gen.cnt [2] like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_baud_gen.cnt [3] like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_baud_gen.cnt [4] like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_baud_gen.cnt [5] like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_baud_gen.cnt [6] like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_baud_gen.cnt [7] like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_baud_gen.cnt [8] like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_baud_gen.cnt [9] like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_baud_gen.cnt [10] like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_baud_gen.cnt [11] like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_bit_cnt.cnt [0] like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_bit_cnt.cnt [1] like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_bit_cnt.cnt [2] like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_stop_cnt.cnt [0] like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_stop_cnt.cnt [1] like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: Warning: Treating a total of 60 undriven bits in miter like $anyseq.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] aig: finished (returncode=0)
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] engine_0: starting process &quot;cd apb_uart.u_tx_uart.parity_latched; yosys-abc -c 'read_aiger model/design_aiger.aig; fold; strash; pdr -v -l; write_cex -a engine_0/trace.aiw'&quot;
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] engine_0: ======== ABC command line &quot;read_aiger model/design_aiger.aig; fold; strash; pdr -v -l; write_cex -a engine_0/trace.aiw&quot;
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] engine_0: Warning: The last 15 outputs are interpreted as constraints.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] engine_0: VarMax = 300. FrameMax = 10000. QueMax = 0. TimeMax = 119. MonoCNF = no. SkipGen = no. SolveAll = no.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] engine_0: Frame Clauses                                                     Max Queue Flops Time
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] engine_0: 1 : 0 4                                                                 1     5      0.00 sec  T/O =  0  PRV =  0
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] engine_0: 2 : 0 13 14 ~1                                                           7    18      0.01 sec  T/O =  0  PRV =  0
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] engine_0: 3 : 0 8 6 6 ~3                                                           0    18      0.02 sec  T/O =  0  PRV =  0
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] engine_0: 4 : 0 10 9 11 15 ~3                                                      7    22      0.03 sec  T/O =  0  PRV =  0
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] engine_0: 5 : 0 7 4 12 15 24 ~10                                                  11    22      0.06 sec  T/O =  0  PRV =  0
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] engine_0: 6 : 0 7 3 6 1 1 23 ~12                                                   0    22      0.08 sec  T/O =  0  PRV =  0
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] engine_0: 7 : 0 7 3 6 1 1 4 24 ~12                                                 4    22      0.09 sec  T/O =  0  PRV =  0
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] engine_0: 8 : 0 7 3 6 0 0 0 0 6 ~30                                                0    22      0.11 sec  T/O =  0  PRV =  0
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] engine_0: Proved output 0 in frame 0 (converged).
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] engine_0: Block =   14  Oblig =   139  Clause =    92  Call =   754 (sat=53.4%)  Cex =   0  Start =   0
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] engine_0: SAT solving =     0.05 sec ( 41.75 %)
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] engine_0: unsat     =     0.02 sec ( 16.95 %)
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] engine_0: sat       =     0.03 sec ( 24.80 %)
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] engine_0: Generalize  =     0.03 sec ( 21.01 %)
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] engine_0: Push clause =     0.03 sec ( 20.95 %)
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] engine_0: Ternary sim =     0.00 sec (  2.28 %)
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] engine_0: Containment =     0.00 sec (  0.01 %)
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] engine_0: CNF compute =     0.00 sec (  3.36 %)
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] engine_0: Refinement  =     0.00 sec (  0.00 %)
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] engine_0: TOTAL       =     0.12 sec (100.00 %)
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] engine_0: Property proved.  Time =     0.12 sec
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] engine_0: Counter-example is not available.
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] engine_0: finished (returncode=0)
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] engine_0: Status returned by engine: PASS
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] summary: Elapsed clock time [H:MM:SS (secs)]: 0:00:00 (0)
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] summary: Elapsed process time [H:MM:SS (secs)]: 0:00:00 (0)
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] summary: engine_0 (abc pdr) returned PASS
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] summary: engine_0 did not produce any traces
+SBY 22:46:04 [apb_uart.u_tx_uart.parity_latched] DONE (PASS, rc=0)
+</system-out>
+<system-err>
+</system-err>
+</testsuite>
+</testsuites>

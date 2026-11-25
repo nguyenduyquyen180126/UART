@@ -100,7 +100,7 @@ footer{position:fixed;left:0;bottom:0;right:0;background:var(--panel);border-top
 <tr><th>Hạn nộp</th><th>Cổng</th><th>Ngưỡng đạt</th></tr>
 <tr><td>T3 10/11/2026</td><td>G1 Đặc tả</td><td>bảng thanh ghi, bảng <code>BAUD</code> và sai số ở 25 MHz, thiết kế bộ tích luỹ phân số, kế hoạch kiểm chứng</td></tr>
 <tr><td>T7 14/11/2026</td><td>G2 RTL + lint</td><td>0 cảnh báo Verilator <code>-Wall</code>; 0 latch; một net clock</td></tr>
-<tr><td>T4 18/11/2026</td><td>G3 DV, G4 netlist</td><td>20 test công khai đạt (RTL và netlist Yosys); độ phủ statement, branch ≥ 90 % (Questa)</td></tr>
+<tr><td>T4 18/11/2026</td><td>G3 DV, G4 netlist</td><td>20 test công khai đạt trên RTL và netlist Yosys đã map Sky130 HD; độ phủ statement, branch ≥ 90 % ở từng module RTL trong hierarchy apb_uart (Questa)</td></tr>
 <tr><td>T7 21/11/2026</td><td>G6 STA, LEC (G5 DFT cộng điểm)</td><td>WS setup, hold ≥ 0 ở 40 ns, corner ss; <code>eqy</code> tương đương</td></tr>
 <tr><td>T3 24/11/2026</td><td>G7 Layout</td><td>LibreLane hết flow, tile 1×1, WS sau route ≥ 0</td></tr>
 <tr><td>T5 26/11/2026, 23:59</td><td>G8 GLS, G9 sign-off, khoá mã nguồn</td><td>GLS có SDF ở tt, ss, ff; DRC = 0, LVS khớp, antenna = 0; GitHub Actions TT xanh</td></tr>
@@ -731,7 +731,7 @@ $("#irqctl").addEventListener("input",irqUpd);irqUpd();
 const CHK={
  "G1 Đặc tả (T3 10/11)":["Bảng 7 thanh ghi khớp đặc tả 1.1 (địa chỉ, bit, quyền, reset)","Bảng BAUD và sai số ở 25 MHz cho 7 tốc độ bắt buộc","Thiết kế bộ tích luỹ phân số của baud_gen","Sơ đồ khối có tên tín hiệu","Kế hoạch kiểm chứng ánh xạ từng mục đặc tả sang test"],
  "G2 RTL + lint (T7 14/11)":["Module apb_uart đúng tên và cổng","verilator --lint-only -Wall: 0 dòng %Warning","Yosys proc: không có Latch inferred","Một net clock pclk; không clock sinh bằng logic","rx, cts_n qua 2 flip-flop đồng bộ","Không initial, #delay, $display trong rtl/; không gọi ô sky130_"],
- "G3, G4 DV và netlist (T4 18/11)":["20 test công khai đạt trên RTL (Questa)","Độ phủ statement, branch ≥ 90 % (vcover)","Testbench chỉ truy cập apb_uart qua cổng","20 test công khai đạt trên netlist Yosys"],
+ "G3, G4 DV và netlist (T4 18/11)“:["20 test công khai đạt trên RTL (Questa)","Độ phủ statement, branch ≥ 90 % ở từng module RTL trong hierarchy apb_uart (vcover)","Testbench chỉ truy cập apb_uart qua cổng","20 test công khai đạt trên netlist Yosys đã map Sky130 HD, mô phỏng bằng functional Verilog models của thư viện"],
  "G6 STA, LEC (T7 21/11)":["SDC: create_clock 40 ns trên pclk, input/output delay","Setup WS ≥ 0 ở corner ss, hold WS ≥ 0 mọi corner","eqy: RTL tương đương netlist"],
  "G7 Layout (T3 24/11)":["LibreLane hết flow trên template TT, tile 1×1","WS setup, hold sau route ≥ 0"],
  "G8, G9 GLS và sign-off (T5 26/11)":["GLS có SDF ở tt, ss, ff đạt 20 test công khai","DRC Magic = 0, DRC KLayout = 0","LVS khớp, antenna = 0","GitHub Actions của repo TT xanh","Báo cáo đủ 10 mục danh sách phần E của tiêu chí chấm"]

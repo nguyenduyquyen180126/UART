@@ -22,7 +22,7 @@ module rx_controller(
                FRAME  = 2'b10,
                HOLD   = 2'b11;
 
-    assign rx_busy  = (state != IDLE);
+    assign rx_busy  = (state == FRAME) || (state == HOLD);
     assign clr_baud = (state == IDLE);
 
     always @(posedge clk or negedge rst_n) begin
@@ -73,7 +73,7 @@ module rx_controller(
                 end
             end
             FRAME: begin
-                if(baud_tick) begin
+                if(baud_tick && (tick_cnt == 4'd15)) begin
                     if(bit_last) next_state = HOLD;
                     else next_state = FRAME;
                 end
@@ -110,14 +110,14 @@ module rx_controller(
                 end
             end
             FRAME: begin
-                if(baud_tick) begin
+                if(baud_tick && (tick_cnt == 4'd15)) begin
+                    shift_en = 1'b1;
                     if(bit_last) begin
                         bit_clr  = 1'b1;
                         tick_clr = 1'b1;
                     end
-                    else if(tick_cnt == 4'd15) begin
+                    else begin
                         tick_en  = 1'b1;
-                        shift_en = 1'b1;
                     end
                 end
             end

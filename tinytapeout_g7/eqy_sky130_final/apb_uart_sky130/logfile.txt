@@ -1,0 +1,201 @@
+EQY 22:43:53 [apb_uart_sky130] read_gold: starting process "yosys -ql apb_uart_sky130/gold.log apb_uart_sky130/gold.ys"
+EQY 22:43:53 [apb_uart_sky130] read_gold: finished (returncode=0)
+EQY 22:43:53 [apb_uart_sky130] read_gate: starting process "yosys -ql apb_uart_sky130/gate.log apb_uart_sky130/gate.ys"
+EQY 22:43:54 [apb_uart_sky130] read_gate: finished (returncode=0)
+EQY 22:43:54 [apb_uart_sky130] combine: starting process "yosys -ql apb_uart_sky130/combine.log apb_uart_sky130/combine.ys"
+EQY 22:43:55 [apb_uart_sky130] combine: finished (returncode=0)
+EQY 22:43:56 [apb_uart_sky130] partition: starting process "cd apb_uart_sky130; yosys -ql partition.log partition.ys"
+EQY 22:43:58 [apb_uart_sky130] partition: finished (returncode=0)
+EQY 22:43:58 [apb_uart_sky130] run: starting process "make -C apb_uart_sky130 -f strategies.mk"
+EQY 22:43:58 [apb_uart_sky130] run: make: Entering directory '/home/vietanh/Downloads/code/UART/UART/tinytapeout_g7/eqy_sky130_final/apb_uart_sky130'
+EQY 22:43:58 [apb_uart_sky130] run: Running strategy 'simple' on 'apb_uart.irq'..
+EQY 22:43:58 [apb_uart_sky130] run: Proved equivalence of partition 'apb_uart.irq' using strategy 'simple'
+EQY 22:43:58 [apb_uart_sky130] run: Running strategy 'simple' on 'apb_uart.parity_err_status'..
+EQY 22:44:02 [apb_uart_sky130] run: Could not prove equivalence of partition 'apb_uart.parity_err_status' using strategy 'simple': equivalence unknown
+EQY 22:44:02 [apb_uart_sky130] run: Running strategy 'pdr' on 'apb_uart.parity_err_status'..
+EQY 22:44:03 [apb_uart_sky130] run: Proved equivalence of partition 'apb_uart.parity_err_status' using strategy 'pdr'
+EQY 22:44:03 [apb_uart_sky130] run: Running strategy 'simple' on 'apb_uart.prdata'..
+EQY 22:44:09 [apb_uart_sky130] run: Could not prove equivalence of partition 'apb_uart.prdata' using strategy 'simple': equivalence unknown
+EQY 22:44:09 [apb_uart_sky130] run: Running strategy 'pdr' on 'apb_uart.prdata'..
+EQY 22:44:10 [apb_uart_sky130] run: Proved equivalence of partition 'apb_uart.prdata' using strategy 'pdr'
+EQY 22:44:10 [apb_uart_sky130] run: Running strategy 'simple' on 'apb_uart.pready'..
+EQY 22:44:10 [apb_uart_sky130] run: Proved equivalence of partition 'apb_uart.pready' using strategy 'simple'
+EQY 22:44:10 [apb_uart_sky130] run: Running strategy 'simple' on 'apb_uart.pslverr'..
+EQY 22:44:15 [apb_uart_sky130] run: Could not prove equivalence of partition 'apb_uart.pslverr' using strategy 'simple': equivalence unknown
+EQY 22:44:15 [apb_uart_sky130] run: Running strategy 'pdr' on 'apb_uart.pslverr'..
+EQY 22:44:16 [apb_uart_sky130] run: Proved equivalence of partition 'apb_uart.pslverr' using strategy 'pdr'
+EQY 22:44:16 [apb_uart_sky130] run: Running strategy 'simple' on 'apb_uart.rts_n'..
+EQY 22:44:16 [apb_uart_sky130] run: Proved equivalence of partition 'apb_uart.rts_n' using strategy 'simple'
+EQY 22:44:16 [apb_uart_sky130] run: Running strategy 'simple' on 'apb_uart.rx_done_status'..
+EQY 22:44:21 [apb_uart_sky130] run: Could not prove equivalence of partition 'apb_uart.rx_done_status' using strategy 'simple': equivalence unknown
+EQY 22:44:21 [apb_uart_sky130] run: Running strategy 'pdr' on 'apb_uart.rx_done_status'..
+EQY 22:44:22 [apb_uart_sky130] run: Proved equivalence of partition 'apb_uart.rx_done_status' using strategy 'pdr'
+EQY 22:44:22 [apb_uart_sky130] run: Running strategy 'simple' on 'apb_uart.tx'..
+EQY 22:44:25 [apb_uart_sky130] run: Could not prove equivalence of partition 'apb_uart.tx' using strategy 'simple': equivalence unknown
+EQY 22:44:25 [apb_uart_sky130] run: Running strategy 'pdr' on 'apb_uart.tx'..
+EQY 22:44:27 [apb_uart_sky130] run: Proved equivalence of partition 'apb_uart.tx' using strategy 'pdr'
+EQY 22:44:27 [apb_uart_sky130] run: Running strategy 'simple' on 'apb_uart.tx_done_status'..
+EQY 22:44:30 [apb_uart_sky130] run: Could not prove equivalence of partition 'apb_uart.tx_done_status' using strategy 'simple': equivalence unknown
+EQY 22:44:30 [apb_uart_sky130] run: Running strategy 'pdr' on 'apb_uart.tx_done_status'..
+EQY 22:44:31 [apb_uart_sky130] run: Proved equivalence of partition 'apb_uart.tx_done_status' using strategy 'pdr'
+EQY 22:44:31 [apb_uart_sky130] run: Running strategy 'simple' on 'apb_uart.u_apb_regs.baud'..
+EQY 22:44:38 [apb_uart_sky130] run: Could not prove equivalence of partition 'apb_uart.u_apb_regs.baud' using strategy 'simple': equivalence unknown
+EQY 22:44:38 [apb_uart_sky130] run: Running strategy 'pdr' on 'apb_uart.u_apb_regs.baud'..
+EQY 22:44:40 [apb_uart_sky130] run: Proved equivalence of partition 'apb_uart.u_apb_regs.baud' using strategy 'pdr'
+EQY 22:44:40 [apb_uart_sky130] run: Running strategy 'simple' on 'apb_uart.u_apb_regs.cfg'..
+EQY 22:44:50 [apb_uart_sky130] run: Could not prove equivalence of partition 'apb_uart.u_apb_regs.cfg' using strategy 'simple': equivalence unknown
+EQY 22:44:50 [apb_uart_sky130] run: Running strategy 'pdr' on 'apb_uart.u_apb_regs.cfg'..
+EQY 22:44:52 [apb_uart_sky130] run: Proved equivalence of partition 'apb_uart.u_apb_regs.cfg' using strategy 'pdr'
+EQY 22:44:52 [apb_uart_sky130] run: Running strategy 'simple' on 'apb_uart.u_apb_regs.frame_err_flag'..
+EQY 22:44:53 [apb_uart_sky130] run: Proved equivalence of partition 'apb_uart.u_apb_regs.frame_err_flag' using strategy 'simple'
+EQY 22:44:53 [apb_uart_sky130] run: Running strategy 'simple' on 'apb_uart.u_apb_regs.ier'..
+EQY 22:44:53 [apb_uart_sky130] run: Proved equivalence of partition 'apb_uart.u_apb_regs.ier' using strategy 'simple'
+EQY 22:44:53 [apb_uart_sky130] run: Running strategy 'simple' on 'apb_uart.u_apb_regs.parity_err_flag'..
+EQY 22:44:54 [apb_uart_sky130] run: Proved equivalence of partition 'apb_uart.u_apb_regs.parity_err_flag' using strategy 'simple'
+EQY 22:44:54 [apb_uart_sky130] run: Running strategy 'simple' on 'apb_uart.u_apb_regs.rx_data_reg'..
+EQY 22:44:55 [apb_uart_sky130] run: Proved equivalence of partition 'apb_uart.u_apb_regs.rx_data_reg' using strategy 'simple'
+EQY 22:44:55 [apb_uart_sky130] run: Running strategy 'simple' on 'apb_uart.u_apb_regs.rx_done_flag'..
+EQY 22:44:56 [apb_uart_sky130] run: Proved equivalence of partition 'apb_uart.u_apb_regs.rx_done_flag' using strategy 'simple'
+EQY 22:44:56 [apb_uart_sky130] run: Running strategy 'simple' on 'apb_uart.u_apb_regs.rx_done_prev'..
+EQY 22:44:56 [apb_uart_sky130] run: Proved equivalence of partition 'apb_uart.u_apb_regs.rx_done_prev' using strategy 'simple'
+EQY 22:44:56 [apb_uart_sky130] run: Running strategy 'simple' on 'apb_uart.u_apb_regs.soft_rst_reg'..
+EQY 22:44:57 [apb_uart_sky130] run: Proved equivalence of partition 'apb_uart.u_apb_regs.soft_rst_reg' using strategy 'simple'
+EQY 22:44:57 [apb_uart_sky130] run: Running strategy 'simple' on 'apb_uart.u_apb_regs.start_reg'..
+EQY 22:44:57 [apb_uart_sky130] run: Proved equivalence of partition 'apb_uart.u_apb_regs.start_reg' using strategy 'simple'
+EQY 22:44:57 [apb_uart_sky130] run: Running strategy 'simple' on 'apb_uart.u_apb_regs.tx_data_reg'..
+EQY 22:44:58 [apb_uart_sky130] run: Proved equivalence of partition 'apb_uart.u_apb_regs.tx_data_reg' using strategy 'simple'
+EQY 22:44:58 [apb_uart_sky130] run: Running strategy 'simple' on 'apb_uart.u_rx_uart.bit_cnt_inst.bit_cnt'..
+EQY 22:45:01 [apb_uart_sky130] run: Proved equivalence of partition 'apb_uart.u_rx_uart.bit_cnt_inst.bit_cnt' using strategy 'simple'
+EQY 22:45:01 [apb_uart_sky130] run: Running strategy 'simple' on 'apb_uart.u_rx_uart.deframe_inst.parity_bit'..
+EQY 22:45:05 [apb_uart_sky130] run: Could not prove equivalence of partition 'apb_uart.u_rx_uart.deframe_inst.parity_bit' using strategy 'simple': equivalence unknown
+EQY 22:45:05 [apb_uart_sky130] run: Running strategy 'pdr' on 'apb_uart.u_rx_uart.deframe_inst.parity_bit'..
+EQY 22:45:06 [apb_uart_sky130] run: Proved equivalence of partition 'apb_uart.u_rx_uart.deframe_inst.parity_bit' using strategy 'pdr'
+EQY 22:45:06 [apb_uart_sky130] run: Running strategy 'simple' on 'apb_uart.u_rx_uart.deframe_inst.parity_exp'..
+EQY 22:45:12 [apb_uart_sky130] run: Could not prove equivalence of partition 'apb_uart.u_rx_uart.deframe_inst.parity_exp' using strategy 'simple': equivalence unknown
+EQY 22:45:12 [apb_uart_sky130] run: Running strategy 'pdr' on 'apb_uart.u_rx_uart.deframe_inst.parity_exp'..
+EQY 22:45:15 [apb_uart_sky130] run: Proved equivalence of partition 'apb_uart.u_rx_uart.deframe_inst.parity_exp' using strategy 'pdr'
+EQY 22:45:15 [apb_uart_sky130] run: Running strategy 'simple' on 'apb_uart.u_rx_uart.deframe_inst.rx_data'..
+EQY 22:45:23 [apb_uart_sky130] run: Could not prove equivalence of partition 'apb_uart.u_rx_uart.deframe_inst.rx_data' using strategy 'simple': equivalence unknown
+EQY 22:45:23 [apb_uart_sky130] run: Running strategy 'pdr' on 'apb_uart.u_rx_uart.deframe_inst.rx_data'..
+EQY 22:45:25 [apb_uart_sky130] run: Proved equivalence of partition 'apb_uart.u_rx_uart.deframe_inst.rx_data' using strategy 'pdr'
+EQY 22:45:25 [apb_uart_sky130] run: Running strategy 'simple' on 'apb_uart.u_rx_uart.frame_err'..
+EQY 22:45:29 [apb_uart_sky130] run: Could not prove equivalence of partition 'apb_uart.u_rx_uart.frame_err' using strategy 'simple': equivalence unknown
+EQY 22:45:29 [apb_uart_sky130] run: Running strategy 'pdr' on 'apb_uart.u_rx_uart.frame_err'..
+EQY 22:45:30 [apb_uart_sky130] run: Proved equivalence of partition 'apb_uart.u_rx_uart.frame_err' using strategy 'pdr'
+EQY 22:45:30 [apb_uart_sky130] run: Running strategy 'simple' on 'apb_uart.u_rx_uart.overrun'..
+EQY 22:45:34 [apb_uart_sky130] run: Could not prove equivalence of partition 'apb_uart.u_rx_uart.overrun' using strategy 'simple': equivalence unknown
+EQY 22:45:34 [apb_uart_sky130] run: Running strategy 'pdr' on 'apb_uart.u_rx_uart.overrun'..
+EQY 22:45:35 [apb_uart_sky130] run: Proved equivalence of partition 'apb_uart.u_rx_uart.overrun' using strategy 'pdr'
+EQY 22:45:35 [apb_uart_sky130] run: Running strategy 'simple' on 'apb_uart.u_rx_uart.reset_release_pending'..
+EQY 22:45:35 [apb_uart_sky130] run: Proved equivalence of partition 'apb_uart.u_rx_uart.reset_release_pending' using strategy 'simple'
+EQY 22:45:35 [apb_uart_sky130] run: Running strategy 'simple' on 'apb_uart.u_rx_uart.rx_controller_inst.first_stop_sampled'..
+EQY 22:45:37 [apb_uart_sky130] run: Proved equivalence of partition 'apb_uart.u_rx_uart.rx_controller_inst.first_stop_sampled' using strategy 'simple'
+EQY 22:45:37 [apb_uart_sky130] run: Running strategy 'simple' on 'apb_uart.u_rx_uart.rx_controller_inst.frame_error_latched'..
+EQY 22:45:40 [apb_uart_sky130] run: Could not prove equivalence of partition 'apb_uart.u_rx_uart.rx_controller_inst.frame_error_latched' using strategy 'simple': equivalence unknown
+EQY 22:45:40 [apb_uart_sky130] run: Running strategy 'pdr' on 'apb_uart.u_rx_uart.rx_controller_inst.frame_error_latched'..
+EQY 22:45:41 [apb_uart_sky130] run: Proved equivalence of partition 'apb_uart.u_rx_uart.rx_controller_inst.frame_error_latched' using strategy 'pdr'
+EQY 22:45:41 [apb_uart_sky130] run: Running strategy 'simple' on 'apb_uart.u_rx_uart.rx_data'..
+EQY 22:45:45 [apb_uart_sky130] run: Could not prove equivalence of partition 'apb_uart.u_rx_uart.rx_data' using strategy 'simple': equivalence unknown
+EQY 22:45:45 [apb_uart_sky130] run: Running strategy 'pdr' on 'apb_uart.u_rx_uart.rx_data'..
+EQY 22:45:46 [apb_uart_sky130] run: Proved equivalence of partition 'apb_uart.u_rx_uart.rx_data' using strategy 'pdr'
+EQY 22:45:46 [apb_uart_sky130] run: Running strategy 'simple' on 'apb_uart.u_rx_uart.rx_sync1'..
+EQY 22:45:46 [apb_uart_sky130] run: Proved equivalence of partition 'apb_uart.u_rx_uart.rx_sync1' using strategy 'simple'
+EQY 22:45:46 [apb_uart_sky130] run: Running strategy 'simple' on 'apb_uart.u_rx_uart.rx_sync2'..
+EQY 22:45:46 [apb_uart_sky130] run: Proved equivalence of partition 'apb_uart.u_rx_uart.rx_sync2' using strategy 'simple'
+EQY 22:45:46 [apb_uart_sky130] run: Running strategy 'simple' on 'apb_uart.u_rx_uart.tick_cnt_inst.tick_cnt'..
+EQY 22:45:49 [apb_uart_sky130] run: Could not prove equivalence of partition 'apb_uart.u_rx_uart.tick_cnt_inst.tick_cnt' using strategy 'simple': equivalence unknown
+EQY 22:45:50 [apb_uart_sky130] run: Running strategy 'pdr' on 'apb_uart.u_rx_uart.tick_cnt_inst.tick_cnt'..
+EQY 22:45:51 [apb_uart_sky130] run: Proved equivalence of partition 'apb_uart.u_rx_uart.tick_cnt_inst.tick_cnt' using strategy 'pdr'
+EQY 22:45:51 [apb_uart_sky130] run: Running strategy 'simple' on 'apb_uart.u_rx_uart.u_rx_baud_gen.acc'..
+EQY 22:45:54 [apb_uart_sky130] run: Could not prove equivalence of partition 'apb_uart.u_rx_uart.u_rx_baud_gen.acc' using strategy 'simple': equivalence unknown
+EQY 22:45:54 [apb_uart_sky130] run: Running strategy 'pdr' on 'apb_uart.u_rx_uart.u_rx_baud_gen.acc'..
+EQY 22:45:55 [apb_uart_sky130] run: Proved equivalence of partition 'apb_uart.u_rx_uart.u_rx_baud_gen.acc' using strategy 'pdr'
+EQY 22:45:55 [apb_uart_sky130] run: Running strategy 'simple' on 'apb_uart.u_rx_uart.u_rx_baud_gen.cnt'..
+EQY 22:45:59 [apb_uart_sky130] run: Could not prove equivalence of partition 'apb_uart.u_rx_uart.u_rx_baud_gen.cnt' using strategy 'simple': equivalence unknown
+EQY 22:45:59 [apb_uart_sky130] run: Running strategy 'pdr' on 'apb_uart.u_rx_uart.u_rx_baud_gen.cnt'..
+EQY 22:46:00 [apb_uart_sky130] run: Proved equivalence of partition 'apb_uart.u_rx_uart.u_rx_baud_gen.cnt' using strategy 'pdr'
+EQY 22:46:00 [apb_uart_sky130] run: Running strategy 'simple' on 'apb_uart.u_tx_uart.cts_n_sync1'..
+EQY 22:46:01 [apb_uart_sky130] run: Proved equivalence of partition 'apb_uart.u_tx_uart.cts_n_sync1' using strategy 'simple'
+EQY 22:46:01 [apb_uart_sky130] run: Running strategy 'simple' on 'apb_uart.u_tx_uart.cts_n_sync2'..
+EQY 22:46:01 [apb_uart_sky130] run: Proved equivalence of partition 'apb_uart.u_tx_uart.cts_n_sync2' using strategy 'simple'
+EQY 22:46:01 [apb_uart_sky130] run: Running strategy 'simple' on 'apb_uart.u_tx_uart.parity_latched'..
+EQY 22:46:04 [apb_uart_sky130] run: Could not prove equivalence of partition 'apb_uart.u_tx_uart.parity_latched' using strategy 'simple': equivalence unknown
+EQY 22:46:04 [apb_uart_sky130] run: Running strategy 'pdr' on 'apb_uart.u_tx_uart.parity_latched'..
+EQY 22:46:04 [apb_uart_sky130] run: Proved equivalence of partition 'apb_uart.u_tx_uart.parity_latched' using strategy 'pdr'
+EQY 22:46:04 [apb_uart_sky130] run: Running strategy 'simple' on 'apb_uart.u_tx_uart.tick_cnt_ins.cnt'..
+EQY 22:46:08 [apb_uart_sky130] run: Could not prove equivalence of partition 'apb_uart.u_tx_uart.tick_cnt_ins.cnt' using strategy 'simple': equivalence unknown
+EQY 22:46:08 [apb_uart_sky130] run: Running strategy 'pdr' on 'apb_uart.u_tx_uart.tick_cnt_ins.cnt'..
+EQY 22:46:11 [apb_uart_sky130] run: Proved equivalence of partition 'apb_uart.u_tx_uart.tick_cnt_ins.cnt' using strategy 'pdr'
+EQY 22:46:11 [apb_uart_sky130] run: Running strategy 'simple' on 'apb_uart.u_tx_uart.u_baud_gen.acc'..
+EQY 22:46:14 [apb_uart_sky130] run: Could not prove equivalence of partition 'apb_uart.u_tx_uart.u_baud_gen.acc' using strategy 'simple': equivalence unknown
+EQY 22:46:14 [apb_uart_sky130] run: Running strategy 'pdr' on 'apb_uart.u_tx_uart.u_baud_gen.acc'..
+EQY 22:46:15 [apb_uart_sky130] run: Proved equivalence of partition 'apb_uart.u_tx_uart.u_baud_gen.acc' using strategy 'pdr'
+EQY 22:46:15 [apb_uart_sky130] run: Running strategy 'simple' on 'apb_uart.u_tx_uart.u_baud_gen.cnt'..
+EQY 22:46:20 [apb_uart_sky130] run: Could not prove equivalence of partition 'apb_uart.u_tx_uart.u_baud_gen.cnt' using strategy 'simple': equivalence unknown
+EQY 22:46:20 [apb_uart_sky130] run: Running strategy 'pdr' on 'apb_uart.u_tx_uart.u_baud_gen.cnt'..
+EQY 22:46:23 [apb_uart_sky130] run: Proved equivalence of partition 'apb_uart.u_tx_uart.u_baud_gen.cnt' using strategy 'pdr'
+EQY 22:46:23 [apb_uart_sky130] run: Running strategy 'simple' on 'apb_uart.u_tx_uart.u_bit_cnt.cnt'..
+EQY 22:46:26 [apb_uart_sky130] run: Could not prove equivalence of partition 'apb_uart.u_tx_uart.u_bit_cnt.cnt' using strategy 'simple': equivalence unknown
+EQY 22:46:26 [apb_uart_sky130] run: Running strategy 'pdr' on 'apb_uart.u_tx_uart.u_bit_cnt.cnt'..
+EQY 22:46:28 [apb_uart_sky130] run: Proved equivalence of partition 'apb_uart.u_tx_uart.u_bit_cnt.cnt' using strategy 'pdr'
+EQY 22:46:28 [apb_uart_sky130] run: Running strategy 'simple' on 'apb_uart.u_tx_uart.u_piso.data'..
+EQY 22:46:33 [apb_uart_sky130] run: Could not prove equivalence of partition 'apb_uart.u_tx_uart.u_piso.data' using strategy 'simple': equivalence unknown
+EQY 22:46:33 [apb_uart_sky130] run: Running strategy 'pdr' on 'apb_uart.u_tx_uart.u_piso.data'..
+EQY 22:46:34 [apb_uart_sky130] run: Proved equivalence of partition 'apb_uart.u_tx_uart.u_piso.data' using strategy 'pdr'
+EQY 22:46:34 [apb_uart_sky130] run: Running strategy 'simple' on 'apb_uart.u_tx_uart.u_stop_cnt.cnt'..
+EQY 22:46:39 [apb_uart_sky130] run: Could not prove equivalence of partition 'apb_uart.u_tx_uart.u_stop_cnt.cnt' using strategy 'simple': equivalence unknown
+EQY 22:46:39 [apb_uart_sky130] run: Running strategy 'pdr' on 'apb_uart.u_tx_uart.u_stop_cnt.cnt'..
+EQY 22:46:40 [apb_uart_sky130] run: Proved equivalence of partition 'apb_uart.u_tx_uart.u_stop_cnt.cnt' using strategy 'pdr'
+EQY 22:46:40 [apb_uart_sky130] run: make -f strategies.mk summary
+EQY 22:46:40 [apb_uart_sky130] run: make[1]: Entering directory '/home/vietanh/Downloads/code/UART/UART/tinytapeout_g7/eqy_sky130_final/apb_uart_sky130'
+EQY 22:46:40 [apb_uart_sky130] run: make[1]: Leaving directory '/home/vietanh/Downloads/code/UART/UART/tinytapeout_g7/eqy_sky130_final/apb_uart_sky130'
+EQY 22:46:40 [apb_uart_sky130] run: make: Leaving directory '/home/vietanh/Downloads/code/UART/UART/tinytapeout_g7/eqy_sky130_final/apb_uart_sky130'
+EQY 22:46:40 [apb_uart_sky130] run: finished (returncode=0)
+EQY 22:46:40 [apb_uart_sky130] Successfully proved equivalence of partition apb_uart.u_tx_uart.u_stop_cnt.cnt
+EQY 22:46:40 [apb_uart_sky130] Successfully proved equivalence of partition apb_uart.u_tx_uart.u_piso.data
+EQY 22:46:40 [apb_uart_sky130] Successfully proved equivalence of partition apb_uart.u_tx_uart.u_bit_cnt.cnt
+EQY 22:46:40 [apb_uart_sky130] Successfully proved equivalence of partition apb_uart.u_tx_uart.u_baud_gen.cnt
+EQY 22:46:40 [apb_uart_sky130] Successfully proved equivalence of partition apb_uart.u_tx_uart.u_baud_gen.acc
+EQY 22:46:40 [apb_uart_sky130] Successfully proved equivalence of partition apb_uart.u_tx_uart.tick_cnt_ins.cnt
+EQY 22:46:40 [apb_uart_sky130] Successfully proved equivalence of partition apb_uart.u_tx_uart.parity_latched
+EQY 22:46:40 [apb_uart_sky130] Successfully proved equivalence of partition apb_uart.u_tx_uart.cts_n_sync2
+EQY 22:46:40 [apb_uart_sky130] Successfully proved equivalence of partition apb_uart.u_tx_uart.cts_n_sync1
+EQY 22:46:40 [apb_uart_sky130] Successfully proved equivalence of partition apb_uart.u_rx_uart.u_rx_baud_gen.cnt
+EQY 22:46:40 [apb_uart_sky130] Successfully proved equivalence of partition apb_uart.u_rx_uart.u_rx_baud_gen.acc
+EQY 22:46:40 [apb_uart_sky130] Successfully proved equivalence of partition apb_uart.u_rx_uart.tick_cnt_inst.tick_cnt
+EQY 22:46:40 [apb_uart_sky130] Successfully proved equivalence of partition apb_uart.u_rx_uart.rx_sync2
+EQY 22:46:40 [apb_uart_sky130] Successfully proved equivalence of partition apb_uart.u_rx_uart.rx_sync1
+EQY 22:46:40 [apb_uart_sky130] Successfully proved equivalence of partition apb_uart.u_rx_uart.rx_data
+EQY 22:46:40 [apb_uart_sky130] Successfully proved equivalence of partition apb_uart.u_rx_uart.rx_controller_inst.frame_error_latched
+EQY 22:46:40 [apb_uart_sky130] Successfully proved equivalence of partition apb_uart.u_rx_uart.rx_controller_inst.first_stop_sampled
+EQY 22:46:40 [apb_uart_sky130] Successfully proved equivalence of partition apb_uart.u_rx_uart.reset_release_pending
+EQY 22:46:40 [apb_uart_sky130] Successfully proved equivalence of partition apb_uart.u_rx_uart.overrun
+EQY 22:46:40 [apb_uart_sky130] Successfully proved equivalence of partition apb_uart.u_rx_uart.frame_err
+EQY 22:46:40 [apb_uart_sky130] Successfully proved equivalence of partition apb_uart.u_rx_uart.deframe_inst.rx_data
+EQY 22:46:40 [apb_uart_sky130] Successfully proved equivalence of partition apb_uart.u_rx_uart.deframe_inst.parity_exp
+EQY 22:46:40 [apb_uart_sky130] Successfully proved equivalence of partition apb_uart.u_rx_uart.deframe_inst.parity_bit
+EQY 22:46:40 [apb_uart_sky130] Successfully proved equivalence of partition apb_uart.u_rx_uart.bit_cnt_inst.bit_cnt
+EQY 22:46:40 [apb_uart_sky130] Successfully proved equivalence of partition apb_uart.u_apb_regs.tx_data_reg
+EQY 22:46:40 [apb_uart_sky130] Successfully proved equivalence of partition apb_uart.u_apb_regs.start_reg
+EQY 22:46:40 [apb_uart_sky130] Successfully proved equivalence of partition apb_uart.u_apb_regs.soft_rst_reg
+EQY 22:46:40 [apb_uart_sky130] Successfully proved equivalence of partition apb_uart.u_apb_regs.rx_done_prev
+EQY 22:46:40 [apb_uart_sky130] Successfully proved equivalence of partition apb_uart.u_apb_regs.rx_done_flag
+EQY 22:46:40 [apb_uart_sky130] Successfully proved equivalence of partition apb_uart.u_apb_regs.rx_data_reg
+EQY 22:46:40 [apb_uart_sky130] Successfully proved equivalence of partition apb_uart.u_apb_regs.parity_err_flag
+EQY 22:46:40 [apb_uart_sky130] Successfully proved equivalence of partition apb_uart.u_apb_regs.ier
+EQY 22:46:40 [apb_uart_sky130] Successfully proved equivalence of partition apb_uart.u_apb_regs.frame_err_flag
+EQY 22:46:40 [apb_uart_sky130] Successfully proved equivalence of partition apb_uart.u_apb_regs.cfg
+EQY 22:46:40 [apb_uart_sky130] Successfully proved equivalence of partition apb_uart.u_apb_regs.baud
+EQY 22:46:40 [apb_uart_sky130] Successfully proved equivalence of partition apb_uart.parity_err_status
+EQY 22:46:40 [apb_uart_sky130] Successfully proved equivalence of partition apb_uart.rx_done_status
+EQY 22:46:40 [apb_uart_sky130] Successfully proved equivalence of partition apb_uart.tx_done_status
+EQY 22:46:40 [apb_uart_sky130] Successfully proved equivalence of partition apb_uart.irq
+EQY 22:46:40 [apb_uart_sky130] Successfully proved equivalence of partition apb_uart.rts_n
+EQY 22:46:40 [apb_uart_sky130] Successfully proved equivalence of partition apb_uart.tx
+EQY 22:46:40 [apb_uart_sky130] Successfully proved equivalence of partition apb_uart.prdata
+EQY 22:46:40 [apb_uart_sky130] Successfully proved equivalence of partition apb_uart.pslverr
+EQY 22:46:40 [apb_uart_sky130] Successfully proved equivalence of partition apb_uart.pready
+EQY 22:46:40 [apb_uart_sky130] Successfully proved designs equivalent
+EQY 22:46:40 [apb_uart_sky130] summary: Elapsed clock time [H:MM:SS (secs)]: 0:02:47 (167)
+EQY 22:46:40 [apb_uart_sky130] summary: Elapsed process time [H:MM:SS (secs)]: 0:02:47 (167)
+EQY 22:46:40 [apb_uart_sky130] DONE (PASS, rc=0)

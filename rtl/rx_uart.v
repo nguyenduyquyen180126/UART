@@ -1,5 +1,7 @@
 module rx_uart #(
+    /* verilator lint_off UNUSEDPARAM */
     parameter CLK_FREQ = 50_000_000
+    /* verilator lint_on UNUSEDPARAM */
 )(
     input clk,
     input rst_n,
@@ -30,10 +32,12 @@ module rx_uart #(
    wire tick_clr;
    wire bit_clr;
    wire bit_last;
-   wire [11:0] data_out;
+   wire [8:0] data_out;
    wire [3:0] num_data_b;
    wire [1:0] num_stop_b;
+   /* verilator lint_off UNUSEDSIGNAL */
    wire [3:0] bit_cnt;
+   /* verilator lint_on UNUSEDSIGNAL */
    wire [3:0] tick_cnt;
    wire parity_exp;
    wire parity_error;
@@ -45,29 +49,30 @@ module rx_uart #(
    assign error = parity_error | frame_err;
    
     // 2-FF Synchronizer cho tin hieu rx (chong Metastability)
+    // Giu nguyen qua trinh lay mau rx khi soft_rst_i de tranh tao suon xuong gia
+    // neu soft_rst xay ra giua khung thu dang o muc 0.
     reg rx_sync1, rx_sync2;
-    reg rx_falling, rx_sync_prv;
+    reg rx_armed;
     reg reset_release_pending;
 
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
             rx_sync1 <= 1'b1;
             rx_sync2 <= 1'b1;
-            rx_sync_prv <= 1'b1;
-            rx_falling <= 1'b0;
-        end else if (soft_rst_i) begin
-            rx_sync1 <= 1'b1;
-            rx_sync2 <= 1'b1;
-            rx_sync_prv <= 1'b1;
-            rx_falling <= 1'b0;
+            rx_armed <= 1'b0;
         end else begin
             rx_sync1 <= rx;
             rx_sync2 <= rx_sync1;
-            rx_sync_prv <= rx_sync2;
-            rx_falling <= (rx_sync_prv == 1'b1) & (rx_sync2 == 1'b0);
+            if (soft_rst_i || rx_dis || (ctrl_rx_done && !rx_sync2)) begin
+                // After reset, disable, or a framing-error stop bit (=0), require a
+                // mark/idle level (rx_sync2==1) before arming the next falling start edge.
+                rx_armed <= 1'b0;
+            end else if (rx_sync2) begin
+                rx_armed <= 1'b1;
+            end
         end
     end
-    wire rx_fsm_in = (rx_dis) ? 1'b1 : rx_sync2; 
+    wire rx_fsm_in = (rx_dis || !rx_armed) ? 1'b1 : rx_sync2; 
     // APB-UART spec requires RTS inactive (high) while reset is asserted.
     // Keep RTS inactive through the first sampled clock after reset release.
     // This satisfies the APB-UART reset contract before normal receive-ready
@@ -113,7 +118,7 @@ module rx_uart #(
         .data_b_num_out(num_data_b)
     );
     stop_b_num stop_b_num_inst(
-        .stop_b_num(stop_b_num),
+        .two_stop_bits(stop_b_num),
         .stop_b_num_out(num_stop_b)
     );
     bit_cnt bit_cnt_inst(
@@ -141,9 +146,6 @@ module rx_uart #(
         .data_out(data_out)
     );
     deframe deframe_inst(
-        .clk(clk),
-        .rst_n(rst_n),
-        .bit_last(bit_last),
         .parity_en(parity_en),
         .data_in(data_out),
         .num_data_b(num_data_b),
@@ -172,23 +174,22 @@ module rx_uart #(
             rx_done <= 1'b0;
             rx_data <= 8'b0;
         end else begin
-            if(rx_clear) begin
-                rx_done <= 1'b0;
-                frame_err <= 1'b0;
-                parity_err <= 1'b0;
-                overrun <= 1'b0;
-            end
-            else if (ctrl_rx_done) begin
+            if (ctrl_rx_done) begin
                 if(rx_done && !rx_clear) begin
                     overrun <= 1'b1;
                 end else begin
                     rx_done <= 1'b1;
                     frame_err <= ctrl_frame_err;
                     parity_err <= parity_error;
+                    overrun <= 1'b0;
                     rx_data <= rx_deframe_data;
                 end
-
-        end
+            end else if(rx_clear) begin
+                rx_done <= 1'b0;
+                frame_err <= 1'b0;
+                parity_err <= 1'b0;
+                overrun <= 1'b0;
+            end
         end
     end
 

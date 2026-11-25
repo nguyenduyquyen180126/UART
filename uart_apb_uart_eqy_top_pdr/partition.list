@@ -1,0 +1,1 @@
+apb_uart apb_uart.top_outputs xbits : tx[0] rts_n[0] pslverr[0] pready[0] prdata[31:0] irq[0]

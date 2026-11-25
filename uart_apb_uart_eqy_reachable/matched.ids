@@ -1,0 +1,110 @@
+# [apb_uart] gold-match pclk
+apb_uart pclk pclk
+# [apb_uart] gold-match presetn
+apb_uart presetn presetn
+# [apb_uart] gold-match psel
+apb_uart psel psel
+# [apb_uart] gold-match penable
+apb_uart penable penable
+# [apb_uart] gold-match pwrite
+apb_uart pwrite pwrite
+# [apb_uart] gold-match paddr
+apb_uart paddr paddr
+# [apb_uart] gold-match pstrb
+apb_uart pstrb pstrb
+# [apb_uart] gold-match pwdata
+apb_uart pwdata pwdata
+# [apb_uart] gold-match pready
+apb_uart pready pready
+# [apb_uart] gold-match pslverr
+apb_uart pslverr pslverr
+# [apb_uart] gold-match prdata
+apb_uart prdata prdata
+# [apb_uart] gold-match cts_n
+apb_uart cts_n cts_n
+# [apb_uart] gold-match tx
+apb_uart tx tx
+# [apb_uart] gold-match rx
+apb_uart rx rx
+# [apb_uart] gold-match rts_n
+apb_uart rts_n rts_n
+# [apb_uart] gold-match irq
+apb_uart irq irq
+# [apb_uart] gold-match u_apb_regs.baud
+apb_uart u_apb_regs.baud u_apb_regs.baud
+# [apb_uart] gold-match u_apb_regs.cfg
+apb_uart u_apb_regs.cfg u_apb_regs.cfg
+# [apb_uart] gold-match u_apb_regs.frame_err_flag
+apb_uart u_apb_regs.frame_err_flag u_apb_regs.frame_err_flag
+# [apb_uart] gold-match u_apb_regs.ier
+apb_uart u_apb_regs.ier u_apb_regs.ier
+# [apb_uart] gold-match u_apb_regs.parity_err_flag
+apb_uart u_apb_regs.parity_err_flag u_apb_regs.parity_err_flag
+# [apb_uart] gold-match u_apb_regs.rx_data_reg
+apb_uart u_apb_regs.rx_data_reg u_apb_regs.rx_data_reg
+# [apb_uart] gold-match u_apb_regs.rx_done_flag
+apb_uart u_apb_regs.rx_done_flag u_apb_regs.rx_done_flag
+# [apb_uart] gold-match u_apb_regs.rx_done_prev
+apb_uart u_apb_regs.rx_done_prev u_apb_regs.rx_done_prev
+# [apb_uart] gold-match u_apb_regs.soft_rst_reg
+apb_uart u_apb_regs.soft_rst_reg u_apb_regs.soft_rst_reg
+# [apb_uart] gold-match u_apb_regs.start_reg
+apb_uart u_apb_regs.start_reg u_apb_regs.start_reg
+# [apb_uart] gold-match u_apb_regs.tx_data_reg
+apb_uart u_apb_regs.tx_data_reg u_apb_regs.tx_data_reg
+# [apb_uart] gold-match u_rx_uart.bit_cnt_inst.bit_cnt
+apb_uart u_rx_uart.bit_cnt_inst.bit_cnt u_rx_uart.bit_cnt_inst.bit_cnt
+# [apb_uart] gold-match u_rx_uart.deframe_inst.parity_bit
+apb_uart u_rx_uart.deframe_inst.parity_bit u_rx_uart.deframe_inst.parity_bit
+# [apb_uart] gold-match u_rx_uart.deframe_inst.parity_exp
+apb_uart u_rx_uart.deframe_inst.parity_exp u_rx_uart.deframe_inst.parity_exp
+# [apb_uart] gold-match u_rx_uart.deframe_inst.rx_data
+apb_uart u_rx_uart.deframe_inst.rx_data u_rx_uart.deframe_inst.rx_data
+# [apb_uart] gold-match u_rx_uart.frame_err
+apb_uart u_rx_uart.frame_err u_rx_uart.frame_err
+# [apb_uart] gold-match u_rx_uart.overrun
+apb_uart u_rx_uart.overrun u_rx_uart.overrun
+# [apb_uart] gold-match u_rx_uart.parity_err
+apb_uart u_rx_uart.parity_err u_rx_uart.parity_err
+# [apb_uart] gold-match u_rx_uart.reset_release_pending
+apb_uart u_rx_uart.reset_release_pending u_rx_uart.reset_release_pending
+# [apb_uart] gold-match u_rx_uart.rx_controller_inst.first_stop_sampled
+apb_uart u_rx_uart.rx_controller_inst.first_stop_sampled u_rx_uart.rx_controller_inst.first_stop_sampled
+# [apb_uart] gold-match u_rx_uart.rx_controller_inst.frame_error_latched
+apb_uart u_rx_uart.rx_controller_inst.frame_error_latched u_rx_uart.rx_controller_inst.frame_error_latched
+# [apb_uart] gold-match u_rx_uart.rx_data
+apb_uart u_rx_uart.rx_data u_rx_uart.rx_data
+# [apb_uart] gold-match u_rx_uart.rx_done
+apb_uart u_rx_uart.rx_done u_rx_uart.rx_done
+# [apb_uart] gold-match u_rx_uart.rx_sync1
+apb_uart u_rx_uart.rx_sync1 u_rx_uart.rx_sync1
+# [apb_uart] gold-match u_rx_uart.rx_sync2
+apb_uart u_rx_uart.rx_sync2 u_rx_uart.rx_sync2
+# [apb_uart] gold-match u_rx_uart.sipo_inst.data_out
+apb_uart u_rx_uart.sipo_inst.data_out u_rx_uart.sipo_inst.data_out
+# [apb_uart] gold-match u_rx_uart.tick_cnt_inst.tick_cnt
+apb_uart u_rx_uart.tick_cnt_inst.tick_cnt u_rx_uart.tick_cnt_inst.tick_cnt
+# [apb_uart] gold-match u_rx_uart.u_rx_baud_gen.acc
+apb_uart u_rx_uart.u_rx_baud_gen.acc u_rx_uart.u_rx_baud_gen.acc
+# [apb_uart] gold-match u_rx_uart.u_rx_baud_gen.cnt
+apb_uart u_rx_uart.u_rx_baud_gen.cnt u_rx_uart.u_rx_baud_gen.cnt
+# [apb_uart] gold-match u_tx_uart.cts_n_sync1
+apb_uart u_tx_uart.cts_n_sync1 u_tx_uart.cts_n_sync1
+# [apb_uart] gold-match u_tx_uart.cts_n_sync2
+apb_uart u_tx_uart.cts_n_sync2 u_tx_uart.cts_n_sync2
+# [apb_uart] gold-match u_tx_uart.parity_latched
+apb_uart u_tx_uart.parity_latched u_tx_uart.parity_latched
+# [apb_uart] gold-match u_tx_uart.tick_cnt_ins.cnt
+apb_uart u_tx_uart.tick_cnt_ins.cnt u_tx_uart.tick_cnt_ins.cnt
+# [apb_uart] gold-match u_tx_uart.tx_done
+apb_uart u_tx_uart.tx_done u_tx_uart.tx_done
+# [apb_uart] gold-match u_tx_uart.u_baud_gen.acc
+apb_uart u_tx_uart.u_baud_gen.acc u_tx_uart.u_baud_gen.acc
+# [apb_uart] gold-match u_tx_uart.u_baud_gen.cnt
+apb_uart u_tx_uart.u_baud_gen.cnt u_tx_uart.u_baud_gen.cnt
+# [apb_uart] gold-match u_tx_uart.u_bit_cnt.cnt
+apb_uart u_tx_uart.u_bit_cnt.cnt u_tx_uart.u_bit_cnt.cnt
+# [apb_uart] gold-match u_tx_uart.u_piso.data
+apb_uart u_tx_uart.u_piso.data u_tx_uart.u_piso.data
+# [apb_uart] gold-match u_tx_uart.u_stop_cnt.cnt
+apb_uart u_tx_uart.u_stop_cnt.cnt u_tx_uart.u_stop_cnt.cnt

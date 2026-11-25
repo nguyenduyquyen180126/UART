@@ -1,0 +1,63 @@
+{
+  "partition": {
+    "index": 16,
+    "name": "apb_uart.u_rx_uart.stop_b_num_inst.stop_b_num_out.1",
+    "inbits": {
+      "u_apb_regs.cfg": [
+        2
+      ]
+    },
+    "outbits": {
+      "u_rx_uart.stop_b_num_inst.stop_b_num_out": [
+        1
+      ]
+    },
+    "crossbits": {}
+  },
+  "gold_module": {
+    "name": "gold.apb_uart.u_rx_uart.stop_b_num_inst.stop_b_num_out.1",
+    "internal": {
+      "stop_bits": [
+        0
+      ],
+      "u_apb_regs.stop_bits": [
+        0
+      ],
+      "u_rx_uart.num_stop_b": [
+        1
+      ],
+      "u_rx_uart.rx_controller_inst.num_stop_b": [
+        1
+      ],
+      "u_rx_uart.stop_b_num": [
+        0
+      ]
+    },
+    "unused": {},
+    "cellcount": 6,
+    "bitcount": 7
+  },
+  "gate_module": {
+    "name": "gold.apb_uart.u_rx_uart.stop_b_num_inst.stop_b_num_out.1",
+    "internal": {
+      "u_apb_regs.stop_bits": [
+        0
+      ],
+      "u_rx_uart.num_stop_b": [
+        1
+      ],
+      "u_rx_uart.rx_controller_inst.num_stop_b": [
+        1
+      ],
+      "u_rx_uart.stop_b_num": [
+        0
+      ],
+      "u_rx_uart.stop_b_num_inst.stop_b_num": [
+        0
+      ]
+    },
+    "unused": {},
+    "cellcount": 6,
+    "bitcount": 7
+  }
+}

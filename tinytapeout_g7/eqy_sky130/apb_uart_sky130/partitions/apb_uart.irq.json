@@ -1,0 +1,142 @@
+{
+  "partition": {
+    "index": 41,
+    "name": "apb_uart.irq",
+    "inbits": {
+      "tx_done_status": [
+        0
+      ],
+      "u_apb_regs.frame_err_flag": [
+        0
+      ],
+      "u_apb_regs.ier": [
+        0,
+        1,
+        2
+      ],
+      "u_apb_regs.parity_err_flag": [
+        0
+      ],
+      "u_apb_regs.rx_done_flag": [
+        0
+      ],
+      "u_rx_uart.overrun": [
+        0
+      ],
+      "u_tx_uart.tx_done": [
+        0
+      ]
+    },
+    "outbits": {
+      "irq": [
+        0
+      ]
+    },
+    "crossbits": {}
+  },
+  "gold_module": {
+    "name": "gold.apb_uart.irq",
+    "internal": {
+      "rx_overrun": [
+        0
+      ],
+      "u_apb_regs.rx_overrun": [
+        0
+      ],
+      "u_apb_regs.stat": [
+        0,
+        1,
+        2,
+        6,
+        7
+      ],
+      "u_apb_regs.tx_done": [
+        0
+      ]
+    },
+    "unused": {
+      "u_tx_uart.tx_done": [
+        0
+      ]
+    },
+    "cellcount": 15,
+    "bitcount": 24
+  },
+  "gate_module": {
+    "name": "gold.apb_uart.irq",
+    "internal": {
+      "_1982_.Y": [
+        0
+      ],
+      "_1982_.base.Y": [
+        0
+      ],
+      "_1982_.base.not0_out_Y": [
+        0
+      ],
+      "_2119_.A1": [
+        0
+      ],
+      "_2119_.base.A1": [
+        0
+      ],
+      "_2589_.Y": [
+        0
+      ],
+      "_2589_.base.Y": [
+        0
+      ],
+      "_2589_.base.nor0_out_Y": [
+        0
+      ],
+      "_2590_.Y": [
+        0
+      ],
+      "_2590_.base.Y": [
+        0
+      ],
+      "_2590_.base.and0_out_Y": [
+        0
+      ],
+      "_2590_.base.nand0_out": [
+        0
+      ],
+      "_2590_.base.nand1_out": [
+        0
+      ],
+      "_2591_.A1": [
+        0
+      ],
+      "_2591_.A2": [
+        0
+      ],
+      "_2591_.B1": [
+        0
+      ],
+      "_2591_.base.A1": [
+        0
+      ],
+      "_2591_.base.A2": [
+        0
+      ],
+      "_2591_.base.B1": [
+        0
+      ],
+      "_2591_.base.or0_out": [
+        0
+      ],
+      "u_apb_regs.stat": [
+        1,
+        2,
+        6
+      ]
+    },
+    "unused": {
+      "tx_done_status": [
+        0
+      ]
+    },
+    "cellcount": 29,
+    "bitcount": 38
+  }
+}

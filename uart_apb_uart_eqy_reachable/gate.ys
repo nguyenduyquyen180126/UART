@@ -1,0 +1,8 @@
+exec -- python3 /tmp/uart-eqy-src/examples/spm/formal_pdk_proc.py /tmp/uart-eqy-src/examples/spm/primitives.v /tmp/uart-eqy-src/examples/spm/sky130_fd_sc_hd.v -o /tmp/sky130_uart_cells_functional_current.v
+read_verilog -formal /tmp/sky130_uart_cells_functional_current.v /tmp/uart_apb_uart_sky130_final2.v
+prep -top apb_uart -flatten
+async2sync
+opt_clean
+check -initdrv
+setundef -undriven -undef
+write_rtlil uart_apb_uart_eqy_reachable/gate.il

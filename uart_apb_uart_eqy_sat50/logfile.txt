@@ -1,0 +1,167 @@
+EQY 21:22:24 [uart_apb_uart_eqy_sat50] read_gold: starting process "yosys -ql uart_apb_uart_eqy_sat50/gold.log uart_apb_uart_eqy_sat50/gold.ys"
+EQY 21:22:24 [uart_apb_uart_eqy_sat50] read_gold: finished (returncode=0)
+EQY 21:22:24 [uart_apb_uart_eqy_sat50] read_gate: starting process "yosys -ql uart_apb_uart_eqy_sat50/gate.log uart_apb_uart_eqy_sat50/gate.ys"
+EQY 21:22:25 [uart_apb_uart_eqy_sat50] read_gate: Warning: Wire apb_uart.\u_rx_uart.u_rx_baud_gen.sum [0] is used but has no driver.
+EQY 21:22:25 [uart_apb_uart_eqy_sat50] read_gate: Warning: Wire apb_uart.\u_tx_uart.u_baud_gen.sum [0] is used but has no driver.
+EQY 21:22:25 [uart_apb_uart_eqy_sat50] read_gate: Warning: Wire apb_uart.\_1842_ [0] is used but has no driver.
+EQY 21:22:25 [uart_apb_uart_eqy_sat50] read_gate: Warning: Wire apb_uart.\_1845_ [0] is used but has no driver.
+EQY 21:22:25 [uart_apb_uart_eqy_sat50] read_gate: Warning: Wire apb_uart.\_1837_ [0] is used but has no driver.
+EQY 21:22:25 [uart_apb_uart_eqy_sat50] read_gate: Warning: Wire apb_uart.\_1835_ [0] is used but has no driver.
+EQY 21:22:25 [uart_apb_uart_eqy_sat50] read_gate: Warning: Wire apb_uart.\_1834_ [3] is used but has no driver.
+EQY 21:22:25 [uart_apb_uart_eqy_sat50] read_gate: Warning: Wire apb_uart.\u_tx_uart.controller.tx_sel [0] is used but has no driver.
+EQY 21:22:25 [uart_apb_uart_eqy_sat50] read_gate: Warning: Wire apb_uart.\u_tx_uart.controller.tx_sel [1] is used but has no driver.
+EQY 21:22:25 [uart_apb_uart_eqy_sat50] read_gate: Warning: Wire apb_uart.\u_rx_uart.ctrl_frame_err is used but has no driver.
+EQY 21:22:25 [uart_apb_uart_eqy_sat50] read_gate: Warning: Wire apb_uart.\u_tx_uart.controller.stop_last is used but has no driver.
+EQY 21:22:25 [uart_apb_uart_eqy_sat50] read_gate: Warning: Wire apb_uart.\u_rx_uart.clr_baud is used but has no driver.
+EQY 21:22:25 [uart_apb_uart_eqy_sat50] read_gate: Warning: Wire apb_uart.\u_tx_uart.clr_baud is used but has no driver.
+EQY 21:22:25 [uart_apb_uart_eqy_sat50] read_gate: Warning: Wire apb_uart.\u_rx_uart.num_stop_b [0] is used but has no driver.
+EQY 21:22:25 [uart_apb_uart_eqy_sat50] read_gate: Warning: Wire apb_uart.\u_tx_uart.controller.tick_last is used but has no driver.
+EQY 21:22:25 [uart_apb_uart_eqy_sat50] read_gate: Warning: Wire apb_uart.\u_tx_uart.clr_bit is used but has no driver.
+EQY 21:22:25 [uart_apb_uart_eqy_sat50] read_gate: Warning: Wire apb_uart.\u_tx_uart.baud_tick is used but has no driver.
+EQY 21:22:25 [uart_apb_uart_eqy_sat50] read_gate: Warning: Wire apb_uart.\u_tx_uart.controller.stop_cnt_en is used but has no driver.
+EQY 21:22:25 [uart_apb_uart_eqy_sat50] read_gate: Warning: Wire apb_uart.\u_tx_uart.clr_stop is used but has no driver.
+EQY 21:22:25 [uart_apb_uart_eqy_sat50] read_gate: Warning: Wire apb_uart.\u_tx_uart.parity_bit is used but has no driver.
+EQY 21:22:25 [uart_apb_uart_eqy_sat50] read_gate: Warning: Wire apb_uart.\u_tx_uart.tx_data_masked [5] is used but has no driver.
+EQY 21:22:25 [uart_apb_uart_eqy_sat50] read_gate: Warning: Wire apb_uart.\u_tx_uart.tx_data_masked [6] is used but has no driver.
+EQY 21:22:25 [uart_apb_uart_eqy_sat50] read_gate: Warning: Wire apb_uart.\u_tx_uart.tx_data_masked [7] is used but has no driver.
+EQY 21:22:25 [uart_apb_uart_eqy_sat50] read_gate: Warning: Wire apb_uart.\tx_load_reg_unused is used but has no driver.
+EQY 21:22:25 [uart_apb_uart_eqy_sat50] read_gate: Warning: Wire apb_uart.\u_rx_uart.error_check_inst.error is used but has no driver.
+EQY 21:22:25 [uart_apb_uart_eqy_sat50] read_gate: Warning: Wire apb_uart.\u_rx_uart.rx_controller_inst.rx is used but has no driver.
+EQY 21:22:25 [uart_apb_uart_eqy_sat50] read_gate: Warning: Wire apb_uart.\u_rx_uart.data_out [0] is used but has no driver.
+EQY 21:22:25 [uart_apb_uart_eqy_sat50] read_gate: Warning: Wire apb_uart.\u_rx_uart.data_out [1] is used but has no driver.
+EQY 21:22:25 [uart_apb_uart_eqy_sat50] read_gate: Warning: Wire apb_uart.\u_rx_uart.data_out [2] is used but has no driver.
+EQY 21:22:25 [uart_apb_uart_eqy_sat50] read_gate: Warning: Wire apb_uart.\u_rx_uart.bit_cnt_inst.data_b_num_out [0] is used but has no driver.
+EQY 21:22:25 [uart_apb_uart_eqy_sat50] read_gate: Warning: Wire apb_uart.\u_rx_uart.bit_cnt_inst.data_b_num_out [1] is used but has no driver.
+EQY 21:22:25 [uart_apb_uart_eqy_sat50] read_gate: Warning: Wire apb_uart.\u_rx_uart.bit_cnt_inst.data_b_num_out [2] is used but has no driver.
+EQY 21:22:25 [uart_apb_uart_eqy_sat50] read_gate: Warning: Wire apb_uart.\u_rx_uart.bit_cnt_inst.data_b_num_out [3] is used but has no driver.
+EQY 21:22:25 [uart_apb_uart_eqy_sat50] read_gate: Warning: Wire apb_uart.\u_rx_uart.bit_cnt_inst.bit_last is used but has no driver.
+EQY 21:22:25 [uart_apb_uart_eqy_sat50] read_gate: Warning: Wire apb_uart.\u_rx_uart.bit_cnt_inst.tick_en is used but has no driver.
+EQY 21:22:25 [uart_apb_uart_eqy_sat50] read_gate: Warning: Wire apb_uart.\u_rx_uart.rx_controller_inst.baud_tick is used but has no driver.
+EQY 21:22:25 [uart_apb_uart_eqy_sat50] read_gate: Warning: Wire apb_uart.\rx_busy is used but has no driver.
+EQY 21:22:25 [uart_apb_uart_eqy_sat50] read_gate: Warning: Wire apb_uart.\rx_clear is used but has no driver.
+EQY 21:22:26 [uart_apb_uart_eqy_sat50] read_gate: finished (returncode=0)
+EQY 21:22:26 [uart_apb_uart_eqy_sat50] combine: starting process "yosys -ql uart_apb_uart_eqy_sat50/combine.log uart_apb_uart_eqy_sat50/combine.ys"
+EQY 21:22:26 [uart_apb_uart_eqy_sat50] combine: finished (returncode=0)
+EQY 21:22:27 [uart_apb_uart_eqy_sat50] partition: starting process "cd uart_apb_uart_eqy_sat50; yosys -ql partition.log partition.ys"
+EQY 21:22:28 [uart_apb_uart_eqy_sat50] partition: finished (returncode=0)
+EQY 21:22:28 [uart_apb_uart_eqy_sat50] Warning: Partition apb_uart.u_tx_uart.u_stop_cnt.cnt contains 5 unused gold inputs.
+EQY 21:22:28 [uart_apb_uart_eqy_sat50] Warning: Partition apb_uart.u_tx_uart.u_piso.data contains 1 unused gold inputs.
+EQY 21:22:28 [uart_apb_uart_eqy_sat50] Warning: Partition apb_uart.u_tx_uart.u_piso.data contains 2 unused gate inputs.
+EQY 21:22:28 [uart_apb_uart_eqy_sat50] Warning: Partition apb_uart.u_tx_uart.u_bit_cnt.cnt contains 4 unused gold inputs.
+EQY 21:22:28 [uart_apb_uart_eqy_sat50] Warning: Partition apb_uart.u_tx_uart.u_baud_gen.cnt contains 4 unused gold inputs.
+EQY 21:22:28 [uart_apb_uart_eqy_sat50] Warning: Partition apb_uart.u_tx_uart.u_baud_gen.cnt contains 1 unused gate inputs.
+EQY 21:22:28 [uart_apb_uart_eqy_sat50] Warning: Partition apb_uart.u_tx_uart.u_baud_gen.acc contains 4 unused gold inputs.
+EQY 21:22:28 [uart_apb_uart_eqy_sat50] Warning: Partition apb_uart.u_tx_uart.u_baud_gen.acc contains 1 unused gate inputs.
+EQY 21:22:28 [uart_apb_uart_eqy_sat50] Warning: Partition apb_uart.u_tx_uart.tx_done contains 1 unused gate inputs.
+EQY 21:22:28 [uart_apb_uart_eqy_sat50] Warning: Partition apb_uart.u_tx_uart.tick_cnt_ins.cnt contains 4 unused gold inputs.
+EQY 21:22:28 [uart_apb_uart_eqy_sat50] Warning: Partition apb_uart.u_tx_uart.tick_cnt_ins.cnt contains 1 unused gate inputs.
+EQY 21:22:28 [uart_apb_uart_eqy_sat50] Warning: Partition apb_uart.u_tx_uart.parity_latched contains 1 unused gate inputs.
+EQY 21:22:28 [uart_apb_uart_eqy_sat50] Warning: Partition apb_uart.u_tx_uart.controller.state contains 1 unused gold inputs.
+EQY 21:22:28 [uart_apb_uart_eqy_sat50] Warning: Partition apb_uart.u_tx_uart.controller.state contains 1 unused gate inputs.
+EQY 21:22:28 [uart_apb_uart_eqy_sat50] Warning: Partition apb_uart.u_tx_uart.bit_cnt_last contains 1 unused gate inputs.
+EQY 21:22:28 [uart_apb_uart_eqy_sat50] Warning: Partition apb_uart.u_rx_uart.tick_cnt_inst.tick_cnt contains 2 unused gate inputs.
+EQY 21:22:28 [uart_apb_uart_eqy_sat50] Warning: Partition apb_uart.u_rx_uart.stop_b_num_inst.stop_b_num_out.0 contains 1 unused gate inputs.
+EQY 21:22:28 [uart_apb_uart_eqy_sat50] Warning: Partition apb_uart.u_rx_uart.rx_done contains 1 unused gate inputs.
+EQY 21:22:28 [uart_apb_uart_eqy_sat50] Warning: Partition apb_uart.u_rx_uart.rx_data contains 1 unused gate inputs.
+EQY 21:22:28 [uart_apb_uart_eqy_sat50] Warning: Partition apb_uart.u_rx_uart.rx_controller_inst.state contains 1 unused gate inputs.
+EQY 21:22:28 [uart_apb_uart_eqy_sat50] Warning: Partition apb_uart.u_rx_uart.parity_err contains 1 unused gate inputs.
+EQY 21:22:28 [uart_apb_uart_eqy_sat50] Warning: Partition apb_uart.u_rx_uart.overrun contains 1 unused gate inputs.
+EQY 21:22:28 [uart_apb_uart_eqy_sat50] Warning: Partition apb_uart.u_rx_uart.frame_err contains 1 unused gate inputs.
+EQY 21:22:28 [uart_apb_uart_eqy_sat50] Warning: Partition apb_uart.tx contains 11 unused gold inputs.
+EQY 21:22:28 [uart_apb_uart_eqy_sat50] Warning: Partition apb_uart.tx contains 1 unused gate inputs.
+EQY 21:22:28 [uart_apb_uart_eqy_sat50] run: starting process "make -C uart_apb_uart_eqy_sat50 -f strategies.mk"
+EQY 21:22:28 [uart_apb_uart_eqy_sat50] run: make: Entering directory '/home/vietanh/Downloads/code/UART/UART/uart_apb_uart_eqy_sat50'
+EQY 21:22:28 [uart_apb_uart_eqy_sat50] run: Running strategy 'simple' on 'apb_uart.irq'..
+EQY 21:22:28 [uart_apb_uart_eqy_sat50] run: Proved equivalence of partition 'apb_uart.irq' using strategy 'simple'
+EQY 21:22:28 [uart_apb_uart_eqy_sat50] run: Running strategy 'simple' on 'apb_uart.prdata'..
+EQY 21:22:28 [uart_apb_uart_eqy_sat50] run: Proved equivalence of partition 'apb_uart.prdata' using strategy 'simple'
+EQY 21:22:28 [uart_apb_uart_eqy_sat50] run: Running strategy 'simple' on 'apb_uart.pready'..
+EQY 21:22:28 [uart_apb_uart_eqy_sat50] run: Proved equivalence of partition 'apb_uart.pready' using strategy 'simple'
+EQY 21:22:28 [uart_apb_uart_eqy_sat50] run: Running strategy 'simple' on 'apb_uart.pslverr'..
+EQY 21:22:28 [uart_apb_uart_eqy_sat50] run: Proved equivalence of partition 'apb_uart.pslverr' using strategy 'simple'
+EQY 21:22:28 [uart_apb_uart_eqy_sat50] run: Running strategy 'simple' on 'apb_uart.rts_n'..
+EQY 21:22:29 [uart_apb_uart_eqy_sat50] run: Proved equivalence of partition 'apb_uart.rts_n' using strategy 'simple'
+EQY 21:22:29 [uart_apb_uart_eqy_sat50] run: Running strategy 'simple' on 'apb_uart.tx'..
+EQY 21:22:29 [uart_apb_uart_eqy_sat50] run: Could not prove equivalence of partition 'apb_uart.tx' using strategy 'simple': partitions not equivalent
+EQY 21:22:29 [uart_apb_uart_eqy_sat50] run: Running strategy 'simple' on 'apb_uart.u_apb_regs.baud'..
+EQY 21:22:29 [uart_apb_uart_eqy_sat50] run: Proved equivalence of partition 'apb_uart.u_apb_regs.baud' using strategy 'simple'
+EQY 21:22:29 [uart_apb_uart_eqy_sat50] run: Running strategy 'simple' on 'apb_uart.u_apb_regs.cfg'..
+EQY 21:22:29 [uart_apb_uart_eqy_sat50] run: Proved equivalence of partition 'apb_uart.u_apb_regs.cfg' using strategy 'simple'
+EQY 21:22:29 [uart_apb_uart_eqy_sat50] run: Running strategy 'simple' on 'apb_uart.u_apb_regs.frame_err_flag'..
+EQY 21:22:29 [uart_apb_uart_eqy_sat50] run: Proved equivalence of partition 'apb_uart.u_apb_regs.frame_err_flag' using strategy 'simple'
+EQY 21:22:29 [uart_apb_uart_eqy_sat50] run: Running strategy 'simple' on 'apb_uart.u_apb_regs.ier'..
+EQY 21:22:29 [uart_apb_uart_eqy_sat50] run: Proved equivalence of partition 'apb_uart.u_apb_regs.ier' using strategy 'simple'
+EQY 21:22:29 [uart_apb_uart_eqy_sat50] run: Running strategy 'simple' on 'apb_uart.u_apb_regs.parity_err_flag'..
+EQY 21:22:29 [uart_apb_uart_eqy_sat50] run: Proved equivalence of partition 'apb_uart.u_apb_regs.parity_err_flag' using strategy 'simple'
+EQY 21:22:29 [uart_apb_uart_eqy_sat50] run: Running strategy 'simple' on 'apb_uart.u_apb_regs.rx_data_reg'..
+EQY 21:22:30 [uart_apb_uart_eqy_sat50] run: Proved equivalence of partition 'apb_uart.u_apb_regs.rx_data_reg' using strategy 'simple'
+EQY 21:22:30 [uart_apb_uart_eqy_sat50] run: Running strategy 'simple' on 'apb_uart.u_apb_regs.rx_done_flag'..
+EQY 21:22:30 [uart_apb_uart_eqy_sat50] run: Proved equivalence of partition 'apb_uart.u_apb_regs.rx_done_flag' using strategy 'simple'
+EQY 21:22:30 [uart_apb_uart_eqy_sat50] run: Running strategy 'simple' on 'apb_uart.u_apb_regs.rx_done_prev'..
+EQY 21:22:30 [uart_apb_uart_eqy_sat50] run: Proved equivalence of partition 'apb_uart.u_apb_regs.rx_done_prev' using strategy 'simple'
+EQY 21:22:30 [uart_apb_uart_eqy_sat50] run: Running strategy 'simple' on 'apb_uart.u_apb_regs.soft_rst_reg'..
+EQY 21:22:30 [uart_apb_uart_eqy_sat50] run: Proved equivalence of partition 'apb_uart.u_apb_regs.soft_rst_reg' using strategy 'simple'
+EQY 21:22:30 [uart_apb_uart_eqy_sat50] run: Running strategy 'simple' on 'apb_uart.u_apb_regs.start_reg'..
+EQY 21:22:30 [uart_apb_uart_eqy_sat50] run: Proved equivalence of partition 'apb_uart.u_apb_regs.start_reg' using strategy 'simple'
+EQY 21:22:30 [uart_apb_uart_eqy_sat50] run: Running strategy 'simple' on 'apb_uart.u_apb_regs.tx_data_reg'..
+EQY 21:22:30 [uart_apb_uart_eqy_sat50] run: Proved equivalence of partition 'apb_uart.u_apb_regs.tx_data_reg' using strategy 'simple'
+EQY 21:22:30 [uart_apb_uart_eqy_sat50] run: Running strategy 'simple' on 'apb_uart.u_rx_uart.bit_cnt_inst.bit_cnt'..
+EQY 21:22:30 [uart_apb_uart_eqy_sat50] run: Proved equivalence of partition 'apb_uart.u_rx_uart.bit_cnt_inst.bit_cnt' using strategy 'simple'
+EQY 21:22:30 [uart_apb_uart_eqy_sat50] run: Running strategy 'simple' on 'apb_uart.u_rx_uart.deframe_inst.parity_bit'..
+EQY 21:22:30 [uart_apb_uart_eqy_sat50] run: Proved equivalence of partition 'apb_uart.u_rx_uart.deframe_inst.parity_bit' using strategy 'simple'
+EQY 21:22:30 [uart_apb_uart_eqy_sat50] run: Running strategy 'simple' on 'apb_uart.u_rx_uart.deframe_inst.parity_exp'..
+EQY 21:22:30 [uart_apb_uart_eqy_sat50] run: Proved equivalence of partition 'apb_uart.u_rx_uart.deframe_inst.parity_exp' using strategy 'simple'
+EQY 21:22:30 [uart_apb_uart_eqy_sat50] run: Running strategy 'simple' on 'apb_uart.u_rx_uart.deframe_inst.rx_data'..
+EQY 21:22:31 [uart_apb_uart_eqy_sat50] run: Proved equivalence of partition 'apb_uart.u_rx_uart.deframe_inst.rx_data' using strategy 'simple'
+EQY 21:22:31 [uart_apb_uart_eqy_sat50] run: Running strategy 'simple' on 'apb_uart.u_rx_uart.frame_err'..
+EQY 21:22:31 [uart_apb_uart_eqy_sat50] run: Proved equivalence of partition 'apb_uart.u_rx_uart.frame_err' using strategy 'simple'
+EQY 21:22:31 [uart_apb_uart_eqy_sat50] run: Running strategy 'simple' on 'apb_uart.u_rx_uart.overrun'..
+EQY 21:22:32 [uart_apb_uart_eqy_sat50] run: Proved equivalence of partition 'apb_uart.u_rx_uart.overrun' using strategy 'simple'
+EQY 21:22:32 [uart_apb_uart_eqy_sat50] run: Running strategy 'simple' on 'apb_uart.u_rx_uart.parity_err'..
+EQY 21:22:32 [uart_apb_uart_eqy_sat50] run: Proved equivalence of partition 'apb_uart.u_rx_uart.parity_err' using strategy 'simple'
+EQY 21:22:32 [uart_apb_uart_eqy_sat50] run: Running strategy 'simple' on 'apb_uart.u_rx_uart.reset_release_pending'..
+EQY 21:22:32 [uart_apb_uart_eqy_sat50] run: Proved equivalence of partition 'apb_uart.u_rx_uart.reset_release_pending' using strategy 'simple'
+EQY 21:22:32 [uart_apb_uart_eqy_sat50] run: Running strategy 'simple' on 'apb_uart.u_rx_uart.rx_controller_inst.first_stop_sampled'..
+EQY 21:22:32 [uart_apb_uart_eqy_sat50] run: Proved equivalence of partition 'apb_uart.u_rx_uart.rx_controller_inst.first_stop_sampled' using strategy 'simple'
+EQY 21:22:32 [uart_apb_uart_eqy_sat50] run: Running strategy 'simple' on 'apb_uart.u_rx_uart.rx_controller_inst.frame_error_latched'..
+EQY 21:22:32 [uart_apb_uart_eqy_sat50] run: Proved equivalence of partition 'apb_uart.u_rx_uart.rx_controller_inst.frame_error_latched' using strategy 'simple'
+EQY 21:22:32 [uart_apb_uart_eqy_sat50] run: Running strategy 'simple' on 'apb_uart.u_rx_uart.rx_controller_inst.state'..
+EQY 21:22:33 [uart_apb_uart_eqy_sat50] run: Proved equivalence of partition 'apb_uart.u_rx_uart.rx_controller_inst.state' using strategy 'simple'
+EQY 21:22:33 [uart_apb_uart_eqy_sat50] run: Running strategy 'simple' on 'apb_uart.u_rx_uart.rx_data'..
+EQY 21:23:10 [uart_apb_uart_eqy_sat50] run: Could not prove equivalence of partition 'apb_uart.u_rx_uart.rx_data' using strategy 'simple': equivalence unknown
+EQY 21:23:10 [uart_apb_uart_eqy_sat50] run: Running strategy 'simple' on 'apb_uart.u_rx_uart.rx_done'..
+EQY 21:23:11 [uart_apb_uart_eqy_sat50] run: Proved equivalence of partition 'apb_uart.u_rx_uart.rx_done' using strategy 'simple'
+EQY 21:23:11 [uart_apb_uart_eqy_sat50] run: Running strategy 'simple' on 'apb_uart.u_rx_uart.rx_sync1'..
+EQY 21:23:11 [uart_apb_uart_eqy_sat50] run: Proved equivalence of partition 'apb_uart.u_rx_uart.rx_sync1' using strategy 'simple'
+EQY 21:23:11 [uart_apb_uart_eqy_sat50] run: Running strategy 'simple' on 'apb_uart.u_rx_uart.rx_sync2'..
+EQY 21:23:11 [uart_apb_uart_eqy_sat50] run: Proved equivalence of partition 'apb_uart.u_rx_uart.rx_sync2' using strategy 'simple'
+EQY 21:23:11 [uart_apb_uart_eqy_sat50] run: Running strategy 'simple' on 'apb_uart.u_rx_uart.sipo_inst.data_out'..
+EQY 21:23:58 [uart_apb_uart_eqy_sat50] run: Could not prove equivalence of partition 'apb_uart.u_rx_uart.sipo_inst.data_out' using strategy 'simple': equivalence unknown
+EQY 21:23:58 [uart_apb_uart_eqy_sat50] run: Running strategy 'simple' on 'apb_uart.u_rx_uart.stop_b_num_inst.stop_b_num_out.0'..
+EQY 21:23:58 [uart_apb_uart_eqy_sat50] run: Could not prove equivalence of partition 'apb_uart.u_rx_uart.stop_b_num_inst.stop_b_num_out.0' using strategy 'simple': partitions not equivalent
+EQY 21:23:58 [uart_apb_uart_eqy_sat50] run: Running strategy 'simple' on 'apb_uart.u_rx_uart.stop_b_num_inst.stop_b_num_out.1'..
+EQY 21:23:58 [uart_apb_uart_eqy_sat50] run: Proved equivalence of partition 'apb_uart.u_rx_uart.stop_b_num_inst.stop_b_num_out.1' using strategy 'simple'
+EQY 21:23:58 [uart_apb_uart_eqy_sat50] run: Running strategy 'simple' on 'apb_uart.u_rx_uart.tick_cnt_inst.tick_cnt'..
+EQY 21:23:58 [uart_apb_uart_eqy_sat50] run: Proved equivalence of partition 'apb_uart.u_rx_uart.tick_cnt_inst.tick_cnt' using strategy 'simple'
+EQY 21:23:58 [uart_apb_uart_eqy_sat50] run: Running strategy 'simple' on 'apb_uart.u_rx_uart.u_rx_baud_gen.acc'..
+EQY 21:23:58 [uart_apb_uart_eqy_sat50] run: Proved equivalence of partition 'apb_uart.u_rx_uart.u_rx_baud_gen.acc' using strategy 'simple'
+EQY 21:23:58 [uart_apb_uart_eqy_sat50] run: Running strategy 'simple' on 'apb_uart.u_rx_uart.u_rx_baud_gen.cnt'..
+EQY 21:23:58 [uart_apb_uart_eqy_sat50] run: Proved equivalence of partition 'apb_uart.u_rx_uart.u_rx_baud_gen.cnt' using strategy 'simple'
+EQY 21:23:58 [uart_apb_uart_eqy_sat50] run: Running strategy 'simple' on 'apb_uart.u_tx_uart.bit_cnt_last'..
+EQY 21:23:58 [uart_apb_uart_eqy_sat50] run: Could not prove equivalence of partition 'apb_uart.u_tx_uart.bit_cnt_last' using strategy 'simple': partitions not equivalent
+EQY 21:23:58 [uart_apb_uart_eqy_sat50] run: Running strategy 'simple' on 'apb_uart.u_tx_uart.controller.state'..
+EQY 21:23:59 [uart_apb_uart_eqy_sat50] run: Proved equivalence of partition 'apb_uart.u_tx_uart.controller.state' using strategy 'simple'
+EQY 21:23:59 [uart_apb_uart_eqy_sat50] run: Running strategy 'simple' on 'apb_uart.u_tx_uart.cts_n_sync1'..
+EQY 21:23:59 [uart_apb_uart_eqy_sat50] run: Proved equivalence of partition 'apb_uart.u_tx_uart.cts_n_sync1' using strategy 'simple'
+EQY 21:23:59 [uart_apb_uart_eqy_sat50] run: Running strategy 'simple' on 'apb_uart.u_tx_uart.cts_n_sync2'..
+EQY 21:23:59 [uart_apb_uart_eqy_sat50] run: Proved equivalence of partition 'apb_uart.u_tx_uart.cts_n_sync2' using strategy 'simple'
+EQY 21:23:59 [uart_apb_uart_eqy_sat50] run: Running strategy 'simple' on 'apb_uart.u_tx_uart.parity_latched'..
+EQY 21:24:00 [uart_apb_uart_eqy_sat50] run: Proved equivalence of partition 'apb_uart.u_tx_uart.parity_latched' using strategy 'simple'
+EQY 21:24:00 [uart_apb_uart_eqy_sat50] run: Running strategy 'simple' on 'apb_uart.u_tx_uart.tick_cnt_ins.cnt'..
+EQY 21:24:05 [uart_apb_uart_eqy_sat50] run: Proved equivalence of partition 'apb_uart.u_tx_uart.tick_cnt_ins.cnt' using strategy 'simple'
+EQY 21:24:05 [uart_apb_uart_eqy_sat50] run: Running strategy 'simple' on 'apb_uart.u_tx_uart.tx'..
+EQY 21:24:05 [uart_apb_uart_eqy_sat50] run: Proved equivalence of partition 'apb_uart.u_tx_uart.tx' using strategy 'simple'
+EQY 21:24:05 [uart_apb_uart_eqy_sat50] run: Running strategy 'simple' on 'apb_uart.u_tx_uart.tx_done'..
+EQY 21:24:05 [uart_apb_uart_eqy_sat50] run: Proved equivalence of partition 'apb_uart.u_tx_uart.tx_done' using strategy 'simple'
+EQY 21:24:05 [uart_apb_uart_eqy_sat50] run: Running strategy 'simple' on 'apb_uart.u_tx_uart.u_baud_gen.acc'..
+EQY 21:27:58 [uart_apb_uart_eqy_sat50] run: terminating process

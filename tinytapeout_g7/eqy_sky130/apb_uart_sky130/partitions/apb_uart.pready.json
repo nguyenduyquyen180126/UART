@@ -1,0 +1,27 @@
+{
+  "partition": {
+    "index": 46,
+    "name": "apb_uart.pready",
+    "inbits": {},
+    "outbits": {
+      "pready": [
+        0
+      ]
+    },
+    "crossbits": {}
+  },
+  "gold_module": {
+    "name": "gold.apb_uart.pready",
+    "internal": {},
+    "unused": {},
+    "cellcount": 1,
+    "bitcount": 1
+  },
+  "gate_module": {
+    "name": "gold.apb_uart.pready",
+    "internal": {},
+    "unused": {},
+    "cellcount": 1,
+    "bitcount": 1
+  }
+}

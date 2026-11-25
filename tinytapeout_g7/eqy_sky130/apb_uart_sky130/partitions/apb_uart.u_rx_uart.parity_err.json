@@ -1,0 +1,762 @@
+{
+  "partition": {
+    "index": 20,
+    "name": "apb_uart.u_rx_uart.parity_err",
+    "inbits": {
+      "paddr": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "parity_err_status": [
+        0
+      ],
+      "pclk": [
+        0
+      ],
+      "penable": [
+        0
+      ],
+      "presetn": [
+        0
+      ],
+      "psel": [
+        0
+      ],
+      "pwrite": [
+        0
+      ],
+      "rx_done_status": [
+        0
+      ],
+      "u_apb_regs.baud": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "u_apb_regs.cfg": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        6
+      ],
+      "u_apb_regs.soft_rst_reg": [
+        0
+      ],
+      "u_rx_uart.bit_cnt_inst.bit_cnt": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "u_rx_uart.deframe_inst.parity_bit": [
+        0
+      ],
+      "u_rx_uart.deframe_inst.parity_exp": [
+        0
+      ],
+      "u_rx_uart.rx_controller_inst.first_stop_sampled": [
+        0
+      ],
+      "u_rx_uart.rx_sync2": [
+        0
+      ],
+      "u_rx_uart.tick_cnt_inst.tick_cnt": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "u_rx_uart.u_rx_baud_gen.acc": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "u_rx_uart.u_rx_baud_gen.cnt": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ]
+    },
+    "outbits": {
+      "u_rx_uart.parity_err": [
+        0
+      ]
+    },
+    "crossbits": {}
+  },
+  "gold_module": {
+    "name": "gold.apb_uart.u_rx_uart.parity_err",
+    "internal": {
+      "data_bits": [
+        0,
+        1
+      ],
+      "div_frac": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "div_int": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "parity_en": [
+        0
+      ],
+      "parity_type": [
+        0
+      ],
+      "rx_clear": [
+        0
+      ],
+      "rx_dis": [
+        0
+      ],
+      "soft_rst": [
+        0
+      ],
+      "stop_bits": [
+        0
+      ],
+      "u_apb_regs.data_bits": [
+        0,
+        1
+      ],
+      "u_apb_regs.div_frac": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "u_apb_regs.div_int": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "u_apb_regs.paddr": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "u_apb_regs.parity_en": [
+        0
+      ],
+      "u_apb_regs.parity_err": [
+        0
+      ],
+      "u_apb_regs.parity_type": [
+        0
+      ],
+      "u_apb_regs.pclk": [
+        0
+      ],
+      "u_apb_regs.penable": [
+        0
+      ],
+      "u_apb_regs.presetn": [
+        0
+      ],
+      "u_apb_regs.psel": [
+        0
+      ],
+      "u_apb_regs.pwrite": [
+        0
+      ],
+      "u_apb_regs.rx_dis": [
+        0
+      ],
+      "u_apb_regs.rx_done": [
+        0
+      ],
+      "u_apb_regs.soft_rst": [
+        0
+      ],
+      "u_apb_regs.stat": [
+        5
+      ],
+      "u_apb_regs.stop_bits": [
+        0
+      ],
+      "u_rx_uart.baud_tick": [
+        0
+      ],
+      "u_rx_uart.bit_cnt": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "u_rx_uart.bit_cnt_inst.bit_last": [
+        0
+      ],
+      "u_rx_uart.bit_cnt_inst.clk": [
+        0
+      ],
+      "u_rx_uart.bit_cnt_inst.data_b_num_out": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "u_rx_uart.bit_cnt_inst.parity_en": [
+        0
+      ],
+      "u_rx_uart.bit_cnt_inst.rst_n": [
+        0
+      ],
+      "u_rx_uart.bit_last": [
+        0
+      ],
+      "u_rx_uart.clk": [
+        0
+      ],
+      "u_rx_uart.clr_baud": [
+        0
+      ],
+      "u_rx_uart.ctrl_rx_done": [
+        0
+      ],
+      "u_rx_uart.data_b_num": [
+        0,
+        1
+      ],
+      "u_rx_uart.data_b_num_inst.data_b_num": [
+        0,
+        1
+      ],
+      "u_rx_uart.data_b_num_inst.data_b_num_out": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "u_rx_uart.deframe_inst.bit_last": [
+        0
+      ],
+      "u_rx_uart.deframe_inst.clk": [
+        0
+      ],
+      "u_rx_uart.deframe_inst.num_data_b": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "u_rx_uart.deframe_inst.parity_en": [
+        0
+      ],
+      "u_rx_uart.deframe_inst.rst_n": [
+        0
+      ],
+      "u_rx_uart.div_frac": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "u_rx_uart.div_int": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "u_rx_uart.error_check_inst.error": [
+        0
+      ],
+      "u_rx_uart.error_check_inst.parity_bit": [
+        0
+      ],
+      "u_rx_uart.error_check_inst.parity_en": [
+        0
+      ],
+      "u_rx_uart.error_check_inst.parity_exp": [
+        0
+      ],
+      "u_rx_uart.error_check_inst.parity_type": [
+        0
+      ],
+      "u_rx_uart.num_data_b": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "u_rx_uart.num_stop_b": [
+        0,
+        1
+      ],
+      "u_rx_uart.parity_bit": [
+        0
+      ],
+      "u_rx_uart.parity_en": [
+        0
+      ],
+      "u_rx_uart.parity_error": [
+        0
+      ],
+      "u_rx_uart.parity_exp": [
+        0
+      ],
+      "u_rx_uart.parity_type": [
+        0
+      ],
+      "u_rx_uart.rst_n": [
+        0
+      ],
+      "u_rx_uart.rx_clear": [
+        0
+      ],
+      "u_rx_uart.rx_controller_inst.baud_tick": [
+        0
+      ],
+      "u_rx_uart.rx_controller_inst.bit_last": [
+        0
+      ],
+      "u_rx_uart.rx_controller_inst.clk": [
+        0
+      ],
+      "u_rx_uart.rx_controller_inst.clr_baud": [
+        0
+      ],
+      "u_rx_uart.rx_controller_inst.final_stop": [
+        0
+      ],
+      "u_rx_uart.rx_controller_inst.next_state": [
+        0,
+        1
+      ],
+      "u_rx_uart.rx_controller_inst.num_stop_b": [
+        0,
+        1
+      ],
+      "u_rx_uart.rx_controller_inst.rst_n": [
+        0
+      ],
+      "u_rx_uart.rx_controller_inst.rx": [
+        0
+      ],
+      "u_rx_uart.rx_controller_inst.rx_done": [
+        0
+      ],
+      "u_rx_uart.rx_controller_inst.soft_rst": [
+        0
+      ],
+      "u_rx_uart.rx_controller_inst.state": [
+        0,
+        1
+      ],
+      "u_rx_uart.rx_controller_inst.stop_sample": [
+        0
+      ],
+      "u_rx_uart.rx_controller_inst.tick_cnt": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "u_rx_uart.rx_dis": [
+        0
+      ],
+      "u_rx_uart.rx_fsm_in": [
+        0
+      ],
+      "u_rx_uart.sipo_inst.clk": [
+        0
+      ],
+      "u_rx_uart.sipo_inst.rst_n": [
+        0
+      ],
+      "u_rx_uart.sipo_inst.rx": [
+        0
+      ],
+      "u_rx_uart.soft_rst": [
+        0
+      ],
+      "u_rx_uart.soft_rst_i": [
+        0
+      ],
+      "u_rx_uart.stop_b_num": [
+        0
+      ],
+      "u_rx_uart.stop_b_num_inst.stop_b_num_out": [
+        0,
+        1
+      ],
+      "u_rx_uart.stop_b_num_inst.two_stop_bits": [
+        0
+      ],
+      "u_rx_uart.tick_cnt": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "u_rx_uart.tick_cnt_inst.baud_tick": [
+        0
+      ],
+      "u_rx_uart.tick_cnt_inst.clk": [
+        0
+      ],
+      "u_rx_uart.tick_cnt_inst.rst_n": [
+        0
+      ],
+      "u_rx_uart.u_rx_baud_gen.baud_tick": [
+        0
+      ],
+      "u_rx_uart.u_rx_baud_gen.carry": [
+        0
+      ],
+      "u_rx_uart.u_rx_baud_gen.clr_baud": [
+        0
+      ],
+      "u_rx_uart.u_rx_baud_gen.div_frac": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "u_rx_uart.u_rx_baud_gen.div_int": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "u_rx_uart.u_rx_baud_gen.max_cnt": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "u_rx_uart.u_rx_baud_gen.pclk": [
+        0
+      ],
+      "u_rx_uart.u_rx_baud_gen.presetn": [
+        0
+      ],
+      "u_rx_uart.u_rx_baud_gen.sum": [
+        4
+      ],
+      "u_tx_uart.clk": [
+        0
+      ],
+      "u_tx_uart.controller.clk": [
+        0
+      ],
+      "u_tx_uart.controller.parity_en": [
+        0
+      ],
+      "u_tx_uart.controller.rst_n": [
+        0
+      ],
+      "u_tx_uart.controller.soft_rst": [
+        0
+      ],
+      "u_tx_uart.data_bit_num": [
+        0,
+        1
+      ],
+      "u_tx_uart.div_frac": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "u_tx_uart.div_int": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "u_tx_uart.parity_en": [
+        0
+      ],
+      "u_tx_uart.parity_type": [
+        0
+      ],
+      "u_tx_uart.rst_n": [
+        0
+      ],
+      "u_tx_uart.soft_rst": [
+        0
+      ],
+      "u_tx_uart.soft_rst_i": [
+        0
+      ],
+      "u_tx_uart.stop_bit_num": [
+        0
+      ],
+      "u_tx_uart.tick_cnt_ins.clk": [
+        0
+      ],
+      "u_tx_uart.tick_cnt_ins.rst_n": [
+        0
+      ],
+      "u_tx_uart.u_baud_gen.div_frac": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "u_tx_uart.u_baud_gen.div_int": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "u_tx_uart.u_baud_gen.pclk": [
+        0
+      ],
+      "u_tx_uart.u_baud_gen.presetn": [
+        0
+      ],
+      "u_tx_uart.u_bit_cnt.clk": [
+        0
+      ],
+      "u_tx_uart.u_bit_cnt.rst_n": [
+        0
+      ],
+      "u_tx_uart.u_parity.parity_type": [
+        0
+      ],
+      "u_tx_uart.u_piso.clk": [
+        0
+      ],
+      "u_tx_uart.u_piso.rst_n": [
+        0
+      ],
+      "u_tx_uart.u_piso.soft_rst": [
+        0
+      ],
+      "u_tx_uart.u_stop_cnt.clk": [
+        0
+      ],
+      "u_tx_uart.u_stop_cnt.rst_n": [
+        0
+      ]
+    },
+    "unused": {},
+    "cellcount": 300,
+    "bitcount": 438
+  },
+  "gate_module": {
+    "name": "gold.apb_uart.u_rx_uart.parity_err",
+    "internal": {
+      "u_apb_regs.parity_err": [
+        0
+      ]
+    },
+    "unused": {
+      "paddr": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "pclk": [
+        0
+      ],
+      "penable": [
+        0
+      ],
+      "presetn": [
+        0
+      ],
+      "psel": [
+        0
+      ],
+      "pwrite": [
+        0
+      ],
+      "rx_done_status": [
+        0
+      ],
+      "u_apb_regs.baud": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "u_apb_regs.cfg": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        6
+      ],
+      "u_apb_regs.soft_rst_reg": [
+        0
+      ],
+      "u_rx_uart.bit_cnt_inst.bit_cnt": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "u_rx_uart.deframe_inst.parity_bit": [
+        0
+      ],
+      "u_rx_uart.deframe_inst.parity_exp": [
+        0
+      ],
+      "u_rx_uart.rx_controller_inst.first_stop_sampled": [
+        0
+      ],
+      "u_rx_uart.rx_sync2": [
+        0
+      ],
+      "u_rx_uart.tick_cnt_inst.tick_cnt": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "u_rx_uart.u_rx_baud_gen.acc": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "u_rx_uart.u_rx_baud_gen.cnt": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ]
+    },
+    "cellcount": 2,
+    "bitcount": 72
+  }
+}

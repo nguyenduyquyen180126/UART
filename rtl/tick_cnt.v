@@ -9,14 +9,11 @@ module tick_cnt(
         if(~rst_n) begin
             tick_cnt <= 4'b0;
         end
+        else if(tick_clr) begin
+            tick_cnt <= 4'b0;
+        end
         else if(baud_tick) begin
-            if(tick_clr) begin
-                tick_cnt <= 4'b0;
-            end
-            else begin
-                tick_cnt <= tick_cnt + 1'b1;
-            end
-           
+            tick_cnt <= tick_cnt + 1'b1;
         end
     end
 endmodule

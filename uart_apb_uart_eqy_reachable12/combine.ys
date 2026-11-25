@@ -1,0 +1,11 @@
+plugin -i /tmp/uart-eqy-src/src/eqy_combine.so
+read_rtlil uart_apb_uart_eqy_reachable12/gold.il
+uniquify
+hierarchy
+design -stash gold
+read_rtlil uart_apb_uart_eqy_reachable12/gate_recoded.il
+uniquify
+hierarchy
+design -stash gate
+eqy_combine -gold_ids uart_apb_uart_eqy_reachable12/gold.ids -gate_ids uart_apb_uart_eqy_reachable12/gate_recoded.ids
+write_rtlil uart_apb_uart_eqy_reachable12/combined.il

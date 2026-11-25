@@ -1,0 +1,71 @@
+{
+  "partition": {
+    "index": 6,
+    "name": "apb_uart.u_tx_uart.tx",
+    "inbits": {
+      "tx": [
+        0
+      ]
+    },
+    "outbits": {
+      "u_tx_uart.tx": [
+        0
+      ]
+    },
+    "crossbits": {}
+  },
+  "gold_module": {
+    "name": "gold.apb_uart.u_tx_uart.tx",
+    "internal": {},
+    "unused": {},
+    "cellcount": 1,
+    "bitcount": 2
+  },
+  "gate_module": {
+    "name": "gold.apb_uart.u_tx_uart.tx",
+    "internal": {
+      "_2583_.Y": [
+        0
+      ],
+      "_2583_.base.Y": [
+        0
+      ],
+      "_2583_.base.nand0_out_Y": [
+        0
+      ],
+      "_3039_.A": [
+        0
+      ],
+      "_3039_.X": [
+        0
+      ],
+      "_3039_.base.A": [
+        0
+      ],
+      "_3039_.base.X": [
+        0
+      ],
+      "_3039_.base.buf0_out_X": [
+        0
+      ],
+      "_3723_.A": [
+        0
+      ],
+      "_3723_.X": [
+        0
+      ],
+      "_3723_.base.A": [
+        0
+      ],
+      "_3723_.base.X": [
+        0
+      ],
+      "_3723_.base.buf0_out_X": [
+        0
+      ]
+    },
+    "unused": {},
+    "cellcount": 14,
+    "bitcount": 15
+  }
+}

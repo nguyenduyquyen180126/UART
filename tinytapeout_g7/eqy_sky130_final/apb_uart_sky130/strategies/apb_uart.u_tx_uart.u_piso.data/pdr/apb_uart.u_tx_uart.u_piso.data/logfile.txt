@@ -1,0 +1,102 @@
+SBY 22:46:33 [apb_uart.u_tx_uart.u_piso.data] Removing directory '/home/vietanh/Downloads/code/UART/UART/tinytapeout_g7/eqy_sky130_final/apb_uart_sky130/strategies/apb_uart.u_tx_uart.u_piso.data/pdr/apb_uart.u_tx_uart.u_piso.data'.
+SBY 22:46:33 [apb_uart.u_tx_uart.u_piso.data] engine_0: abc pdr
+SBY 22:46:33 [apb_uart.u_tx_uart.u_piso.data] base: starting process "cd apb_uart.u_tx_uart.u_piso.data/src; yosys -ql ../model/design.log ../model/design.ys"
+SBY 22:46:33 [apb_uart.u_tx_uart.u_piso.data] base: finished (returncode=0)
+SBY 22:46:33 [apb_uart.u_tx_uart.u_piso.data] prep: starting process "cd apb_uart.u_tx_uart.u_piso.data/model; yosys -ql design_prep.log design_prep.ys"
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] prep: finished (returncode=0)
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: starting process "cd apb_uart.u_tx_uart.u_piso.data/model; yosys -ql design_aiger.log design_aiger.ys"
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_pclk like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_presetn like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [0] like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [1] like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [2] like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [3] like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [4] like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [5] like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [6] like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [7] like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [8] like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [9] like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [10] like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [11] like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [12] like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [13] like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [14] like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [15] like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.cfg__3_0 [0] like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.cfg__3_0 [1] like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.cfg__3_0 [2] like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.cfg__3_0 [3] like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.cfg__5 like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.soft_rst_reg like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.start_reg like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.tx_data_reg [0] like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.tx_data_reg [1] like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.tx_data_reg [2] like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.tx_data_reg [3] like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.tx_data_reg [4] like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.tx_data_reg [5] like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.tx_data_reg [6] like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.tx_data_reg [7] like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.cts_n_sync2 like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.tick_cnt_ins.cnt [0] like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.tick_cnt_ins.cnt [1] like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.tick_cnt_ins.cnt [2] like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.tick_cnt_ins.cnt [3] like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_baud_gen.acc [0] like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_baud_gen.acc [1] like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_baud_gen.acc [2] like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_baud_gen.acc [3] like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_baud_gen.cnt [0] like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_baud_gen.cnt [1] like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_baud_gen.cnt [2] like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_baud_gen.cnt [3] like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_baud_gen.cnt [4] like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_baud_gen.cnt [5] like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_baud_gen.cnt [6] like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_baud_gen.cnt [7] like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_baud_gen.cnt [8] like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_baud_gen.cnt [9] like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_baud_gen.cnt [10] like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_baud_gen.cnt [11] like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_bit_cnt.cnt [0] like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_bit_cnt.cnt [1] like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_bit_cnt.cnt [2] like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_stop_cnt.cnt [0] like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.u_stop_cnt.cnt [1] like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: Warning: Treating a total of 59 undriven bits in miter like $anyseq.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] aig: finished (returncode=0)
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] engine_0: starting process "cd apb_uart.u_tx_uart.u_piso.data; yosys-abc -c 'read_aiger model/design_aiger.aig; fold; strash; pdr -v -l; write_cex -a engine_0/trace.aiw'"
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] engine_0: ======== ABC command line "read_aiger model/design_aiger.aig; fold; strash; pdr -v -l; write_cex -a engine_0/trace.aiw"
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] engine_0: Warning: The last 16 outputs are interpreted as constraints.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] engine_0: VarMax = 300. FrameMax = 10000. QueMax = 0. TimeMax = 119. MonoCNF = no. SkipGen = no. SolveAll = no.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] engine_0: Frame Clauses                                                     Max Queue Flops Time
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] engine_0: 1 : 0 32                                                                1    33      0.01 sec  T/O =  0  PRV =  0
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] engine_0: 2 : 0 38 41 ~8                                                           6    51      0.04 sec  T/O =  0  PRV =  0
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] engine_0: 3 : 0 24 23 27 ~25                                                       4    51      0.08 sec  T/O =  0  PRV =  0
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] engine_0: 4 : 0 24 4 23 20 ~26                                                     2    51      0.10 sec  T/O =  0  PRV =  0
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] engine_0: 5 : 0 24 4 7 30 26 ~25                                                   7    51      0.13 sec  T/O =  0  PRV =  0
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] engine_0: 6 : 0 24 4 5 7 23 26 ~25                                                 4    51      0.16 sec  T/O =  0  PRV =  0
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] engine_0: 7 : 0 24 4 5 5 8 28 30 ~25                                               6    51      0.20 sec  T/O =  0  PRV =  0
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] engine_0: 8 : 0 24 4 5 0 0 0 0 41 ~25                                              0    51      0.22 sec  T/O =  0  PRV =  0
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] engine_0: Proved output 0 in frame 0 (converged).
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] engine_0: Block =  135  Oblig =   267  Clause =   216  Call =  1680 (sat=56.7%)  Cex =   0  Start =   1
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] engine_0: SAT solving =     0.13 sec ( 56.30 %)
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] engine_0: unsat     =     0.03 sec ( 13.10 %)
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] engine_0: sat       =     0.10 sec ( 43.20 %)
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] engine_0: Generalize  =     0.08 sec ( 32.44 %)
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] engine_0: Push clause =     0.06 sec ( 24.90 %)
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] engine_0: Ternary sim =     0.01 sec (  3.55 %)
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] engine_0: Containment =     0.00 sec (  0.03 %)
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] engine_0: CNF compute =     0.01 sec (  4.69 %)
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] engine_0: Refinement  =     0.00 sec (  0.00 %)
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] engine_0: TOTAL       =     0.23 sec (100.00 %)
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] engine_0: Property proved.  Time =     0.24 sec
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] engine_0: Counter-example is not available.
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] engine_0: finished (returncode=0)
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] engine_0: Status returned by engine: PASS
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] summary: Elapsed clock time [H:MM:SS (secs)]: 0:00:01 (1)
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] summary: Elapsed process time [H:MM:SS (secs)]: 0:00:01 (1)
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] summary: engine_0 (abc pdr) returned PASS
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] summary: engine_0 did not produce any traces
+SBY 22:46:34 [apb_uart.u_tx_uart.u_piso.data] DONE (PASS, rc=0)

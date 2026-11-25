@@ -15,7 +15,7 @@ SEED     ?= 1
 COV      ?=
 STOP_ON_FAIL ?=
 SUITE    ?= public
-FILES_F  ?= files.f
+FILES_F  ?= $(if $(filter hidden all,$(SUITE)),files_hidden.f,files.f)
 TOP      ?= tb_top
 RUNTAG   ?=
 RUN       = run_$(TEST)_$(SEED)$(RUNTAG)
@@ -57,7 +57,7 @@ regress:
 	for s in $(SEEDS); do \
 	  for t in $$(grep -vE '^\s*(#|$$)' $(SUITE_FILE) | awk '{print $$1}'); do \
 	    run=run_$${t}_$${s}$(RUNTAG); ts=$$(date +%s); \
-	    $(MAKE) --no-print-directory sim TEST=$$t SEED=$$s RTL="$(RTL)" RUNTAG=$(RUNTAG) $(if $(COV),COV=1) > $(REGRESS_DIR)/$$t.$$s.out 2>&1; rc=$$?; \
+	    $(MAKE) --no-print-directory sim TEST=$$t SEED=$$s RTL="$(RTL)" RUNTAG=$(RUNTAG) FILES_F="$(FILES_F)" $(if $(COV),COV=1) > $(REGRESS_DIR)/$$t.$$s.out 2>&1; rc=$$?; \
 	    sec=$$(( $$(date +%s) - ts )); \
 	    ce=$$(sed -nE 's/^# (PASS|FAIL) [^ ]+ checks=([0-9]+) errors=([0-9]+).*/\2,\3/p' $$run/sim.log 2>/dev/null | tail -1); \
 	    [ -n "$$ce" ] || ce=","; \

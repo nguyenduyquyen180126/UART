@@ -1,0 +1,20 @@
+diff --git a/project.py b/project.py
+index 87f7386..3977ace 100644
+--- a/project.py
++++ b/project.py
+@@ -291,12 +291,13 @@ class Project:
+ 
+     def get_git_remote(self):
+         try:
+-            return list(Repo(self.local_dir).remotes[0].urls)[0]
++            # Tiny Tapeout projects may live in a subdirectory of a monorepo.
++            return list(Repo(self.local_dir, search_parent_directories=True).remotes[0].urls)[0]
+         except IndexError:
+             return "N/A"
+ 
+     def get_git_commit_hash(self):
+-        return Repo(self.local_dir).commit().hexsha
++        return Repo(self.local_dir, search_parent_directories=True).commit().hexsha
+ 
+     def get_tt_tools_version(self):
+         repo = Repo(os.path.join(self.local_dir, "tt"))

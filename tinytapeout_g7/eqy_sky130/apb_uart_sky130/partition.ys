@@ -1,0 +1,4 @@
+plugin -i /tmp/uart-eqy-src/src/eqy_partition.so
+read_rtlil combined.il
+insbuf -chain
+eqy_partition -matched_ids matched.ids -partition_ids partition.ids

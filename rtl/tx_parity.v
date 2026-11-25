@@ -1,3 +1,4 @@
+/* verilator lint_off DECLFILENAME */
 module parity (
     input  [7:0] data_in,
     input        parity_type, // 0: EVEN, 1: ODD
@@ -12,3 +13,4 @@ module parity (
         end
     end
 endmodule
+/* verilator lint_on DECLFILENAME */

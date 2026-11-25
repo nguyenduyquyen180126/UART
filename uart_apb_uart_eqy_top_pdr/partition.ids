@@ -1,0 +1,6 @@
+name apb_uart irq top_outputs
+name apb_uart prdata top_outputs
+name apb_uart pready top_outputs
+name apb_uart pslverr top_outputs
+name apb_uart rts_n top_outputs
+name apb_uart tx top_outputs

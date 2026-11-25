@@ -1,5 +1,7 @@
 module tx_uart #(
+    /* verilator lint_off UNUSEDPARAM */
     parameter CLK_FREQ = 50_000_000
+    /* verilator lint_on UNUSEDPARAM */
 )(
     input clk, rst_n,
     input soft_rst,
@@ -18,7 +20,7 @@ module tx_uart #(
     output reg tx_done,
     output tx_busy
 );
-    reg stop_last;
+    wire stop_last;
     wire bit_last;
     wire baud_tick;
     wire data_mux_in;
@@ -29,8 +31,8 @@ module tx_uart #(
     wire clr_stop;
     wire clr_baud;
     wire [2:0] bit_cnt;
-    reg [2:0] bit_cnt_last;
-    wire [1:0] stop_cnt;
+    wire [2:0] bit_cnt_last = {1'b1, data_bit_num};
+    wire stop_cnt;
     wire [1:0] tx_sel;
     wire shift_reg;
     wire tick_last;
@@ -115,41 +117,16 @@ module tx_uart #(
         .cnt(bit_cnt)
     );
 
-    always @(*) begin
-        case(data_bit_num)
-            2'b00: bit_cnt_last = 3'd4;
-            2'b01: bit_cnt_last = 3'd5;
-            2'b10: bit_cnt_last = 3'd6;
-            2'b11: bit_cnt_last = 3'd7;
-            default: bit_cnt_last = 3'd7;
-        endcase
-    end
-
     assign bit_last = (bit_cnt == bit_cnt_last);
 
     tx_stop_cnt u_stop_cnt(
         .clk(clk),
         .rst_n(rst_n),
         .clr_stop(clr_stop),
-        .baud_tick(baud_tick),
-        .tick_last(tick_last),
         .stop_cnt_en(stop_cnt_en),
         .cnt(stop_cnt)
     );
-    always @(*)begin
-        if(stop_bit_num == 1'b0) begin
-            // stop_cnt counts completed stop-bit boundaries. Zero means the
-            // current stop bit is the final one-stop-bit interval.
-            stop_last = (stop_cnt == 2'b00);
-        end
-        else if(stop_bit_num == 1'b1) begin
-            // For two stop bits, count 1 means the second interval is active.
-            stop_last = (stop_cnt == 2'b01);
-        end
-        else begin
-            stop_last = 1'b0;
-        end
-    end
+    assign stop_last = (stop_cnt == stop_bit_num);
 
 
     always @(*) begin

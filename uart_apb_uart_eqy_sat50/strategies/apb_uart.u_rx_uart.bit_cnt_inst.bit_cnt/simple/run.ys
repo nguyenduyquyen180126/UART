@@ -1,0 +1,9 @@
+verilog_defaults -add -D CHECK_OUTPUTS
+read_verilog -sv ../../../partitions/apb_uart.u_rx_uart.bit_cnt_inst.bit_cnt.sv
+read_rtlil ../../../partitions/apb_uart.u_rx_uart.bit_cnt_inst.bit_cnt.il
+hierarchy -top miter; proc; chformal -cover -remove
+async2sync
+formalff -clk2ff -ff2anyinit gate.apb_uart.u_rx_uart.bit_cnt_inst.bit_cnt
+setundef -anyseq gate.apb_uart.u_rx_uart.bit_cnt_inst.bit_cnt
+flatten -wb; dffunmap; opt_expr -keepdc -undriven; opt_clean
+sat -tempinduct -set-init-undef -set-def-formal -set-def-inputs -maxsteps 50 -set-assumes -prove-asserts -show-public -dump_vcd trace.vcd miter

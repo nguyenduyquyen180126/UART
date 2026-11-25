@@ -1,0 +1,137 @@
+SBY 22:43:08 [apb_uart.prdata] Removing directory '/home/vietanh/Downloads/code/UART/UART/tinytapeout_g7/eqy_sky130/apb_uart_sky130/strategies/apb_uart.prdata/pdr/apb_uart.prdata'.
+SBY 22:43:08 [apb_uart.prdata] engine_0: abc pdr
+SBY 22:43:08 [apb_uart.prdata] base: starting process "cd apb_uart.prdata/src; yosys -ql ../model/design.log ../model/design.ys"
+SBY 22:43:08 [apb_uart.prdata] base: finished (returncode=0)
+SBY 22:43:08 [apb_uart.prdata] prep: starting process "cd apb_uart.prdata/model; yosys -ql design_prep.log design_prep.ys"
+SBY 22:43:09 [apb_uart.prdata] prep: finished (returncode=0)
+SBY 22:43:09 [apb_uart.prdata] aig: starting process "cd apb_uart.prdata/model; yosys -ql design_aiger.log design_aiger.ys"
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_paddr [0] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_paddr [1] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_paddr [2] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_paddr [3] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_paddr [4] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_paddr [5] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_paddr [6] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_paddr [7] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_paddr [8] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_paddr [9] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_paddr [10] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_paddr [11] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_pclk like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_penable like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_presetn like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_psel like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_pwrite like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_tx_done_status like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [0] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [1] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [2] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [3] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [4] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [5] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [6] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [7] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [8] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [9] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [10] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [11] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [12] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [13] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [14] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [15] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.cfg [0] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.cfg [1] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.cfg [2] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.cfg [3] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.cfg [4] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.cfg [5] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.cfg [6] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.frame_err_flag like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.ier [0] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.ier [1] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.ier [2] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.parity_err_flag like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.rx_data_reg [0] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.rx_data_reg [1] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.rx_data_reg [2] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.rx_data_reg [3] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.rx_data_reg [4] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.rx_data_reg [5] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.rx_data_reg [6] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.rx_data_reg [7] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.rx_done_flag like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.soft_rst_reg like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.tx_data_reg [0] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.tx_data_reg [1] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.tx_data_reg [2] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.tx_data_reg [3] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.tx_data_reg [4] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.tx_data_reg [5] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.tx_data_reg [6] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.tx_data_reg [7] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_rx_uart.bit_cnt_inst.bit_cnt [0] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_rx_uart.bit_cnt_inst.bit_cnt [1] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_rx_uart.bit_cnt_inst.bit_cnt [2] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_rx_uart.bit_cnt_inst.bit_cnt [3] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_rx_uart.overrun like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_rx_uart.rx_controller_inst.first_stop_sampled like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_rx_uart.rx_sync2 like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_rx_uart.tick_cnt_inst.tick_cnt [0] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_rx_uart.tick_cnt_inst.tick_cnt [1] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_rx_uart.tick_cnt_inst.tick_cnt [2] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_rx_uart.tick_cnt_inst.tick_cnt [3] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_rx_uart.u_rx_baud_gen.acc [0] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_rx_uart.u_rx_baud_gen.acc [1] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_rx_uart.u_rx_baud_gen.acc [2] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_rx_uart.u_rx_baud_gen.acc [3] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_rx_uart.u_rx_baud_gen.cnt [0] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_rx_uart.u_rx_baud_gen.cnt [1] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_rx_uart.u_rx_baud_gen.cnt [2] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_rx_uart.u_rx_baud_gen.cnt [3] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_rx_uart.u_rx_baud_gen.cnt [4] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_rx_uart.u_rx_baud_gen.cnt [5] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_rx_uart.u_rx_baud_gen.cnt [6] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_rx_uart.u_rx_baud_gen.cnt [7] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_rx_uart.u_rx_baud_gen.cnt [8] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_rx_uart.u_rx_baud_gen.cnt [9] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_rx_uart.u_rx_baud_gen.cnt [10] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_rx_uart.u_rx_baud_gen.cnt [11] like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating undriven bit miter.\__pi_u_tx_uart.tx_done like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: Warning: Treating a total of 92 undriven bits in miter like $anyseq.
+SBY 22:43:09 [apb_uart.prdata] aig: finished (returncode=0)
+SBY 22:43:09 [apb_uart.prdata] engine_0: starting process "cd apb_uart.prdata; yosys-abc -c 'read_aiger model/design_aiger.aig; fold; strash; pdr -v -l; write_cex -a engine_0/trace.aiw'"
+SBY 22:43:09 [apb_uart.prdata] engine_0: ======== ABC command line "read_aiger model/design_aiger.aig; fold; strash; pdr -v -l; write_cex -a engine_0/trace.aiw"
+SBY 22:43:09 [apb_uart.prdata] engine_0: Warning: The last 26 outputs are interpreted as constraints.
+SBY 22:43:09 [apb_uart.prdata] engine_0: VarMax = 300. FrameMax = 10000. QueMax = 0. TimeMax = 119. MonoCNF = no. SkipGen = no. SolveAll = no.
+SBY 22:43:09 [apb_uart.prdata] engine_0: Frame Clauses                                                     Max Queue Flops Time
+SBY 22:43:09 [apb_uart.prdata] engine_0: Block =    1  Oblig =     1  Clause =     0  Call =     1 (sat=100.0%)  Cex =   0  Start =   0
+SBY 22:43:09 [apb_uart.prdata] engine_0: SAT solving =     0.00 sec (  0.73 %)
+SBY 22:43:09 [apb_uart.prdata] engine_0: unsat     =     0.00 sec (  0.00 %)
+SBY 22:43:09 [apb_uart.prdata] engine_0: sat       =     0.00 sec (  0.73 %)
+SBY 22:43:09 [apb_uart.prdata] engine_0: Generalize  =     0.00 sec (  0.00 %)
+SBY 22:43:09 [apb_uart.prdata] engine_0: Push clause =     0.00 sec (  0.00 %)
+SBY 22:43:09 [apb_uart.prdata] engine_0: Ternary sim =     0.00 sec (  0.28 %)
+SBY 22:43:09 [apb_uart.prdata] engine_0: Containment =     0.00 sec (  0.00 %)
+SBY 22:43:09 [apb_uart.prdata] engine_0: CNF compute =     0.00 sec (  0.00 %)
+SBY 22:43:09 [apb_uart.prdata] engine_0: Refinement  =     0.00 sec (  0.52 %)
+SBY 22:43:09 [apb_uart.prdata] engine_0: TOTAL       =     0.01 sec (100.00 %)
+SBY 22:43:09 [apb_uart.prdata] engine_0: Output 0 of miter "model/design_aiger" was asserted in frame 0.  Time =     0.01 sec
+SBY 22:43:09 [apb_uart.prdata] engine_0: finished (returncode=0)
+SBY 22:43:09 [apb_uart.prdata] engine_0: Status returned by engine: FAIL
+SBY 22:43:09 [apb_uart.prdata] smt2: starting process "cd apb_uart.prdata/model; yosys -ql design_smt2.log design_smt2.ys"
+SBY 22:43:09 [apb_uart.prdata] engine_0: starting process "cd apb_uart.prdata; yosys-witness aiw2yw engine_0/trace.aiw model/design_aiger.ywa engine_0/trace_aiw.yw"
+SBY 22:43:09 [apb_uart.prdata] smt2: finished (returncode=0)
+SBY 22:43:09 [apb_uart.prdata] engine_0: Converting AIGER witness trace 'engine_0/trace.aiw' to Yosys witness trace 'engine_0/trace_aiw.yw'...
+SBY 22:43:09 [apb_uart.prdata] engine_0: Using Yosys witness AIGER map file 'model/design_aiger.ywa'
+SBY 22:43:09 [apb_uart.prdata] engine_0: Converted 1 time steps.
+SBY 22:43:09 [apb_uart.prdata] engine_0: finished (returncode=0)
+SBY 22:43:09 [apb_uart.prdata] engine_0: starting process "cd apb_uart.prdata; yosys-smtbmc -s yices --noprogress --append 0 --dump-vcd engine_0/trace.vcd --dump-yw engine_0/trace.yw --dump-vlogtb engine_0/trace_tb.v --dump-smtc engine_0/trace.smtc --yw engine_0/trace_aiw.yw model/design_smt2.smt2"
+SBY 22:43:09 [apb_uart.prdata] engine_0: ##   0:00:00  Solver: yices
+SBY 22:43:09 [apb_uart.prdata] engine_0: ##   0:00:00  SMT Solver 'yices-smt2' not found in path.
+SBY 22:43:09 [apb_uart.prdata] engine_0: finished (returncode=1)
+SBY 22:43:09 [apb_uart.prdata] ERROR: engine_0: Could not determine aigsmt status.
+SBY 22:43:09 [apb_uart.prdata] summary: Elapsed clock time [H:MM:SS (secs)]: 0:00:01 (1)
+SBY 22:43:09 [apb_uart.prdata] summary: Elapsed process time [H:MM:SS (secs)]: 0:00:01 (1)
+SBY 22:43:09 [apb_uart.prdata] summary: engine_0 (abc pdr) returned FAIL
+SBY 22:43:09 [apb_uart.prdata] summary: engine_0 did not produce any traces
+SBY 22:43:09 [apb_uart.prdata] DONE (ERROR, rc=16)

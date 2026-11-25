@@ -7,6 +7,11 @@ module tx_tick_cnt #(
     input clr_tick,
     output tick_last
 );
+    // WIDTH is $clog2(OS); OS-1 therefore fits the counter. The explicit
+    // narrowing below records the intended counter-width comparison.
+    /* verilator lint_off WIDTHTRUNC */
+    localparam [WIDTH-1:0] LAST_COUNT = OS - 1;
+    /* verilator lint_on WIDTHTRUNC */
     reg [WIDTH - 1 : 0] cnt;
 
     always @(posedge clk or negedge rst_n) begin
@@ -18,7 +23,7 @@ module tx_tick_cnt #(
                 cnt <= {WIDTH{1'b0}};
             end
             else if(baud_tick) begin
-                if(cnt == OS - 1) begin
+                if(cnt == LAST_COUNT) begin
                     cnt <= {WIDTH{1'b0}};
                 end
                 else cnt <= cnt + 1'b1;
@@ -29,5 +34,5 @@ module tx_tick_cnt #(
         end
     end
 
-    assign tick_last = (cnt == OS - 1) && baud_tick;
+    assign tick_last = (cnt == LAST_COUNT) && baud_tick;
 endmodule

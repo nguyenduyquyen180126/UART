@@ -1,5 +1,8 @@
+`timescale 1ns/1ps
 module apb_uart #(
+    /* verilator lint_off UNUSEDPARAM */
     parameter CLK_FREQ = 50_000_000
+    /* verilator lint_on UNUSEDPARAM */
 )(
     input pclk,
     input presetn,
@@ -16,7 +19,10 @@ module apb_uart #(
     output tx,
     input  rx,
     output rts_n,
-    output irq
+    output irq,
+    output tx_done_status,
+    output rx_done_status,
+    output parity_err_status
 );
 
     wire [1:0] data_bits;
@@ -37,6 +43,17 @@ module apb_uart #(
     wire       rx_overrun;
     wire [11:0] div_int;
     wire [3:0]  div_frac;
+    // These status/data outputs are intentionally not consumed by APB control.
+    /* verilator lint_off UNUSEDSIGNAL */
+    wire tx_load_reg_unused;
+    wire tx_busy_unused;
+    wire rx_error_unused;
+    /* verilator lint_on UNUSEDSIGNAL */
+
+    // Public status taps for board-level wrappers; avoid hierarchical references.
+    assign tx_done_status = tx_done;
+    assign rx_done_status = rx_done;
+    assign parity_err_status = parity_err;
 
     apb_regs u_apb_regs (
         .pclk        (pclk),
@@ -75,9 +92,7 @@ module apb_uart #(
     // soft_rst la reset mem dong bo voi pclk, duoc dua vao cong soft_rst rieng cua engine.
     wire rx_clear = psel & penable & ~pwrite & (paddr == 12'h004);
 
-    tx_uart #(
-        .CLK_FREQ (CLK_FREQ)
-    ) u_tx_uart (
+    tx_uart u_tx_uart (
         .clk          (pclk),
         .rst_n        (presetn),
         .soft_rst     (soft_rst),
@@ -92,14 +107,12 @@ module apb_uart #(
         .div_int      (div_int),
         .div_frac     (div_frac),
         .tx           (tx),
-        .load_reg     (),
+        .load_reg     (tx_load_reg_unused),
         .tx_done      (tx_done),
-        .tx_busy      ()
+        .tx_busy      (tx_busy_unused)
     );
 
-    rx_uart #(
-        .CLK_FREQ (CLK_FREQ)
-    ) u_rx_uart (
+    rx_uart u_rx_uart (
         .clk         (pclk),
         .rst_n       (presetn),
         .soft_rst    (soft_rst),
@@ -119,7 +132,7 @@ module apb_uart #(
         .parity_err  (parity_err),
         .frame_err   (frame_err),
         .overrun     (rx_overrun),
-        .error       ()
+        .error       (rx_error_unused)
     );
 
 endmodule

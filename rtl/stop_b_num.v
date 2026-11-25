@@ -1,11 +1,8 @@
 module stop_b_num(
-    input stop_b_num,
-    output reg [1:0] stop_b_num_out
+    input two_stop_bits,
+    output wire [1:0] stop_b_num_out
 );
-    always @(stop_b_num) begin
-        case (stop_b_num)
-            1'b0: stop_b_num_out = 2'd1;
-            1'b1: stop_b_num_out = 2'd2;
-        endcase
-    end
+    // The APB format bit encodes one stop bit as 0 and two stop bits as 1.
+    assign stop_b_num_out[0] = ~two_stop_bits;
+    assign stop_b_num_out[1] = two_stop_bits;
 endmodule

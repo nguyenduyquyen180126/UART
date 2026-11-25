@@ -1,0 +1,134 @@
+{
+  "partition": {
+    "index": 42,
+    "name": "apb_uart.irq",
+    "inbits": {
+      "u_apb_regs.frame_err_flag": [
+        0
+      ],
+      "u_apb_regs.ier": [
+        0,
+        1,
+        2
+      ],
+      "u_apb_regs.parity_err_flag": [
+        0
+      ],
+      "u_apb_regs.rx_done_flag": [
+        0
+      ],
+      "u_rx_uart.overrun": [
+        0
+      ],
+      "u_tx_uart.tx_done": [
+        0
+      ]
+    },
+    "outbits": {
+      "irq": [
+        0
+      ]
+    },
+    "crossbits": {}
+  },
+  "gold_module": {
+    "name": "gold.apb_uart.irq",
+    "internal": {
+      "rx_overrun": [
+        0
+      ],
+      "tx_done": [
+        0
+      ],
+      "u_apb_regs.rx_overrun": [
+        0
+      ],
+      "u_apb_regs.stat": [
+        0,
+        1,
+        2,
+        6,
+        7
+      ],
+      "u_apb_regs.tx_done": [
+        0
+      ]
+    },
+    "unused": {},
+    "cellcount": 16,
+    "bitcount": 24
+  },
+  "gate_module": {
+    "name": "gold.apb_uart.irq",
+    "internal": {
+      "_1999_.Y": [
+        0
+      ],
+      "_1999_.base.Y": [
+        0
+      ],
+      "_1999_.base.not0_out_Y": [
+        0
+      ],
+      "_2152_.A1": [
+        0
+      ],
+      "_2152_.base.A1": [
+        0
+      ],
+      "_2631_.Y": [
+        0
+      ],
+      "_2631_.base.Y": [
+        0
+      ],
+      "_2631_.base.nor0_out_Y": [
+        0
+      ],
+      "_2633_.Y": [
+        0
+      ],
+      "_2633_.base.Y": [
+        0
+      ],
+      "_2633_.base.and0_out_Y": [
+        0
+      ],
+      "_2633_.base.nand0_out": [
+        0
+      ],
+      "_2633_.base.nand1_out": [
+        0
+      ],
+      "_2634_.A1": [
+        0
+      ],
+      "_2634_.A2": [
+        0
+      ],
+      "_2634_.B1": [
+        0
+      ],
+      "_2634_.base.A1": [
+        0
+      ],
+      "_2634_.base.A2": [
+        0
+      ],
+      "_2634_.base.B1": [
+        0
+      ],
+      "_2634_.base.or0_out": [
+        0
+      ],
+      "u_apb_regs.stat": [
+        1,
+        2,
+        6
+      ]
+    },
+    "unused": {},
+    "cellcount": 29,
+    "bitcount": 37
+  }
+}

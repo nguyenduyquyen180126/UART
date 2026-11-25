@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+<testsuite timestamp="2026-11-24T22:44:03" hostname="vietanh-Precision-7560" package="apb_uart.parity_err_status" id="0" name="default" tests="1" errors="0" failures="0" time="0" skipped="0">
+<properties>
+<property name="os" value="Linux"/>
+<property name="expect" value="PASS, FAIL, UNKNOWN, TIMEOUT"/>
+<property name="status" value="PASS"/>
+</properties>
+<testcase classname="default" name="default" time="0">
+</testcase>
+<system-out>SBY 22:44:03 [apb_uart.parity_err_status] Removing directory '/home/vietanh/Downloads/code/UART/UART/tinytapeout_g7/eqy_sky130_final/apb_uart_sky130/strategies/apb_uart.parity_err_status/pdr/apb_uart.parity_err_status'.
+SBY 22:44:03 [apb_uart.parity_err_status] engine_0: abc pdr
+SBY 22:44:03 [apb_uart.parity_err_status] base: starting process &quot;cd apb_uart.parity_err_status/src; yosys -ql ../model/design.log ../model/design.ys&quot;
+SBY 22:44:03 [apb_uart.parity_err_status] base: finished (returncode=0)
+SBY 22:44:03 [apb_uart.parity_err_status] prep: starting process &quot;cd apb_uart.parity_err_status/model; yosys -ql design_prep.log design_prep.ys&quot;
+SBY 22:44:03 [apb_uart.parity_err_status] prep: finished (returncode=0)
+SBY 22:44:03 [apb_uart.parity_err_status] aig: starting process &quot;cd apb_uart.parity_err_status/model; yosys -ql design_aiger.log design_aiger.ys&quot;
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_paddr [0] like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_paddr [1] like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_paddr [2] like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_paddr [3] like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_paddr [4] like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_paddr [5] like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_paddr [6] like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_paddr [7] like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_paddr [8] like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_paddr [9] like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_paddr [10] like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_paddr [11] like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_pclk like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_penable like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_presetn like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_psel like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_pwrite like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_rx_done_status like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [0] like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [1] like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [2] like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [3] like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [4] like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [5] like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [6] like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [7] like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [8] like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [9] like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [10] like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [11] like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [12] like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [13] like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [14] like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.baud [15] like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.cfg__4_0 [0] like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.cfg__4_0 [1] like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.cfg__4_0 [2] like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.cfg__4_0 [3] like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.cfg__4_0 [4] like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.cfg__6 like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_u_apb_regs.soft_rst_reg like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_u_rx_uart.bit_cnt_inst.bit_cnt [0] like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_u_rx_uart.bit_cnt_inst.bit_cnt [1] like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_u_rx_uart.bit_cnt_inst.bit_cnt [2] like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_u_rx_uart.bit_cnt_inst.bit_cnt [3] like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_u_rx_uart.deframe_inst.parity_bit like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_u_rx_uart.deframe_inst.parity_exp like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_u_rx_uart.rx_controller_inst.first_stop_sampled like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_u_rx_uart.rx_sync2 like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_u_rx_uart.tick_cnt_inst.tick_cnt [0] like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_u_rx_uart.tick_cnt_inst.tick_cnt [1] like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_u_rx_uart.tick_cnt_inst.tick_cnt [2] like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_u_rx_uart.tick_cnt_inst.tick_cnt [3] like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_u_rx_uart.u_rx_baud_gen.acc [0] like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_u_rx_uart.u_rx_baud_gen.acc [1] like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_u_rx_uart.u_rx_baud_gen.acc [2] like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_u_rx_uart.u_rx_baud_gen.acc [3] like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_u_rx_uart.u_rx_baud_gen.cnt [0] like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_u_rx_uart.u_rx_baud_gen.cnt [1] like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_u_rx_uart.u_rx_baud_gen.cnt [2] like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_u_rx_uart.u_rx_baud_gen.cnt [3] like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_u_rx_uart.u_rx_baud_gen.cnt [4] like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_u_rx_uart.u_rx_baud_gen.cnt [5] like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_u_rx_uart.u_rx_baud_gen.cnt [6] like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_u_rx_uart.u_rx_baud_gen.cnt [7] like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_u_rx_uart.u_rx_baud_gen.cnt [8] like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_u_rx_uart.u_rx_baud_gen.cnt [9] like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_u_rx_uart.u_rx_baud_gen.cnt [10] like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating undriven bit miter.\__pi_u_rx_uart.u_rx_baud_gen.cnt [11] like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: Warning: Treating a total of 69 undriven bits in miter like $anyseq.
+SBY 22:44:03 [apb_uart.parity_err_status] aig: finished (returncode=0)
+SBY 22:44:03 [apb_uart.parity_err_status] engine_0: starting process &quot;cd apb_uart.parity_err_status; yosys-abc -c 'read_aiger model/design_aiger.aig; fold; strash; pdr -v -l; write_cex -a engine_0/trace.aiw'&quot;
+SBY 22:44:03 [apb_uart.parity_err_status] engine_0: ======== ABC command line &quot;read_aiger model/design_aiger.aig; fold; strash; pdr -v -l; write_cex -a engine_0/trace.aiw&quot;
+SBY 22:44:03 [apb_uart.parity_err_status] engine_0: Warning: The last 21 outputs are interpreted as constraints.
+SBY 22:44:03 [apb_uart.parity_err_status] engine_0: VarMax = 300. FrameMax = 10000. QueMax = 0. TimeMax = 119. MonoCNF = no. SkipGen = no. SolveAll = no.
+SBY 22:44:03 [apb_uart.parity_err_status] engine_0: Frame Clauses                                                     Max Queue Flops Time
+SBY 22:44:03 [apb_uart.parity_err_status] engine_0: 1 : 0 4                                                                 1     5      0.01 sec  T/O =  0  PRV =  0
+SBY 22:44:03 [apb_uart.parity_err_status] engine_0: 2 : 0 6 7 ~1                                                             4    12      0.01 sec  T/O =  0  PRV =  0
+SBY 22:44:03 [apb_uart.parity_err_status] engine_0: 3 : 0 3 6 7 ~2                                                           4    13      0.02 sec  T/O =  0  PRV =  0
+SBY 22:44:03 [apb_uart.parity_err_status] engine_0: 4 : 0 2 4 8 5 ~5                                                         5    13      0.03 sec  T/O =  0  PRV =  0
+SBY 22:44:03 [apb_uart.parity_err_status] engine_0: 5 : 0 2 3 5 5 5 ~5                                                       3    13      0.04 sec  T/O =  0  PRV =  0
+SBY 22:44:03 [apb_uart.parity_err_status] engine_0: 6 : 0 2 3 2 2 0 7 ~5                                                     0    13      0.06 sec  T/O =  0  PRV =  0
+SBY 22:44:03 [apb_uart.parity_err_status] engine_0: Proved output 0 in frame 0 (converged).
+SBY 22:44:03 [apb_uart.parity_err_status] engine_0: Block =   12  Oblig =    56  Clause =    35  Call =   262 (sat=55.7%)  Cex =   0  Start =   0
+SBY 22:44:03 [apb_uart.parity_err_status] engine_0: SAT solving =     0.03 sec ( 38.35 %)
+SBY 22:44:03 [apb_uart.parity_err_status] engine_0: unsat     =     0.01 sec ( 21.48 %)
+SBY 22:44:03 [apb_uart.parity_err_status] engine_0: sat       =     0.01 sec ( 16.88 %)
+SBY 22:44:03 [apb_uart.parity_err_status] engine_0: Generalize  =     0.01 sec ( 18.53 %)
+SBY 22:44:03 [apb_uart.parity_err_status] engine_0: Push clause =     0.01 sec ( 19.55 %)
+SBY 22:44:03 [apb_uart.parity_err_status] engine_0: Ternary sim =     0.00 sec (  1.93 %)
+SBY 22:44:03 [apb_uart.parity_err_status] engine_0: Containment =     0.00 sec (  0.01 %)
+SBY 22:44:03 [apb_uart.parity_err_status] engine_0: CNF compute =     0.00 sec (  3.67 %)
+SBY 22:44:03 [apb_uart.parity_err_status] engine_0: Refinement  =     0.00 sec (  0.00 %)
+SBY 22:44:03 [apb_uart.parity_err_status] engine_0: TOTAL       =     0.07 sec (100.00 %)
+SBY 22:44:03 [apb_uart.parity_err_status] engine_0: Property proved.  Time =     0.07 sec
+SBY 22:44:03 [apb_uart.parity_err_status] engine_0: Counter-example is not available.
+SBY 22:44:03 [apb_uart.parity_err_status] engine_0: finished (returncode=0)
+SBY 22:44:03 [apb_uart.parity_err_status] engine_0: Status returned by engine: PASS
+SBY 22:44:03 [apb_uart.parity_err_status] summary: Elapsed clock time [H:MM:SS (secs)]: 0:00:00 (0)
+SBY 22:44:03 [apb_uart.parity_err_status] summary: Elapsed process time [H:MM:SS (secs)]: 0:00:00 (0)
+SBY 22:44:03 [apb_uart.parity_err_status] summary: engine_0 (abc pdr) returned PASS
+SBY 22:44:03 [apb_uart.parity_err_status] summary: engine_0 did not produce any traces
+SBY 22:44:03 [apb_uart.parity_err_status] DONE (PASS, rc=0)
+</system-out>
+<system-err>
+</system-err>
+</testsuite>
+</testsuites>
